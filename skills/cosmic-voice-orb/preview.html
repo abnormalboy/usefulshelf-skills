@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Cosmic Voice Orb</title>
+    <style>
+      :root {
+        --accent: #bda8ff;
+        font-family: Arial, "PingFang SC", sans-serif;
+        background: #0c0b13;
+        color: #f1eefa;
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      canvas:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 4px;
+      }
+      .shell {
+        max-width: 1440px;
+        margin: auto;
+        padding: 28px 5%;
+        min-height: 720px;
+      }
+      header {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: space-between;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        align-items: center;
+      }
+      .brand {
+        font-weight: bold;
+        letter-spacing: 0.07em;
+        font-size: 15px;
+      }
+      .brand span {
+        color: var(--accent);
+      }
+      .demo-label {
+        font-size: 10px;
+        color: #948ba8;
+        border: 1px solid #373143;
+        padding: 8px 12px;
+        border-radius: 30px;
+      }
+      .main {
+        display: grid;
+        grid-template-columns: 0.85fr 1.15fr;
+        gap: 6%;
+        align-items: center;
+        margin-top: 32px;
+      }
+      .eyebrow {
+        font-size: 10px;
+        color: var(--accent);
+        letter-spacing: 0.16em;
+      }
+      h1 {
+        white-space: pre-line;
+        font-size: clamp(42px, 5.4vw, 76px);
+        line-height: 1.03;
+        letter-spacing: -0.065em;
+        font-weight: 500;
+        overflow-wrap: anywhere;
+        margin: 24px 0;
+      }
+      .intro {
+        font-size: 13px;
+        line-height: 1.9;
+        color: #9f96ae;
+        max-width: 350px;
+      }
+      .modes {
+        display: flex;
+        gap: 7px;
+        margin-top: 28px;
+        flex-wrap: wrap;
+      }
+      button {
+        border: 1px solid #3a334a;
+        color: #b2a8c1;
+        background: transparent;
+        padding: 11px 16px;
+        border-radius: 8px;
+        font-size: 12px;
+      }
+      button[aria-pressed="true"] {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #181122;
+      }
+      button:hover {
+        filter: brightness(1.15);
+      }
+      .stage {
+        height: 440px;
+        position: relative;
+        min-width: 0;
+        border-radius: 24px;
+        background: radial-gradient(ellipse at 50% 55%, #31224455, transparent 68%), #111019;
+        border: 1px solid #2b2438;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+        height: 100%;
+        width: 100%;
+        cursor: pointer;
+      }
+      .stage-top {
+        position: absolute;
+        left: 20px;
+        right: 20px;
+        top: 20px;
+        display: flex;
+        justify-content: space-between;
+        color: #84788f;
+        font-size: 9px;
+        letter-spacing: 0.16em;
+        pointer-events: none;
+      }
+      .stage-bottom {
+        position: absolute;
+        bottom: 18px;
+        left: 20px;
+        right: 20px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 10px;
+        color: #aea2be;
+        pointer-events: none;
+      }
+      .stage-bottom span:last-child {
+        color: #675c77;
+      }
+      .controls {
+        margin-top: 30px;
+        padding-top: 24px;
+        border-top: 1px solid #2d2639;
+        display: grid;
+        grid-template-columns: 1fr 1.2fr 1fr;
+        gap: 32px;
+        align-items: center;
+      }
+      .label {
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        color: #968aab;
+        margin-bottom: 12px;
+      }
+      .palette {
+        display: flex;
+        gap: 10px;
+      }
+      .swatch {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        padding: 0;
+        border: 3px solid #0c0b13;
+        outline: 1px solid #463b5b;
+      }
+      .swatch[aria-pressed="true"] {
+        outline: 2px solid #eae3fa;
+      }
+      .swatch:nth-child(1) {
+        background: linear-gradient(135deg, #e7c3ff, #6b58ea);
+      }
+      .swatch:nth-child(2) {
+        background: linear-gradient(135deg, #b4ffdf, #276fbc);
+      }
+      .swatch:nth-child(3) {
+        background: linear-gradient(135deg, #ffe0a0, #db466d);
+      }
+      .energy-label {
+        display: flex;
+        justify-content: space-between;
+        color: #d0c7dd;
+        font-size: 11px;
+        margin-bottom: 12px;
+      }
+      input {
+        width: 100%;
+        accent-color: var(--accent);
+        cursor: pointer;
+      }
+      .play {
+        display: flex;
+        justify-content: flex-end;
+      }
+      .play button {
+        border-radius: 30px;
+        color: #ede6f7;
+        padding: 14px 20px;
+        white-space: nowrap;
+      }
+      footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        line-height: 1.6;
+        color: #746983;
+        font-size: 10px;
+        margin-top: 26px;
+      }
+      #status {
+        color: #b8a8d3;
+      }
+      .signal {
+        display: flex;
+        gap: 3px;
+        height: 20px;
+        align-items: center;
+        margin-top: 22px;
+      }
+      .signal i {
+        background: var(--accent);
+        width: 3px;
+        opacity: 0.6;
+        border-radius: 4px;
+      }
+      #modeNote {
+        font-size: 11px;
+        color: #77698e;
+        line-height: 1.7;
+        margin-top: 12px;
+        min-height: 38px;
+      }
+      @media (max-width: 700px) {
+        .shell {
+          padding: 22px;
+        }
+        .main {
+          grid-template-columns: 1fr;
+          gap: 22px;
+          margin-top: 28px;
+        }
+        h1 {
+          white-space: pre-line;
+          font-size: 44px;
+          margin: 16px 0;
+        }
+        .intro {
+          max-width: none;
+          margin: 0;
+        }
+        .modes {
+          margin-top: 20px;
+        }
+        .signal {
+          display: none;
+        }
+        #modeNote {
+          min-height: 0;
+          margin: 12px 0 0;
+        }
+        .stage {
+          height: 330px;
+        }
+        .controls {
+          grid-template-columns: 1fr 1fr;
+          gap: 24px;
+          margin-top: 22px;
+          padding-top: 20px;
+        }
+        .play {
+          grid-column: 1/-1;
+          justify-content: stretch;
+        }
+        .play button {
+          width: 100%;
+        }
+        .demo-label {
+          font-size: 9px;
+          padding: 7px 9px;
+        }
+        footer {
+          margin-top: 20px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header>
+        <div class="brand">
+          <span>◉</span>
+          INNER / SPACE
+        </div>
+        <span class="demo-label" data-i="demoLabel">演示信号 · 无需麦克风</span>
+      </header>
+      <section class="main">
+        <div>
+          <div class="eyebrow" data-i="eyebrow">让声音，有自己的形状。</div>
+          <h1>A little universe.</h1>
+          <p class="intro" data-i="intro">
+            一颗安静的小宇宙。换一种状态、挑一种颜色，再给它一点能量，看看它如何回应你。
+          </p>
+          <div class="modes" role="group" aria-label="声纹状态">
+            <button data-mode="idle" aria-pressed="false" data-i="idle">静候</button>
+            <button data-mode="listen" aria-pressed="false" data-i="listen">聆听</button>
+            <button data-mode="speak" aria-pressed="true" data-i="speak">表达</button>
+          </div>
+          <p id="modeNote">起伏的丝带，像一句正在展开的话。</p>
+          <div class="signal" aria-hidden="true"></div>
+        </div>
+        <div class="stage">
+          <div class="stage-top">
+            <span>PROCEDURAL / 03</span>
+            <span id="energyReadout">ENERGY 55</span>
+          </div>
+          <canvas tabindex="0" role="button" aria-label="点击或按回车，释放脉冲"></canvas>
+          <div class="stage-bottom">
+            <span id="stateLabel">表达 / SPEAKING</span>
+            <span data-i="tap">点一下 · 释放脉冲</span>
+          </div>
+        </div>
+      </section>
+      <section class="controls" aria-label="声纹控制">
+        <div>
+          <div class="label" data-i="palette">选择色域</div>
+          <div class="palette" role="group" aria-label="色域">
+            <button
+              class="swatch"
+              data-palette="0"
+              aria-label="紫色星云"
+              aria-pressed="true"
+            ></button>
+            <button
+              class="swatch"
+              data-palette="1"
+              aria-label="青色极光"
+              aria-pressed="false"
+            ></button>
+            <button
+              class="swatch"
+              data-palette="2"
+              aria-label="珊瑚日落"
+              aria-pressed="false"
+            ></button>
+          </div>
+        </div>
+        <div>
+          <label class="energy-label" for="energy">
+            <span data-i="energy">手动能量</span>
+            <output id="energyValue">55%</output>
+          </label>
+          <input id="energy" type="range" min="0" max="100" value="55" />
+        </div>
+        <div class="play">
+          <button id="play" aria-pressed="false" data-i="play">▷ 播放 12 秒演示</button>
+        </div>
+      </section>
+      <footer>
+        <span data-i="footer">程序化丝带 / 玻璃高光 / 合成声纹</span>
+        <span role="status" aria-live="polite" id="status">轻触球体，唤醒一次脉冲。</span>
+      </footer>
+    </main>
+    <!-- usefulshelf-runtime:start -->
+    <script>
+      // Inlined into each downloadable template: no sibling runtime is required.
+      (() => {
+        "use strict";
+        const dictionary = {};
+        const lang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          "zh";
+        const chinese = lang !== "en";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+        const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        window.__usefulshelfConfigure = (config) => {
+          const accent = document.documentElement.dataset.skillAccent;
+          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+        };
+        window.__usefulshelfText = (value) => {
+          if (!chinese || typeof value !== "string") return value;
+          const exact = dictionary[normalize(value)];
+          if (exact !== undefined) return exact;
+          return value
+            .replace(/What is ([^?]+)\?/g, "什么是 $1？")
+            .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
+            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
+            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
+            .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
+            .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/added to your sky\./g, "已加入夜空。")
+            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(/· no transaction sent/g, "· 未发送真实交易");
+        };
+        function boot() {
+          if (chinese) {
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            let node;
+            while ((node = walker.nextNode())) {
+              if (
+                node.parentElement?.closest(
+                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
+                )
+              )
+                continue;
+              const next = window.__usefulshelfText(node.textContent);
+              if (next !== node.textContent) node.textContent = next;
+            }
+            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
+              for (const name of ["aria-label", "placeholder", "title"]) {
+                if (element.hasAttribute(name))
+                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+              }
+            }
+            document.title = window.__usefulshelfText(document.title);
+          }
+          if (parent === window) return;
+          // Freeze viewport-based demo heights before measuring, avoiding vh feedback
+          // when the parent grows the iframe. Intentional inner demo scrollers remain.
+          const initialHeight = Math.max(360, Math.min(760, innerHeight));
+          function fixRules(rules) {
+            for (const rule of rules) {
+              if (rule.cssRules) fixRules(rule.cssRules);
+              if (!rule.style) continue;
+              if (/v[hbs]/.test(rule.style.minHeight))
+                rule.style.setProperty("min-height", "0", "important");
+              if (/v[hbs]/.test(rule.style.height))
+                rule.style.setProperty("height", `${initialHeight}px`, "important");
+            }
+          }
+          for (const sheet of document.styleSheets) {
+            try {
+              fixRules(sheet.cssRules);
+            } catch {
+              /* Same-file styles are sufficient. */
+            }
+          }
+          for (const element of [document.documentElement, document.body]) {
+            element.style.setProperty("height", "auto", "important");
+            element.style.setProperty("min-height", "0", "important");
+          }
+          document.documentElement.style.overflowX = "clip";
+          let frame = 0,
+            lastHeight = 0;
+          const measure = () => {
+            frame = 0;
+            const height = Math.ceil(
+              Math.max(document.body.scrollHeight, document.body.getBoundingClientRect().height),
+            );
+            if (height > 0 && height <= 20000 && height !== lastHeight) {
+              lastHeight = height;
+              parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+            }
+          };
+          const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(measure);
+          };
+          const observer = new ResizeObserver(schedule);
+          observer.observe(document.body);
+          window.addEventListener("resize", schedule);
+          const onMessage = (event) => {
+            if (event.source === parent && event.data?.type === "usefulshelf:measure") {
+              // The first resize may precede parent hydration. A measurement request
+              // must acknowledge even an unchanged height, so that message is recovered.
+              lastHeight = 0;
+              schedule();
+            }
+          };
+          window.addEventListener("message", onMessage);
+          document.fonts?.ready.then(schedule);
+          window.addEventListener(
+            "pagehide",
+            () => {
+              observer.disconnect();
+              cancelAnimationFrame(frame);
+              window.removeEventListener("resize", schedule);
+              window.removeEventListener("message", onMessage);
+            },
+            { once: true },
+          );
+          schedule();
+        }
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        else boot();
+      })();
+    </script>
+    <!-- usefulshelf-runtime:end -->
+    <script>
+      const config = window.__usefulshelfConfigure({"title": null, "intensity": 55}),
+        en =
+          (new URLSearchParams(location.search).get("lang") ||
+            document.documentElement.dataset.skillLang) === "en";
+      document.documentElement.lang = en ? "en" : "zh-CN";
+      const texts = {
+        demoLabel: "DEMO SIGNAL · NO MICROPHONE",
+        eyebrow: "GIVE SOUND A SHAPE OF ITS OWN.",
+        intro:
+          "A quiet little universe. Change its state, pick a color, and give it some energy. See how it answers.",
+        idle: "Idle",
+        listen: "Listening",
+        speak: "Speaking",
+        tap: "TAP TO PULSE",
+        palette: "COLOR SPACE",
+        energy: "Manual energy",
+        play: "▷ Play 12-second demo",
+        footer: "Procedural ribbons / Glass highlights / Synthetic waveform",
+      };
+      if (en)
+        document.querySelectorAll("[data-i]").forEach((e) => (e.textContent = texts[e.dataset.i]));
+      document.querySelector("h1").textContent =
+        config.title ?? (en ? "A little\nuniverse." : "一个会回应的\n小宇宙。");
+      const c = document.querySelector("canvas"),
+        ctx = c.getContext("2d"),
+        energy = document.querySelector("#energy"),
+        status = document.querySelector("#status"),
+        play = document.querySelector("#play"),
+        motion = matchMedia("(prefers-reduced-motion: reduce)");
+      c.setAttribute(
+        "aria-label",
+        en ? "Click or press Enter to release a pulse" : "点击或按回车，释放脉冲",
+      );
+      const palettes = [
+        [
+          getComputedStyle(document.documentElement).getPropertyValue("--accent").trim(),
+          "#6f65f6",
+          "#eebaff",
+        ],
+        ["#74e7d1", "#486fe2", "#c1ffdf"],
+        ["#ffcc88", "#e96088", "#ffecd6"],
+      ];
+      let w = 1,
+        h = 1,
+        mode = "speak",
+        palette = 0,
+        raf = 0,
+        playing = false,
+        pulsing = false,
+        started = 0,
+        phase = 1.2;
+      energy.value = config.intensity;
+      const signal = document.querySelector(".signal");
+      for (let i = 0; i < 42; i++) {
+        const b = document.createElement("i");
+        b.style.height = 4 + Math.abs(Math.sin(i * 0.63)) * 16 + "px";
+        signal.append(b);
+      }
+      if (en)
+        document
+          .querySelectorAll("[data-palette]")
+          .forEach((b, i) =>
+            b.setAttribute("aria-label", ["Violet nebula", "Mint aurora", "Coral sunset"][i]),
+          );
+      function draw(t = phase, boost = 0) {
+        ctx.clearRect(0, 0, w, h);
+        const cx = w / 2,
+          cy = h * 0.51,
+          r = Math.min(w * 0.32, h * 0.36),
+          level = Number(energy.value) / 100,
+          colors = palettes[palette],
+          amp = (mode === "idle" ? 0.12 : mode === "listen" ? 0.32 : 0.54) * level + boost * 0.18;
+        let glow = ctx.createRadialGradient(cx, cy, r * 0.45, cx, cy, r * 1.5);
+        glow.addColorStop(0, colors[1] + "25");
+        glow.addColorStop(0.65, colors[0] + "19");
+        glow.addColorStop(1, colors[0] + "00");
+        ctx.fillStyle = glow;
+        ctx.fillRect(0, 0, w, h);
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.beginPath();
+        ctx.arc(0, 0, r, 0, Math.PI * 2);
+        ctx.clip();
+        let base = ctx.createRadialGradient(-r * 0.3, -r * 0.5, 0, 0, 0, r);
+        base.addColorStop(0, "#383048");
+        base.addColorStop(0.6, "#100d21");
+        base.addColorStop(1, "#242138");
+        ctx.fillStyle = base;
+        ctx.fillRect(-r, -r, 2 * r, 2 * r);
+        for (let j = 0; j < 65; j++) {
+          const offset = (j - 32) / 32;
+          ctx.beginPath();
+          for (let i = 0; i <= 100; i++) {
+            const x = (i / 50 - 1) * r,
+              y =
+                offset * r * 0.72 +
+                Math.sin((x / r) * (mode === "listen" ? 6 : 3.7) + t + j * 0.065) *
+                  (r * 0.13 + r * amp * 0.5) *
+                  Math.sqrt(Math.max(0, 1 - (x * x) / (r * r))) +
+                Math.cos((x / r) * 3 - t * 0.7) * r * 0.17;
+            i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+          }
+          ctx.strokeStyle = colors[j % 3];
+          ctx.globalAlpha = 0.12 + 0.3 * Math.pow(Math.sin(j * 0.13 + t) * 0.5 + 0.5, 2);
+          ctx.lineWidth = j % 7 === 0 ? 2 : 0.7;
+          ctx.stroke();
+        }
+        ctx.globalAlpha = 1;
+        for (let i = 0; i < 72; i++) {
+          const a = i * 2.399,
+            rr = r * Math.sqrt((i + 0.5) / 72) * 0.93,
+            x = Math.cos(a) * rr,
+            y = Math.sin(a) * rr;
+          ctx.globalAlpha = 0.18 + 0.7 * Math.abs(Math.sin(i * 3.4 + t * 0.6));
+          ctx.fillStyle = colors[2];
+          ctx.beginPath();
+          ctx.arc(x, y, i % 9 === 0 ? 1.25 : 0.6, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        let shine = ctx.createRadialGradient(
+          -r * 0.36,
+          -r * 0.54,
+          0,
+          -r * 0.3,
+          -r * 0.45,
+          r * 0.75,
+        );
+        shine.addColorStop(0, "#ffffff33");
+        shine.addColorStop(0.3, "#ffffff09");
+        shine.addColorStop(1, "#ffffff00");
+        ctx.fillStyle = shine;
+        ctx.fillRect(-r, -r, r * 2, r * 2);
+        ctx.restore();
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.strokeStyle = colors[0] + "55";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.ellipse(
+          cx - r * 0.16,
+          cy - r * 0.15,
+          r * 0.88,
+          r * 0.83,
+          -0.6,
+          Math.PI,
+          Math.PI * 1.52,
+        );
+        ctx.strokeStyle = "#eee8ff88";
+        ctx.lineWidth = 1.6;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.ellipse(cx, cy + r * 1.17, r * 0.7, r * 0.07, 0, 0, Math.PI * 2);
+        ctx.fillStyle = "#00000044";
+        ctx.fill();
+      }
+      function resize() {
+        const b = c.getBoundingClientRect();
+        w = b.width;
+        h = b.height;
+        const d = Math.min(devicePixelRatio || 1, 2);
+        c.width = w * d;
+        c.height = h * d;
+        ctx.setTransform(d, 0, 0, d, 0, 0);
+        draw();
+      }
+      new ResizeObserver(resize).observe(c);
+      function note() {
+        const notes = {
+          idle: en
+            ? "A quiet breath, with room for the next thought."
+            : "安静地呼吸，为下一个念头留一点空间。",
+          listen: en
+            ? "Fine, attentive ripples gather around the signal."
+            : "细密的涟漪，围绕信号轻轻聚拢。",
+          speak: en
+            ? "Flowing ribbons, like a thought finding its voice."
+            : "起伏的丝带，像一句正在展开的话。",
+        };
+        document.querySelector("#modeNote").textContent = notes[mode];
+        document.querySelector("#stateLabel").textContent = en
+          ? { idle: "IDLE", listen: "LISTENING", speak: "SPEAKING" }[mode]
+          : { idle: "静候 / IDLE", listen: "聆听 / LISTENING", speak: "表达 / SPEAKING" }[mode];
+      }
+      function stop(message) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+        playing = false;
+        pulsing = false;
+        play.setAttribute("aria-pressed", "false");
+        play.textContent = en ? texts.play : "▷ 播放 12 秒演示";
+        if (message) status.textContent = message;
+        draw();
+      }
+      function frame(now) {
+        const elapsed = now - started,
+          max = playing ? 12000 : 1800;
+        if (elapsed >= max || document.hidden) {
+          stop(
+            en
+              ? "Signal settled. Try another state or pulse."
+              : "信号已停稳。试试另一种状态，或再次释放脉冲。",
+          );
+          return;
+        }
+        phase = 1.2 + elapsed / 900;
+        const boost = playing
+          ? (Math.sin(elapsed * 0.009) * 0.5 + 0.5) * (0.6 + 0.4 * Math.sin(elapsed * 0.002))
+          : Math.sin((elapsed / max) * Math.PI);
+        draw(phase, boost);
+        raf = requestAnimationFrame(frame);
+      }
+      function pulse() {
+        stop();
+        if (motion.matches) {
+          phase += 0.8;
+          draw();
+          status.textContent = en
+            ? "Static pulse preview · reduced motion enabled."
+            : "静态脉冲预览 · 已启用减少动态效果。";
+          return;
+        }
+        pulsing = true;
+        started = performance.now();
+        status.textContent = en ? "Pulse released." : "脉冲已释放。";
+        raf = requestAnimationFrame(frame);
+      }
+      play.onclick = () => {
+        if (playing) {
+          stop(en ? "Demo paused." : "演示已暂停。");
+          return;
+        }
+        stop();
+        if (motion.matches) {
+          phase += 0.8;
+          draw();
+          status.textContent = en
+            ? "Static demo · reduced motion enabled."
+            : "静态演示 · 已启用减少动态效果。";
+          return;
+        }
+        playing = true;
+        started = performance.now();
+        play.setAttribute("aria-pressed", "true");
+        play.textContent = en ? "Ⅱ Pause demo" : "Ⅱ 暂停演示";
+        status.textContent = en
+          ? "Playing a synthetic waveform · stops after 12 seconds."
+          : "正在播放合成波形 · 12 秒后自动停止。";
+        raf = requestAnimationFrame(frame);
+      };
+      document.querySelectorAll("[data-mode]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            mode = b.dataset.mode;
+            document
+              .querySelectorAll("[data-mode]")
+              .forEach((e) => e.setAttribute("aria-pressed", String(e === b)));
+            note();
+            draw();
+            status.textContent = en ? `State: ${texts[mode]}` : `状态：${b.textContent}`;
+          }),
+      );
+      document.querySelectorAll("[data-palette]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            palette = Number(b.dataset.palette);
+            document
+              .querySelectorAll("[data-palette]")
+              .forEach((e) => e.setAttribute("aria-pressed", String(e === b)));
+            draw();
+            status.textContent = b.getAttribute("aria-label");
+          }),
+      );
+      energy.oninput = () => {
+        document.querySelector("#energyValue").textContent = energy.value + "%";
+        document.querySelector("#energyReadout").textContent = "ENERGY " + energy.value;
+        draw();
+      };
+      energy.oninput();
+      c.onclick = pulse;
+      c.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          pulse();
+        }
+      });
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) stop(en ? "Demo paused while hidden." : "页面隐藏，演示已暂停。");
+      });
+      motion.addEventListener("change", () => {
+        if (motion.matches) stop(en ? "Reduced motion enabled." : "已启用减少动态效果。");
+      });
+      note();
+      status.textContent = en ? "Tap the orb to wake a pulse." : "轻触球体，唤醒一次脉冲。";
+    </script>
+  </body>
+</html>

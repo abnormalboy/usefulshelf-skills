@@ -1,0 +1,1835 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>给灵感接上线。</title>
+    <style>
+      :root {
+        --accent: #e57950;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        color: #ece7df;
+        background: #111211;
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.35;
+        cursor: default;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible,
+      select:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 4px;
+      }
+      main {
+        max-width: 1320px;
+        margin: auto;
+        padding: 30px 35px;
+      }
+      .mast {
+        display: flex;
+        justify-content: space-between;
+        font:
+          10px ui-monospace,
+          monospace;
+        letter-spacing: 0.13em;
+        color: #81877b;
+      }
+      header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 30px;
+        margin: 31px 0 28px;
+      }
+      h1 {
+        font-size: clamp(29px, 4.2vw, 52px);
+        font-weight: 480;
+        letter-spacing: -0.045em;
+        margin: 0;
+        overflow-wrap: anywhere;
+        line-height: 1.2;
+      }
+      header p {
+        font-size: 12px;
+        line-height: 1.8;
+        color: #999d92;
+        max-width: 315px;
+        margin: 0;
+      }
+      .tools {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        padding: 14px 17px;
+        border: 1px solid #33372d;
+        border-radius: 13px 13px 0 0;
+        background: #1a1c18;
+      }
+      .btn {
+        border: 1px solid #414738;
+        background: transparent;
+        color: #d6daca;
+        padding: 9px 13px;
+        border-radius: 7px;
+        font-size: 11px;
+      }
+      .btn:hover {
+        background: #30362a;
+      }
+      .primary {
+        background: var(--accent);
+        color: #191c16;
+        border-color: var(--accent);
+      }
+      .tools .hint {
+        margin-left: auto;
+        font:
+          10px ui-monospace,
+          monospace;
+        color: #8c9680;
+      }
+      .stage {
+        position: relative;
+        height: 400px;
+        border: 1px solid #33372d;
+        border-top: 0;
+        isolation: isolate;
+        background:
+          radial-gradient(#49524055 0.7px, transparent 0.9px) 0 0/22px 22px,
+          #141712;
+        overflow: hidden;
+      }
+      .stage svg.wires {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        pointer-events: none;
+      }
+      .wire {
+        fill: none;
+        stroke: var(--accent);
+        stroke-width: 2;
+        filter: drop-shadow(0 0 4px #d5b78d55);
+      }
+      .wire.pending {
+        stroke-dasharray: 5 6;
+        opacity: 0.6;
+      }
+      .wire-hit {
+        fill: none;
+        stroke: transparent;
+        stroke-width: 16;
+        pointer-events: stroke;
+        cursor: pointer;
+      }
+      .node {
+        position: absolute;
+        width: 26%;
+        background: #20241b;
+        border: 1px solid #64724c;
+        border-radius: 24px;
+        padding: 20px 22px;
+        box-shadow: 0 12px 35px #0003;
+        min-width: 0;
+      }
+      .node-a {
+        left: 5%;
+        top: 65px;
+        border-color: #937957;
+      }
+      .node-b {
+        left: 37%;
+        top: 130px;
+        border-color: #637852;
+      }
+      .node-c {
+        left: 69%;
+        top: 220px;
+        border-color: #678385;
+      }
+      .node-head {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        margin-bottom: 13px;
+      }
+      .node-icon {
+        width: 33px;
+        height: 33px;
+        flex-shrink: 0;
+        display: grid;
+        place-items: center;
+        background: #10130c;
+        border: 1px solid #535c45;
+        border-radius: 50%;
+        font:
+          17px Georgia,
+          serif;
+        color: var(--accent);
+      }
+      .node h2 {
+        font-size: 13px;
+        font-weight: 550;
+        margin: 0 0 3px;
+      }
+      .node small {
+        font:
+          9px ui-monospace,
+          monospace;
+        letter-spacing: 0.07em;
+        color: #89937d;
+      }
+      .port {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        top: calc(50% - 12px);
+        background: #192015;
+        border: 5px solid #141712;
+        border-radius: 50%;
+        padding: 0;
+        z-index: 4;
+        box-shadow: inset 0 0 0 2px #89987a;
+        touch-action: none;
+      }
+      .port.out {
+        right: -12px;
+      }
+      .port.in {
+        left: -12px;
+      }
+      .port:hover,
+      .port[aria-pressed="true"] {
+        background: var(--accent);
+        box-shadow:
+          0 0 12px #d6b68c66,
+          inset 0 0 0 2px var(--accent);
+      }
+      textarea,
+      select {
+        width: 100%;
+        min-width: 0;
+        background: #12160f;
+        color: #d7dfc9;
+        border: 1px solid #424d36;
+        border-radius: 7px;
+        padding: 10px;
+        font-size: 11px;
+      }
+      textarea {
+        height: 57px;
+        resize: vertical;
+        line-height: 1.45;
+      }
+      select {
+        height: 38px;
+      }
+      .result {
+        font-size: 16px;
+        line-height: 1.3;
+        letter-spacing: -0.02em;
+        overflow-wrap: anywhere;
+        color: #dbe9db;
+        white-space: pre-wrap;
+        margin: 0;
+        min-height: 42px;
+        max-height: 120px;
+        overflow: auto;
+      }
+      .under {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+        padding: 22px 17px;
+        border: 1px solid #33372d;
+        border-top: 0;
+        border-radius: 0 0 13px 13px;
+        background: #1a1c18;
+      }
+      .legend {
+        font:
+          10px/1.8 ui-monospace,
+          monospace;
+        color: #919b82;
+        margin: 0;
+      }
+      .connections {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        min-height: 26px;
+      }
+      .connection {
+        border: 1px solid #515e41;
+        background: #252e1d;
+        border-radius: 20px;
+        padding: 5px 10px;
+        color: #c4d0b5;
+        font-size: 10px;
+      }
+      .status {
+        font-size: 12px;
+        line-height: 1.7;
+        color: #c1ccb1;
+        margin: 0 0 13px;
+        min-height: 21px;
+      }
+      .export {
+        float: right;
+      }
+      footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 17px;
+        font:
+          9px/1.7 ui-monospace,
+          monospace;
+        color: #707d62;
+      }
+      .stage-caption {
+        position: absolute;
+        left: 22px;
+        bottom: 17px;
+        font:
+          9px ui-monospace,
+          monospace;
+        letter-spacing: 0.1em;
+        color: #5c6c4e;
+      }
+      .pulse .wire {
+        stroke-dasharray: 10 7;
+        animation: flow 0.8s linear 2;
+      }
+      @keyframes flow {
+        to {
+          stroke-dashoffset: -34;
+        }
+      }
+      @media (max-width: 750px) {
+        main {
+          padding: 24px 18px;
+        }
+        .mast {
+          font-size: 8px;
+        }
+        .mast span:last-child {
+          display: none;
+        }
+        header {
+          display: block;
+          margin: 25px 0;
+        }
+        header p {
+          margin-top: 14px;
+          max-width: none;
+        }
+        .node {
+          width: 74%;
+          left: 13%;
+          padding: 15px 19px;
+        }
+        .node-a {
+          top: 30px;
+        }
+        .node-b {
+          top: 208px;
+        }
+        .node-c {
+          top: 374px;
+        }
+        .stage {
+          height: 555px;
+        }
+        .port.out {
+          right: calc(50% - 12px);
+          top: auto;
+          bottom: -12px;
+        }
+        .port.in {
+          left: calc(50% - 12px);
+          top: -12px;
+        }
+        .tools {
+          padding: 12px;
+          gap: 6px;
+        }
+        .btn {
+          font-size: 10px;
+          padding: 9px 10px;
+        }
+        .tools .hint {
+          display: none;
+        }
+        .under {
+          grid-template-columns: 1fr;
+          gap: 20px;
+          padding: 17px;
+        }
+        .stage-caption {
+          font-size: 8px;
+          bottom: 12px;
+        }
+        .export {
+          float: none;
+        }
+        .node-head {
+          margin-bottom: 10px;
+        }
+        footer {
+          flex-direction: column;
+        }
+        .result {
+          max-height: 62px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .mode-tabs {
+        position: relative;
+        max-width: 1320px;
+        margin: auto;
+        display: flex;
+        justify-content: flex-end;
+        gap: 7px;
+        padding: 17px 24px;
+        background: #0b0c0e;
+      }
+      .mode-tabs button {
+        border: 1px solid #343840;
+        background: transparent;
+        color: #8c949f;
+        border-radius: 7px;
+        padding: 9px 13px;
+        font-size: 11px;
+      }
+      .mode-tabs button[aria-pressed="true"] {
+        background: #25282f;
+        color: #eee;
+      }
+      .route-layout {
+        display: grid;
+        grid-template-columns: 228px minmax(0, 1fr);
+        min-height: 580px;
+        background: #08090b;
+        max-width: 1320px;
+        margin: auto;
+        border-top: 1px solid #202329;
+      }
+      .route-sidebar {
+        padding: 27px 20px;
+        border-right: 1px solid #24262c;
+        display: flex;
+        flex-direction: column;
+      }
+      .route-sidebar h1 {
+        font-size: 19px;
+        letter-spacing: -0.02em;
+        margin: 0 0 12px;
+        line-height: 1.4;
+        font-weight: 550;
+      }
+      .route-sidebar p {
+        font-size: 11px;
+        line-height: 1.75;
+        color: #8c939e;
+        margin: 0 0 28px;
+      }
+      .route-kicker {
+        font:
+          9px ui-monospace,
+          monospace;
+        letter-spacing: 0.12em;
+        color: #737c89;
+        margin-bottom: 13px;
+      }
+      .route-presets {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .route-presets button {
+        border: 0;
+        background: transparent;
+        border-radius: 10px;
+        color: #929aa7;
+        text-align: left;
+        padding: 12px;
+        font-size: 12px;
+      }
+      .route-presets button[aria-pressed="true"] {
+        background: #22242a;
+        color: #f1f2f5;
+      }
+      .route-presets button:hover {
+        background: #1a1d23;
+        color: #fff;
+      }
+      .route-note {
+        margin-top: auto !important;
+        padding-top: 32px;
+        font-size: 10px !important;
+      }
+      .route-canvas {
+        position: relative;
+        min-width: 0;
+        height: 580px;
+        isolation: isolate;
+        overflow: hidden;
+        background: radial-gradient(#48506355 0.65px, transparent 0.8px) 0 0/27px 27px;
+      }
+      .route-svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        pointer-events: none;
+        z-index: 2;
+      }
+      .route-node {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(520px, 73%);
+        height: 108px;
+        border-radius: 60px;
+        display: flex;
+        align-items: center;
+        padding: 21px 25px;
+        gap: 19px;
+        border: 1px solid var(--node-color);
+        background: var(--node-fill);
+        box-shadow: 0 0 28px color-mix(in srgb, var(--node-color) 9%, transparent);
+        z-index: 3;
+      }
+      .route-warm {
+        top: 98px;
+        --node-color: var(--accent);
+        --node-fill: #130e0c;
+      }
+      .route-cool {
+        top: 359px;
+        --node-color: #559fe6;
+        --node-fill: #0a111b;
+      }
+      .route-emblem {
+        height: 56px;
+        width: 56px;
+        flex-shrink: 0;
+        border: 1px solid #34373e;
+        background: #080a0c;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        color: #e3e7ef;
+        font-size: 27px;
+        font-family: Georgia, serif;
+      }
+      .route-cool .route-emblem {
+        color: #79bcfb;
+      }
+      .route-node small {
+        display: block;
+        font-size: 10px;
+        color: #9198a6;
+        margin-bottom: 5px;
+      }
+      .route-node .route-type {
+        color: var(--node-color);
+        font-size: 11px;
+        display: block;
+        margin-bottom: 5px;
+      }
+      .route-node h2 {
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1.3;
+        margin: 0;
+        color: #e4e8ee;
+      }
+      .route-port {
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        transform: translateX(-50%);
+        touch-action: none;
+      }
+      .route-port::after {
+        content: "";
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border: 1px solid #424954;
+        background: #8b94a1;
+        border-radius: 50%;
+        left: 7px;
+        top: 7px;
+      }
+      .route-port[data-side="top"] {
+        top: -11px;
+      }
+      .route-port[data-side="bottom"] {
+        bottom: -11px;
+      }
+      .route-port[data-col="left"] {
+        left: 18%;
+      }
+      .route-port[data-col="center"] {
+        left: 50%;
+      }
+      .route-port[data-col="right"] {
+        left: 82%;
+      }
+      .route-port:hover::after,
+      .route-port[aria-pressed="true"]::after {
+        background: var(--node-color);
+        box-shadow: 0 0 10px var(--node-color);
+      }
+      .route-line {
+        fill: none;
+        stroke: url(#route-gradient);
+        stroke-width: 2;
+        stroke-linecap: round;
+        filter: drop-shadow(0 0 3px #b5d2ff30);
+      }
+      .route-hit {
+        fill: none;
+        stroke: transparent;
+        stroke-width: 19;
+        pointer-events: stroke;
+      }
+      .route-group:hover .route-line,
+      .route-group:focus-within .route-line {
+        stroke: #ff836c;
+        stroke-width: 2.8;
+      }
+      .route-delete {
+        opacity: 0;
+        pointer-events: none;
+        border: 1px solid #ff957b;
+        background: #411c20;
+        color: #ffafa0;
+        border-radius: 50%;
+        width: 27px;
+        height: 27px;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        font: 18px/1 system-ui;
+        cursor: pointer;
+        transition: opacity 0.12s;
+      }
+      .route-group:hover .route-delete,
+      .route-group:focus-within .route-delete,
+      .route-delete:focus {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .route-ghost {
+        fill: none;
+        stroke: #98b8de;
+        stroke-width: 1.5;
+        stroke-dasharray: 5 6;
+        opacity: 0.7;
+      }
+      .route-floor {
+        position: absolute;
+        bottom: 20px;
+        left: 27px;
+        right: 27px;
+        font:
+          10px ui-monospace,
+          monospace;
+        color: #808b9c;
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+      }
+      .route-under {
+        max-width: 1320px;
+        margin: auto;
+        background: #0e1014;
+        border-top: 1px solid #22252b;
+        padding: 17px 24px;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .route-list {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .route-chip {
+        background: #171c25;
+        border: 1px solid #333d4e;
+        border-radius: 15px;
+        color: #a5b8ce;
+        padding: 6px 10px;
+        font-size: 10px;
+      }
+      .route-status {
+        color: #8f9bab;
+        font-size: 11px;
+        line-height: 1.65;
+        margin: 0;
+        max-width: 440px;
+      }
+      .route-under small {
+        color: #5f6b7c;
+        font-size: 9px;
+      }
+      .pipeline-heading {
+        font-size: 30px;
+        letter-spacing: -0.04em;
+        margin: 0;
+        color: #ece7df;
+      }
+      @media (max-width: 700px) {
+        .mode-tabs {
+          padding: 12px 16px;
+          justify-content: center;
+        }
+        .route-layout {
+          display: block;
+        }
+        .route-sidebar {
+          padding: 21px 20px 15px;
+          border-right: 0;
+          border-bottom: 1px solid #24262c;
+        }
+        .route-sidebar h1 {
+          font-size: 22px;
+        }
+        .route-sidebar p {
+          margin-bottom: 15px;
+          max-width: 470px;
+        }
+        .route-kicker {
+          display: none;
+        }
+        .route-presets {
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 4px;
+        }
+        .route-presets button {
+          padding: 9px 10px;
+          font-size: 10px;
+        }
+        .route-note {
+          display: none;
+        }
+        .route-canvas {
+          height: 450px;
+        }
+        .route-node {
+          width: 77%;
+          height: 95px;
+          padding: 17px 20px;
+          gap: 12px;
+        }
+        .route-warm {
+          top: 60px;
+        }
+        .route-cool {
+          top: 293px;
+        }
+        .route-emblem {
+          width: 39px;
+          height: 39px;
+          font-size: 22px;
+        }
+        .route-node h2 {
+          font-size: 13px;
+        }
+        .route-node small {
+          font-size: 9px;
+        }
+        .route-node .route-type {
+          font-size: 10px;
+        }
+        .route-floor {
+          left: 18px;
+          right: 18px;
+          bottom: 3px;
+          font-size: 8px;
+        }
+        .route-under {
+          align-items: start;
+          flex-direction: column;
+          padding: 15px 18px;
+        }
+        .route-status {
+          max-width: none;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .route-delete {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mode-tabs" role="group" aria-label="工作台模式" id="workbench-modes">
+      <button id="show-routes" aria-pressed="true">接线画布</button>
+      <button id="show-pipeline" aria-pressed="false">文字管道</button>
+    </div>
+    <div id="routing-mode">
+      <section class="route-layout">
+        <aside class="route-sidebar">
+          <h1>给灵感接上线。</h1>
+          <p id="route-intro">暖色节点发出信号，冷色节点接住想法。试试直连、分支合流与回环。</p>
+          <div class="route-kicker">ROUTING STATES</div>
+          <nav class="route-presets" id="route-presets" aria-label="接线路线预设">
+            <button data-route-preset="direct" aria-pressed="false">直连</button>
+            <button data-route-preset="merge" aria-pressed="false">分支合流</button>
+            <button data-route-preset="loop" aria-pressed="true">回环路线</button>
+            <button data-route-preset="empty" aria-pressed="false">清空画布</button>
+            <button id="route-undo" disabled>撤销改动</button>
+          </nav>
+          <p class="route-note" id="route-note">
+            点击输出端口，再点击输入端口；也可以拖线连接。悬停连线会出现删除柄。回环仅展示路线，不执行循环。
+          </p>
+        </aside>
+        <div class="route-canvas" id="route-canvas" aria-label="双色胶囊接线画布">
+          <svg class="route-svg" id="route-svg" role="group" aria-label="可删除连线"></svg>
+          <article class="route-node route-warm">
+            <span class="route-emblem" aria-hidden="true">✳</span>
+            <div>
+              <small id="warm-kicker">创意信号 / SOURCE</small>
+              <span class="route-type" id="warm-type">定义一段想法</span>
+              <h2 id="warm-title">小小灵感发生器</h2>
+            </div>
+            <button
+              class="route-port"
+              id="warm-tl"
+              data-route-input="warm-tl"
+              data-side="top"
+              data-col="left"
+              aria-label="暖节点左输入"
+            ></button>
+            <button
+              class="route-port"
+              id="warm-tc"
+              data-route-input="warm-tc"
+              data-side="top"
+              data-col="center"
+              aria-label="暖节点中输入"
+            ></button>
+            <button
+              class="route-port"
+              id="warm-tr"
+              data-route-input="warm-tr"
+              data-side="top"
+              data-col="right"
+              aria-label="暖节点右输入"
+            ></button>
+            <button
+              class="route-port"
+              id="warm-bl"
+              data-route-output="warm-bl"
+              data-side="bottom"
+              data-col="left"
+              aria-label="暖节点左输出"
+              aria-pressed="false"
+            ></button>
+            <button
+              class="route-port"
+              id="warm-bc"
+              data-route-output="warm-bc"
+              data-side="bottom"
+              data-col="center"
+              aria-label="暖节点中输出"
+              aria-pressed="false"
+            ></button>
+            <button
+              class="route-port"
+              id="warm-br"
+              data-route-output="warm-br"
+              data-side="bottom"
+              data-col="right"
+              aria-label="暖节点右输出"
+              aria-pressed="false"
+            ></button>
+          </article>
+          <article class="route-node route-cool">
+            <span class="route-emblem" aria-hidden="true">◎</span>
+            <div>
+              <small id="cool-kicker">收集容器 / DESTINATION</small>
+              <span class="route-type" id="cool-type">接住每一次连接</span>
+              <h2 id="cool-title">灵感汇流工作台</h2>
+            </div>
+            <button
+              class="route-port"
+              id="cool-tl"
+              data-route-input="cool-tl"
+              data-side="top"
+              data-col="left"
+              aria-label="冷节点左输入"
+            ></button>
+            <button
+              class="route-port"
+              id="cool-tc"
+              data-route-input="cool-tc"
+              data-side="top"
+              data-col="center"
+              aria-label="冷节点中输入"
+            ></button>
+            <button
+              class="route-port"
+              id="cool-tr"
+              data-route-input="cool-tr"
+              data-side="top"
+              data-col="right"
+              aria-label="冷节点右输入"
+            ></button>
+            <button
+              class="route-port"
+              id="cool-bl"
+              data-route-output="cool-bl"
+              data-side="bottom"
+              data-col="left"
+              aria-label="冷节点左输出"
+              aria-pressed="false"
+            ></button>
+            <button
+              class="route-port"
+              id="cool-bc"
+              data-route-output="cool-bc"
+              data-side="bottom"
+              data-col="center"
+              aria-label="冷节点中输出"
+              aria-pressed="false"
+            ></button>
+            <button
+              class="route-port"
+              id="cool-br"
+              data-route-output="cool-br"
+              data-side="bottom"
+              data-col="right"
+              aria-label="冷节点右输出"
+              aria-pressed="false"
+            ></button>
+          </article>
+          <div class="route-floor">
+            <span id="route-count">3 WIRES</span>
+            <span>OUTPUT → INPUT / ESC TO CANCEL</span>
+          </div>
+        </div>
+      </section>
+      <div class="route-under">
+        <div><div class="route-list" id="route-list"></div></div>
+        <p class="route-status" id="route-status" role="status">
+          三条路线，一次直连、一次分支、一次回环。把指针放在线上试试。
+        </p>
+      </div>
+    </div>
+    <main id="pipeline" hidden>
+      <div class="mast">
+        <span>SMALL CIRCUITS / TEXT WORKSHOP</span>
+        <span data-i18n="mast">一根线，接通一个小想法</span>
+      </div>
+      <header>
+        <h2 class="pipeline-heading" data-i18n="pipelineTitle">让连线真正处理文字。</h2>
+        <p data-i18n="intro">
+          从输出圆点拉一根线到输入圆点。让文字经过变换，变成一张可以带走的小海报。
+        </p>
+      </header>
+      <div class="tools">
+        <button class="btn primary" id="complete" data-i18n="complete">接通完整路线</button>
+        <button class="btn" id="undo" data-i18n="undo">撤销接线</button>
+        <button class="btn" id="clear" data-i18n="clear">清空连线</button>
+        <span class="hint" data-i18n="keyboard">也可依次点击两个端口 · Esc 取消</span>
+      </div>
+      <section class="stage" id="stage" aria-label="节点画布">
+        <svg class="wires" id="wires" aria-hidden="true"></svg>
+        <article class="node node-a">
+          <div class="node-head">
+            <span class="node-icon" aria-hidden="true">a</span>
+            <div>
+              <h2 data-i18n="source">文字种子</h2>
+              <small>01 / INPUT</small>
+            </div>
+          </div>
+          <textarea id="phrase" maxlength="160" aria-label="输入文字">
+MAKE SMALL THINGS MATTER</textarea
+          >
+          <button
+            class="port out"
+            id="source-out"
+            data-output="source"
+            aria-label="文字种子输出"
+            aria-pressed="false"
+          ></button>
+        </article>
+        <article class="node node-b">
+          <button
+            class="port in"
+            id="transform-in"
+            data-input="transform"
+            aria-label="文字工坊输入"
+          ></button>
+          <div class="node-head">
+            <span class="node-icon" aria-hidden="true">↗</span>
+            <div>
+              <h2 data-i18n="transform">文字工坊</h2>
+              <small>02 / TRANSFORM</small>
+            </div>
+          </div>
+          <select id="operation" aria-label="文字变换方式">
+            <option value="upper" data-i18n="upper">放大声音 · 大写</option>
+            <option value="reverse" data-i18n="reverse">倒着想 · 反转</option>
+            <option value="echo" data-i18n="echo">小小回声 · 重复</option>
+            <option value="spaced" data-i18n="spaced">慢慢说 · 加空格</option>
+          </select>
+          <button
+            class="port out"
+            id="transform-out"
+            data-output="transform"
+            aria-label="文字工坊输出"
+            aria-pressed="false"
+          ></button>
+        </article>
+        <article class="node node-c">
+          <button class="port in" id="poster-in" data-input="poster" aria-label="海报输入"></button>
+          <div class="node-head">
+            <span class="node-icon" aria-hidden="true">▧</span>
+            <div>
+              <h2 data-i18n="poster">口袋海报</h2>
+              <small>03 / OUTPUT</small>
+            </div>
+          </div>
+          <p class="result" id="result"></p>
+        </article>
+        <span class="stage-caption">DATA FLOWS WHERE CURIOSITY GOES.</span>
+      </section>
+      <div class="under">
+        <div>
+          <p class="legend" data-i18n="legend">
+            路线会决定结果。可跳过工坊直接接到海报。
+            <br />
+            点击下面的路线标签即可拆线。
+          </p>
+          <div class="connections" id="connections"></div>
+        </div>
+        <div>
+          <p class="status" id="status" role="status"></p>
+          <button class="btn export" id="export" data-i18n="export" disabled>
+            导出 SVG 海报 ↗
+          </button>
+        </div>
+      </div>
+      <footer>
+        <span data-i18n="footer">本地文字实验 · 不连接任何外部服务</span>
+        <span>CONNECT / TRANSFORM / KEEP</span>
+      </footer>
+    </main>
+    <!-- usefulshelf-runtime:start -->
+    <script>
+      // Inlined into each downloadable template: no sibling runtime is required.
+      (() => {
+        "use strict";
+        const dictionary = {};
+        const lang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          "zh";
+        const chinese = lang !== "en";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+        const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        window.__usefulshelfConfigure = (config) => {
+          const accent = document.documentElement.dataset.skillAccent;
+          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+        };
+        window.__usefulshelfText = (value) => {
+          if (!chinese || typeof value !== "string") return value;
+          const exact = dictionary[normalize(value)];
+          if (exact !== undefined) return exact;
+          return value
+            .replace(/What is ([^?]+)\?/g, "什么是 $1？")
+            .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
+            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
+            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
+            .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
+            .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/added to your sky\./g, "已加入夜空。")
+            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(/· no transaction sent/g, "· 未发送真实交易");
+        };
+        function boot() {
+          if (chinese) {
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            let node;
+            while ((node = walker.nextNode())) {
+              if (
+                node.parentElement?.closest(
+                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
+                )
+              )
+                continue;
+              const next = window.__usefulshelfText(node.textContent);
+              if (next !== node.textContent) node.textContent = next;
+            }
+            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
+              for (const name of ["aria-label", "placeholder", "title"]) {
+                if (element.hasAttribute(name))
+                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+              }
+            }
+            document.title = window.__usefulshelfText(document.title);
+          }
+          if (parent === window) return;
+          // Freeze viewport-based demo heights before measuring, avoiding vh feedback
+          // when the parent grows the iframe. Intentional inner demo scrollers remain.
+          const initialHeight = Math.max(360, Math.min(760, innerHeight));
+          function fixRules(rules) {
+            for (const rule of rules) {
+              if (rule.cssRules) fixRules(rule.cssRules);
+              if (!rule.style) continue;
+              if (/v[hbs]/.test(rule.style.minHeight))
+                rule.style.setProperty("min-height", "0", "important");
+              if (/v[hbs]/.test(rule.style.height))
+                rule.style.setProperty("height", `${initialHeight}px`, "important");
+            }
+          }
+          for (const sheet of document.styleSheets) {
+            try {
+              fixRules(sheet.cssRules);
+            } catch {
+              /* Same-file styles are sufficient. */
+            }
+          }
+          for (const element of [document.documentElement, document.body]) {
+            element.style.setProperty("height", "auto", "important");
+            element.style.setProperty("min-height", "0", "important");
+          }
+          document.documentElement.style.overflowX = "clip";
+          let frame = 0,
+            lastHeight = 0;
+          const measure = () => {
+            frame = 0;
+            const height = Math.ceil(
+              Math.max(document.body.scrollHeight, document.body.getBoundingClientRect().height),
+            );
+            if (height > 0 && height <= 20000 && height !== lastHeight) {
+              lastHeight = height;
+              parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+            }
+          };
+          const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(measure);
+          };
+          const observer = new ResizeObserver(schedule);
+          observer.observe(document.body);
+          window.addEventListener("resize", schedule);
+          const onMessage = (event) => {
+            if (event.source === parent && event.data?.type === "usefulshelf:measure") {
+              // The first resize may precede parent hydration. A measurement request
+              // must acknowledge even an unchanged height, so that message is recovered.
+              lastHeight = 0;
+              schedule();
+            }
+          };
+          window.addEventListener("message", onMessage);
+          document.fonts?.ready.then(schedule);
+          window.addEventListener(
+            "pagehide",
+            () => {
+              observer.disconnect();
+              cancelAnimationFrame(frame);
+              window.removeEventListener("resize", schedule);
+              window.removeEventListener("message", onMessage);
+            },
+            { once: true },
+          );
+          schedule();
+        }
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        else boot();
+      })();
+    </script>
+    <!-- usefulshelf-runtime:end -->
+    <script>
+      const config = window.__usefulshelfConfigure({"title": "\u7ed9\u7075\u611f\u63a5\u4e0a\u7ebf\u3002", "accent": "#e57950", "phrase": "MAKE SMALL THINGS MATTER", "curvature": 90, "customTitle": false, "customText": []}),
+        en =
+          (new URLSearchParams(location.search).get("lang") ||
+            document.documentElement.dataset.skillLang) === "en",
+        $ = (id) => document.getElementById(id),
+        t = (zh, eng) => (en ? eng : zh);
+      document.documentElement.lang = en ? "en" : "zh-CN";
+      const english = {
+        pipelineTitle: "Make the wires do real work.",
+        mast: "One wire. One little possibility.",
+        intro:
+          "Draw a wire from an output dot to an input dot. Transform a small thought into a pocket-sized poster.",
+        complete: "Connect full route",
+        undo: "Undo wiring",
+        clear: "Clear wires",
+        keyboard: "Or click two ports · Esc to cancel",
+        source: "Text seed",
+        transform: "Word workshop",
+        poster: "Pocket poster",
+        upper: "Speak up · Uppercase",
+        reverse: "Think backwards · Reverse",
+        echo: "A little echo · Repeat",
+        spaced: "Take it slow · Space out",
+        legend:
+          "The route changes the result. Bypass the workshop for the original text. Click a route below to remove it.",
+        export: "Export SVG poster ↗",
+        footer: "A local text experiment · No external services",
+      };
+      if (en) {
+        document
+          .querySelectorAll("[data-i18n]")
+          .forEach((el) => (el.textContent = english[el.dataset.i18n]));
+        if (!config.customTitle)
+          document.querySelector("h1").textContent = "Connect a little possibility.";
+        const labels = {
+          stage: "Node canvas",
+          phrase: "Input text",
+          operation: "Text transformation",
+          "source-out": "Text seed output",
+          "transform-in": "Word workshop input",
+          "transform-out": "Word workshop output",
+          "poster-in": "Poster input",
+        };
+        Object.entries(labels).forEach(([id, label]) => $(id).setAttribute("aria-label", label));
+      }
+      let edges = [{ from: "source", to: "transform" }],
+        history = [],
+        pending = null,
+        pointer = null,
+        output = "",
+        dragging = false,
+        justConnected = false;
+      const names = {
+        source: t("种子", "Seed"),
+        transform: t("工坊", "Workshop"),
+        poster: t("海报", "Poster"),
+      };
+      function compute(value, operation, links) {
+        const incoming = (to) => links.find((e) => e.to === to)?.from;
+        const route = incoming("poster");
+        if (route === "source") return value;
+        if (route === "transform" && incoming("transform") === "source") {
+          if (operation === "upper") return value.toLocaleUpperCase();
+          if (operation === "reverse") return [...value].reverse().join("");
+          if (operation === "echo") return value + "\n" + value;
+          return [...value].join(" ");
+        }
+        return null;
+      }
+      function save() {
+        history.push(edges.map((e) => ({ ...e })));
+        if (history.length > 30) history.shift();
+      }
+      function say(msg) {
+        $("status").textContent = msg;
+      }
+      function cancel() {
+        pending = null;
+        pointer = null;
+        document
+          .querySelectorAll("[data-output]")
+          .forEach((b) => b.setAttribute("aria-pressed", "false"));
+        draw();
+      }
+      function connect(from, to) {
+        if (
+          !(
+            (from === "source" && (to === "transform" || to === "poster")) ||
+            (from === "transform" && to === "poster")
+          )
+        ) {
+          say(
+            t(
+              "这个方向接不通。请选择下游输入端口。",
+              "That route cannot connect. Choose a downstream input.",
+            ),
+          );
+          cancel();
+          return;
+        }
+        if (edges.some((e) => e.from === from && e.to === to)) {
+          cancel();
+          return;
+        }
+        save();
+        edges = edges.filter((e) => e.to !== to);
+        edges.push({ from, to });
+        cancel();
+        render();
+        say(t("接通了：", "Connected: ") + names[from] + " → " + names[to]);
+        pulse();
+      }
+      function point(id) {
+        const p = $(id).getBoundingClientRect(),
+          r = $("stage").getBoundingClientRect();
+        return { x: p.left + p.width / 2 - r.left, y: p.top + p.height / 2 - r.top };
+      }
+      function path(a, b) {
+        const vertical = matchMedia("(max-width:750px)").matches;
+        const c = config.curvature;
+        return vertical
+          ? `M${a.x},${a.y} C${a.x},${a.y + c} ${b.x},${b.y - c} ${b.x},${b.y}`
+          : `M${a.x},${a.y} C${a.x + c},${a.y} ${b.x - c},${b.y} ${b.x},${b.y}`;
+      }
+      function draw() {
+        const ns = "http://www.w3.org/2000/svg";
+        $("wires").replaceChildren();
+        for (const edge of edges) {
+          const a = point(edge.from + "-out"),
+            b = point(edge.to + "-in");
+          const line = document.createElementNS(ns, "path");
+          line.setAttribute("d", path(a, b));
+          line.classList.add("wire");
+          $("wires").append(line);
+          const hit = line.cloneNode();
+          hit.classList.replace("wire", "wire-hit");
+          hit.onclick = () => remove(edge.from, edge.to);
+          $("wires").append(hit);
+        }
+        if (pending) {
+          const a = point(pending + "-out");
+          const b = pointer || {
+            x: a.x + (innerWidth > 750 ? 80 : 0),
+            y: a.y + (innerWidth > 750 ? 0 : 65),
+          };
+          const ghost = document.createElementNS(ns, "path");
+          ghost.setAttribute("d", path(a, b));
+          ghost.setAttribute("class", "wire pending");
+          $("wires").append(ghost);
+        }
+      }
+      function remove(from, to) {
+        save();
+        edges = edges.filter((e) => !(e.from === from && e.to === to));
+        render();
+        say(t("已拆掉一根连线。", "One wire removed."));
+      }
+      function render() {
+        output = compute($("phrase").value, $("operation").value, edges);
+        $("result").textContent =
+          output === null
+            ? t("等一根连线，等一个想法。", "Waiting for a wire. Waiting for an idea.")
+            : output || t("给种子写点文字吧。", "Give the seed some words.");
+        $("export").disabled = output === null || !output.trim();
+        $("undo").disabled = !history.length;
+        $("connections").replaceChildren();
+        for (const e of edges) {
+          const b = document.createElement("button");
+          b.className = "connection";
+          b.textContent = names[e.from] + " → " + names[e.to] + " ×";
+          b.setAttribute(
+            "aria-label",
+            t("移除连线 ", "Remove wire ") + names[e.from] + " → " + names[e.to],
+          );
+          b.onclick = () => remove(e.from, e.to);
+          $("connections").append(b);
+        }
+        draw();
+      }
+      let pulseTimer;
+      function pulse() {
+        clearTimeout(pulseTimer);
+        $("stage").classList.remove("pulse");
+        requestAnimationFrame(() => {
+          $("stage").classList.add("pulse");
+          pulseTimer = setTimeout(() => $("stage").classList.remove("pulse"), 1700);
+        });
+      }
+      document.querySelectorAll("[data-output]").forEach((b) => {
+        b.onclick = () => {
+          pending = b.dataset.output;
+          pointer = null;
+          document
+            .querySelectorAll("[data-output]")
+            .forEach((x) => x.setAttribute("aria-pressed", x === b));
+          draw();
+          say(t("现在选择一个输入端口。", "Now choose an input port."));
+        };
+        b.onpointerdown = () => {
+          pending = b.dataset.output;
+          dragging = true;
+        };
+        b.onpointermove = (e) => {
+          if (e.buttons !== 1 || pending !== b.dataset.output) return;
+          const r = $("stage").getBoundingClientRect();
+          pointer = { x: e.clientX - r.left, y: e.clientY - r.top };
+          draw();
+        };
+      });
+      document.addEventListener("pointermove", (e) => {
+        if (!dragging || !pending || e.buttons !== 1) return;
+        const r = $("stage").getBoundingClientRect();
+        pointer = { x: e.clientX - r.left, y: e.clientY - r.top };
+        draw();
+      });
+      document.addEventListener("pointerup", (e) => {
+        dragging = false;
+        if (!pending) return;
+        const input = document.elementFromPoint(e.clientX, e.clientY)?.closest("[data-input]");
+        if (input) {
+          connect(pending, input.dataset.input);
+          justConnected = true;
+          setTimeout(() => (justConnected = false), 0);
+        }
+      });
+      document.querySelectorAll("[data-input]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            if (justConnected) return;
+            if (pending) connect(pending, b.dataset.input);
+          }),
+      );
+      document.addEventListener("pointercancel", () => {
+        dragging = false;
+        cancel();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          cancel();
+          say(t("已取消接线。", "Connection cancelled."));
+        }
+      });
+      $("complete").onclick = () => {
+        save();
+        edges = [
+          { from: "source", to: "transform" },
+          { from: "transform", to: "poster" },
+        ];
+        cancel();
+        render();
+        say(t("路线接通了。试试换一种文字变换。", "Route connected. Try another transformation."));
+        pulse();
+      };
+      $("clear").onclick = () => {
+        if (edges.length) save();
+        edges = [];
+        cancel();
+        render();
+        say(t("画布清空，重新接一个想法。", "A clean canvas. Connect another idea."));
+      };
+      $("undo").onclick = () => {
+        if (history.length) {
+          edges = history.pop();
+          cancel();
+          render();
+          say(t("已恢复上一条路线。", "Previous route restored."));
+        }
+      };
+      $("phrase").oninput = render;
+      $("operation").onchange = () => {
+        render();
+        pulse();
+        say(t("变换已更新。", "Transformation updated."));
+      };
+      new ResizeObserver(draw).observe($("stage"));
+      function escapeXML(s) {
+        return s.replace(
+          /[&<>"']/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[c],
+        );
+      }
+      $("export").onclick = () => {
+        if (!output?.trim()) return;
+        const measure = document.createElement("canvas").getContext("2d");
+        if (measure) measure.font = "34px sans-serif";
+        const lines = [];
+        let line = "";
+        for (const ch of output) {
+          if (ch === "\n") {
+            lines.push(line);
+            line = "";
+            continue;
+          }
+          const candidate = line + ch;
+          const width = measure ? measure.measureText(candidate).width : [...candidate].length * 34;
+          if (width > 490 && line) {
+            lines.push(line);
+            line = ch;
+          } else line = candidate;
+        }
+        if (line) lines.push(line);
+        const height = Math.max(700, lines.length * 42 + 240);
+        const text = lines
+          .map(
+            (s, i) =>
+              `<text x="55" y="${160 + i * 42}" font-size="34" fill="#263121" font-family="sans-serif">${escapeXML(s)}</text>`,
+          )
+          .join("");
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="${height}" viewBox="0 0 600 ${height}"><rect width="600" height="${height}" fill="#ecefdc"/><circle cx="530" cy="65" r="18" fill="${config.accent}"/><text x="55" y="70" fill="#667452" font-size="11" font-family="monospace">SMALL CIRCUITS / A POCKET THOUGHT</text>${text}<path d="M55 ${height - 90}H545" stroke="#768364"/><text x="55" y="${height - 55}" fill="#667452" font-family="monospace" font-size="10">CONNECTED BY YOU.</text></svg>`;
+        const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "pocket-thought.svg";
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1500);
+        say(t("海报已导出为 SVG。", "Poster exported as SVG."));
+      };
+      render();
+      say(
+        t(
+          "第一根线已接好。把工坊输出接到海报输入试试。",
+          "The first wire is ready. Connect the workshop output to the poster input.",
+        ),
+      );
+      function initRouteWorkbench() {
+        const words = en
+          ? {
+              "show-routes": "Wiring canvas",
+              "show-pipeline": "Text pipeline",
+              "route-intro":
+                "A warm signal. A cool destination. Explore direct wires, merging branches and a looping return.",
+              "route-note":
+                "Click an output, then an input, or drag to connect. Hover a wire to reveal its delete handle. Loops show routes only; they never execute a data cycle.",
+              "warm-kicker": "CREATIVE SIGNAL / SOURCE",
+              "warm-type": "Define a little thought",
+              "warm-title": "A little idea generator",
+              "cool-kicker": "COLLECTION / DESTINATION",
+              "cool-type": "Catch every connection",
+              "cool-title": "The idea junction",
+            }
+          : {};
+        Object.entries(words).forEach(([id, text]) => ($(id).textContent = text));
+        if (en) {
+          $("workbench-modes").setAttribute("aria-label", "Workbench mode");
+          $("route-presets").setAttribute("aria-label", "Wiring presets");
+          $("route-canvas").setAttribute("aria-label", "Warm and cool capsule wiring canvas");
+          $("route-svg").setAttribute("aria-label", "Removable connections");
+          $("route-undo").textContent = "Undo change";
+          const presetNames = {
+            direct: "Direct connection",
+            merge: "Branch merge",
+            loop: "Loop route",
+            empty: "Clear canvas",
+          };
+          document
+            .querySelectorAll("[data-route-preset]")
+            .forEach((b) => (b.textContent = presetNames[b.dataset.routePreset]));
+          document.querySelectorAll(".route-port").forEach((b) => {
+            const [node, port] = b.id.split("-");
+            b.setAttribute(
+              "aria-label",
+              (node === "warm" ? "Warm" : "Cool") +
+                " " +
+                { l: "left", c: "center", r: "right" }[port[1]] +
+                " " +
+                (port[0] === "t" ? "input" : "output"),
+            );
+          });
+        }
+        const presets = {
+          direct: [["warm-bc", "cool-tc"]],
+          merge: [
+            ["warm-bl", "cool-tc"],
+            ["warm-bc", "cool-tc"],
+            ["warm-br", "cool-tc"],
+          ],
+          loop: [
+            ["warm-bc", "cool-tc"],
+            ["warm-br", "cool-tr"],
+            ["cool-bl", "warm-tl"],
+          ],
+          empty: [],
+        };
+        let routes = presets.loop.map((x) => ({ from: x[0], to: x[1] })),
+          routeHistory = [],
+          pendingPort = null,
+          dragRoute = false,
+          routePointer = null;
+        function stash() {
+          routeHistory.push(routes.map((e) => ({ ...e })));
+          if (routeHistory.length > 30) routeHistory.shift();
+        }
+        function status(message) {
+          $("route-status").textContent = message;
+        }
+        function portPoint(id) {
+          const p = $(id).getBoundingClientRect(),
+            r = $("route-canvas").getBoundingClientRect();
+          return { x: p.left + p.width / 2 - r.left, y: p.top + p.height / 2 - r.top };
+        }
+        function geometry(a, b, loop) {
+          if (loop) {
+            const left = Math.max(13, Math.min(a.x, b.x) - 125),
+              cy = (a.y + b.y) / 2;
+            return {
+              d: `M${a.x} ${a.y} C${a.x} ${a.y + 65} ${left} ${a.y + 65} ${left} ${a.y} L${left} ${b.y} C${left} ${b.y - 65} ${b.x} ${b.y - 65} ${b.x} ${b.y}`,
+              mid: { x: left, y: cy },
+            };
+          }
+          const bend = Math.min(config.curvature, Math.abs(b.y - a.y) * 0.58);
+          return {
+            d: `M${a.x} ${a.y} C${a.x} ${a.y + bend} ${b.x} ${b.y - bend} ${b.x} ${b.y}`,
+            mid: { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 },
+          };
+        }
+        function cancelRoute() {
+          pendingPort = null;
+          routePointer = null;
+          dragRoute = false;
+          document
+            .querySelectorAll("[data-route-output]")
+            .forEach((b) => b.setAttribute("aria-pressed", "false"));
+          paint();
+        }
+        function removeRoute(from, to) {
+          stash();
+          routes = routes.filter((e) => !(e.from === from && e.to === to));
+          clearPreset();
+          renderRoutes();
+          status(
+            t("已拆下一条路线，可随时撤销。", "Connection removed. You can undo this change."),
+          );
+        }
+        function clearPreset() {
+          document
+            .querySelectorAll("[data-route-preset]")
+            .forEach((b) => b.setAttribute("aria-pressed", "false"));
+        }
+        function paint() {
+          if ($("routing-mode").hidden) return;
+          const ns = "http://www.w3.org/2000/svg",
+            svg = $("route-svg");
+          svg.replaceChildren();
+          const defs = document.createElementNS(ns, "defs"),
+            gradient = document.createElementNS(ns, "linearGradient");
+          gradient.id = "route-gradient";
+          gradient.setAttribute("gradientUnits", "userSpaceOnUse");
+          gradient.setAttribute("x1", "0");
+          gradient.setAttribute("y1", portPoint("warm-bc").y);
+          gradient.setAttribute("x2", "0");
+          gradient.setAttribute("y2", portPoint("cool-tc").y);
+          const stop1 = document.createElementNS(ns, "stop"),
+            stop2 = document.createElementNS(ns, "stop");
+          stop1.setAttribute("stop-color", config.accent);
+          stop2.setAttribute("offset", "1");
+          stop2.setAttribute("stop-color", "#559fe6");
+          gradient.append(stop1, stop2);
+          defs.append(gradient);
+          svg.append(defs);
+          routes.forEach((edge) => {
+            const a = portPoint(edge.from),
+              b = portPoint(edge.to),
+              shape = geometry(a, b, edge.from.startsWith("cool")),
+              group = document.createElementNS(ns, "g");
+            group.setAttribute("class", "route-group");
+            group.dataset.from = edge.from;
+            group.dataset.to = edge.to;
+            const line = document.createElementNS(ns, "path");
+            line.setAttribute("class", "route-line");
+            line.setAttribute("d", shape.d);
+            const hit = line.cloneNode();
+            hit.setAttribute("class", "route-hit");
+            const handle = document.createElementNS(ns, "foreignObject");
+            handle.setAttribute("x", shape.mid.x - 14);
+            handle.setAttribute("y", shape.mid.y - 14);
+            handle.setAttribute("width", "29");
+            handle.setAttribute("height", "29");
+            const button = document.createElement("button");
+            button.className = "route-delete";
+            button.textContent = "×";
+            button.setAttribute(
+              "aria-label",
+              t("删除连线：", "Delete wire: ") +
+                $(edge.from).getAttribute("aria-label") +
+                " → " +
+                $(edge.to).getAttribute("aria-label"),
+            );
+            button.onclick = (e) => {
+              e.stopPropagation();
+              removeRoute(edge.from, edge.to);
+              $("route-undo").focus();
+            };
+            handle.append(button);
+            group.append(line, hit, handle);
+            svg.append(group);
+          });
+          if (pendingPort) {
+            const a = portPoint(pendingPort),
+              b = routePointer || { x: a.x + 30, y: a.y + 65 },
+              shape = geometry(a, b, false),
+              ghost = document.createElementNS(ns, "path");
+            ghost.setAttribute("class", "route-ghost");
+            ghost.setAttribute("d", shape.d);
+            svg.append(ghost);
+          }
+        }
+        function renderRoutes() {
+          paint();
+          $("route-count").textContent = routes.length + t(" 条连线", " WIRES");
+          $("route-undo").disabled = !routeHistory.length;
+          $("route-list").replaceChildren();
+          routes.forEach((edge, i) => {
+            const b = document.createElement("button");
+            b.className = "route-chip";
+            b.textContent =
+              i +
+              1 +
+              " · " +
+              (edge.from.startsWith("cool")
+                ? t("回环", "Return loop")
+                : edge.to === "cool-tc"
+                  ? t("汇入", "Merge in")
+                  : t("分支", "Branch")) +
+              " ×";
+            b.setAttribute("aria-label", t("移除路线 ", "Remove route ") + (i + 1));
+            b.onclick = () => {
+              removeRoute(edge.from, edge.to);
+              $("route-undo").focus();
+            };
+            $("route-list").append(b);
+          });
+        }
+        function connectRoute(from, to) {
+          if (from.split("-")[0] === to.split("-")[0]) {
+            status(t("请选择另一个节点的输入端口。", "Choose an input on the other node."));
+            cancelRoute();
+            return;
+          }
+          if (routes.some((e) => e.from === from && e.to === to)) {
+            cancelRoute();
+            return;
+          }
+          stash();
+          routes.push({ from, to });
+          clearPreset();
+          cancelRoute();
+          renderRoutes();
+          status(
+            t(
+              "新路线已接通。回环仅展示，不会执行循环。",
+              "New route connected. Return loops are visual only, never an execution cycle.",
+            ),
+          );
+        }
+        document.querySelectorAll("[data-route-preset]").forEach(
+          (b) =>
+            (b.onclick = () => {
+              stash();
+              routes = presets[b.dataset.routePreset].map((x) => ({ from: x[0], to: x[1] }));
+              cancelRoute();
+              document
+                .querySelectorAll("[data-route-preset]")
+                .forEach((x) => x.setAttribute("aria-pressed", x === b));
+              renderRoutes();
+              status(t("已切换：", "Preset: ") + b.textContent);
+            }),
+        );
+        $("route-undo").onclick = () => {
+          if (!routeHistory.length) return;
+          routes = routeHistory.pop();
+          cancelRoute();
+          clearPreset();
+          renderRoutes();
+          status(t("上一组路线回来了。", "Previous routes restored."));
+        };
+        document.querySelectorAll("[data-route-output]").forEach((b) => {
+          b.onclick = () => {
+            pendingPort = b.dataset.routeOutput;
+            routePointer = null;
+            document
+              .querySelectorAll("[data-route-output]")
+              .forEach((x) => x.setAttribute("aria-pressed", x === b));
+            paint();
+            status(t("选择另一个节点的输入端口。", "Choose an input on the other node."));
+          };
+          b.onpointerdown = () => {
+            pendingPort = b.dataset.routeOutput;
+            dragRoute = true;
+          };
+        });
+        document.querySelectorAll("[data-route-input]").forEach(
+          (b) =>
+            (b.onclick = () => {
+              if (pendingPort) connectRoute(pendingPort, b.dataset.routeInput);
+            }),
+        );
+        document.addEventListener("pointermove", (e) => {
+          if (!dragRoute || !pendingPort || e.buttons !== 1) return;
+          const r = $("route-canvas").getBoundingClientRect();
+          routePointer = { x: e.clientX - r.left, y: e.clientY - r.top };
+          paint();
+        });
+        document.addEventListener("pointerup", (e) => {
+          dragRoute = false;
+          if (!pendingPort) return;
+          const input = document
+            .elementFromPoint(e.clientX, e.clientY)
+            ?.closest("[data-route-input]");
+          if (input) connectRoute(pendingPort, input.dataset.routeInput);
+        });
+        document.addEventListener("pointercancel", cancelRoute);
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && !$("routing-mode").hidden) {
+            cancelRoute();
+            status(t("已取消接线。", "Connection cancelled."));
+          }
+        });
+        function mode(pipeline) {
+          $("pipeline").hidden = !pipeline;
+          $("routing-mode").hidden = pipeline;
+          $("show-routes").setAttribute("aria-pressed", !pipeline);
+          $("show-pipeline").setAttribute("aria-pressed", pipeline);
+          cancelRoute();
+          cancel();
+          if (pipeline) render();
+          else renderRoutes();
+        }
+        $("show-routes").onclick = () => mode(false);
+        $("show-pipeline").onclick = () => mode(true);
+        new ResizeObserver(paint).observe($("route-canvas"));
+        renderRoutes();
+        status(
+          t(
+            "三条路线：直连、分支、回环。悬停连线可以拆线。",
+            "Three routes: direct, branch and return loop. Hover a wire to remove it.",
+          ),
+        );
+      }
+      initRouteWorkbench();
+    </script>
+  </body>
+</html>

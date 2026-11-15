@@ -1,0 +1,1232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Memories, ready to play.</title>
+    <style>
+      :root {
+        --accent: #b34d31;
+        --bg: #f4f1e9;
+        --ink: #302f2a;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        width: 100%;
+        min-width: 0;
+      }
+      body {
+        width: 100%;
+        min-width: 0;
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font:
+          15px system-ui,
+          sans-serif;
+      }
+      main {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        max-width: 1060px;
+        margin: auto;
+        padding: 32px 30px;
+        min-height: 720px;
+      }
+      .mast {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px solid #302f2a26;
+        padding-bottom: 18px;
+        font:
+          10px ui-monospace,
+          monospace;
+        letter-spacing: 0.15em;
+      }
+      .intro {
+        display: grid;
+        min-width: 0;
+        width: 100%;
+        grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+        gap: 45px;
+        align-items: end;
+        margin: 31px 0 30px;
+      }
+      h1 {
+        font:
+          clamp(39px, 5vw, 63px)/1.04 Georgia,
+          serif;
+        letter-spacing: -0.05em;
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
+      .intro p {
+        max-width: 350px;
+        color: #6e6b62;
+        line-height: 1.65;
+        margin: 0;
+      }
+      .deck {
+        display: flex;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        gap: 26px;
+        padding: 32px 24px 33px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        perspective: 900px;
+        scrollbar-width: thin;
+        scrollbar-color: #b8b0a0 transparent;
+      }
+      .cartridge {
+        position: relative;
+        flex: 0 0 192px;
+        height: 232px;
+        background: #cdc8bb;
+        border: 1px solid #a7a293;
+        border-radius: 10px 10px 4px 4px;
+        box-shadow:
+          inset 4px 3px 0 #eee9dc,
+          inset -7px -2px 0 #aaa596,
+          8px 12px 10px #30302013;
+        transform: rotateY(-13deg) rotateZ(2deg);
+        cursor: pointer;
+        padding: 0 14px;
+        color: var(--ink);
+        scroll-snap-align: center;
+        transition:
+          transform 0.35s,
+          box-shadow 0.35s;
+        text-align: left;
+      }
+      .cartridge:nth-child(2) {
+        background: #b6c3b5;
+      }
+      .cartridge:nth-child(3) {
+        background: #c6b5a6;
+      }
+      .cartridge:nth-child(4) {
+        background: #b2b9c8;
+      }
+      .cartridge::before {
+        content: "";
+        position: absolute;
+        left: 12px;
+        right: 12px;
+        top: 15px;
+        height: 27px;
+        background: repeating-linear-gradient(to bottom, #35382b28 0 2px, transparent 2px 5px);
+      }
+      .cartridge::after {
+        content: "";
+        position: absolute;
+        left: 41px;
+        right: 41px;
+        bottom: 0;
+        height: 16px;
+        background: repeating-linear-gradient(to right, #9b8d58 0 6px, #483b2c 6px 8px);
+        border: 5px solid #888777;
+        border-bottom: 0;
+      }
+      .cartridge[aria-pressed="true"] {
+        transform: translateY(-9px) rotateY(-3deg) rotateZ(-3deg);
+        box-shadow:
+          inset 4px 3px 0 #eee9dc,
+          inset -7px -2px 0 #aaa596,
+          9px 21px 16px #30302024;
+      }
+      .cartridge:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 6px;
+      }
+      .label {
+        position: absolute;
+        left: 14px;
+        right: 18px;
+        top: 53px;
+        bottom: 28px;
+        background: #f7f1df;
+        border: 1px solid #8d887c;
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .art {
+        height: 94px;
+        position: relative;
+        overflow: hidden;
+        background: #df986a;
+        display: grid;
+        place-items: center;
+      }
+      .art:before,
+      .art:after {
+        content: "";
+        position: absolute;
+      }
+      .art.one:before {
+        width: 72px;
+        height: 72px;
+        background: #ab4930;
+        border-radius: 50%;
+        top: 13px;
+      }
+      .art.one:after {
+        width: 160px;
+        height: 80px;
+        background: #f8d68e;
+        transform: rotate(-25deg);
+        top: 55px;
+      }
+      .art.two {
+        background: #506751;
+      }
+      .art.two:before {
+        width: 94px;
+        height: 94px;
+        border: 12px solid #b9d1a9;
+        transform: rotate(45deg);
+        top: 25px;
+      }
+      .art.two:after {
+        width: 50px;
+        height: 50px;
+        background: #dfb154;
+        border-radius: 50%;
+        top: 15px;
+      }
+      .art.three {
+        background: #cab2cf;
+      }
+      .art.three:before {
+        width: 80px;
+        height: 100px;
+        background: repeating-linear-gradient(90deg, #684e74 0 12px, transparent 12px 24px);
+        transform: rotate(25deg);
+      }
+      .art.four {
+        background: #243843;
+      }
+      .art.four:before {
+        width: 75px;
+        height: 75px;
+        border: 1px solid #8fc1c6;
+        border-radius: 50%;
+        box-shadow:
+          0 0 0 14px #8fc1c633,
+          0 0 0 28px #8fc1c622;
+      }
+      .art.four:after {
+        width: 10px;
+        height: 10px;
+        background: #edac62;
+        border-radius: 50%;
+        top: 13px;
+        left: 40px;
+      }
+      .label strong {
+        display: block;
+        font:
+          17px Georgia,
+          serif;
+        padding: 10px 10px 3px;
+      }
+      .label small {
+        padding: 0 10px;
+        font:
+          9px ui-monospace,
+          monospace;
+        letter-spacing: 0.1em;
+      }
+      .chapter {
+        display: grid;
+        min-width: 0;
+        grid-template-columns: 160px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 24px;
+        margin-top: 20px;
+        padding: 25px 0;
+        border-top: 1px solid #302f2a26;
+        border-bottom: 1px solid #302f2a26;
+      }
+      .chapter .year {
+        font:
+          50px Georgia,
+          serif;
+        color: var(--accent);
+      }
+      h2 {
+        font:
+          24px Georgia,
+          serif;
+        margin: 0 0 6px;
+      }
+      .chapter p {
+        margin: 0;
+        max-width: 530px;
+        color: #716b61;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      .number {
+        font:
+          11px ui-monospace,
+          monospace;
+        white-space: nowrap;
+      }
+      .bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-top: 24px;
+      }
+      .bottom button {
+        background: var(--ink);
+        color: #fff;
+        border: 0;
+        border-radius: 24px;
+        padding: 13px 21px;
+        cursor: pointer;
+        font: 12px system-ui;
+      }
+      .bottom button:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 4px;
+      }
+      #discovered {
+        font:
+          11px ui-monospace,
+          monospace;
+        color: #756e62;
+      }
+      @media (max-width: 650px) {
+        main {
+          padding: 24px 18px;
+        }
+        .intro {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 17px;
+        }
+        .intro p {
+          font-size: 13px;
+        }
+        .deck {
+          width: calc(100% + 36px);
+          max-width: calc(100% + 36px);
+          margin: 0 -18px;
+          padding: 25px 35px 28px;
+          gap: 25px;
+        }
+        .cartridge {
+          flex-basis: 166px;
+          height: 216px;
+        }
+        .art {
+          height: 80px;
+        }
+        .chapter {
+          grid-template-columns: 82px minmax(0, 1fr);
+          gap: 14px;
+        }
+        .chapter .year {
+          font-size: 35px;
+        }
+        .number {
+          grid-column: 2;
+        }
+        .bottom {
+          align-items: flex-start;
+        }
+        #discovered {
+          max-width: 120px;
+          line-height: 1.6;
+        }
+        .mast {
+          font-size: 9px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+          scroll-behavior: auto !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="mast">
+        <span>PERSONAL ARCHIVE / VOL. 01</span>
+        <span>FOUR CHAPTERS · KEEP FOREVER</span>
+      </div>
+      <div class="intro">
+        <h1>Memories, ready to play.</h1>
+        <p>Four chapters. One small collection. Pick a cartridge and see what it holds.</p>
+      </div>
+      <div class="deck" role="group" aria-label="Memory cartridges">
+        <button class="cartridge" aria-pressed="true" aria-label="Play First spark, 2018">
+          <span class="label">
+            <span class="art one"></span>
+            <strong>First spark</strong>
+            <small>2018 / EXPERIMENT</small>
+          </span>
+        </button>
+        <button class="cartridge" aria-pressed="false" aria-label="Play Into the wild, 2020">
+          <span class="label">
+            <span class="art two"></span>
+            <strong>Into the wild</strong>
+            <small>2020 / EXPLORE</small>
+          </span>
+        </button>
+        <button class="cartridge" aria-pressed="false" aria-label="Play Make together, 2023">
+          <span class="label">
+            <span class="art three"></span>
+            <strong>Make together</strong>
+            <small>2023 / COLLABORATE</small>
+          </span>
+        </button>
+        <button class="cartridge" aria-pressed="false" aria-label="Play New horizons, 2026">
+          <span class="label">
+            <span class="art four"></span>
+            <strong>New horizons</strong>
+            <small>2026 / IMAGINE</small>
+          </span>
+        </button>
+      </div>
+      <section class="chapter" aria-live="polite" aria-atomic="true">
+        <div class="year" id="year">2018</div>
+        <div>
+          <h2 id="name">First spark</h2>
+          <p id="story">
+            A tiny weekend experiment became the first thing I was brave enough to share. Small
+            beginnings have a way of growing.
+          </p>
+        </div>
+        <span class="number" id="number">PLAYING 01 / 04</span>
+      </section>
+      <div class="bottom">
+        <button id="shuffle">Draw another memory ↗</button>
+        <span id="discovered" role="status">1 of 4 memories discovered</span>
+      </div>
+    </main>
+    <!-- usefulshelf-runtime:start -->
+    <script>
+      // Inlined into each downloadable template: no sibling runtime is required.
+      (() => {
+        "use strict";
+        const dictionary = {
+          "A little bite of joy.": "咬一口小快乐。",
+          "Choose a flavor. Take six little bites. Leave no crumbs behind.":
+            "选一种口味，分六口吃掉，再烤一枚新的。",
+          Vanilla: "香草",
+          Berry: "莓果",
+          Matcha: "抹茶",
+          "One more?": "再来一枚？",
+          "Vanilla · 6 bites to happiness": "香草 · 六口小快乐",
+          "Bake a fresh one ↻": "重新烘焙 ↻",
+          "Zero calories. Quite a lot of delight.": "零卡路里，一点小快乐。",
+          "Cookie flavor": "饼干口味",
+          "Take a bite": "咬一口",
+          "Bake another cookie": "再烤一枚饼干",
+          "All gone!": "吃完啦",
+          "Memories, ready to play.": "让回忆，重新播放。",
+          "Four chapters. One small collection. Pick a cartridge and see what it holds.":
+            "四段故事，一套小收藏。选张卡带，看看里面的回忆。",
+          "First spark": "最初的火花",
+          "Into the wild": "走向远方",
+          "Make together": "一起创造",
+          "New horizons": "新的地平线",
+          "Draw another memory ↗": "再抽一段回忆 ↗",
+          "1 of 4 memories discovered": "已发现 1 / 4 段回忆",
+          "Memory cartridges": "回忆卡带",
+          "Collection complete · play it again": "已集齐回忆 · 再播放一遍",
+          "A tiny weekend experiment became the first thing I was brave enough to share. Small beginnings have a way of growing.":
+            "周末的小实验，成了第一次勇敢分享的作品。小小的开始，也会慢慢生长。",
+          "A backpack, a notebook and a city I had never seen. The best discoveries arrived when the plan ran out.":
+            "一个背包，一本笔记，一座陌生城市。最好的发现，常常在计划之外。",
+          "Four people, one long table, a hundred ideas. We built something none of us could have made alone.":
+            "四个人，一张长桌，许多想法。我们做出了一个人无法完成的东西。",
+          "A fresh page is not an empty page. Every experiment, detour and friendship comes along for the next chapter.":
+            "新的一页并非空白。每次尝试、绕路和相遇，都跟着我们进入下一章。",
+          "Dark documentation navigation": "深色文档导航",
+          Documentation: "使用文档",
+          "Query Reference": "查询参考",
+          "Platform Overview": "平台概览",
+          Quickstart: "快速开始",
+          Architecture: "架构",
+          Features: "功能",
+          Fundamentals: "基本概念",
+          Datasets: "数据集",
+          "Edge deployments": "边缘部署",
+          Limits: "使用限制",
+          Performance: "性能",
+          "Optimize usage": "用法优化",
+          Requirements: "前置要求",
+          "Semantic conventions": "语义约定",
+          Glossary: "术语表",
+          Security: "安全",
+          Roadmap: "路线图",
+          "Send Data": "发送数据",
+          "Reference architectures": "参考架构",
+          Methods: "方法",
+          "Understand Data": "理解数据",
+          Console: "控制台",
+          Overview: "概览",
+          Query: "查询",
+          Dashboards: "仪表板",
+          Stream: "数据流",
+          Docs: "文档",
+          "Docs areas": "文档分区",
+          "Documentation sidebar": "文档侧栏",
+          "Hover sidebar rows · expand Fundamentals / Console · tabs switch accent underline":
+            "悬停侧栏、展开基本概念与控制台，切换顶部标签查看选中状态。",
+          "Query operators, functions, and examples. Replace this sample content with your reference documentation.":
+            "运算符、函数与示例。接入项目时请替换为自己的参考文档。",
+          "Explore the platform, follow the quickstart, and learn the core concepts.":
+            "从快速开始出发，了解平台的基本概念。",
+          "Replace this sample text with documentation for the selected page.":
+            "请将示例文字替换为所选页面的真实文档。",
+          "Get from zero to first query: create a dataset, send events, open the console.":
+            "从创建数据集、发送事件到打开控制台，完成第一次查询。",
+          "Core concepts that underpin ingest, storage, and query behavior.":
+            "了解数据接入、存储与查询背后的核心概念。",
+          "Run collectors closer to your traffic edge for lower latency and regional buffering.":
+            "在靠近数据来源的位置运行采集器，降低延迟并提供区域缓冲。",
+          "Rate limits, retention windows, and plan ceilings that shape how you design pipelines.":
+            "设计数据管道时需确认请求限制、保留时间与服务边界。",
+          "Guidance for query shape, indexing hints, and ingest batching.":
+            "查询组织、索引与批量接入的参考方法。",
+          "A little button. More possibilities.": "一个小按钮，展开更多可能。",
+          "Three quick actions, one quiet home. A wallet interaction with room to breathe.":
+            "三个快捷操作，留在一个轻巧的钱包演示里。",
+          "Interaction collection · 01": "交互练习 · 01",
+          "Open the menu. Make a move.": "展开菜单，试一次操作。",
+          "Good morning, Alex": "早上好，小艾",
+          "Your wallet": "你的钱包",
+          "Total balance": "示例余额",
+          "this week": "本周",
+          "Your assets": "示例资产",
+          Bitcoin: "比特币",
+          Ethereum: "以太坊",
+          "USD Coin": "美元稳定币",
+          "◉ Wallet": "◉   钱包",
+          "▥ Activity": "▥   动态",
+          "⚙ Settings": "⚙   设置",
+          "Interactive demo": "交互演示",
+          "Amount (USD)": "金额（美元）",
+          "Wallet interaction demo": "钱包交互演示",
+          "Quick actions": "快捷操作",
+          "Open quick actions": "展开快捷操作",
+          "Close quick actions": "收起快捷操作",
+          "Close dialog": "关闭对话框",
+          Receive: "收款演示",
+          Send: "发送演示",
+          Swap: "兑换演示",
+          "Share this sample address to receive funds.": "这是演示地址，请勿用于真实收款。",
+          "Choose an amount to preview a transfer.": "选择金额，预览一次本地转账演示。",
+          "Choose an amount to preview an exchange.": "选择金额，预览一次本地兑换演示。",
+          "Copy demo address": "复制演示地址",
+          Preview: "预览",
+          "Demo address copied": "演示地址已复制",
+          "Demo address: demo:wallet:alex:0042": "演示地址：demo:wallet:alex:0042",
+          "A tiny sticker studio.": "一间小小贴纸工坊。",
+          "Pick a collection. Make it yours. Take a little joy with you.":
+            "选一组图形，拼出自己的画面，再把它带走。",
+          "Little things ✳": "小小图形 ✳",
+          "Little shapes.": "小小形状。",
+          "Endless possibilities.": "许多种可能。",
+          "Collapse the sidebar": "收起侧栏",
+          "with Ctrl / ⌘ B.": "快捷键 Ctrl / ⌘ B。",
+          Ink: "墨色",
+          "Rotate ↻": "旋转 ↻",
+          Remove: "移除",
+          "Mix it up": "换个组合",
+          "Export SVG ↗": "导出 SVG ↗",
+          "Add a sticker, move it around, make it yours.": "添加贴纸、移动位置，拼出自己的画面。",
+          "Sticker collections": "贴纸集合",
+          "Collapse sidebar": "收起侧栏",
+          "Expand sidebar": "展开侧栏",
+          Collections: "集合",
+          "Sticker composition. Select a sticker, then use arrow keys to move it.":
+            "贴纸画布。选择贴纸后可用方向键移动。",
+          "Add a sticker": "添加贴纸",
+          "Sticker color": "贴纸颜色",
+          "Happy accidents": "意外的小快乐",
+          "Cosmic daydreams": "宇宙白日梦",
+          "Garden club": "花园俱乐部",
+          Add: "添加",
+          "Your sheet is full. Remove a sticker to make room.": "画布上的贴纸已满，请先移除一张。",
+          "Sticker removed.": "贴纸已移除。",
+          "A new arrangement. Keep mixing until it feels like you.":
+            "换了一个组合，继续试到喜欢为止。",
+          "Sticker placed. Arrow keys adjust its position.": "贴纸已放置，可用方向键微调。",
+          "Your sticker sheet has been exported as an editable SVG.": "贴纸已导出为可编辑的 SVG。",
+          "Three little beginnings. Add more, drag them around, make it yours.":
+            "从三张小贴纸开始，添加、拖动，组成自己的画面。",
+          "A little out of orbit.": "在轨道外，发现一点不同。",
+          "An interactive collection of shape, rhythm and possibility.":
+            "一组关于形状、节奏与可能性的交互练习。",
+          "Ribbon study": "丝带研究",
+          Pause: "暂停",
+          Play: "播放",
+          "Orbit spread": "轨道间距",
+          "Eight original geometric studies.": "八组原创几何练习。",
+          "Infinite ways of looking.": "换个角度，看看不同。",
+          "Choose an object": "选择图形",
+          "Previous object": "上一个图形",
+          "Next object": "下一个图形",
+          "Green frequency": "绿色频率",
+          "Solar assembly": "阳光组合",
+          "Midnight fold": "午夜折叠",
+          "Soft symmetry": "柔和对称",
+          "Tidal rhythm": "潮汐节奏",
+          "Forest module": "森林模块",
+          "Earth signal": "大地信号",
+          Select: "选择",
+          "A continuous line folds back on itself, turning tension into a quiet rhythm.":
+            "连续的线条折返，让张力化作安静的节奏。",
+          "Fine concentric marks create a graphic echo across a green field.":
+            "细密同心线在绿色画面中留下回声。",
+          "Offset circles reveal a sunny composition of overlapping forms.":
+            "错位圆形组成一幅明亮的重叠构图。",
+          "A folded silhouette balances structure with unexpected negative space.":
+            "折叠轮廓在结构与留白之间取得平衡。",
+          "Two mirrored curves find a soft balance in a warm palette.":
+            "两条镜像曲线在温暖配色中找到柔和的平衡。",
+          "Horizontal bands move like water across a circular window.":
+            "横向条带像水面一样穿过圆窗。",
+          "A field of repeated modules breaks gently away from its own rules.":
+            "重复模块轻轻打破自己的排列规则。",
+          "A small architectural landscape explores scale, texture and proportion.":
+            "一处小小建筑景观，探索尺度、肌理与比例。",
+          "Small rituals, worth keeping.": "把日常的小仪式，留在这里。",
+          "A quiet home for your favorite coffees. Open the liquid menu to add beans or remember a cup.":
+            "展开液态菜单，记一款豆子，或留住一杯好咖啡。",
+          "Made for everyday rituals": "为日常的小仪式而做",
+          "A little movement. A richer moment.": "一点动作，留住一个时刻。",
+          "Daily grounds": "日常咖啡簿",
+          "Clear journal": "清空记录",
+          "No coffees yet": "还没有咖啡记录",
+          "Every good collection starts with a first cup.": "每一份收藏，都从第一杯开始。",
+          "Your journal lives in this preview only.": "记录仅保留在本次预览中。",
+          "A new entry": "新增记录",
+          "Log a cup": "记一杯咖啡",
+          "Coffee name": "咖啡名称",
+          "A short note (optional)": "简短备注（选填）",
+          "Save to journal": "保存记录",
+          "Stored in memory for this preview. Refreshing clears entries.":
+            "数据只在当前页面内存中，刷新会清空。",
+          "Coffee journal demo": "咖啡记录演示",
+          "Journal entries": "咖啡记录",
+          "Add to journal": "添加记录",
+          "Add beans": "记一款豆子",
+          "Open journal actions": "展开记录菜单",
+          "Close journal actions": "收起记录菜单",
+          "Chocolate, hazelnut, a slow morning": "巧克力、榛果，或一个慢悠悠的早晨",
+          "Add your beans": "记下喜欢的豆子",
+          "Log a good cup": "留住一杯好咖啡",
+          Beans: "豆子",
+          Cup: "咖啡",
+          "Enter a coffee name.": "请填写咖啡名称。",
+          "Journal cleared. Ready for a fresh start.": "记录已清空，可以重新开始。",
+          "Let curiosity fall.": "让好奇心，落在光里。",
+          "One small nudge. A different journey. Explore light, chance and collisions.":
+            "轻轻一放，走出不同的路线，观察光影与碰撞。",
+          "Launch position": "发射位置",
+          Bounciness: "弹性",
+          "Release a ball ↓": "放下一颗球 ↓",
+          "Release five": "放下五颗",
+          "Advance 1s": "前进一秒",
+          "Start over": "重新开始",
+          "Each column counts real landings.": "每一列记录真实落点次数。",
+          "One path, many possibilities.": "一条路线，许多可能。",
+          "Last path: on": "上次轨迹：显示",
+          "Release a ball. Change the launch point. Follow the light.":
+            "放下一颗球，换个起点，跟着光走。",
+          "Luminous pegboard": "发光弹珠板",
+          "Experiment controls": "实验控件",
+          "Landing distribution": "落点分布",
+          Column: "列",
+          Resume: "继续",
+          "The board is full. Wait for a few landings or start over.":
+            "画布上的球已满，请等球落下，或重新开始。",
+          "Ball ready. Use Advance 1s or Resume to follow its journey.":
+            "球已准备好，可用前进一秒或继续观察路线。",
+          "Ball released. Watch its shadow move across the pegs.":
+            "球已放下，观察阴影如何经过钉点。",
+          "Paused. Inspect the light or advance one second at a time.":
+            "已暂停，可以观察光影，或逐秒前进。",
+          "The experiment is running.": "实验正在运行。",
+          "Advanced one second. Step again to inspect the next part of the journey.":
+            "已前进一秒，再走一步看看接下来的路线。",
+          "A clean board. Your next experiment starts here.": "画布已清空，下一次实验从这里开始。",
+          "Motion paused for your preference. Advance 1s to inspect a static step.":
+            "已按减少动态效果偏好暂停，可前进一秒查看静态结果。",
+          "Motion is paused for your preference. Use Advance 1s to explore without animation.":
+            "已按减少动态效果偏好暂停，可用单秒步进进行探索。",
+          Menu: "菜单",
+          Platform: "平台",
+          Observability: "可观测性",
+          "Try the playground ↗": "试试本地演示 ↗",
+          "Infrastructure for what comes next": "为下一步，搭好结构。",
+          "Run sample pipeline ↗": "运行示例流程 ↗",
+          "Explore the platform ↓": "了解功能 ↓",
+          "Local playground · no account required": "本地演示 · 无需账号",
+          "Python outline": "Python 说明草图",
+          "Copy ↗": "复制 ↗",
+          "Actual JavaScript parser used by this playground.":
+            "此演示实际使用的 JavaScript 解析器。",
+          "The JavaScript parser loads here.": "此处显示实际使用的 JavaScript 解析器。",
+          "Edit sample invoice text": "编辑示例发票文本",
+          "Plain text input · maximum 4,000 characters · USD workflow":
+            "纯文本输入 · 最多 4000 字符 · 美元示例流程",
+          "Valid sample": "有效示例",
+          "Invalid sample": "无效示例",
+          "Ready when you are.": "准备好就可以运行。",
+          "Run the sample to inspect the result.": "运行示例，查看处理结果。",
+          "Your activity in this session": "本次访问中的操作",
+          "Structured from the sample invoice": "从示例发票中提取的结构",
+          Sandbox: "本地演示",
+          "Text parsing in your browser · no upload": "在浏览器中解析文字 · 不上传",
+          "A clearer path from input to insight": "从输入到结果，看清每一步。",
+          "Complex documents.": "复杂文档。",
+          "Simple building blocks.": "清晰模块。",
+          "01 — Classify the input": "01 — 识别输入类型",
+          "Identify the document type before your workflow begins. Give every input the right route through your system.":
+            "在流程开始前识别文档类型，让每种输入进入合适的处理路径。",
+          "02 — Extract what matters": "02 — 提取关键字段",
+          "Map unstructured content into named fields. Keep vendor, currency, and totals readable and ready for the next step.":
+            "将非结构化文本整理成具名字段，清楚保留供应方、货币与金额。",
+          "03 — Validate the result": "03 — 校验结果",
+          "Check required fields and currency before accepting a record. Make a clear boundary between complete and incomplete data.":
+            "接收记录前校验必填字段和货币，区分完整与不完整的数据。",
+          "Document inspector": "文档检查器",
+          Invoice: "发票",
+          Vendor: "供应方",
+          Currency: "货币",
+          "Amount due": "应付金额",
+          "Type identified → INVOICE": "识别类型 → INVOICE",
+          "Route → invoice-flow": "处理路径 → invoice-flow",
+          "Copy code": "复制代码",
+          "Select and copy the code below.": "选择并复制下面的代码。",
+          Done: "完成",
+          "Code language": "代码语言",
+          "Local sample metrics": "本地示例指标",
+          "Code to copy": "待复制的代码",
+          "Missing INVOICE heading": "缺少 INVOICE 标题",
+          "Vendor is required": "供应方不能为空",
+          "Currency must be a three-letter code": "货币需使用三字母代码",
+          "This workflow accepts USD only": "此示例流程仅接受 USD",
+          "Amount due must be a non-negative amount with up to two decimal places, at most 999,999,999.99":
+            "应付金额须为最多两位小数的非负数，且不超过 999999999.99",
+          "Illustrative pseudocode only. This tab is not executed.":
+            "仅供说明的伪代码，本页签不会执行。",
+          "Code copied to clipboard.": "代码已复制到剪贴板。",
+          "Valid sample loaded. Run to parse and validate.": "有效示例已载入，运行以解析和校验。",
+          "Invalid sample loaded. Run to see validation errors.":
+            "无效示例已载入，运行后查看校验错误。",
+          "Unknown document": "未知文档",
+          Missing: "缺失",
+          "Invalid amount": "金额无效",
+          "Validation failed": "校验失败",
+          "Processing sample…": "正在处理示例…",
+          "Reading local text…": "正在读取本地文字…",
+          "Reading invoice text…": "正在读取发票文本…",
+          "Parsing labeled document fields…": "正在解析具名字段…",
+          "Validating amount and currency…": "正在校验金额与货币…",
+          "Complete. Text parsed and validated locally.": "已完成，文字已在本地解析并校验。",
+          "Parsed with validation errors. Edit the sample text and run again.":
+            "解析完成但校验未通过，请编辑示例后重试。",
+          "Processing stopped. Review the input and retry.": "处理已停止，请检查输入后重试。",
+          "Run sample again ↗": "再次运行示例 ↗",
+          "A different perspective.": "换个角度，看见不同。",
+          "Independent minds. Extraordinary outcomes.": "独立的想法，认真完成的作品。",
+          "Pause motion": "暂停动效",
+          "Resume motion": "继续动效",
+          "Our work ↗": "查看作品 ↗",
+          "Explore the collection": "浏览作品集",
+          "Available for new perspectives": "期待新的视角",
+          "Strategy · Identity · Digital experiences": "策略 · 视觉识别 · 数字体验",
+          "Small details.": "小小细节。",
+          "Entirely different worlds.": "不一样的世界。",
+          "This is a sample project study. Replace it with your own work.":
+            "这是示例项目，请替换为自己的作品。",
+          "Orbiting project collection": "轨道作品集",
+          "Close project": "关闭项目",
+          "Folded space": "折叠空间",
+          "Quiet frequency": "安静频率",
+          "New terrain": "新的地形",
+          "Moving matter": "移动的形状",
+          "Soft structure": "柔和结构",
+          "After hours": "夜色之后",
+          "Brand identity": "品牌识别",
+          "Sound & culture": "声音与文化",
+          "Editorial design": "编辑设计",
+          "Digital experience": "数字体验",
+          "Art direction": "视觉指导",
+          "Visual identity": "视觉识别",
+          "Architectural folds turn a simple grid into an unexpected identity.":
+            "建筑般的折面，让简单网格有了不同的识别。",
+          "Concentric lines make rhythm visible, one imperfect circle at a time.":
+            "同心线让节奏变得可见，一圈圈留下细微差异。",
+          "An abstract landscape finds its balance between precision and warmth.":
+            "抽象景观在精确与温暖之间取得平衡。",
+          "A study of modular forms and the spaces they create together.":
+            "研究模块形状，以及它们共同留下的空间。",
+          "An optimistic geometry with a softer, more tactile point of view.":
+            "用更柔和、更有触感的方式理解几何。",
+          "A nocturnal color study built from oversized letters and negative space.":
+            "由大字与留白组成的夜色练习。",
+          View: "查看",
+          "Small things, worth keeping.": "值得留下的小事情。",
+          "Make a tiny receipt for a lovely day. Scrunch it, smooth it, keep it.":
+            "给美好的一天开张小收据，揉皱、抚平，再把它带走。",
+          "+ Add a little thing": "+ 添加一件小事",
+          "Keep as PNG ↓": "保存为 PNG ↓",
+          "Scrunch paper": "揉皱纸张",
+          "Smooth it out": "抚平纸张",
+          "Your paper is ready. Give it a little scrunch.": "纸张准备好了，轻轻揉皱一下。",
+          "Editable paper receipt": "可编辑的纸条收据",
+          "Morning coffee": "清晨咖啡",
+          "A bunch of flowers": "一束花",
+          "Something sweet": "一点甜",
+          "Use a name and a price from 0 to 9999.99 (up to two decimals).":
+            "请填写名称和 0–9999.99 的价格，最多两位小数。",
+          "Receipt updated. Ready to scrunch or keep.": "收据已更新，可以揉皱或保存。",
+          "a little day": "小小的一天",
+          Item: "项目",
+          "Remove item": "移除项目",
+          "Smoothed out. Your little memories are still here.": "已抚平，小小的回忆还在这里。",
+          "A tiny paper sculpture. Smooth it out whenever you like.": "一件小纸雕，随时可以抚平。",
+          "A little surprise": "一个小惊喜",
+          "New line added. Make it your own.": "已添加一行，写下自己的小事。",
+          "Your PNG is ready — a little day, kept forever.": "PNG 已准备好，小小的一天可以留下了。",
+          "A collection of perspectives.": "把不同的视角，放在一起。",
+          "Independent studies in form, color and movement.": "关于形态、颜色与动作的独立练习。",
+          "Folded landscape": "折叠景观",
+          "/ Editorial composition": "/ 编辑构图",
+          "Visual study collection. Use left and right arrow keys to change slides.":
+            "视觉练习集，可用左右方向键切换。",
+          "Previous study": "上一个练习",
+          "Next study": "下一个练习",
+          "Choose a study": "选择练习",
+          "Close study": "关闭练习",
+          "Signal & noise": "信号与杂音",
+          "Soft architecture": "柔和建筑",
+          "Color in motion": "颜色在移动",
+          "The quiet room": "安静房间",
+          "Between the lines": "字里行间",
+          "Editorial composition": "编辑构图",
+          "Graphic rhythm": "图形节奏",
+          "Spatial study": "空间练习",
+          "Chromatic experiment": "色彩实验",
+          "Material language": "材质语言",
+          "Abstract landscape": "抽象景观",
+          "Typography study": "字体研究",
+          "Angular planes intersect across a warm field, with a small solar accent anchoring the composition.":
+            "折面交叠在温暖画面上，一枚小小太阳稳定构图。",
+          "Repeated marks build density and then dissolve into a small moment of silence.":
+            "重复记号逐渐密集，又融成片刻安静。",
+          "A monumental arch turns simple negative space into an architectural subject.":
+            "一座拱门，让简单留白成为建筑般的主题。",
+          "A set of interlocking disks creates movement without relying on a literal image.":
+            "交错圆盘不用具象图片，也能让画面流动。",
+          "Layered blocks and warm neutral tones suggest a room through the relationship of shapes.":
+            "层叠色块与暖中性色，通过形状关系暗示一个房间。",
+          "A stepped horizon and an oversized sun make a landscape from just three colors.":
+            "阶梯地平线和大太阳，只用三种颜色组成景观。",
+          "A single letter becomes an architectural form through repetition and scale.":
+            "一个字母经过重复和缩放，变成建筑般的形状。",
+          "This is an original geometric study for demonstration.":
+            "这是一组用于演示的原创几何练习。",
+          Show: "显示",
+          "Make a little delivery.": "送出一个小包裹。",
+          "Turn any small file into a portable parcel. Everything happens on your device.":
+            "把小文件装进可携带的包裹，所有处理都在你的设备上完成。",
+          "Wrap this file": "打包文件",
+          "Ready to wrap": "准备打包",
+          "Choose a file": "选择文件",
+          Cancel: "取消",
+          "Download parcel": "下载包裹",
+          "A real local file, a glowing journey, and a parcel you can keep.":
+            "读取真实本地文件，看见处理进度，再带走完整包裹。",
+          "↗ Moon notes": "↗ 月亮便笺",
+          "✳ Field journal": "✳ 田野笔记",
+          "◈ Tiny manifesto": "◈ 小小宣言",
+          "JSON parcel · Base64 file contents + CRC32 checksum":
+            "JSON 包裹 · Base64 文件内容与 CRC32 校验和",
+          "Choose → Wrap → Keep → Repeat": "选择 → 打包 → 保存 → 再试一次",
+          "File processing button": "文件处理按钮",
+          "Parcel details": "包裹详情",
+          "Bytes packaged": "已打包字节",
+          "Ready. Your file will be encoded locally into a portable JSON parcel.":
+            "已准备好，文件将在本地编码为可携带的 JSON 包裹。",
+          Cancelled: "已取消",
+          "Wrapping cancelled. The original file is unchanged.": "打包已取消，原文件未改动。",
+          "Wrapping…": "正在打包…",
+          "Encoding bytes": "正在编码字节",
+          "Reading and encoding your file on this device…": "正在此设备上读取并编码文件…",
+          "Wrapped with care": "已完成打包",
+          "Parcel ready": "包裹已就绪",
+          "Try again": "重试",
+          "Could not read file": "无法读取文件",
+          "This file could not be read. Choose another file and try again.":
+            "无法读取此文件，请重新选择文件后再试。",
+          "Fieldwork®": "Fieldwork®",
+          "An expressive navigation study.": "一组会回应动作的导航练习。",
+          "Available for good ideas": "期待好想法",
+          "A small gesture. A clear direction.": "一个小动作，指向清晰的下一步。",
+          "Hover to explore · click to select": "悬停预览 · 点击选择",
+          "Explore sections": "浏览分区",
+          Home: "首页",
+          About: "关于",
+          Services: "服务",
+          Work: "作品",
+          Contact: "联系",
+          "Good things start with a little curiosity.": "好的事情，从一点好奇心开始。",
+          "Thoughtful digital experiences, built around the small moments that make a lasting impression.":
+            "围绕那些值得记住的小瞬间，认真构建数字体验。",
+          "A small studio with a wider perspective.": "小小工作室，宽一点的视角。",
+          "We are a close-knit team of designers and makers. Our best work happens where clear thinking meets playful exploration.":
+            "我们是一组设计与创作伙伴，把清楚的思考和有趣的尝试放在一起。",
+          "From the first idea to the final detail.": "从第一个想法，到最后一个细节。",
+          "Strategy, visual identity, and digital products. We help ambitious teams find their voice and bring it to life.":
+            "从策略、视觉识别到数字产品，帮助团队找到自己的表达。",
+          "Ideas made tangible.": "让想法，变得可以触摸。",
+          "A selection of identities, interfaces, and experiments. Each project starts with a question and ends with something worth using.":
+            "收集识别、界面与实验，每个项目都从问题出发，落到能使用的作品。",
+          "Let’s make something that matters.": "一起做一点有意义的东西。",
+          "Have a project in mind? Start a conversation with your team and turn the next good idea into a considered experience.":
+            "有了项目想法，就与团队开始讨论，让它成为认真完成的体验。",
+          "A world in a little switch.": "小小开关，装着一整个世界。",
+          "Slide from golden afternoons to quiet evenings. There is a little magic in both.":
+            "从金色午后切换到安静夜晚，两边都有一点小魔法。",
+          Daylight: "白昼",
+          Moonlight: "月夜",
+          "16:24 · golden hour": "16:24 · 金色时刻",
+          "Add a cloud +": "添一朵云 +",
+          "A small place to slow down.": "一个可以慢下来的小地方。",
+          "Daytime cottage in green hills with sunshine": "阳光照在绿丘间的小屋上",
+          "Time of day": "日夜时段",
+          "Moonlit cottage with a glowing window, stars and dark hills":
+            "月光照着小屋，窗灯、星星和暗色山丘相伴",
+          "21:08 · wishful thinking": "21:08 · 许愿时刻",
+          "Make a wish ↗": "许个愿 ↗",
+          "The lights are on. Make yourself at home.": "灯亮了，像回到家一样。",
+          "Scroll-aware toolbar": "会随滚动收起的导航。",
+          "A floating glass toolbar that follows your scroll direction.":
+            "跟随滚动方向展开与收起的玻璃悬浮导航。",
+          "Scroll the phone screen — the capsule contracts on down-scroll and expands on up-scroll.":
+            "滚动手机画面：下滑收起胶囊，上滑重新展开。",
+          "Hide-on-scroll navbar demo": "滚动隐藏导航演示",
+          "Scrollable app grid": "可滚动的应用网格",
+          "Floating toolbar": "悬浮导航",
+          "Demo views": "示例视图",
+          Profile: "个人入口",
+          Charts: "图表",
+          List: "列表",
+          "Add a sample icon": "添加示例图标",
+          New: "新建",
+          Camera: "相机",
+          Maps: "地图",
+          Weather: "天气",
+          Share: "分享",
+          Translate: "翻译",
+          Wallet: "钱包",
+          Mail: "邮件",
+          Passwords: "密码",
+          Music: "音乐",
+          Settings: "设置",
+          Photos: "照片",
+          Notes: "便笺",
+          "take a bite.": "咬一口。",
+          "Less plumbing.": "少一点繁琐。",
+          "More possibility.": "多一些可能。",
+          "Turn complex documents into dependable workflows. One modular platform for everything you build next.":
+            "把复杂文档变成可靠的处理流程，用清晰模块搭起下一步。",
+          "YOUR COLLECTIONS": "你的收藏",
+          "3 assets": "3 项示例资产",
+          "ADD BEANS": "添加咖啡豆",
+          "ADD A MEMORY": "留下记忆",
+          "LOG A CUP": "记下一杯",
+          "MAKE A SMALL CHANGE": "试着改一点",
+          LANDED: "已落下",
+          COLLISIONS: "碰撞",
+          "WHERE CURIOSITY LANDS": "让好奇心在这里落下",
+          "ADD A LITTLE JOY": "添一点小快乐",
+          "YOUR LITTLE THINGS": "你的小事情",
+          "TODAY'S TOTAL": "今日合计",
+          "YOUR NEXT LITTLE PARCEL": "下一份小包裹",
+          "TRY A SAMPLE": "试试示例",
+          "Files stay on this device. Maximum 16 MB.": "文件留在此设备，最大 16 MB。",
+          "COMPLETED RUNS": "完成次数",
+          "DOCUMENT FIELDS": "文档字段",
+          "PROCESSING MODE": "处理方式",
+          "01 / INGEST": "01 / 读取",
+          "02 / EXTRACT": "02 / 提取",
+          "03 / VALIDATE": "03 / 校验",
+          "FRESHLY CLICKED · 06 BITES": "新鲜出炉 · 六口快乐",
+          "FOUR CHAPTERS · KEEP FOREVER": "四段故事 · 收藏此刻",
+          "DRAG · ARROW KEYS · DELETE": "拖动 · 方向键 · 删除",
+          "DRAG TO ROTATE · SELECT TO EXPLORE": "拖动旋转 · 选择查看",
+          "CLICK TO DROP · SPACE TO REPEAT": "点击放下 · 空格再来一次",
+          "LAST LANDING —": "上次落点 —",
+          "LIGHT FIELD / 640 × 460": "光场 / 640 × 460",
+          "DRAG TO BROWSE": "拖动浏览",
+          "SELECT THE CENTER CARD TO EXPLORE": "选择中间卡片查看",
+          "SWITCH THE LIGHT. CHANGE THE FEELING.": "切换光线，换一种心情。",
+          cookie: "枚饼干",
+          "enjoyed.": "，享用完毕。",
+          bite: "口",
+          "to happiness": "小快乐",
+          s: "",
+          "PLAYING 0": "正在播放 0",
+          "of 4 memories discovered": "/ 4 段回忆已发现",
+          "collection opened. Pick a shape to add.": "集合已展开，选个图形加入。",
+          sticker: "贴纸",
+          "added.": "已添加。",
+          "stickers on your sheet.": "张贴纸在画布上。",
+          "Selected sticker rotated to": "所选贴纸旋转至",
+          "degrees.": "度。",
+          "e.g. Ethiopia natural roast": "例如：埃塞俄比亚日晒豆",
+          "e.g. Sunday flat white": "例如：周日的馥芮白",
+          "removed.": "已移除。",
+          "added to your journal.": "已加入咖啡记录。",
+          landings: "次落点",
+          "PAUSED · STEP TO EXPLORE": "已暂停 · 单步探索",
+          "LIVE ·": "运行中 ·",
+          "IN FLIGHT": "颗球飞行中",
+          "LAST LANDING": "上次落点",
+          "Landed in column": "落在第",
+          "Sample document → INVOICE Run the parser to inspect your input.":
+            "示例文档 → INVOICE\n运行解析，检查输入。",
+          "Sample fields → vendor · currency · total": "示例字段 → 供应方 · 货币 · 总额",
+          "USD workflow Run to validate your input.": "美元处理流程\n运行校验，检查输入。",
+          "Validation passed ✓ Required fields present · currency is USD":
+            "校验通过 ✓\n必填字段齐全 · 货币为 USD",
+          "COLLECT MOMENTS, TOO.": "也把美好时刻收藏起来。",
+          "THE LITTLE THINGS": "生活的小事情",
+          "DAY WELL SPENT": "值得留下的一天",
+          "A SMALL SOUVENIR. JUST FOR YOU.": "一份小小纪念，送给自己。",
+          name: "名称",
+          price: "价格",
+          "bytes ·": "字节 ·",
+          "binary file": "二进制文件",
+          "This file is too large. Choose a file under": "文件过大，请选择小于",
+          "MB.": "MB 的文件。",
+          Packed: "已打包",
+          "bytes. CRC32": "字节。CRC32",
+          wish: "个愿望",
+          "added to your sky.": "已加入夜空。",
+          "little cloud": "朵小云",
+          "drifting by.": "正轻轻飘过。",
+          "Less plumbing. More possibility.": "少一点繁琐，多一些可能。",
+        };
+        const lang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          "zh";
+        const chinese = lang !== "en";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+        const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        window.__usefulshelfConfigure = (config) => {
+          const accent = document.documentElement.dataset.skillAccent;
+          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+        };
+        window.__usefulshelfText = (value) => {
+          if (!chinese || typeof value !== "string") return value;
+          const exact = dictionary[normalize(value)];
+          if (exact !== undefined) return exact;
+          return value
+            .replace(/What is ([^?]+)\?/g, "什么是 $1？")
+            .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
+            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
+            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
+            .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
+            .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/added to your sky\./g, "已加入夜空。")
+            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(/· no transaction sent/g, "· 未发送真实交易");
+        };
+        function boot() {
+          if (chinese) {
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            let node;
+            while ((node = walker.nextNode())) {
+              if (
+                node.parentElement?.closest(
+                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
+                )
+              )
+                continue;
+              const next = window.__usefulshelfText(node.textContent);
+              if (next !== node.textContent) node.textContent = next;
+            }
+            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
+              for (const name of ["aria-label", "placeholder", "title"]) {
+                if (element.hasAttribute(name))
+                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+              }
+            }
+            document.title = window.__usefulshelfText(document.title);
+          }
+          if (parent === window) return;
+          // Freeze viewport-based demo heights before measuring, avoiding vh feedback
+          // when the parent grows the iframe. Intentional inner demo scrollers remain.
+          const initialHeight = Math.max(360, Math.min(760, innerHeight));
+          function fixRules(rules) {
+            for (const rule of rules) {
+              if (rule.cssRules) fixRules(rule.cssRules);
+              if (!rule.style) continue;
+              if (/v[hbs]/.test(rule.style.minHeight))
+                rule.style.setProperty("min-height", "0", "important");
+              if (/v[hbs]/.test(rule.style.height))
+                rule.style.setProperty("height", `${initialHeight}px`, "important");
+            }
+          }
+          for (const sheet of document.styleSheets) {
+            try {
+              fixRules(sheet.cssRules);
+            } catch {
+              /* Same-file styles are sufficient. */
+            }
+          }
+          for (const element of [document.documentElement, document.body]) {
+            element.style.setProperty("height", "auto", "important");
+            element.style.setProperty("min-height", "0", "important");
+          }
+          document.documentElement.style.overflowX = "clip";
+          let frame = 0,
+            lastHeight = 0;
+          const measure = () => {
+            frame = 0;
+            const height = Math.ceil(
+              Math.max(document.body.scrollHeight, document.body.getBoundingClientRect().height),
+            );
+            if (height > 0 && height <= 20000 && height !== lastHeight) {
+              lastHeight = height;
+              parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+            }
+          };
+          const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(measure);
+          };
+          const observer = new ResizeObserver(schedule);
+          observer.observe(document.body);
+          window.addEventListener("resize", schedule);
+          const onMessage = (event) => {
+            if (event.source === parent && event.data?.type === "usefulshelf:measure") {
+              // The first resize may precede parent hydration. A measurement request
+              // must acknowledge even an unchanged height, so that message is recovered.
+              lastHeight = 0;
+              schedule();
+            }
+          };
+          window.addEventListener("message", onMessage);
+          document.fonts?.ready.then(schedule);
+          window.addEventListener(
+            "pagehide",
+            () => {
+              observer.disconnect();
+              cancelAnimationFrame(frame);
+              window.removeEventListener("resize", schedule);
+              window.removeEventListener("message", onMessage);
+            },
+            { once: true },
+          );
+          schedule();
+        }
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        else boot();
+      })();
+    </script>
+    <!-- usefulshelf-runtime:end -->
+    <script>
+      (() => {
+        "use strict";
+        const cards = [...document.querySelectorAll(".cartridge")],
+          data = [
+            [
+              "2018",
+              window.__usefulshelfText("First spark"),
+              window.__usefulshelfText(
+                "A tiny weekend experiment became the first thing I was brave enough to share. Small beginnings have a way of growing.",
+              ),
+            ],
+            [
+              "2020",
+              window.__usefulshelfText("Into the wild"),
+              window.__usefulshelfText(
+                "A backpack, a notebook and a city I had never seen. The best discoveries arrived when the plan ran out.",
+              ),
+            ],
+            [
+              "2023",
+              window.__usefulshelfText("Make together"),
+              window.__usefulshelfText(
+                "Four people, one long table, a hundred ideas. We built something none of us could have made alone.",
+              ),
+            ],
+            [
+              "2026",
+              window.__usefulshelfText("New horizons"),
+              window.__usefulshelfText(
+                "A fresh page is not an empty page. Every experiment, detour and friendship comes along for the next chapter.",
+              ),
+            ],
+          ];
+        let active = 0;
+        const seen = new Set([0]);
+        function select(i, focus = false) {
+          active = i;
+          seen.add(i);
+          cards.forEach((b, n) => b.setAttribute("aria-pressed", String(n === i)));
+          const d = data[i];
+          document.querySelector("#year").textContent = d[0];
+          document.querySelector("#name").textContent = d[1];
+          document.querySelector("#story").textContent = d[2];
+          document.querySelector("#number").textContent =
+            window.__usefulshelfText("PLAYING 0") + (i + 1) + " / 04";
+          document.querySelector("#discovered").textContent =
+            seen.size === 4
+              ? window.__usefulshelfText("Collection complete · play it again")
+              : seen.size + window.__usefulshelfText(" of 4 memories discovered");
+          const deck = document.querySelector(".deck");
+          deck.scrollTo({
+            left:
+              cards[i].offsetLeft - deck.offsetLeft - (deck.clientWidth - cards[i].offsetWidth) / 2,
+            behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+          });
+          if (focus) cards[i].focus({ preventScroll: true });
+        }
+        cards.forEach((b, i) => {
+          b.addEventListener("click", () => select(i));
+          b.addEventListener("keydown", (e) => {
+            let target;
+            if (e.key === "ArrowRight") target = (i + 1) % 4;
+            else if (e.key === "ArrowLeft") target = (i + 3) % 4;
+            else if (e.key === "Home") target = 0;
+            else if (e.key === "End") target = 3;
+            else return;
+            e.preventDefault();
+            select(target, true);
+          });
+        });
+        document.querySelector("#shuffle").addEventListener("click", () => {
+          const unseen = [0, 1, 2, 3].filter((i) => !seen.has(i));
+          const pool = unseen.length ? unseen : [0, 1, 2, 3].filter((i) => i !== active);
+          select(pool[Math.floor(Math.random() * pool.length)]);
+        });
+      })();
+    </script>
+  </body>
+</html>

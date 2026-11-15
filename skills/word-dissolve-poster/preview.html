@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Word Dissolve Poster</title>
+    <style>
+      :root {
+        --accent: #e9ff68;
+        font-family: Arial, "PingFang SC", sans-serif;
+        color: #f3f3e9;
+        background: #181a17;
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      canvas:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 4px;
+      }
+      .shell {
+        max-width: 1440px;
+        margin: auto;
+        padding: 28px 5%;
+        min-height: 730px;
+      }
+      header {
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #555a4c;
+      }
+      .badge {
+        color: var(--accent);
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 8%;
+        align-items: center;
+        padding-top: 28px;
+      }
+      .kicker {
+        color: #a4ac95;
+        font-size: 11px;
+      }
+      h1 {
+        white-space: pre-line;
+        font-size: clamp(38px, 5vw, 68px);
+        line-height: 1.06;
+        letter-spacing: -0.06em;
+        overflow-wrap: anywhere;
+        font-weight: 500;
+        margin: 22px 0;
+      }
+      .intro {
+        color: #aeb3a4;
+        line-height: 1.9;
+        font-size: 13px;
+        max-width: 360px;
+      }
+      .editor {
+        margin-top: 32px;
+      }
+      label {
+        font-size: 11px;
+        display: block;
+        margin-bottom: 10px;
+        color: #c1c9b3;
+      }
+      input[type="text"] {
+        border: 0;
+        border-bottom: 1px solid #70765e;
+        border-radius: 0;
+        background: transparent;
+        color: var(--accent);
+        width: 100%;
+        padding: 10px 0 14px;
+        font-size: 21px;
+        min-width: 0;
+        letter-spacing: -0.02em;
+      }
+      .hint {
+        font-size: 10px;
+        color: #858e77;
+        margin: 10px 0 22px;
+        line-height: 1.6;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      button {
+        background: transparent;
+        color: #e1e6d7;
+        border: 1px solid #6d7660;
+        border-radius: 3px;
+        padding: 12px 18px;
+        font-size: 12px;
+      }
+      button.primary {
+        background: var(--accent);
+        color: #19200f;
+        border-color: var(--accent);
+      }
+      button:hover {
+        filter: brightness(1.15);
+      }
+      .range {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        margin-top: 26px;
+      }
+      .range label {
+        margin: 0;
+        white-space: nowrap;
+      }
+      .range input {
+        accent-color: var(--accent);
+        width: 100%;
+        min-width: 40px;
+      }
+      .range output {
+        font-size: 11px;
+        font-variant-numeric: tabular-nums;
+      }
+      .poster {
+        padding: 22px;
+        background: #0c0d0b;
+        aspect-ratio: 0.85;
+        max-height: 610px;
+        position: relative;
+        box-shadow: 0 24px 50px #0004;
+        border: 1px solid #303328;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+      .poster-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        color: #a1a895;
+        font-size: 9px;
+        letter-spacing: 0.11em;
+        border-top: 2px solid var(--accent);
+        padding-top: 12px;
+      }
+      .art {
+        flex: 1;
+        position: relative;
+        min-height: 270px;
+        margin-top: 18px;
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        inset: 0;
+        cursor: crosshair;
+      }
+      .poster-bottom {
+        font-size: 11px;
+        line-height: 1.7;
+        border-top: 1px solid #404635;
+        padding-top: 14px;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .edition {
+        color: var(--accent);
+        font-size: 40px;
+        letter-spacing: -0.07em;
+        line-height: 1;
+      }
+      footer {
+        font-size: 10px;
+        color: #8b957c;
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        margin-top: 22px;
+        line-height: 1.5;
+      }
+      #status {
+        color: var(--accent);
+      }
+      @media (max-width: 700px) {
+        .shell {
+          padding: 22px;
+        }
+        .layout {
+          grid-template-columns: 1fr;
+          gap: 26px;
+          padding-top: 20px;
+        }
+        h1 {
+          white-space: pre-line;
+          font-size: 40px;
+          margin: 16px 0;
+        }
+        .intro {
+          margin: 0;
+          max-width: none;
+        }
+        .editor {
+          margin-top: 20px;
+        }
+        .poster {
+          max-height: none;
+          aspect-ratio: 0.83;
+          max-width: 480px;
+          width: 100%;
+          justify-self: center;
+        }
+        .art {
+          min-height: 260px;
+        }
+        .range {
+          margin-top: 20px;
+        }
+        .hint {
+          margin-bottom: 14px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header>
+        <span>TYPE / MATTER</span>
+        <span class="badge" data-i="badge">可触碰的排版实验 · 02</span>
+      </header>
+      <section class="layout">
+        <div>
+          <div class="kicker" data-i="kicker">把一句话，变成一场小雨。</div>
+          <h1>Words have weight.</h1>
+          <p class="intro" data-i="intro">
+            每个字都有自己的重量。写下几个词，看笔画散成颗粒、沿重力落下，再一点点回到原位。
+          </p>
+          <div class="editor">
+            <label for="words" data-i="label">你的海报文字</label>
+            <input
+              id="words"
+              type="text"
+              value="MAKE SOME NOISE"
+              maxlength="36"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <p class="hint" data-i="hint">最多 36 字 · 输入后自动排版 · 点击海报或按回车也能散落</p>
+            <div class="actions">
+              <button id="dissolve" class="primary" data-i="dissolve">让文字散落 ↓</button>
+              <button id="gather" data-i="gather">重新排版 ↑</button>
+              <button id="remix" data-i="remix">换句话 ↻</button>
+            </div>
+            <div class="range">
+              <label for="wind" data-i="wind">侧风</label>
+              <input type="range" min="-100" max="100" value="20" id="wind" />
+              <output id="windValue">20</output>
+            </div>
+          </div>
+        </div>
+        <div class="poster">
+          <div class="poster-meta">
+            <span>
+              EXPERIMENT 002
+              <br />
+              TYPE IN MOTION
+            </span>
+            <span id="particleCount">0 DOTS</span>
+          </div>
+          <div class="art">
+            <canvas tabindex="0" role="button" aria-label="点击或回车让文字散落"></canvas>
+          </div>
+          <div class="poster-bottom">
+            <span data-i="posterNote">
+              有些话值得留下。
+              <br />
+              有些话，让它随风。
+            </span>
+            <span class="edition" aria-hidden="true">Aa</span>
+          </div>
+        </div>
+      </section>
+      <footer>
+        <span data-i="footer">字形采样 / 重力与侧风 / 可逆排版</span>
+        <span id="status" role="status" aria-live="polite">文字已就位</span>
+      </footer>
+    </main>
+    <!-- usefulshelf-runtime:start -->
+    <script>
+      // Inlined into each downloadable template: no sibling runtime is required.
+      (() => {
+        "use strict";
+        const dictionary = {};
+        const lang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          "zh";
+        const chinese = lang !== "en";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+        const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        window.__usefulshelfConfigure = (config) => {
+          const accent = document.documentElement.dataset.skillAccent;
+          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+        };
+        window.__usefulshelfText = (value) => {
+          if (!chinese || typeof value !== "string") return value;
+          const exact = dictionary[normalize(value)];
+          if (exact !== undefined) return exact;
+          return value
+            .replace(/What is ([^?]+)\?/g, "什么是 $1？")
+            .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
+            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
+            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
+            .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
+            .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/added to your sky\./g, "已加入夜空。")
+            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(/· no transaction sent/g, "· 未发送真实交易");
+        };
+        function boot() {
+          if (chinese) {
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            let node;
+            while ((node = walker.nextNode())) {
+              if (
+                node.parentElement?.closest(
+                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
+                )
+              )
+                continue;
+              const next = window.__usefulshelfText(node.textContent);
+              if (next !== node.textContent) node.textContent = next;
+            }
+            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
+              for (const name of ["aria-label", "placeholder", "title"]) {
+                if (element.hasAttribute(name))
+                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+              }
+            }
+            document.title = window.__usefulshelfText(document.title);
+          }
+          if (parent === window) return;
+          // Freeze viewport-based demo heights before measuring, avoiding vh feedback
+          // when the parent grows the iframe. Intentional inner demo scrollers remain.
+          const initialHeight = Math.max(360, Math.min(760, innerHeight));
+          function fixRules(rules) {
+            for (const rule of rules) {
+              if (rule.cssRules) fixRules(rule.cssRules);
+              if (!rule.style) continue;
+              if (/v[hbs]/.test(rule.style.minHeight))
+                rule.style.setProperty("min-height", "0", "important");
+              if (/v[hbs]/.test(rule.style.height))
+                rule.style.setProperty("height", `${initialHeight}px`, "important");
+            }
+          }
+          for (const sheet of document.styleSheets) {
+            try {
+              fixRules(sheet.cssRules);
+            } catch {
+              /* Same-file styles are sufficient. */
+            }
+          }
+          for (const element of [document.documentElement, document.body]) {
+            element.style.setProperty("height", "auto", "important");
+            element.style.setProperty("min-height", "0", "important");
+          }
+          document.documentElement.style.overflowX = "clip";
+          let frame = 0,
+            lastHeight = 0;
+          const measure = () => {
+            frame = 0;
+            const height = Math.ceil(
+              Math.max(document.body.scrollHeight, document.body.getBoundingClientRect().height),
+            );
+            if (height > 0 && height <= 20000 && height !== lastHeight) {
+              lastHeight = height;
+              parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+            }
+          };
+          const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(measure);
+          };
+          const observer = new ResizeObserver(schedule);
+          observer.observe(document.body);
+          window.addEventListener("resize", schedule);
+          const onMessage = (event) => {
+            if (event.source === parent && event.data?.type === "usefulshelf:measure") {
+              // The first resize may precede parent hydration. A measurement request
+              // must acknowledge even an unchanged height, so that message is recovered.
+              lastHeight = 0;
+              schedule();
+            }
+          };
+          window.addEventListener("message", onMessage);
+          document.fonts?.ready.then(schedule);
+          window.addEventListener(
+            "pagehide",
+            () => {
+              observer.disconnect();
+              cancelAnimationFrame(frame);
+              window.removeEventListener("resize", schedule);
+              window.removeEventListener("message", onMessage);
+            },
+            { once: true },
+          );
+          schedule();
+        }
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        else boot();
+      })();
+    </script>
+    <!-- usefulshelf-runtime:end -->
+    <script>
+      const config = window.__usefulshelfConfigure({"title": null, "density": 4}),
+        en =
+          (new URLSearchParams(location.search).get("lang") ||
+            document.documentElement.dataset.skillLang) === "en";
+      document.documentElement.lang = en ? "en" : "zh-CN";
+      const texts = {
+        badge: "A TACTILE TYPE EXPERIMENT · 02",
+        kicker: "Turn a few words into a little rain.",
+        intro:
+          "Every letter has a little weight. Write something, watch its strokes fall into particles, then invite them back into place.",
+        label: "Your poster text",
+        hint: "Up to 36 characters · Reflows as you type · Tap the poster or press Enter to scatter",
+        dissolve: "Let it fall ↓",
+        gather: "Bring it back ↑",
+        remix: "Another thought ↻",
+        wind: "Side wind",
+        posterNote: "Some words stay. Others drift away.",
+        footer: "Glyph sampling / Gravity & wind / Reversible typography",
+      };
+      if (en)
+        document.querySelectorAll("[data-i]").forEach((e) => (e.textContent = texts[e.dataset.i]));
+      document.querySelector("h1").textContent =
+        config.title ?? (en ? "Words have\nweight." : "文字有重量。\n也有自由。");
+      const c = document.querySelector("canvas"),
+        ctx = c.getContext("2d"),
+        input = document.querySelector("#words"),
+        wind = document.querySelector("#wind"),
+        status = document.querySelector("#status"),
+        motion = matchMedia("(prefers-reduced-motion: reduce)");
+      c.setAttribute(
+        "aria-label",
+        en ? "Click or press Enter to dissolve the words" : "点击或回车让文字散落",
+      );
+      const off = document.createElement("canvas"),
+        ink = off.getContext("2d", { willReadFrequently: true });
+      const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+      let w = 1,
+        h = 1,
+        points = [],
+        raf = 0,
+        start = 0,
+        phase = "set",
+        amount = 0,
+        from = 0,
+        target = 0,
+        remixIndex = 0,
+        layoutTimer;
+      function linesFor(text) {
+        let words = text.trim().split(/\s+/),
+          rows = [];
+        if (words.length > 1) {
+          let line = "";
+          for (const word of words) {
+            if (line.length + word.length > 10 && line) {
+              rows.push(line);
+              line = word;
+            } else line += (line ? " " : "") + word;
+          }
+          if (line) rows.push(line);
+        } else {
+          let chars = Array.from(text.trim());
+          let limit = /[^\x00-\xff]/.test(text) ? 4 : 8;
+          while (chars.length) rows.push(chars.splice(0, limit).join(""));
+        }
+        return rows.length ? rows : [" "];
+      }
+      function build() {
+        cancelAnimationFrame(raf);
+        amount = 0;
+        target = 0;
+        from = 0;
+        phase = "set";
+        off.width = Math.max(1, Math.round(w));
+        off.height = Math.max(1, Math.round(h));
+        ink.clearRect(0, 0, w, h);
+        let rows = linesFor(input.value);
+        let size = Math.min(w * 0.25, h / (rows.length * 1.12));
+        ink.font = `900 ${size}px Arial, sans-serif`;
+        let widest = Math.max(...rows.map((s) => ink.measureText(s).width), 1);
+        if (widest > w * 0.94) size *= (w * 0.94) / widest;
+        ink.font = `900 ${size}px Arial, sans-serif`;
+        ink.fillStyle = "#fff";
+        ink.textBaseline = "middle";
+        const total = rows.length * size * 1.05,
+          top = (h - total) / 2 + size * 0.52;
+        rows.forEach((s, i) => ink.fillText(s, 2, top + i * size * 1.05));
+        const data = ink.getImageData(0, 0, off.width, off.height).data;
+        points = [];
+        const step = Math.max(config.density, Math.ceil(Math.sqrt((w * h) / 8000)));
+        for (let y = 0; y < off.height; y += step)
+          for (let x = 0; x < off.width; x += step)
+            if (data[(y * off.width + x) * 4 + 3] > 80)
+              points.push({
+                x,
+                y,
+                drift: Math.sin(x * 12.3 + y * 0.77),
+                delay: Math.sin(x * 0.4 + y * 0.9) * 0.08 + 0.1,
+              });
+        document.querySelector("#particleCount").textContent = points.length + " DOTS";
+        status.textContent = en ? "Type is in place." : "文字已就位";
+        draw();
+      }
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        if (amount === 0) {
+          ctx.fillStyle = accent;
+          ctx.fillRect(0, 0, w, h);
+          ctx.globalCompositeOperation = "destination-in";
+          ctx.drawImage(off, 0, 0, w, h);
+          ctx.globalCompositeOperation = "source-over";
+          return;
+        }
+        ctx.fillStyle = accent;
+        for (const p of points) {
+          let t = Math.max(0, (amount - p.delay) / (1 - p.delay));
+          let x = p.x + t * t * (Number(wind.value) * 2 + p.drift * 50),
+            y = p.y + t * t * (h + 70) + Math.sin(t * 6 + p.drift) * t * 12;
+          ctx.globalAlpha = Math.max(0, 1 - t * 0.35);
+          ctx.fillRect(
+            x,
+            y,
+            Math.max(1, config.density * 0.65),
+            Math.max(1, config.density * 0.6 + t * 12),
+          );
+        }
+        ctx.globalAlpha = 1;
+      }
+      function animate(now) {
+        let t = Math.min((now - start) / 1500, 1),
+          e = target === 1 ? t : 1 - Math.pow(1 - t, 3);
+        amount = from + (target - from) * e;
+        draw();
+        if (t < 1 && !document.hidden) raf = requestAnimationFrame(animate);
+        else {
+          amount = target;
+          phase = target ? "fallen" : "set";
+          draw();
+          status.textContent = target
+            ? en
+              ? "Words have fallen. Bring them back whenever you like."
+              : "文字已散落。随时可以重新排版。"
+            : en
+              ? "Every letter is back in place."
+              : "每一个字，都回到了原位。";
+          raf = 0;
+        }
+      }
+      function move(next) {
+        cancelAnimationFrame(raf);
+        from = amount;
+        target = next;
+        phase = next ? "falling" : "gathering";
+        status.textContent = next
+          ? en
+            ? "Letting the words fall…"
+            : "文字正在散落…"
+          : en
+            ? "Gathering every stroke…"
+            : "正在收回每一道笔画…";
+        if (motion.matches || document.hidden) {
+          amount = target;
+          phase = target ? "fallen" : "set";
+          draw();
+          status.textContent = target
+            ? en
+              ? "Words have fallen."
+              : "文字已散落。"
+            : en
+              ? "Type is in place."
+              : "文字已就位。";
+        } else {
+          start = performance.now();
+          raf = requestAnimationFrame(animate);
+        }
+      }
+      function resize() {
+        const r = c.getBoundingClientRect();
+        w = r.width;
+        h = r.height;
+        const d = Math.min(devicePixelRatio || 1, 2);
+        c.width = w * d;
+        c.height = h * d;
+        ctx.setTransform(d, 0, 0, d, 0, 0);
+        build();
+      }
+      new ResizeObserver(resize).observe(c);
+      input.addEventListener("input", build);
+      document.querySelector("#dissolve").onclick = () => move(1);
+      document.querySelector("#gather").onclick = () => move(0);
+      document.querySelector("#remix").onclick = () => {
+        const thoughts = en
+          ? ["STAY A LITTLE", "LESS BUT BETTER", "LET IT GO", "MAKE SOME NOISE"]
+          : ["慢一点 也没关系", "让灵感 自由落下", "今天 也有好事", "MAKE SOME NOISE"];
+        input.value = thoughts[remixIndex++ % thoughts.length];
+        build();
+      };
+      c.onclick = () => move(amount > 0.5 ? 0 : 1);
+      c.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          move(amount > 0.5 ? 0 : 1);
+        }
+      });
+      wind.oninput = () => {
+        document.querySelector("#windValue").textContent = wind.value;
+        draw();
+      };
+      function settle() {
+        cancelAnimationFrame(raf);
+        amount = target;
+        draw();
+      }
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) settle();
+      });
+      motion.addEventListener("change", () => {
+        if (motion.matches) settle();
+      });
+      status.textContent = en ? "Type is in place." : "文字已就位";
+    </script>
+  </body>
+</html>

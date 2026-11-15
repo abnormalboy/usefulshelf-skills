@@ -1,0 +1,1019 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>让小想法，探出一点头。</title>
+    <style>
+      :root {
+        --accent: #dbbe84;
+        --tilt: 7deg;
+        --panel: #282a2e;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        color: #ece8de;
+        background: #151618;
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      button,
+      input,
+      textarea {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+        color: inherit;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 4px;
+      }
+      main {
+        max-width: 1120px;
+        margin: auto;
+        padding: 34px 38px;
+      }
+      .mast {
+        font:
+          10px ui-monospace,
+          monospace;
+        letter-spacing: 0.13em;
+        color: #888c90;
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+      }
+      .brand {
+        color: var(--accent);
+      }
+      h1 {
+        font-size: clamp(29px, 4.3vw, 52px);
+        font-weight: 460;
+        letter-spacing: -0.055em;
+        line-height: 1.2;
+        margin: 37px 0 13px;
+        overflow-wrap: anywhere;
+      }
+      .intro {
+        font-size: 12px;
+        line-height: 1.8;
+        color: #8e939a;
+        margin: 0 0 31px;
+      }
+      .window {
+        border: 1px solid #36393f;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 20px 45px #0002;
+      }
+      .tabs-shell {
+        background: #101113;
+        padding: 14px 17px 0;
+        display: flex;
+        align-items: end;
+        gap: 17px;
+        position: relative;
+      }
+      .compass {
+        display: grid;
+        place-items: center;
+        width: 29px;
+        height: 29px;
+        border: 1px solid #35383e;
+        border-radius: 50%;
+        font-size: 15px;
+        color: var(--accent);
+        margin-bottom: 10px;
+        flex-shrink: 0;
+      }
+      .tabs {
+        display: flex;
+        min-width: 0;
+        gap: 7px;
+        width: 100%;
+        align-items: end;
+      }
+      .tab {
+        position: relative;
+        isolation: isolate;
+        min-width: 0;
+        padding: 14px 18px;
+        border: 0;
+        background: transparent;
+        border-radius: 10px 10px 0 0;
+        color: #878d96;
+        font-size: 12px;
+        transition:
+          transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
+          background 0.2s;
+        z-index: 1;
+        transform-origin: center bottom;
+        white-space: nowrap;
+      }
+      .tab span {
+        pointer-events: none;
+        display: inline-block;
+        transition: transform 0.25s;
+      }
+      .tab[aria-selected="true"] {
+        background: var(--panel);
+        color: #f0eee8;
+        z-index: 3;
+      }
+      .tab[aria-selected="true"]::before,
+      .tab[aria-selected="true"]::after {
+        content: "";
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        bottom: 0;
+        pointer-events: none;
+      }
+      .tab[aria-selected="true"]::before {
+        left: -14px;
+        border-radius: 0 0 14px 0;
+        box-shadow: 5px 5px 0 4px var(--panel);
+      }
+      .tab[aria-selected="true"]::after {
+        right: -14px;
+        border-radius: 0 0 0 14px;
+        box-shadow: -5px 5px 0 4px var(--panel);
+      }
+      .tab.hovered {
+        background: #363940;
+        color: #f0eee8;
+        border-radius: 10px;
+        transform: translateY(-4px);
+        z-index: 4;
+      }
+      .tab.left-neighbor {
+        transform: skewX(var(--tilt)) translateX(-3px);
+      }
+      .tab.right-neighbor {
+        transform: skewX(calc(-1 * var(--tilt))) translateX(3px);
+      }
+      .tab.left-neighbor span {
+        transform: skewX(calc(-1 * var(--tilt)));
+      }
+      .tab.right-neighbor span {
+        transform: skewX(var(--tilt));
+      }
+      .panel {
+        background: var(--panel);
+        padding: 30px 31px 23px;
+        min-height: 374px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 175px;
+        gap: 33px;
+      }
+      .page-content {
+        min-width: 0;
+      }
+      .page-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        font:
+          9px ui-monospace,
+          monospace;
+        letter-spacing: 0.1em;
+        color: #777e88;
+        margin-bottom: 17px;
+      }
+      .color-dot {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
+        margin-right: 7px;
+      }
+      .title-input {
+        font-size: 24px;
+        font-weight: 480;
+        letter-spacing: -0.03em;
+        padding: 0 0 11px;
+        width: 100%;
+        border: 0;
+        border-bottom: 1px solid #3c4046;
+        background: transparent;
+        color: #eee9dd;
+        border-radius: 0;
+        min-width: 0;
+      }
+      .writing {
+        display: block;
+        width: 100%;
+        margin-top: 15px;
+        min-height: 175px;
+        resize: vertical;
+        background: repeating-linear-gradient(
+          transparent,
+          transparent 28px,
+          #393d4429 28px,
+          #393d4429 29px
+        );
+        font-size: 13px;
+        line-height: 29px;
+        border: 0;
+        color: #b9c0c9;
+        padding: 0;
+        min-width: 0;
+      }
+      .aside {
+        border-left: 1px solid #3d4147;
+        padding-left: 23px;
+        display: flex;
+        flex-direction: column;
+        gap: 19px;
+      }
+      .stamp {
+        border: 1px solid #5a574d;
+        width: 93px;
+        height: 106px;
+        padding: 9px;
+        transform: rotate(6deg);
+        background: #32312c;
+        color: #bfb59c;
+        align-self: center;
+      }
+      .stamp-art {
+        height: 64px;
+        display: grid;
+        place-items: center;
+        background: #22231f;
+        color: var(--accent);
+        font:
+          45px Georgia,
+          serif;
+      }
+      .stamp small {
+        display: block;
+        font:
+          7px ui-monospace,
+          monospace;
+        letter-spacing: 0.09em;
+        text-align: center;
+        margin-top: 8px;
+      }
+      .aside p {
+        font-size: 11px;
+        line-height: 1.85;
+        color: #858e9b;
+        margin: 0;
+      }
+      .stat {
+        font:
+          28px Georgia,
+          serif;
+        color: #d3cbb7;
+      }
+      .stat small {
+        display: block;
+        font:
+          9px ui-monospace,
+          monospace;
+        color: #777f8b;
+        margin-top: 7px;
+      }
+      .bottom {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        font:
+          9px ui-monospace,
+          monospace;
+        color: #777f8a;
+        border-top: 1px solid #393d43;
+        margin-top: 20px;
+        padding-top: 15px;
+      }
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 9px;
+        margin-top: 17px;
+      }
+      .btn {
+        font-size: 11px;
+        border: 1px solid #41464e;
+        border-radius: 7px;
+        padding: 10px 14px;
+        background: transparent;
+        color: #b4bdc9;
+      }
+      .btn:hover {
+        background: #292d33;
+      }
+      .primary {
+        color: #171919;
+        background: var(--accent);
+        border-color: var(--accent);
+        margin-left: auto;
+      }
+      .primary:hover {
+        background: var(--accent);
+        filter: brightness(1.1);
+      }
+      .status {
+        font-size: 11px;
+        line-height: 1.7;
+        color: #909aa7;
+        min-height: 19px;
+        margin: 17px 0 0;
+      }
+      .todo-list {
+        list-style: none;
+        padding: 0;
+        margin: 15px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .todo-list label {
+        display: flex;
+        gap: 10px;
+        align-items: start;
+        font-size: 12px;
+        line-height: 1.7;
+        color: #bdc5d0;
+        overflow-wrap: anywhere;
+      }
+      .todo-list input {
+        accent-color: var(--accent);
+        margin-top: 4px;
+        flex-shrink: 0;
+      }
+      .todo-list input:checked + span {
+        text-decoration: line-through;
+        color: #777f8b;
+      }
+      .todo-list li {
+        display: flex;
+        gap: 8px;
+        justify-content: space-between;
+      }
+      .remove-task {
+        border: 0;
+        background: none;
+        color: #778190;
+        padding: 0 5px;
+        font-size: 16px;
+      }
+      .add-row {
+        display: flex;
+        gap: 8px;
+      }
+      .add-row input {
+        background: #202328;
+        border: 1px solid #434953;
+        color: #bec6d1;
+        min-width: 0;
+        width: 100%;
+        padding: 9px;
+        border-radius: 6px;
+        font-size: 11px;
+      }
+      .add-row button {
+        border: 1px solid #525b69;
+        background: #313843;
+        color: #cbd5e2;
+        border-radius: 6px;
+        padding: 6px 11px;
+      }
+      .hidden {
+        display: none !important;
+      }
+      footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        font:
+          9px/1.7 ui-monospace,
+          monospace;
+        color: #697480;
+        margin-top: 28px;
+      }
+      @media (max-width: 720px) {
+        main {
+          padding: 25px 17px;
+        }
+        .mast {
+          font-size: 8px;
+        }
+        .mast span:last-child {
+          display: none;
+        }
+        h1 {
+          margin-top: 28px;
+        }
+        .tabs-shell {
+          gap: 8px;
+          padding: 12px 8px 0;
+        }
+        .compass {
+          display: none;
+        }
+        .tabs {
+          gap: 3px;
+        }
+        .tab {
+          font-size: 10px;
+          padding: 13px 8px;
+          flex: 1;
+        }
+        .panel {
+          grid-template-columns: 1fr;
+          padding: 24px 20px;
+          gap: 23px;
+          min-height: 360px;
+        }
+        .aside {
+          display: none;
+        }
+        .title-input {
+          font-size: 22px;
+        }
+        .writing {
+          min-height: 200px;
+        }
+        .toolbar {
+          gap: 7px;
+        }
+        .btn {
+          font-size: 10px;
+          padding: 10px 11px;
+        }
+        .primary {
+          margin-left: 0;
+        }
+        .page-meta {
+          font-size: 8px;
+        }
+        .bottom {
+          font-size: 8px;
+        }
+        footer {
+          flex-direction: column;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+        .tab.hovered,
+        .tab.left-neighbor,
+        .tab.right-neighbor,
+        .tab span {
+          transform: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="mast">
+        <span class="brand" id="notebook">小小灵感簿</span>
+        <span>ODD LITTLE IDEAS / ALWAYS WELCOME</span>
+      </div>
+      <h1>让小想法，探出一点头。</h1>
+      <p class="intro" data-i18n="intro">
+        划过一个标签，邻居会轻轻让一让。每一页都能留下不同的想法，写完就把它们一起带走。
+      </p>
+      <section class="window">
+        <div class="tabs-shell">
+          <span class="compass" aria-hidden="true">✳</span>
+          <div class="tabs" id="tabs" role="tablist" aria-label="笔记页面">
+            <button
+              class="tab"
+              id="tab-0"
+              role="tab"
+              aria-selected="true"
+              aria-controls="panel"
+              tabindex="0"
+            >
+              <span data-i18n="tab0">◌ 随手记</span>
+            </button>
+            <button
+              class="tab"
+              id="tab-1"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel"
+              tabindex="-1"
+            >
+              <span data-i18n="tab1">☑ 小计划</span>
+            </button>
+            <button
+              class="tab"
+              id="tab-2"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel"
+              tabindex="-1"
+            >
+              <span data-i18n="tab2">✧ 灵感角</span>
+            </button>
+            <button
+              class="tab"
+              id="tab-3"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel"
+              tabindex="-1"
+            >
+              <span data-i18n="tab3">♡ 小确幸</span>
+            </button>
+          </div>
+        </div>
+        <div class="panel" id="panel" role="tabpanel" aria-labelledby="tab-0">
+          <div class="page-content">
+            <div class="page-meta">
+              <span>
+                <i class="color-dot"></i>
+                <span id="page-number">PAGE 01 / 04</span>
+              </span>
+              <span data-i18n="session">只在当前会话保存</span>
+            </div>
+            <input class="title-input" id="page-title" maxlength="80" aria-label="页面标题" />
+            <textarea
+              class="writing"
+              id="writing"
+              maxlength="4000"
+              aria-label="笔记正文"
+            ></textarea>
+            <div id="tasks" class="hidden">
+              <ul class="todo-list" id="todo-list"></ul>
+              <form class="add-row" id="add-form">
+                <input
+                  id="task-text"
+                  maxlength="120"
+                  aria-label="新计划"
+                  placeholder="加一个小小的计划…"
+                />
+                <button type="submit" aria-label="添加计划" id="add-task">+</button>
+              </form>
+            </div>
+            <div class="bottom">
+              <span id="count"></span>
+              <span data-i18n="hint">← → 切换标签 · 自由书写</span>
+            </div>
+          </div>
+          <aside class="aside">
+            <div class="stamp">
+              <div class="stamp-art" id="stamp">✳</div>
+              <small>FOR THE LITTLE THINGS</small>
+            </div>
+            <p id="page-aside"></p>
+            <div class="stat">
+              <span id="total">0</span>
+              <small data-i18n="total">整本笔记的字符</small>
+            </div>
+          </aside>
+        </div>
+      </section>
+      <div class="toolbar">
+        <button class="btn" id="prompt" data-i18n="prompt">给我一个开头 ↗</button>
+        <button class="btn" id="next" data-i18n="next">翻到下一页 →</button>
+        <button class="btn primary" id="export" data-i18n="export">导出整本 Markdown ↓</button>
+      </div>
+      <p class="status" id="status" role="status"></p>
+      <footer>
+        <span data-i18n="footer">没有云同步 · 刷新前记得导出</span>
+        <span>NOTICE / COLLECT / BEGIN AGAIN</span>
+      </footer>
+    </main>
+    <!-- usefulshelf-runtime:start -->
+    <script>
+      // Inlined into each downloadable template: no sibling runtime is required.
+      (() => {
+        "use strict";
+        const dictionary = {};
+        const lang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          "zh";
+        const chinese = lang !== "en";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+        const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        window.__usefulshelfConfigure = (config) => {
+          const accent = document.documentElement.dataset.skillAccent;
+          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+        };
+        window.__usefulshelfText = (value) => {
+          if (!chinese || typeof value !== "string") return value;
+          const exact = dictionary[normalize(value)];
+          if (exact !== undefined) return exact;
+          return value
+            .replace(/What is ([^?]+)\?/g, "什么是 $1？")
+            .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
+            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
+            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
+            .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
+            .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/added to your sky\./g, "已加入夜空。")
+            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(/· no transaction sent/g, "· 未发送真实交易");
+        };
+        function boot() {
+          if (chinese) {
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            let node;
+            while ((node = walker.nextNode())) {
+              if (
+                node.parentElement?.closest(
+                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
+                )
+              )
+                continue;
+              const next = window.__usefulshelfText(node.textContent);
+              if (next !== node.textContent) node.textContent = next;
+            }
+            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
+              for (const name of ["aria-label", "placeholder", "title"]) {
+                if (element.hasAttribute(name))
+                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+              }
+            }
+            document.title = window.__usefulshelfText(document.title);
+          }
+          if (parent === window) return;
+          // Freeze viewport-based demo heights before measuring, avoiding vh feedback
+          // when the parent grows the iframe. Intentional inner demo scrollers remain.
+          const initialHeight = Math.max(360, Math.min(760, innerHeight));
+          function fixRules(rules) {
+            for (const rule of rules) {
+              if (rule.cssRules) fixRules(rule.cssRules);
+              if (!rule.style) continue;
+              if (/v[hbs]/.test(rule.style.minHeight))
+                rule.style.setProperty("min-height", "0", "important");
+              if (/v[hbs]/.test(rule.style.height))
+                rule.style.setProperty("height", `${initialHeight}px`, "important");
+            }
+          }
+          for (const sheet of document.styleSheets) {
+            try {
+              fixRules(sheet.cssRules);
+            } catch {
+              /* Same-file styles are sufficient. */
+            }
+          }
+          for (const element of [document.documentElement, document.body]) {
+            element.style.setProperty("height", "auto", "important");
+            element.style.setProperty("min-height", "0", "important");
+          }
+          document.documentElement.style.overflowX = "clip";
+          let frame = 0,
+            lastHeight = 0;
+          const measure = () => {
+            frame = 0;
+            const height = Math.ceil(
+              Math.max(document.body.scrollHeight, document.body.getBoundingClientRect().height),
+            );
+            if (height > 0 && height <= 20000 && height !== lastHeight) {
+              lastHeight = height;
+              parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+            }
+          };
+          const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(measure);
+          };
+          const observer = new ResizeObserver(schedule);
+          observer.observe(document.body);
+          window.addEventListener("resize", schedule);
+          const onMessage = (event) => {
+            if (event.source === parent && event.data?.type === "usefulshelf:measure") {
+              // The first resize may precede parent hydration. A measurement request
+              // must acknowledge even an unchanged height, so that message is recovered.
+              lastHeight = 0;
+              schedule();
+            }
+          };
+          window.addEventListener("message", onMessage);
+          document.fonts?.ready.then(schedule);
+          window.addEventListener(
+            "pagehide",
+            () => {
+              observer.disconnect();
+              cancelAnimationFrame(frame);
+              window.removeEventListener("resize", schedule);
+              window.removeEventListener("message", onMessage);
+            },
+            { once: true },
+          );
+          schedule();
+        }
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        else boot();
+      })();
+    </script>
+    <!-- usefulshelf-runtime:end -->
+    <script>
+      const config = window.__usefulshelfConfigure({"title": "\u8ba9\u5c0f\u60f3\u6cd5\uff0c\u63a2\u51fa\u4e00\u70b9\u5934\u3002", "accent": "#dbbe84", "notebook": "\u5c0f\u5c0f\u7075\u611f\u7c3f", "tilt": 7, "customTitle": false, "customText": []}),
+        en =
+          (new URLSearchParams(location.search).get("lang") ||
+            document.documentElement.dataset.skillLang) === "en",
+        $ = (id) => document.getElementById(id),
+        t = (zh, eng) => (en ? eng : zh);
+      document.documentElement.lang = en ? "en" : "zh-CN";
+      const english = {
+        intro:
+          "Hover a tab and its neighbors make a little room. Keep a different thought on every page, then take the whole notebook with you.",
+        tab0: "◌ Notes",
+        tab1: "☑ Plans",
+        tab2: "✧ Ideas",
+        tab3: "♡ Joys",
+        session: "Kept for this session",
+        hint: "← → Switch tabs · Write freely",
+        total: "CHARACTERS IN THE NOTEBOOK",
+        prompt: "Give me a beginning ↗",
+        next: "Turn the page →",
+        export: "Export all as Markdown ↓",
+        footer: "No cloud sync · Export before refreshing",
+      };
+      if (en) {
+        document
+          .querySelectorAll("[data-i18n]")
+          .forEach((el) => (el.textContent = english[el.dataset.i18n]));
+        if (!config.customTitle)
+          document.querySelector("h1").textContent = "Give small thoughts a little room.";
+        if (!config.customText.includes("notebook"))
+          $("notebook").textContent = "The little idea notebook";
+        $("tabs").setAttribute("aria-label", "Notebook pages");
+        $("page-title").setAttribute("aria-label", "Page title");
+        $("writing").setAttribute("aria-label", "Note text");
+        $("task-text").setAttribute("aria-label", "New plan");
+        $("task-text").placeholder = "Add one small plan…";
+        $("add-task").setAttribute("aria-label", "Add plan");
+      }
+      const pages = [
+        {
+          title: t("把这一天，装进口袋。", "Put a little of today in your pocket."),
+          body: t(
+            "今天的小发现：\n\n把留白也当作一种安排。\n给散步留一点不赶时间的空间。",
+            "A small thing I noticed today:\n\nLeave a little space in the plan.\nTake a walk without trying to arrive.",
+          ),
+          aside: t(
+            "不必写成一篇文章。\n一句没头没尾的话，也值得拥有一页。",
+            "It does not need to be an essay.\nA half-finished thought deserves a page, too.",
+          ),
+          icon: "✳",
+        },
+        {
+          title: t("只做三件小事。", "Three small things are enough."),
+          body: "",
+          aside: t(
+            "完成不等于做得很多。\n把一个小计划划掉，也是一种前进。",
+            "Progress is not always a long list.\nOne small tick can be enough.",
+          ),
+          icon: "✓",
+        },
+        {
+          title: t("如果换一种方式呢？", "What if we tried it another way?"),
+          body: t(
+            "一个还没想清楚的点子：\n\n做一盏只在雨天亮起的灯。",
+            "An idea that is not quite an idea yet:\n\nA lamp that lights only on rainy days.",
+          ),
+          aside: t(
+            "先把奇怪的想法写下来。\n实用性可以晚一点再说。",
+            "Write the strange idea first.\nPracticality can wait a little.",
+          ),
+          icon: "✧",
+        },
+        {
+          title: t("值得留住的小瞬间。", "Small moments worth keeping."),
+          body: t(
+            "晒过太阳的被子。\n刚好遇上的绿灯。\n有人记得我随口说过的话。",
+            "Sun-warmed laundry.\nA green light at just the right time.\nSomeone remembering a passing thought.",
+          ),
+          aside: t(
+            "不是每个瞬间都惊天动地。\n小小的好，也算数。",
+            "Not every moment is extraordinary.\nSmall good things count.",
+          ),
+          icon: "♡",
+        },
+      ];
+      let active = 0,
+        tasks = [
+          { id: 1, text: t("去窗边看看天空", "Look at the sky from a window"), done: false },
+          { id: 2, text: t("给一个想法起名字", "Give an idea a name"), done: true },
+          { id: 3, text: t("留十分钟无所事事", "Leave ten minutes unplanned"), done: false },
+        ],
+        nextTask = 4,
+        promptIndex = 0;
+      function say(text) {
+        $("status").textContent = text;
+      }
+      function storePage() {
+        pages[active].title = $("page-title").value;
+        if (active !== 1) pages[active].body = $("writing").value;
+      }
+      function updateCount() {
+        const n = active === 1 ? tasks.filter((x) => x.done).length : pages[active].body.length;
+        $("count").textContent =
+          active === 1
+            ? n + " / " + tasks.length + t(" 已完成", " DONE")
+            : n + t(" 字符", " CHARACTERS");
+        $("total").textContent =
+          pages.reduce((n, p) => n + p.title.length + p.body.length, 0) +
+          tasks.reduce((n, x) => n + x.text.length, 0);
+      }
+      function renderTasks() {
+        const list = $("todo-list");
+        list.replaceChildren();
+        tasks.forEach((task) => {
+          const li = document.createElement("li"),
+            label = document.createElement("label"),
+            check = document.createElement("input"),
+            text = document.createElement("span"),
+            remove = document.createElement("button");
+          check.type = "checkbox";
+          check.checked = task.done;
+          text.textContent = task.text;
+          check.onchange = () => {
+            task.done = check.checked;
+            updateCount();
+            say(
+              task.done
+                ? t("又完成了一件小事。", "One more small thing, done.")
+                : t("计划重新打开了。", "That plan is open again."),
+            );
+          };
+          remove.className = "remove-task";
+          remove.textContent = "×";
+          remove.setAttribute("aria-label", t("移除计划：", "Remove plan: ") + task.text);
+          remove.onclick = () => {
+            tasks = tasks.filter((x) => x.id !== task.id);
+            renderTasks();
+            updateCount();
+            $("task-text").focus();
+            say(t("已移除这个计划。", "Plan removed."));
+          };
+          label.append(check, text);
+          li.append(label, remove);
+          list.append(li);
+        });
+        updateCount();
+      }
+      function openPage(index, focus = false) {
+        storePage();
+        active = index;
+        document.querySelectorAll("[role=tab]").forEach((tab, i) => {
+          tab.setAttribute("aria-selected", i === active);
+          tab.tabIndex = i === active ? 0 : -1;
+        });
+        $("panel").setAttribute("aria-labelledby", "tab-" + active);
+        $("page-title").value = pages[active].title;
+        $("writing").value = pages[active].body;
+        $("writing").classList.toggle("hidden", active === 1);
+        $("tasks").classList.toggle("hidden", active !== 1);
+        $("prompt").textContent =
+          active === 1
+            ? t("加一个轻松的小计划 ↗", "Add a gentle little plan ↗")
+            : t("给我一个开头 ↗", "Give me a beginning ↗");
+        $("page-number").textContent = "PAGE 0" + (active + 1) + " / 04";
+        $("page-aside").textContent = pages[active].aside;
+        $("stamp").textContent = pages[active].icon;
+        renderTasks();
+        if (focus) $("tab-" + active).focus();
+        say(t("翻到第 ", "Opened page ") + (active + 1) + t(" 页。", "."));
+      }
+      function tilt(index) {
+        document.querySelectorAll("[role=tab]").forEach((tab, i) => {
+          tab.classList.toggle("hovered", i === index);
+          tab.classList.toggle("left-neighbor", i === index - 1);
+          tab.classList.toggle("right-neighbor", i === index + 1);
+        });
+      }
+      function untilt() {
+        document
+          .querySelectorAll("[role=tab]")
+          .forEach((tab) => tab.classList.remove("hovered", "left-neighbor", "right-neighbor"));
+      }
+      document.querySelectorAll("[role=tab]").forEach((tab, i) => {
+        tab.onclick = () => openPage(i);
+        tab.onpointerenter = () => tilt(i);
+        tab.onpointerleave = untilt;
+        tab.onfocus = () => tilt(i);
+        tab.onblur = untilt;
+        tab.onkeydown = (e) => {
+          let next;
+          if (e.key === "ArrowRight") next = (i + 1) % 4;
+          if (e.key === "ArrowLeft") next = (i + 3) % 4;
+          if (e.key === "Home") next = 0;
+          if (e.key === "End") next = 3;
+          if (next !== undefined) {
+            e.preventDefault();
+            openPage(next, true);
+          }
+        };
+      });
+      $("page-title").oninput = () => {
+        pages[active].title = $("page-title").value;
+        updateCount();
+      };
+      $("writing").oninput = () => {
+        pages[active].body = $("writing").value;
+        updateCount();
+      };
+      $("next").onclick = () => openPage((active + 1) % 4, true);
+      $("add-form").onsubmit = (e) => {
+        e.preventDefault();
+        const text = $("task-text").value.trim();
+        if (!text) return;
+        if (tasks.length >= 20) {
+          say(
+            t("先完成几件小事吧，最多保留 20 个计划。", "Keep it small: up to 20 plans at a time."),
+          );
+          return;
+        }
+        tasks.push({ id: nextTask++, text, done: false });
+        $("task-text").value = "";
+        renderTasks();
+        say(t("一个新计划，已经记下了。", "One new little plan, noted."));
+      };
+      const prompts = [
+        t("如果今天是一种颜色，那会是：", "If today were a color, it would be:"),
+        t("我想把更多时间留给：", "I would like to leave more time for:"),
+        t("一个不必马上有答案的问题：", "A question that does not need an answer yet:"),
+        t("刚刚让我停下来看的东西：", "Something that made me stop and look:"),
+      ];
+      $("prompt").onclick = () => {
+        if (active === 1) {
+          $("task-text").value = t("给自己倒一杯水", "Pour yourself a glass of water");
+          $("task-text").focus();
+          say(
+            t("写好了一个开头，按 + 加入计划。", "A starting point is ready. Press + to add it."),
+          );
+          return;
+        }
+        const text = (pages[active].body ? "\n\n" : "") + prompts[promptIndex++ % prompts.length];
+        if (pages[active].body.length + text.length > 4000) {
+          say(t("这一页写满了，换一页继续吧。", "This page is full. Try another page."));
+          return;
+        }
+        pages[active].body += text;
+        $("writing").value = pages[active].body;
+        $("writing").focus();
+        $("writing").setSelectionRange($("writing").value.length, $("writing").value.length);
+        updateCount();
+        say(
+          t("加了一个开头，把故事继续写下去吧。", "A beginning is in place. Make the rest yours."),
+        );
+      };
+      function markdown() {
+        storePage();
+        return (
+          "# " +
+          $("notebook").textContent +
+          "\n\n" +
+          pages
+            .map(
+              (p, i) =>
+                "## " +
+                (p.title || t("未命名页面", "Untitled page")) +
+                "\n\n" +
+                (i === 1
+                  ? tasks.map((x) => "- [" + (x.done ? "x" : " ") + "] " + x.text).join("\n")
+                  : p.body),
+            )
+            .join("\n\n---\n\n") +
+          "\n"
+        );
+      }
+      $("export").onclick = () => {
+        const url = URL.createObjectURL(
+          new Blob([markdown()], { type: "text/markdown;charset=utf-8" }),
+        );
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "little-idea-notebook.md";
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1500);
+        say(
+          t(
+            "四页笔记已导出为 Markdown，包括已勾选的计划。",
+            "All four pages exported as Markdown, including checked plans.",
+          ),
+        );
+      };
+      $("page-title").value = pages[0].title;
+      $("writing").value = pages[0].body;
+      openPage(0);
+      say(t("这一页，留给你今天的小发现。", "This page is for a small thing you noticed today."));
+    </script>
+  </body>
+</html>

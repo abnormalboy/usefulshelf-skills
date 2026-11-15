@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ice Fracture Lab</title>
+    <style>
+      :root {
+        --accent: #a5e6ff;
+        color-scheme: dark;
+        font-family: Arial, "PingFang SC", sans-serif;
+        background: #060b10;
+        color: #eef7fa;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      canvas:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 5px;
+      }
+      .shell {
+        max-width: 1440px;
+        margin: auto;
+        min-height: 720px;
+        padding: 30px 5% 24px;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        border-bottom: 1px solid #ffffff1c;
+        padding-bottom: 22px;
+      }
+      .mark {
+        font-weight: bold;
+        font-size: 17px;
+        letter-spacing: 0.02em;
+      }
+      .mark span {
+        color: var(--accent);
+      }
+      .live {
+        color: #7d969f;
+      }
+      .live:before {
+        content: "◈";
+        color: var(--accent);
+        margin-right: 9px;
+      }
+      .hero {
+        position: relative;
+        min-height: 474px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+      }
+      .copy {
+        z-index: 2;
+        pointer-events: none;
+      }
+      .eyebrow {
+        font-size: 10px;
+        letter-spacing: 0.18em;
+        color: var(--accent);
+        text-transform: uppercase;
+      }
+      h1 {
+        white-space: pre-line;
+        font-size: clamp(40px, 6.6vw, 90px);
+        line-height: 0.98;
+        letter-spacing: -0.065em;
+        max-width: 650px;
+        font-weight: 600;
+        margin: 24px 0;
+        overflow-wrap: anywhere;
+      }
+      h1 em {
+        font-style: normal;
+        color: #70828e;
+      }
+      .intro {
+        color: #93a5ae;
+        max-width: 380px;
+        line-height: 1.8;
+        font-size: 13px;
+      }
+      .visual {
+        position: relative;
+        min-width: 0;
+        aspect-ratio: 1.15;
+        max-height: 460px;
+        background: radial-gradient(ellipse, #16314455, transparent 67%);
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+        cursor: crosshair;
+      }
+      .cross {
+        position: absolute;
+        font-size: 16px;
+        color: #536773;
+        pointer-events: none;
+      }
+      .cross.a {
+        top: 8%;
+        left: 5%;
+      }
+      .cross.b {
+        bottom: 8%;
+        right: 5%;
+      }
+      .tip {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        color: #59717f;
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        pointer-events: none;
+      }
+      .controls {
+        border-top: 1px solid #ffffff1c;
+        display: grid;
+        grid-template-columns: 1.1fr 1.2fr 1fr;
+        gap: 32px;
+        padding-top: 23px;
+        align-items: center;
+      }
+      .label {
+        font-size: 10px;
+        color: #8296a0;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+      }
+      .amount {
+        font-size: 36px;
+        letter-spacing: -0.05em;
+        margin-top: 4px;
+      }
+      .amount small {
+        font-size: 11px;
+        color: #7b909d;
+        letter-spacing: 0;
+        margin-left: 8px;
+      }
+      .meter {
+        display: flex;
+        gap: 5px;
+        margin: 10px 0;
+      }
+      .meter i {
+        height: 3px;
+        background: var(--accent);
+        flex: 1;
+        opacity: 0.9;
+        transition: opacity 0.2s;
+      }
+      .range-top {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: #b4c8d1;
+        margin-bottom: 12px;
+      }
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+        cursor: pointer;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+      button {
+        border: 1px solid #4d6877;
+        border-radius: 30px;
+        padding: 13px 20px;
+        background: transparent;
+        color: #eaf8ff;
+        white-space: nowrap;
+      }
+      button.primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #081015;
+      }
+      button:hover {
+        filter: brightness(1.17);
+      }
+      footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        color: #536b78;
+        font-size: 10px;
+        margin-top: 26px;
+        line-height: 1.5;
+      }
+      #status {
+        color: #91adbb;
+      }
+      .sr {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+      }
+      @media (max-width: 700px) {
+        .shell {
+          padding: 24px 22px;
+          min-height: 720px;
+        }
+        .hero {
+          grid-template-columns: 1fr;
+          min-height: 0;
+        }
+        .copy {
+          padding-top: 30px;
+        }
+        h1 {
+          white-space: pre-line;
+          max-width: 520px;
+          font-size: 48px;
+          margin: 16px 0;
+        }
+        .intro {
+          font-size: 12px;
+          margin: 0;
+          max-width: 100%;
+        }
+        .visual {
+          height: 300px;
+          aspect-ratio: auto;
+        }
+        .controls {
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+          padding-top: 18px;
+        }
+        .actions {
+          grid-column: 1/-1;
+          justify-content: stretch;
+        }
+        .actions button {
+          flex: 1;
+        }
+        footer {
+          margin-top: 18px;
+        }
+        .live {
+          font-size: 9px;
+        }
+        .amount {
+          font-size: 30px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header>
+        <div class="mark">
+          <span>✳</span>
+          PHASE / 01
+        </div>
+        <div class="live" data-i="header">形态实验室</div>
+      </header>
+      <section class="hero">
+        <div class="copy">
+          <div class="eyebrow" data-i="eyebrow">固态 → 碎片 → 新生</div>
+          <h1>Break the ice.</h1>
+          <p class="intro" data-i="intro">
+            点击冰晶，释放一次冲击。调高力量，看每块切面找到新的轨迹；重冻，让一切回到原点。
+          </p>
+        </div>
+        <div class="visual">
+          <span class="cross a">+</span>
+          <canvas tabindex="0" role="button" aria-label="点击或按回车碎裂冰晶"></canvas>
+          <span class="cross b">+</span>
+          <div class="tip" data-i="tip">点击 / 回车 · 施加冲击</div>
+        </div>
+      </section>
+      <section class="controls" aria-label="实验控制">
+        <div>
+          <div class="label" data-i="state">晶体完整度</div>
+          <div class="amount">
+            <span id="integrity">100</span>
+            <small>%</small>
+          </div>
+          <div class="meter" aria-hidden="true"></div>
+        </div>
+        <div>
+          <label class="range-top" for="force">
+            <span data-i="force">冲击力度</span>
+            <output id="forceValue">65%</output>
+          </label>
+          <input id="force" type="range" min="10" max="100" value="65" />
+        </div>
+        <div class="actions">
+          <button class="primary" id="break" data-i="break">碎裂 ↗</button>
+          <button id="freeze" data-i="freeze">重新凝结 ↺</button>
+        </div>
+      </section>
+      <footer>
+        <span data-i="footer">24 个切面 / 每一次冲击，都有不同的形状</span>
+        <span id="status" role="status" aria-live="polite">冰晶已凝结</span>
+      </footer>
+    </main>
+    <!-- usefulshelf-runtime:start -->
+    <script>
+      // Inlined into each downloadable template: no sibling runtime is required.
+      (() => {
+        "use strict";
+        const dictionary = {};
+        const lang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          "zh";
+        const chinese = lang !== "en";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+        const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        window.__usefulshelfConfigure = (config) => {
+          const accent = document.documentElement.dataset.skillAccent;
+          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+        };
+        window.__usefulshelfText = (value) => {
+          if (!chinese || typeof value !== "string") return value;
+          const exact = dictionary[normalize(value)];
+          if (exact !== undefined) return exact;
+          return value
+            .replace(/What is ([^?]+)\?/g, "什么是 $1？")
+            .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
+            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
+            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
+            .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
+            .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/added to your sky\./g, "已加入夜空。")
+            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(/· no transaction sent/g, "· 未发送真实交易");
+        };
+        function boot() {
+          if (chinese) {
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            let node;
+            while ((node = walker.nextNode())) {
+              if (
+                node.parentElement?.closest(
+                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
+                )
+              )
+                continue;
+              const next = window.__usefulshelfText(node.textContent);
+              if (next !== node.textContent) node.textContent = next;
+            }
+            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
+              for (const name of ["aria-label", "placeholder", "title"]) {
+                if (element.hasAttribute(name))
+                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+              }
+            }
+            document.title = window.__usefulshelfText(document.title);
+          }
+          if (parent === window) return;
+          // Freeze viewport-based demo heights before measuring, avoiding vh feedback
+          // when the parent grows the iframe. Intentional inner demo scrollers remain.
+          const initialHeight = Math.max(360, Math.min(760, innerHeight));
+          function fixRules(rules) {
+            for (const rule of rules) {
+              if (rule.cssRules) fixRules(rule.cssRules);
+              if (!rule.style) continue;
+              if (/v[hbs]/.test(rule.style.minHeight))
+                rule.style.setProperty("min-height", "0", "important");
+              if (/v[hbs]/.test(rule.style.height))
+                rule.style.setProperty("height", `${initialHeight}px`, "important");
+            }
+          }
+          for (const sheet of document.styleSheets) {
+            try {
+              fixRules(sheet.cssRules);
+            } catch {
+              /* Same-file styles are sufficient. */
+            }
+          }
+          for (const element of [document.documentElement, document.body]) {
+            element.style.setProperty("height", "auto", "important");
+            element.style.setProperty("min-height", "0", "important");
+          }
+          document.documentElement.style.overflowX = "clip";
+          let frame = 0,
+            lastHeight = 0;
+          const measure = () => {
+            frame = 0;
+            const height = Math.ceil(
+              Math.max(document.body.scrollHeight, document.body.getBoundingClientRect().height),
+            );
+            if (height > 0 && height <= 20000 && height !== lastHeight) {
+              lastHeight = height;
+              parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+            }
+          };
+          const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(measure);
+          };
+          const observer = new ResizeObserver(schedule);
+          observer.observe(document.body);
+          window.addEventListener("resize", schedule);
+          const onMessage = (event) => {
+            if (event.source === parent && event.data?.type === "usefulshelf:measure") {
+              // The first resize may precede parent hydration. A measurement request
+              // must acknowledge even an unchanged height, so that message is recovered.
+              lastHeight = 0;
+              schedule();
+            }
+          };
+          window.addEventListener("message", onMessage);
+          document.fonts?.ready.then(schedule);
+          window.addEventListener(
+            "pagehide",
+            () => {
+              observer.disconnect();
+              cancelAnimationFrame(frame);
+              window.removeEventListener("resize", schedule);
+              window.removeEventListener("message", onMessage);
+            },
+            { once: true },
+          );
+          schedule();
+        }
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        else boot();
+      })();
+    </script>
+    <!-- usefulshelf-runtime:end -->
+    <script>
+      const config = window.__usefulshelfConfigure({"title": null, "impact": 65});
+      const en =
+        (new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang) === "en";
+      document.documentElement.lang = en ? "en" : "zh-CN";
+      const texts = {
+        header: "MATERIAL PLAYGROUND",
+        eyebrow: "SOLID → SCATTERED → REBORN",
+        intro:
+          "Tap the crystal to release an impact. Turn up the force and follow every fragment. Refreeze to bring it all home.",
+        tip: "TAP / ENTER · APPLY IMPACT",
+        state: "CRYSTAL INTEGRITY",
+        force: "Impact force",
+        break: "Fracture ↗",
+        freeze: "Refreeze ↺",
+        footer: "24 facets / A different shape with every impact",
+      };
+      if (en)
+        document.querySelectorAll("[data-i]").forEach((e) => (e.textContent = texts[e.dataset.i]));
+      document.querySelector("h1").textContent =
+        config.title ?? (en ? "Break the ice." : "打破形态。\n重新凝结。");
+      const canvas = document.querySelector("canvas"),
+        ctx = canvas.getContext("2d"),
+        range = document.querySelector("#force"),
+        status = document.querySelector("#status");
+      canvas.setAttribute(
+        "aria-label",
+        en ? "Click or press Enter to fracture the crystal" : "点击或按回车碎裂冰晶",
+      );
+      const motion = matchMedia("(prefers-reduced-motion: reduce)");
+      let w = 1,
+        h = 1,
+        dpr = 1,
+        raf = 0,
+        progress = 0,
+        target = 0,
+        origin = 0,
+        start = 0,
+        impact = 0,
+        seed = 0;
+      range.value = config.impact;
+      const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+      const meter = document.querySelector(".meter");
+      for (let i = 0; i < 12; i++) meter.append(document.createElement("i"));
+      const pieces = [];
+      const vertices = [];
+      for (let i = 0; i < 8; i++) {
+        let a = -Math.PI / 2 + (i * Math.PI) / 4;
+        vertices.push([Math.cos(a) * 0.8, Math.sin(a)]);
+      }
+      for (let i = 0; i < 8; i++) {
+        const a = vertices[i],
+          b = vertices[(i + 1) % 8],
+          mid = [(a[0] + b[0]) * 0.38, (a[1] + b[1]) * 0.38];
+        pieces.push([[0, 0], a, mid], [[0, 0], mid, b], [a, b, mid]);
+      }
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        const r = Math.min(w * 0.34, h * 0.37),
+          cx = w * 0.5,
+          cy = h * 0.46;
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.strokeStyle = "#36546955";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.ellipse(0, r * 1.08, r * 1.04, r * 0.2, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        for (let i = 0; i < pieces.length; i++) {
+          const p = pieces[i],
+            center = p.reduce((v, q) => [v[0] + q[0] / 3, v[1] + q[1] / 3], [0, 0]);
+          const a = Math.atan2(center[1], center[0]) + Math.sin(i * 3 + seed) * 0.3,
+            dist = progress * (0.55 + (i % 5) * 0.14);
+          ctx.save();
+          ctx.translate(Math.cos(a) * dist * r, Math.sin(a) * dist * r);
+          ctx.rotate(progress * Math.sin(i * 7 + seed) * 0.8);
+          ctx.beginPath();
+          p.forEach((q, j) =>
+            j ? ctx.lineTo(q[0] * r, q[1] * r) : ctx.moveTo(q[0] * r, q[1] * r),
+          );
+          ctx.closePath();
+          const g = ctx.createLinearGradient(-r, -r, r, r);
+          const light = 42 + ((i * 17) % 48);
+          g.addColorStop(0, `hsla(197,75%,${light}%,.90)`);
+          g.addColorStop(0.5, `hsla(205,40%,${light * 0.57}%,.86)`);
+          g.addColorStop(1, "#102435");
+          ctx.fillStyle = g;
+          ctx.fill();
+          ctx.strokeStyle = i % 3 === 0 ? accent : "#93dbf977";
+          ctx.lineWidth = 0.65;
+          ctx.stroke();
+          ctx.restore();
+        }
+        ctx.restore();
+        ctx.fillStyle = "#456270";
+        for (let i = 0; i < 28; i++) {
+          const x = (Math.sin(i * 87.3) * 0.5 + 0.5) * w,
+            y = (Math.cos(i * 41.7) * 0.5 + 0.5) * h;
+          ctx.fillRect(x, y, i % 4 === 0 ? 2 : 1, 1);
+        }
+      }
+      function resize() {
+        const r = canvas.getBoundingClientRect();
+        w = r.width;
+        h = r.height;
+        dpr = Math.min(devicePixelRatio || 1, 2);
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        draw();
+      }
+      new ResizeObserver(resize).observe(canvas);
+      function state() {
+        document.querySelector("#integrity").textContent = Math.round(100 * (1 - target));
+        [...meter.children].forEach(
+          (e, i) => (e.style.opacity = i / 12 < 1 - target ? ".9" : ".13"),
+        );
+      }
+      function animate(now) {
+        const t = Math.min((now - start) / 850, 1),
+          ease = 1 - Math.pow(1 - t, 3);
+        progress = origin + (target - origin) * ease;
+        draw();
+        if (t < 1 && !document.hidden) raf = requestAnimationFrame(animate);
+        else raf = 0;
+      }
+      function move(next) {
+        cancelAnimationFrame(raf);
+        origin = progress;
+        target = next;
+        state();
+        if (motion.matches || document.hidden) {
+          progress = target;
+          draw();
+          raf = 0;
+        } else {
+          start = performance.now();
+          raf = requestAnimationFrame(animate);
+        }
+      }
+      function fracture() {
+        impact++;
+        seed = impact * 1.7;
+        move(Math.min(1, target + 0.15 + Number(range.value) / 150));
+        status.textContent = en
+          ? `Impact ${impact} · ${Math.round((1 - target) * 100)}% intact`
+          : `第 ${impact} 次冲击 · 完整度 ${Math.round((1 - target) * 100)}%`;
+      }
+      function freeze() {
+        move(0);
+        impact = 0;
+        status.textContent = en
+          ? "Crystal refrozen. Ready for a new impact."
+          : "冰晶已重新凝结，可以再次冲击。";
+      }
+      canvas.addEventListener("click", fracture);
+      canvas.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          fracture();
+        }
+      });
+      document.querySelector("#break").onclick = fracture;
+      document.querySelector("#freeze").onclick = freeze;
+      range.oninput = () => (document.querySelector("#forceValue").textContent = range.value + "%");
+      range.oninput();
+      status.textContent = en ? "Crystal frozen. Ready for impact." : "冰晶已凝结";
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          cancelAnimationFrame(raf);
+          progress = target;
+          draw();
+        }
+      });
+      motion.addEventListener("change", () => {
+        if (motion.matches) {
+          cancelAnimationFrame(raf);
+          progress = target;
+          draw();
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1062 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>每条消息，都有下一步。</title>
+    <style>
+      :root {
+        --accent: #5b95ad;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        color: #283431;
+        background: #eff0eb;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      button,
+      select,
+      textarea {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+        color: inherit;
+      }
+      button:disabled {
+        opacity: 0.35;
+        cursor: default;
+      }
+      button:focus-visible,
+      select:focus-visible,
+      textarea:focus-visible,
+      a:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 4px;
+      }
+      main {
+        max-width: 1050px;
+        margin: auto;
+        padding: 30px 40px;
+      }
+      .mast {
+        font:
+          10px ui-monospace,
+          monospace;
+        letter-spacing: 0.14em;
+        color: #839080;
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+      }
+      h1 {
+        font-size: clamp(30px, 4vw, 48px);
+        font-weight: 500;
+        line-height: 1.2;
+        letter-spacing: -0.05em;
+        margin: 32px 0 11px;
+        overflow-wrap: anywhere;
+      }
+      .intro {
+        font-size: 12px;
+        line-height: 1.8;
+        color: #7a8779;
+        margin: 0 0 28px;
+      }
+      .workspace {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 340px;
+        gap: 65px;
+        align-items: center;
+      }
+      .lab {
+        min-width: 0;
+        padding: 12px 0;
+      }
+      .section-label {
+        font:
+          10px ui-monospace,
+          monospace;
+        letter-spacing: 0.12em;
+        color: #85917c;
+        margin: 0 0 20px;
+      }
+      .state-strip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        margin-bottom: 30px;
+      }
+      .state {
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #8e9886;
+        position: relative;
+      }
+      .state::before {
+        content: "";
+        display: block;
+        width: 7px;
+        height: 7px;
+        border: 1px solid #a9b59d;
+        border-radius: 50%;
+      }
+      .state.active {
+        color: #2b4136;
+        font-weight: 650;
+      }
+      .state.active::before {
+        background: var(--accent);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px #a7bcc324;
+      }
+      .state-arrow {
+        color: #bbc4b5;
+        font-size: 11px;
+      }
+      .mode-label {
+        font-size: 12px;
+        display: block;
+        margin-bottom: 9px;
+        color: #5a6d58;
+      }
+      select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccd3c2;
+        border-radius: 8px;
+        background: #f8f9f2;
+        color: #354931;
+        font-size: 12px;
+      }
+      .scenario-note {
+        color: #87927e;
+        font-size: 11px;
+        line-height: 1.7;
+        margin: 10px 0 21px;
+      }
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .action {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #cbd4c2;
+        background: #f6f8ef;
+        border-radius: 8px;
+        font-size: 11px;
+      }
+      .action:hover {
+        background: #e4ebdb;
+      }
+      .action span {
+        margin-right: 8px;
+        font-size: 15px;
+      }
+      .divider {
+        border: 0;
+        border-top: 1px solid #d8dfcf;
+        margin: 24px 0;
+      }
+      .trace-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .trace-head .section-label {
+        margin: 0;
+      }
+      .reset {
+        font-size: 10px;
+        background: none;
+        border: 0;
+        color: #697d5d;
+        padding: 4px;
+      }
+      .events {
+        list-style: none;
+        padding: 0;
+        margin: 13px 0 0;
+        font:
+          10px/1.9 ui-monospace,
+          monospace;
+        color: #718165;
+        min-height: 83px;
+        max-height: 104px;
+        overflow: auto;
+      }
+      .events li {
+        display: flex;
+        gap: 12px;
+      }
+      .events .num {
+        color: #a1ad95;
+      }
+      .status {
+        font-size: 11px;
+        line-height: 1.8;
+        color: #52694b;
+        min-height: 39px;
+        margin: 14px 0 0;
+      }
+      .phone {
+        border: 1px solid #d5dcd0;
+        padding: 18px 15px 11px;
+        border-radius: 34px;
+        background: #fcfdf9;
+        box-shadow: 0 16px 40px #48553414;
+        min-width: 0;
+      }
+      .phone-top {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-bottom: 1px solid #e5e9de;
+        padding: 3px 7px 15px;
+      }
+      .avatar {
+        border-radius: 50%;
+        width: 33px;
+        height: 33px;
+        background: #dce7d4;
+        display: grid;
+        place-items: center;
+        font-size: 20px;
+        color: #648251;
+      }
+      .person {
+        font-size: 12px;
+        font-weight: 600;
+        overflow-wrap: anywhere;
+        min-width: 0;
+      }
+      .presence {
+        font-size: 9px;
+        display: block;
+        color: #95a18c;
+        margin-top: 3px;
+        font-weight: 400;
+      }
+      .local {
+        margin-left: auto;
+        align-self: flex-start;
+        border: 1px solid #d8e2d2;
+        border-radius: 4px;
+        padding: 3px 5px;
+        font:
+          8px ui-monospace,
+          monospace;
+        color: #8c9b82;
+      }
+      .feed {
+        height: 330px;
+        overflow: auto;
+        overscroll-behavior: contain;
+        padding: 18px 5px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        scrollbar-width: thin;
+      }
+      .empty {
+        text-align: center;
+        margin: auto;
+        color: #90a080;
+        font-size: 11px;
+        line-height: 1.8;
+      }
+      .empty .emblem {
+        font-size: 53px;
+        color: var(--accent);
+        display: block;
+        margin-bottom: 15px;
+      }
+      .message {
+        max-width: 88%;
+        padding: 11px 13px;
+        border-radius: 14px 14px 14px 4px;
+        background: #eaf0e4;
+        font-size: 11px;
+        line-height: 1.65;
+        color: #40593a;
+        overflow-wrap: anywhere;
+        white-space: pre-wrap;
+        animation: arrive 0.25s ease-out;
+      }
+      .outgoing {
+        align-self: flex-end;
+        background: #364f3d;
+        color: #f0f5e9;
+        border-radius: 14px 14px 4px 14px;
+      }
+      .message.failed {
+        background: #f3e1db;
+        color: #9c6255;
+        border: 1px solid #e4c7bb;
+      }
+      .message.pending {
+        opacity: 0.6;
+      }
+      .message small {
+        display: block;
+        font-size: 9px;
+        opacity: 0.7;
+        margin-top: 6px;
+      }
+      .message audio {
+        max-width: 100%;
+        width: 220px;
+        height: 32px;
+        display: block;
+        margin-top: 8px;
+      }
+      .postcard {
+        width: 220px;
+        background: #e6e6cc;
+        padding: 10px;
+        border: 1px solid #d9d9bd;
+        border-radius: 10px;
+      }
+      .postcard-art {
+        height: 75px;
+        background: #d0dbc3;
+        position: relative;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+      .postcard-art::before {
+        content: "";
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        background: #f5e5b2;
+        position: absolute;
+        right: 26px;
+        top: 11px;
+      }
+      .postcard-art::after {
+        content: "";
+        width: 260px;
+        height: 140px;
+        border-radius: 50%;
+        background: #819874;
+        position: absolute;
+        left: -12px;
+        top: 49px;
+      }
+      .save-card {
+        font-size: 10px;
+        border: 0;
+        background: none;
+        color: #536745;
+        padding: 7px 0 0;
+      }
+      .composer {
+        border-top: 1px solid #e4eadd;
+        padding-top: 12px;
+      }
+      .composer-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 8px;
+      }
+      textarea {
+        width: 100%;
+        resize: vertical;
+        min-height: 48px;
+        max-height: 140px;
+        border: 1px solid #d6dfcc;
+        border-radius: 11px;
+        padding: 10px;
+        background: #f1f5e9;
+        color: #405635;
+        font-size: 11px;
+        line-height: 1.5;
+      }
+      .send {
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        border: 0;
+        background: var(--accent);
+        color: #fff;
+        font-size: 20px;
+      }
+      .composer-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        font:
+          8px ui-monospace,
+          monospace;
+        color: #9aaa8d;
+        margin: 9px 2px;
+      }
+      .retry {
+        width: 100%;
+        border: 1px solid #d9b0a0;
+        background: #f4e5dc;
+        color: #996553;
+        font-size: 10px;
+        border-radius: 7px;
+        padding: 8px;
+        margin-bottom: 10px;
+      }
+      .hidden {
+        display: none !important;
+      }
+      .home {
+        width: 75px;
+        height: 3px;
+        border-radius: 4px;
+        background: #2c3d2b;
+        margin: 14px auto 0;
+      }
+      footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        font:
+          9px/1.7 ui-monospace,
+          monospace;
+        color: #98a58c;
+        margin-top: 24px;
+      }
+      @keyframes arrive {
+        from {
+          opacity: 0;
+          transform: translateY(7px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @media (max-width: 750px) {
+        main {
+          padding: 24px 20px;
+        }
+        .workspace {
+          grid-template-columns: 1fr;
+          gap: 27px;
+        }
+        .phone {
+          width: min(340px, 100%);
+          margin: auto;
+          grid-row: 1;
+        }
+        .lab {
+          padding: 0;
+        }
+        .mast {
+          font-size: 8px;
+        }
+        .mast span:last-child {
+          display: none;
+        }
+        .intro {
+          max-width: 400px;
+        }
+        .actions {
+          grid-template-columns: 1fr 1fr;
+        }
+        .state-strip {
+          margin-bottom: 23px;
+        }
+        footer {
+          flex-direction: column;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="mast">
+        <span>LITTLE SIGNALS / STATE STUDIO</span>
+        <span data-i18n="mast">把看不见的状态，变成摸得着的反馈</span>
+      </div>
+      <h1>每条消息，都有下一步。</h1>
+      <p class="intro" data-i18n="intro">
+        写一句话，试一次失败，再重试。每一步都留在左侧的轨迹里；所有消息只存在于这个小实验。
+      </p>
+      <div class="workspace">
+        <section class="lab" aria-label="状态实验控制">
+          <p class="section-label" data-i18n="machine">消息的五种状态</p>
+          <div class="state-strip" id="states">
+            <span class="state" data-state="idle" data-i18n="idle">待机</span>
+            <span class="state-arrow">›</span>
+            <span class="state" data-state="composing" data-i18n="composing">输入</span>
+            <span class="state-arrow">›</span>
+            <span class="state" data-state="sending" data-i18n="sending">发送</span>
+            <span class="state-arrow">›</span>
+            <span class="state" data-state="delivered" data-i18n="delivered">送达</span>
+            <span class="state-arrow">/</span>
+            <span class="state" data-state="failed" data-i18n="failed">失败</span>
+          </div>
+          <label class="mode-label" for="transport" data-i18n="mode">这一次，信号会怎样？</label>
+          <select id="transport">
+            <option value="success" data-i18n="success">晴空万里 · 正常送达</option>
+            <option value="fail" data-i18n="fail">一个小意外 · 下一条失败一次</option>
+            <option value="offline" data-i18n="offline">暂时离线 · 等信号回来</option>
+          </select>
+          <p class="scenario-note" data-i18n="scenario">
+            离线时保留原消息。切回正常送达后，可重试同一条消息。
+          </p>
+          <div class="actions">
+            <button class="action" id="receive">
+              <span aria-hidden="true">↙</span>
+              <b data-i18n="receive">收到一句问候</b>
+            </button>
+            <button class="action" id="card">
+              <span aria-hidden="true">▧</span>
+              <b data-i18n="card">放入风景卡片</b>
+            </button>
+            <button class="action" id="voice">
+              <span aria-hidden="true">♫</span>
+              <b data-i18n="voice">放入三音符便条</b>
+            </button>
+            <button class="action" id="attach">
+              <span aria-hidden="true">⌁</span>
+              <b data-i18n="attach">选择本地附件</b>
+            </button>
+            <input id="file" type="file" hidden />
+          </div>
+          <hr class="divider" />
+          <div class="trace-head">
+            <p class="section-label" data-i18n="history">刚刚发生的小事</p>
+            <button class="reset" id="reset" data-i18n="reset">重新开始 ↺</button>
+          </div>
+          <ol class="events" id="events" aria-label="事件记录"></ol>
+          <p class="status" id="status" role="status"></p>
+        </section>
+        <section class="phone" aria-label="本地聊天预览">
+          <div class="phone-top">
+            <span class="avatar" aria-hidden="true">✳</span>
+            <div class="person">
+              <span id="contact">小满</span>
+              <span class="presence" data-i18n="presence">一个虚构的聊天伙伴</span>
+            </div>
+            <span class="local">LOCAL</span>
+          </div>
+          <div class="feed" id="feed" aria-label="消息列表"></div>
+          <div class="composer">
+            <button class="retry hidden" id="retry" data-i18n="retry">重试这条消息 ↻</button>
+            <div class="composer-row">
+              <textarea
+                id="draft"
+                maxlength="200"
+                aria-label="消息内容"
+                placeholder="给今天写一句话…"
+              ></textarea>
+              <button class="send" id="send" aria-label="发送消息">↑</button>
+            </div>
+            <div class="composer-meta">
+              <span id="charcount">0 / 200</span>
+              <span id="state-name">IDLE</span>
+            </div>
+          </div>
+          <div class="home"></div>
+        </section>
+      </div>
+      <footer>
+        <span data-i18n="footer">没有服务器 · 没有真实收件人 · 刷新后清空</span>
+        <span>COMPOSE / TRY / UNDERSTAND</span>
+      </footer>
+    </main>
+    <!-- usefulshelf-runtime:start -->
+    <script>
+      // Inlined into each downloadable template: no sibling runtime is required.
+      (() => {
+        "use strict";
+        const dictionary = {};
+        const lang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          "zh";
+        const chinese = lang !== "en";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+        const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        window.__usefulshelfConfigure = (config) => {
+          const accent = document.documentElement.dataset.skillAccent;
+          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+        };
+        window.__usefulshelfText = (value) => {
+          if (!chinese || typeof value !== "string") return value;
+          const exact = dictionary[normalize(value)];
+          if (exact !== undefined) return exact;
+          return value
+            .replace(/What is ([^?]+)\?/g, "什么是 $1？")
+            .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
+            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
+            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
+            .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
+            .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/added to your sky\./g, "已加入夜空。")
+            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(/· no transaction sent/g, "· 未发送真实交易");
+        };
+        function boot() {
+          if (chinese) {
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            let node;
+            while ((node = walker.nextNode())) {
+              if (
+                node.parentElement?.closest(
+                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
+                )
+              )
+                continue;
+              const next = window.__usefulshelfText(node.textContent);
+              if (next !== node.textContent) node.textContent = next;
+            }
+            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
+              for (const name of ["aria-label", "placeholder", "title"]) {
+                if (element.hasAttribute(name))
+                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+              }
+            }
+            document.title = window.__usefulshelfText(document.title);
+          }
+          if (parent === window) return;
+          // Freeze viewport-based demo heights before measuring, avoiding vh feedback
+          // when the parent grows the iframe. Intentional inner demo scrollers remain.
+          const initialHeight = Math.max(360, Math.min(760, innerHeight));
+          function fixRules(rules) {
+            for (const rule of rules) {
+              if (rule.cssRules) fixRules(rule.cssRules);
+              if (!rule.style) continue;
+              if (/v[hbs]/.test(rule.style.minHeight))
+                rule.style.setProperty("min-height", "0", "important");
+              if (/v[hbs]/.test(rule.style.height))
+                rule.style.setProperty("height", `${initialHeight}px`, "important");
+            }
+          }
+          for (const sheet of document.styleSheets) {
+            try {
+              fixRules(sheet.cssRules);
+            } catch {
+              /* Same-file styles are sufficient. */
+            }
+          }
+          for (const element of [document.documentElement, document.body]) {
+            element.style.setProperty("height", "auto", "important");
+            element.style.setProperty("min-height", "0", "important");
+          }
+          document.documentElement.style.overflowX = "clip";
+          let frame = 0,
+            lastHeight = 0;
+          const measure = () => {
+            frame = 0;
+            const height = Math.ceil(
+              Math.max(document.body.scrollHeight, document.body.getBoundingClientRect().height),
+            );
+            if (height > 0 && height <= 20000 && height !== lastHeight) {
+              lastHeight = height;
+              parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+            }
+          };
+          const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(measure);
+          };
+          const observer = new ResizeObserver(schedule);
+          observer.observe(document.body);
+          window.addEventListener("resize", schedule);
+          const onMessage = (event) => {
+            if (event.source === parent && event.data?.type === "usefulshelf:measure") {
+              // The first resize may precede parent hydration. A measurement request
+              // must acknowledge even an unchanged height, so that message is recovered.
+              lastHeight = 0;
+              schedule();
+            }
+          };
+          window.addEventListener("message", onMessage);
+          document.fonts?.ready.then(schedule);
+          window.addEventListener(
+            "pagehide",
+            () => {
+              observer.disconnect();
+              cancelAnimationFrame(frame);
+              window.removeEventListener("resize", schedule);
+              window.removeEventListener("message", onMessage);
+            },
+            { once: true },
+          );
+          schedule();
+        }
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        else boot();
+      })();
+    </script>
+    <!-- usefulshelf-runtime:end -->
+    <script>
+      const config = window.__usefulshelfConfigure({"title": "\u6bcf\u6761\u6d88\u606f\uff0c\u90fd\u6709\u4e0b\u4e00\u6b65\u3002", "accent": "#5b95ad", "contact": "\u5c0f\u6ee1", "latency": 900, "customTitle": false, "customText": []}),
+        en =
+          (new URLSearchParams(location.search).get("lang") ||
+            document.documentElement.dataset.skillLang) === "en",
+        $ = (id) => document.getElementById(id),
+        t = (zh, eng) => (en ? eng : zh);
+      document.documentElement.lang = en ? "en" : "zh-CN";
+      const english = {
+        mast: "Make the invisible state feel tangible.",
+        intro:
+          "Write a thought. Try a failure. Then retry. Follow every transition on the left. All messages stay inside this little experiment.",
+        machine: "FIVE STATES OF A MESSAGE",
+        idle: "Idle",
+        composing: "Draft",
+        sending: "Sending",
+        delivered: "Sent",
+        failed: "Failed",
+        mode: "What happens to the signal this time?",
+        success: "Clear skies · Deliver normally",
+        fail: "A small detour · Fail the next message once",
+        offline: "Offline · Wait for the signal",
+        scenario:
+          "Offline keeps the original message. Switch back to normal delivery, then retry that same message.",
+        receive: "Receive a greeting",
+        card: "Add a landscape card",
+        voice: "Add a three-note memo",
+        attach: "Choose a local attachment",
+        history: "A TRACE OF LITTLE MOMENTS",
+        reset: "Start again ↺",
+        presence: "A fictional conversation partner",
+        retry: "Retry this message ↻",
+        footer: "No server · No real recipient · Cleared on refresh",
+      };
+      if (en) {
+        document
+          .querySelectorAll("[data-i18n]")
+          .forEach((e) => (e.textContent = english[e.dataset.i18n]));
+        if (!config.customTitle)
+          document.querySelector("h1").textContent = "Every message has a next step.";
+        if (!config.customText.includes("contact")) $("contact").textContent = "Milo";
+        $("draft").placeholder = "Write a little thought…";
+        $("draft").setAttribute("aria-label", "Message text");
+        $("send").setAttribute("aria-label", "Send message");
+        document.querySelector(".lab").setAttribute("aria-label", "Message state controls");
+        document.querySelector(".phone").setAttribute("aria-label", "Local chat preview");
+        $("events").setAttribute("aria-label", "Event history");
+        $("feed").setAttribute("aria-label", "Message list");
+      }
+      let state = "idle",
+        messages = [],
+        events = [],
+        seq = 0,
+        pendingId = null,
+        timer = null,
+        run = 0,
+        voiceURL = "",
+        fileURLs = [];
+      const stateNames = {
+        idle: t("待机", "Idle"),
+        composing: t("输入中", "Composing"),
+        sending: t("发送中", "Sending"),
+        delivered: t("已送达", "Delivered"),
+        failed: t("发送失败", "Failed"),
+      };
+      function log(text) {
+        events.unshift({ n: ++seq, text });
+        events = events.slice(0, 8);
+        $("events").replaceChildren(
+          ...events.map((e) => {
+            const li = document.createElement("li"),
+              n = document.createElement("span"),
+              v = document.createElement("span");
+            n.className = "num";
+            n.textContent = String(e.n).padStart(2, "0");
+            v.textContent = e.text;
+            li.append(n, v);
+            return li;
+          }),
+        );
+      }
+      function say(text) {
+        $("status").textContent = text;
+      }
+      function setState(next) {
+        if (next !== state) {
+          log(state.toUpperCase() + " → " + next.toUpperCase());
+          state = next;
+        }
+        document
+          .querySelectorAll("[data-state]")
+          .forEach((e) => e.classList.toggle("active", e.dataset.state === state));
+        $("state-name").textContent = state.toUpperCase();
+        $("state-name").dataset.state = state;
+        const blocked = state === "sending" || state === "failed";
+        $("draft").readOnly = blocked;
+        $("send").disabled = blocked || !$("draft").value.trim();
+        $("retry").classList.toggle("hidden", state !== "failed");
+        ["receive", "card", "voice", "attach"].forEach((id) => ($(id).disabled = blocked));
+        $("transport").disabled = state === "sending";
+        $("charcount").textContent = $("draft").value.length + " / 200";
+      }
+      function render() {
+        const feed = $("feed");
+        feed.replaceChildren();
+        if (!messages.length) {
+          const empty = document.createElement("div");
+          empty.className = "empty";
+          const icon = document.createElement("span");
+          icon.className = "emblem";
+          icon.textContent = "✳";
+          const text = document.createElement("span");
+          text.textContent = t(
+            "一句小小的问候，\n也能让一天变得不同。",
+            "A small hello\ncan change the shape of a day.",
+          );
+          empty.append(icon, text);
+          feed.append(empty);
+        }
+        for (const m of messages) {
+          const el = document.createElement("div");
+          el.className =
+            "message " +
+            (m.direction === "out" ? "outgoing " : "") +
+            (m.state === "failed" ? "failed" : m.state === "sending" ? "pending" : "");
+          el.dataset.messageId = m.id;
+          el.dataset.delivery = m.state || "received";
+          if (m.type === "card") {
+            el.className = "message postcard";
+            const art = document.createElement("div");
+            art.className = "postcard-art";
+            const label = document.createElement("span");
+            label.textContent = t("给日落留一点时间。", "Leave a little room for sunset.");
+            const save = document.createElement("button");
+            save.className = "save-card";
+            save.textContent = m.saved
+              ? t("已收藏 ✓", "Saved ✓")
+              : t("收藏这片风景 +", "Keep this view +");
+            save.setAttribute("aria-pressed", !!m.saved);
+            save.onclick = () => {
+              m.saved = !m.saved;
+              render();
+              say(
+                m.saved
+                  ? t("风景已收藏在当前会话。", "The landscape is saved in this session.")
+                  : t("已取消收藏。", "Landscape removed from saved items."),
+              );
+            };
+            el.append(art, label, document.createElement("br"), save);
+          } else {
+            const text = document.createElement("span");
+            text.textContent = m.text;
+            el.append(text);
+            if (m.type === "voice") {
+              const audio = document.createElement("audio");
+              audio.controls = true;
+              audio.src = getVoice();
+              audio.setAttribute("aria-label", t("三音符本地音频", "Three-note local audio"));
+              el.append(audio);
+            }
+            if (m.type === "file") {
+              const link = document.createElement("a");
+              link.textContent = t("下载本地副本 ↗", "Download local copy ↗");
+              link.href = m.url;
+              link.download = m.name;
+              link.style.color = "inherit";
+              link.style.display = "block";
+              el.append(link);
+            }
+          }
+          if (m.direction === "out") {
+            const label = document.createElement("small");
+            label.textContent =
+              m.state === "sending"
+                ? t("正在穿过小小的信号…", "Finding a little signal…")
+                : m.state === "failed"
+                  ? t("未送达 · 原内容已保留", "Not delivered · Original kept")
+                  : t("本地模拟送达 ✓", "Delivered in local simulation ✓");
+            el.append(label);
+          }
+          feed.append(el);
+        }
+        feed.scrollTop = feed.scrollHeight;
+      }
+      function settle(id, token, fail) {
+        if (token !== run) return;
+        const msg = messages.find((m) => m.id === id);
+        if (!msg || msg.state !== "sending") return;
+        msg.state = fail ? "failed" : "delivered";
+        timer = null;
+        if (fail) {
+          setState("failed");
+          say(
+            t(
+              "消息还在这里。调整信号后，重试同一条消息。",
+              "Your message is still here. Adjust the signal, then retry the same message.",
+            ),
+          );
+        } else {
+          $("draft").value = "";
+          pendingId = null;
+          setState("delivered");
+          say(
+            t(
+              "已在本地模拟中送达，没有发给任何人。",
+              "Delivered in this local simulation. Nothing was sent to anyone.",
+            ),
+          );
+        }
+        render();
+      }
+      function transmit(id) {
+        const msg = messages.find((m) => m.id === id);
+        if (!msg) return;
+        msg.state = "sending";
+        pendingId = id;
+        setState("sending");
+        render();
+        const mode = $("transport").value;
+        const fail = mode !== "success";
+        if (mode === "fail") $("transport").value = "success";
+        const token = run;
+        say(t("小信号出发了…", "The little signal is on its way…"));
+        clearTimeout(timer);
+        timer = setTimeout(() => settle(id, token, fail), config.latency);
+      }
+      function send() {
+        if (state === "sending" || state === "failed" || !$("draft").value.trim()) return;
+        const id = Date.now() + "-" + seq;
+        messages.push({
+          id,
+          type: "text",
+          direction: "out",
+          text: $("draft").value,
+          state: "sending",
+        });
+        transmit(id);
+      }
+      $("send").onclick = send;
+      $("draft").oninput = () => setState($("draft").value.trim() ? "composing" : "idle");
+      $("draft").onkeydown = (e) => {
+        if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault();
+          send();
+        }
+      };
+      $("retry").onclick = () => {
+        if (state === "failed" && pendingId) {
+          log(t("重试原消息", "RETRY ORIGINAL MESSAGE"));
+          transmit(pendingId);
+        }
+      };
+      function incoming(type, text, extra = {}) {
+        if (state === "sending" || state === "failed") return;
+        messages.push({
+          id: "in-" + Date.now() + "-" + seq,
+          type,
+          direction: "in",
+          text,
+          ...extra,
+        });
+        log("RECEIVE / " + type.toUpperCase());
+        render();
+        say(t("已加入本地会话。", "Added to the local conversation."));
+      }
+      $("receive").onclick = () =>
+        incoming(
+          "text",
+          t(
+            "今天有没有一个，让你忍不住微笑的小瞬间？",
+            "Was there a tiny moment today that made you smile?",
+          ),
+        );
+      $("card").onclick = () => incoming("card", "");
+      $("voice").onclick = () =>
+        incoming(
+          "voice",
+          t("三音符便条 · 本地合成 1.5 秒", "Three-note memo · 1.5s locally synthesized"),
+        );
+      function getVoice() {
+        if (voiceURL) return voiceURL;
+        const rate = 22050,
+          length = Math.floor(rate * 1.5),
+          buffer = new ArrayBuffer(44 + length * 2),
+          v = new DataView(buffer);
+        function word(at, s) {
+          for (let i = 0; i < s.length; i++) v.setUint8(at + i, s.charCodeAt(i));
+        }
+        word(0, "RIFF");
+        v.setUint32(4, 36 + length * 2, true);
+        word(8, "WAVEfmt ");
+        v.setUint32(16, 16, true);
+        v.setUint16(20, 1, true);
+        v.setUint16(22, 1, true);
+        v.setUint32(24, rate, true);
+        v.setUint32(28, rate * 2, true);
+        v.setUint16(32, 2, true);
+        v.setUint16(34, 16, true);
+        word(36, "data");
+        v.setUint32(40, length * 2, true);
+        for (let i = 0; i < length; i++) {
+          const time = i / rate,
+            local = time % 0.5,
+            f = [261.63, 329.63, 392][Math.min(2, Math.floor(time / 0.5))],
+            env = Math.max(0, Math.min(1, local / 0.03, (0.42 - local) / 0.15));
+          v.setInt16(44 + i * 2, Math.sin(2 * Math.PI * f * time) * env * 6500, true);
+        }
+        voiceURL = URL.createObjectURL(new Blob([buffer], { type: "audio/wav" }));
+        return voiceURL;
+      }
+      $("attach").onclick = () => $("file").click();
+      $("file").onchange = () => {
+        const f = $("file").files[0];
+        if (!f) return;
+        if (f.size > 10 * 1024 * 1024) {
+          say(t("请选择 10 MB 以内的文件。", "Choose a file smaller than 10 MB."));
+          $("file").value = "";
+          return;
+        }
+        const url = URL.createObjectURL(f);
+        fileURLs.push(url);
+        incoming("file", f.name + "\n" + f.size.toLocaleString() + " bytes", { url, name: f.name });
+        $("file").value = "";
+      };
+      $("reset").onclick = () => {
+        run++;
+        clearTimeout(timer);
+        timer = null;
+        messages = [];
+        events = [];
+        seq = 0;
+        pendingId = null;
+        $("draft").value = "";
+        fileURLs.forEach(URL.revokeObjectURL);
+        fileURLs = [];
+        if (voiceURL) {
+          URL.revokeObjectURL(voiceURL);
+          voiceURL = "";
+        }
+        $("transport").value = "success";
+        state = "idle";
+        log(t("开始一段新会话", "NEW LOCAL CONVERSATION"));
+        setState("idle");
+        render();
+        say(t("一切归零，重新写一句吧。", "A clean start. Write another little thought."));
+      };
+      log(t("开始一段新会话", "NEW LOCAL CONVERSATION"));
+      setState("idle");
+      render();
+      say(t("先写一句话，再选择信号场景。", "Write a message, then choose a signal scenario."));
+    </script>
+  </body>
+</html>

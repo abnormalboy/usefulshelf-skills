@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>给界面，一点甜。</title>
+    <style>
+      :root {
+        --accent: #9670bb;
+        --bg: #f3f0e9;
+        --ink: #342d3f;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font: 14px system-ui;
+      }
+      main {
+        width: 100%;
+        max-width: 1040px;
+        margin: auto;
+        padding: 28px;
+        min-height: 720px;
+      }
+      .mast {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #41334e24;
+        padding-bottom: 16px;
+        font:
+          10px ui-monospace,
+          monospace;
+        letter-spacing: 0.14em;
+      }
+      h1 {
+        font:
+          clamp(36px, 5vw, 60px)/1.08 Georgia,
+          serif;
+        letter-spacing: -0.05em;
+        margin: 30px 0 13px;
+        overflow-wrap: anywhere;
+      }
+      .sub {
+        color: #82798a;
+        line-height: 1.7;
+        font-size: 13px;
+        margin: 0;
+        max-width: 600px;
+      }
+      .workspace {
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.8fr);
+        gap: 24px;
+        margin-top: 28px;
+        align-items: stretch;
+      }
+      .shelf {
+        padding: 24px 16px;
+        background: #fffafa;
+        border-radius: 16px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 11px;
+        align-content: center;
+      }
+      .sweet {
+        border: 1px solid transparent;
+        background: transparent;
+        padding: 4px 2px 10px;
+        border-radius: 13px;
+        cursor: pointer;
+        min-width: 0;
+        transition:
+          background 0.2s,
+          transform 0.2s;
+        color: var(--ink);
+      }
+      .sweet[aria-pressed="true"] {
+        background: #eee7f1;
+        border-color: #bdabc9;
+      }
+      .sweet:hover {
+        transform: translateY(-4px);
+      }
+      .sweet svg {
+        width: 100%;
+        height: auto;
+        max-width: 145px;
+        display: block;
+        margin: auto;
+        overflow: visible;
+      }
+      .sweet span {
+        font:
+          10px ui-monospace,
+          monospace;
+      }
+      .panel {
+        border: 1px solid #cabfce80;
+        border-radius: 15px;
+        padding: 22px;
+        background: #ffffff55;
+        min-width: 0;
+      }
+      #large {
+        max-width: 185px;
+        margin: -5px auto 8px;
+      }
+      #large svg {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.25s;
+      }
+      .controls label {
+        font-size: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 13px 0;
+        color: #726279;
+      }
+      .controls input[type="color"] {
+        width: 38px;
+        height: 27px;
+        border: 0;
+        background: none;
+        padding: 0;
+        cursor: pointer;
+      }
+      .controls input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+      }
+      .download {
+        width: 100%;
+        border: 0;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 22px;
+        padding: 12px 10px;
+        font: 12px system-ui;
+        cursor: pointer;
+        margin-top: 13px;
+      }
+      .reset {
+        border: 0;
+        background: none;
+        text-decoration: underline;
+        color: #86708f;
+        font: 11px system-ui;
+        cursor: pointer;
+        display: block;
+        margin: 12px auto 0;
+      }
+      #status {
+        font:
+          11px/1.6 ui-monospace,
+          monospace;
+        min-height: 34px;
+        color: #8a7c91;
+        margin-top: 17px;
+      }
+      button:focus-visible,
+      input:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 4px;
+      }
+      .foot {
+        font:
+          9px ui-monospace,
+          monospace;
+        letter-spacing: 0.12em;
+        color: #908497;
+        margin-top: 24px;
+        border-top: 1px solid #41334e24;
+        padding-top: 16px;
+      }
+      @media (max-width: 620px) {
+        main {
+          padding: 22px 18px;
+        }
+        .workspace {
+          grid-template-columns: 1fr;
+        }
+        .shelf {
+          padding: 17px 9px;
+          gap: 8px;
+        }
+        .sweet svg {
+          max-width: 125px;
+        }
+        .panel {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          gap: 14px;
+          padding: 18px;
+        }
+        #large {
+          margin: auto;
+        }
+        .mast {
+          font-size: 8px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+          animation: none !important;
+        }
+        .sweet:hover {
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="mast">
+        <span>SUGAR / OBJECT LIBRARY</span>
+        <span data-zh="六枚小图标 · 一点好心情" data-en="SIX LITTLE OBJECTS · GOOD FEELINGS">
+          六枚小图标 · 一点好心情
+        </span>
+      </div>
+      <h1>给界面，一点甜。</h1>
+      <p class="sub" id="subtitle">挑一个形状，调一束光，把喜欢的小图标带走。</p>
+      <div class="workspace">
+        <section class="shelf" id="shelf" role="group" aria-label="图标选择"></section>
+        <aside class="panel">
+          <div id="large" aria-label="选中图标预览"></div>
+          <div class="controls">
+            <label for="color">
+              <span data-zh="糖衣颜色" data-en="Candy color">糖衣颜色</span>
+              <input type="color" id="color" value="#b282d0" />
+            </label>
+            <label for="light">
+              <span data-zh="高光亮度" data-en="Gloss intensity">高光亮度</span>
+              <output id="light-value">70%</output>
+            </label>
+            <input id="light" type="range" min="0" max="100" value="70" />
+            <label for="tilt">
+              <span data-zh="摆放角度" data-en="Playful tilt">摆放角度</span>
+              <output id="tilt-value">0°</output>
+            </label>
+            <input id="tilt" type="range" min="-20" max="20" value="0" />
+            <button
+              class="download"
+              id="download"
+              data-zh="带走这枚 SVG ↓"
+              data-en="Download this SVG ↓"
+            >
+              带走这枚 SVG ↓
+            </button>
+            <button class="reset" id="reset" data-zh="恢复这枚的原色" data-en="Reset this icon">
+              恢复这枚的原色
+            </button>
+          </div>
+        </aside>
+      </div>
+      <p
+        id="status"
+        role="status"
+        data-zh="选一枚，调一束光，把快乐带走。"
+        data-en="Pick a sweet, shape the light, keep a little joy."
+      >
+        选一枚，调一束光，把快乐带走。
+      </p>
+      <div class="foot">SOFT EDGES. BRIGHT IDEAS. / VECTOR CANDY COLLECTION</div>
+    </main>
+    <!-- usefulshelf-runtime:start -->
+    <script>
+      // Inlined into each downloadable template: no sibling runtime is required.
+      (() => {
+        "use strict";
+        const dictionary = {};
+        const lang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          "zh";
+        const chinese = lang !== "en";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+        const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        window.__usefulshelfConfigure = (config) => {
+          const accent = document.documentElement.dataset.skillAccent;
+          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+        };
+        window.__usefulshelfText = (value) => {
+          if (!chinese || typeof value !== "string") return value;
+          const exact = dictionary[normalize(value)];
+          if (exact !== undefined) return exact;
+          return value
+            .replace(/What is ([^?]+)\?/g, "什么是 $1？")
+            .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
+            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
+            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
+            .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
+            .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/added to your sky\./g, "已加入夜空。")
+            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(/· no transaction sent/g, "· 未发送真实交易");
+        };
+        function boot() {
+          if (chinese) {
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            let node;
+            while ((node = walker.nextNode())) {
+              if (
+                node.parentElement?.closest(
+                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
+                )
+              )
+                continue;
+              const next = window.__usefulshelfText(node.textContent);
+              if (next !== node.textContent) node.textContent = next;
+            }
+            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
+              for (const name of ["aria-label", "placeholder", "title"]) {
+                if (element.hasAttribute(name))
+                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+              }
+            }
+            document.title = window.__usefulshelfText(document.title);
+          }
+          if (parent === window) return;
+          // Freeze viewport-based demo heights before measuring, avoiding vh feedback
+          // when the parent grows the iframe. Intentional inner demo scrollers remain.
+          const initialHeight = Math.max(360, Math.min(760, innerHeight));
+          function fixRules(rules) {
+            for (const rule of rules) {
+              if (rule.cssRules) fixRules(rule.cssRules);
+              if (!rule.style) continue;
+              if (/v[hbs]/.test(rule.style.minHeight))
+                rule.style.setProperty("min-height", "0", "important");
+              if (/v[hbs]/.test(rule.style.height))
+                rule.style.setProperty("height", `${initialHeight}px`, "important");
+            }
+          }
+          for (const sheet of document.styleSheets) {
+            try {
+              fixRules(sheet.cssRules);
+            } catch {
+              /* Same-file styles are sufficient. */
+            }
+          }
+          for (const element of [document.documentElement, document.body]) {
+            element.style.setProperty("height", "auto", "important");
+            element.style.setProperty("min-height", "0", "important");
+          }
+          document.documentElement.style.overflowX = "clip";
+          let frame = 0,
+            lastHeight = 0;
+          const measure = () => {
+            frame = 0;
+            const height = Math.ceil(
+              Math.max(document.body.scrollHeight, document.body.getBoundingClientRect().height),
+            );
+            if (height > 0 && height <= 20000 && height !== lastHeight) {
+              lastHeight = height;
+              parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+            }
+          };
+          const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(measure);
+          };
+          const observer = new ResizeObserver(schedule);
+          observer.observe(document.body);
+          window.addEventListener("resize", schedule);
+          const onMessage = (event) => {
+            if (event.source === parent && event.data?.type === "usefulshelf:measure") {
+              // The first resize may precede parent hydration. A measurement request
+              // must acknowledge even an unchanged height, so that message is recovered.
+              lastHeight = 0;
+              schedule();
+            }
+          };
+          window.addEventListener("message", onMessage);
+          document.fonts?.ready.then(schedule);
+          window.addEventListener(
+            "pagehide",
+            () => {
+              observer.disconnect();
+              cancelAnimationFrame(frame);
+              window.removeEventListener("resize", schedule);
+              window.removeEventListener("message", onMessage);
+            },
+            { once: true },
+          );
+          schedule();
+        }
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        else boot();
+      })();
+    </script>
+    <!-- usefulshelf-runtime:end -->
+    <script>
+      (() => {
+        "use strict";
+        const config = window.__usefulshelfConfigure({"title": "\u7ed9\u754c\u9762\uff0c\u4e00\u70b9\u751c\u3002", "subtitle": "\u6311\u4e00\u4e2a\u5f62\u72b6\uff0c\u8c03\u4e00\u675f\u5149\uff0c\u628a\u559c\u6b22\u7684\u5c0f\u56fe\u6807\u5e26\u8d70\u3002", "accent": "#9670bb", "bg": "#f3f0e9", "customTitle": false, "customSubtitle": false}),
+          en =
+            (new URLSearchParams(location.search).get("lang") ||
+              document.documentElement.dataset.skillLang) === "en",
+          L = (a, b) => (en ? b : a);
+        document.documentElement.lang = en ? "en" : "zh-CN";
+        document
+          .querySelectorAll("[data-en]")
+          .forEach((e) => (e.textContent = e.dataset[en ? "en" : "zh"]));
+        if (en && !config.customTitle)
+          document.querySelector("h1").textContent = "A little gloss goes a long way.";
+        if (en && !config.customSubtitle)
+          document.querySelector("#subtitle").textContent =
+            "Pick a shape, tune the light, and take a little happy icon home.";
+        const names = [
+            ["相机", "Camera"],
+            ["对话", "Conversation"],
+            ["星光", "Sparkle"],
+            ["天气", "Weather"],
+            ["花朵", "Flower"],
+            ["书本", "Book"],
+          ],
+          defaults = ["#6684db", "#92c94e", "#e57cb6", "#58bfd8", "#b98be0", "#eeb85c"],
+          colors = [...defaults],
+          shelf = document.querySelector("#shelf"),
+          large = document.querySelector("#large"),
+          color = document.querySelector("#color"),
+          light = document.querySelector("#light"),
+          tilt = document.querySelector("#tilt"),
+          status = document.querySelector("#status");
+        let selected = 4;
+        const values = names.map(() => ({ gloss: 70, tilt: 0 }));
+        function symbol(i) {
+          if (i === 0)
+            return '<rect x="57" y="69" width="88" height="66" rx="17"/><path d="M76 69L83 58H113L121 69Z"/><circle cx="101" cy="102" r="22" fill="#8b8ba0"/><circle cx="101" cy="102" r="14" fill="#454253"/><circle cx="107" cy="97" r="5" fill="#c6c5d5"/><circle cx="130" cy="82" r="4" fill="#fff"/>';
+          if (i === 1)
+            return '<path d="M58 100Q56 64 101 63Q144 63 146 98Q148 133 104 136L82 151L79 131Q57 125 58 100Z"/><circle cx="85" cy="94" r="4" fill="#567542"/><circle cx="118" cy="94" r="4" fill="#567542"/><path d="M85 110Q101 124 118 110" fill="none" stroke="#567542" stroke-width="4" stroke-linecap="round"/>';
+          if (i === 2)
+            return '<path d="M100 51L115 85L151 100L115 114L100 151L85 114L50 100L85 85Z"/><circle cx="141" cy="56" r="6"/><circle cx="55" cy="140" r="4"/>';
+          if (i === 3)
+            return '<circle cx="127" cy="79" r="29" fill="#ffdf83"/><path d="M62 129Q39 126 45 106Q48 91 65 89Q68 66 91 70Q111 70 116 91Q143 89 146 110Q148 132 125 132Z"/>';
+          if (i === 4)
+            return '<g><ellipse cx="101" cy="78" rx="18" ry="32"/><ellipse cx="101" cy="78" rx="18" ry="32" transform="rotate(72 101 102)"/><ellipse cx="101" cy="78" rx="18" ry="32" transform="rotate(144 101 102)"/><ellipse cx="101" cy="78" rx="18" ry="32" transform="rotate(216 101 102)"/><ellipse cx="101" cy="78" rx="18" ry="32" transform="rotate(288 101 102)"/></g><circle cx="101" cy="102" r="17" fill="#ffe08d"/>';
+          return '<g transform="rotate(-9 100 100)"><rect x="67" y="60" width="77" height="94" rx="10" fill="#966c42"/><rect x="60" y="54" width="77" height="94" rx="10"/><path d="M73 55V144" stroke="#d8c4a4" stroke-width="3"/><path d="M86 79H121M86 89H112M86 118H115" stroke="#a48058" stroke-width="5" stroke-linecap="round"/></g>';
+        }
+        function svg(i, id) {
+          const v = values[i],
+            c = colors[i];
+          return `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="210" viewBox="0 0 200 210" role="img" aria-label="${names[i][en ? 1 : 0]}"><defs><radialGradient id="${id}body" cx=".34" cy=".25" r=".8"><stop stop-color="#fff" stop-opacity=".55"/><stop offset=".48" stop-color="${c}"/><stop offset="1" stop-color="#443958" stop-opacity=".35"/></radialGradient><linearGradient id="${id}symbol" x2=".3" y2="1"><stop stop-color="#fffefc"/><stop offset="1" stop-color="#e3dae5"/></linearGradient><filter id="${id}shadow" x="-.4" y="-.4" width="1.8" height="1.8"><feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2f193c" flood-opacity=".22"/></filter><radialGradient id="${id}shine"><stop stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><ellipse cx="100" cy="185" rx="61" ry="11" fill="#382b4520"/><g transform="rotate(${v.tilt} 100 100)"><circle cx="100" cy="100" r="83" fill="${c}"/><circle cx="100" cy="100" r="83" fill="url(#${id}body)"/><circle cx="100" cy="100" r="79" fill="none" stroke="#fff" stroke-opacity=".32" stroke-width="1.5"/><g fill="url(#${id}symbol)" filter="url(#${id}shadow)">${symbol(i)}</g><ellipse cx="70" cy="48" rx="40" ry="23" transform="rotate(-24 70 48)" fill="url(#${id}shine)" opacity="${v.gloss / 100}"/><path d="M44 141Q79 183 129 165" fill="none" stroke="#fff" stroke-opacity="${v.gloss / 550}" stroke-width="4" stroke-linecap="round"/></g></svg>`;
+        }
+        function render() {
+          shelf.querySelectorAll("button").forEach((b, i) => {
+            b.innerHTML = svg(i, "small" + i) + "<span>" + names[i][en ? 1 : 0] + "</span>";
+            b.setAttribute("aria-pressed", String(i === selected));
+          });
+          large.innerHTML = svg(selected, "large");
+          color.value = colors[selected];
+          light.value = values[selected].gloss;
+          tilt.value = values[selected].tilt;
+          document.querySelector("#light-value").textContent = light.value + "%";
+          document.querySelector("#tilt-value").textContent = tilt.value + "°";
+        }
+        names.forEach((n, i) => {
+          const b = document.createElement("button");
+          b.className = "sweet";
+          b.setAttribute("aria-label", n[en ? 1 : 0]);
+          b.addEventListener("click", () => {
+            selected = i;
+            render();
+            status.textContent = L("正在调制：", "Mixing: ") + n[en ? 1 : 0];
+          });
+          shelf.append(b);
+        });
+        shelf.setAttribute("aria-label", L("图标选择", "Choose an icon"));
+        large.setAttribute("aria-label", L("选中图标预览", "Selected icon preview"));
+        color.addEventListener("input", () => {
+          colors[selected] = color.value;
+          render();
+          status.textContent = L("新糖衣已准备好。", "A fresh coat of candy.");
+        });
+        light.addEventListener("input", () => {
+          values[selected].gloss = Number(light.value);
+          render();
+        });
+        tilt.addEventListener("input", () => {
+          values[selected].tilt = Number(tilt.value);
+          render();
+        });
+        document.querySelector("#reset").addEventListener("click", () => {
+          colors[selected] = defaults[selected];
+          values[selected] = { gloss: 70, tilt: 0 };
+          render();
+          status.textContent = L(
+            "已恢复这枚图标的初始外观。",
+            "This icon is back to its original recipe.",
+          );
+        });
+        document.querySelector("#download").addEventListener("click", () => {
+          const blob = new Blob([svg(selected, "icon")], { type: "image/svg+xml" }),
+            url = URL.createObjectURL(blob),
+            a = document.createElement("a");
+          a.href = url;
+          a.download = "sweet-" + names[selected][1].toLowerCase() + ".svg";
+          a.click();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+          status.textContent = L(
+            "SVG 已准备好，颜色和高光都保留了。",
+            "SVG ready, with your color and lighting intact.",
+          );
+        });
+        render();
+      })();
+    </script>
+  </body>
+</html>

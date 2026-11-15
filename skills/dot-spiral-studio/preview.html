@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Dot Spiral Studio</title>
+    <style>
+      :root {
+        --accent: #ff7948;
+        font-family: Arial, "PingFang SC", sans-serif;
+        color: #f5eee7;
+        background: #11100f;
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      canvas:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 5px;
+      }
+      .shell {
+        max-width: 1440px;
+        margin: auto;
+        padding: 28px 4.5%;
+        min-height: 730px;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #4f44353d;
+        color: #938777;
+        font: 10px monospace;
+        letter-spacing: 0.12em;
+      }
+      .brand {
+        color: #eadbc8;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(230px, 0.68fr) minmax(0, 1.32fr);
+        gap: 6%;
+        align-items: center;
+        padding-top: 24px;
+      }
+      .eyebrow {
+        font: 10px monospace;
+        color: var(--accent);
+        letter-spacing: 0.1em;
+      }
+      h1 {
+        font-size: clamp(35px, 4.1vw, 58px);
+        font-weight: 500;
+        line-height: 1.12;
+        letter-spacing: -0.055em;
+        margin: 24px 0;
+        overflow-wrap: anywhere;
+        white-space: pre-line;
+      }
+      .intro {
+        font-size: 12px;
+        line-height: 1.95;
+        color: #9d9388;
+        max-width: 320px;
+      }
+      .presets {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+        margin: 28px 0 30px;
+      }
+      button {
+        background: transparent;
+        border: 1px solid #514538;
+        border-radius: 4px;
+        color: #bcb0a1;
+        padding: 11px 13px;
+        font-size: 11px;
+      }
+      button[aria-pressed="true"] {
+        background: var(--accent);
+        color: #180f08;
+        border-color: var(--accent);
+      }
+      button:hover {
+        filter: brightness(1.2);
+      }
+      .control {
+        margin: 22px 0;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 11px;
+        margin-bottom: 12px;
+        color: #b9aa98;
+      }
+      output {
+        font: 11px monospace;
+        color: var(--accent);
+      }
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+        cursor: pointer;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 26px;
+      }
+      .actions button {
+        border-radius: 24px;
+      }
+      .actions .primary {
+        background: #f2e7d8;
+        color: #211a13;
+        border-color: #f2e7d8;
+      }
+      .stage {
+        position: relative;
+        aspect-ratio: 1;
+        min-width: 0;
+        max-height: 610px;
+        background: #050505;
+        border: 1px solid #302820;
+      }
+      .stage canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+        cursor: pointer;
+      }
+      .edge {
+        position: absolute;
+        color: #66584a;
+        font: 9px monospace;
+        letter-spacing: 0.12em;
+        pointer-events: none;
+      }
+      .top {
+        top: 16px;
+        left: 18px;
+      }
+      .bottom {
+        bottom: 16px;
+        right: 18px;
+      }
+      .index {
+        font: 40px Georgia;
+        color: #5e4734;
+        margin-top: 30px;
+      }
+      .index small {
+        font: 9px monospace;
+        margin-left: 10px;
+        color: #8e7964;
+      }
+      footer {
+        margin-top: 26px;
+        border-top: 1px solid #4f44353d;
+        padding-top: 15px;
+        font: 10px/1.7 monospace;
+        color: #73675b;
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      #status {
+        color: #bfa68b;
+      }
+      @media (max-width: 720px) {
+        .shell {
+          padding: 22px;
+        }
+        .layout {
+          grid-template-columns: 1fr;
+          gap: 23px;
+        }
+        .copy {
+          display: contents;
+        }
+        .eyebrow {
+          margin: 4px 0 -12px;
+        }
+        h1 {
+          font-size: 40px;
+          margin: 0;
+        }
+        .intro {
+          max-width: none;
+          margin: 0;
+        }
+        .stage {
+          grid-row: 4;
+          height: auto;
+          width: 100%;
+          max-width: 540px;
+          justify-self: center;
+        }
+        .panel {
+          grid-row: 5;
+        }
+        .presets {
+          margin: 0 0 20px;
+        }
+        .control {
+          margin: 18px 0;
+        }
+        .index {
+          display: none;
+        }
+        footer {
+          flex-direction: column;
+          gap: 6px;
+        }
+        header {
+          font-size: 8px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header>
+        <span class="brand">DOT / ORDER</span>
+        <span data-i="header">01 — 点阵运动工坊</span>
+      </header>
+      <section class="layout">
+        <div class="copy">
+          <div class="eyebrow" data-i="eyebrow">微小的点，组成巨大的节奏。</div>
+          <h1>让秩序，转个弯。</h1>
+          <p class="intro" data-i="intro">
+            拖动时间，让冷白点阵卷成螺旋。独立探索三种图案，或让它们连续变换，把红橙黄的轨迹留成矢量海报。
+          </p>
+          <div class="panel">
+            <div class="presets" role="group" aria-label="图案">
+              <button data-mode="spiral" aria-pressed="true" data-i="spiral">方螺旋</button>
+              <button data-mode="rings" aria-pressed="false" data-i="rings">同心回响</button>
+              <button data-mode="cycle" aria-pressed="false" data-i="cycle">三形态循环</button>
+              <button data-mode="wave" aria-pressed="false" data-i="wave">流动切面</button>
+            </div>
+            <div class="control">
+              <label class="row" for="phase">
+                <span data-i="phase">时间切片</span>
+                <output id="phaseValue">44 / 100</output>
+              </label>
+              <input id="phase" type="range" min="0" max="100" value="44" />
+            </div>
+            <div class="control">
+              <label class="row" for="grid">
+                <span data-i="density">矩阵密度</span>
+                <output id="gridValue">31 × 31</output>
+              </label>
+              <input id="grid" type="range" min="17" max="41" step="1" value="31" />
+            </div>
+            <label class="row" for="repeat">
+              <span data-i="repeat">连续播放</span>
+              <input id="repeat" type="checkbox" />
+            </label>
+            <div class="actions">
+              <button id="play" class="primary" aria-pressed="false" data-i="play">
+                ▷ 播放一圈
+              </button>
+              <button id="save" data-i="save">保存 SVG ↗</button>
+            </div>
+            <div class="index">
+              01
+              <small data-i="edition">秩序里的小偏离</small>
+            </div>
+          </div>
+        </div>
+        <div class="stage">
+          <span class="edge top" id="cellCount">961 CELLS</span>
+          <canvas tabindex="0" role="button" aria-label="点按推进时间，左右键逐格探索"></canvas>
+          <span class="edge bottom" data-i="stageHint">点按 / 左右键 · 探索下一帧</span>
+        </div>
+      </section>
+      <footer>
+        <span data-i="footer">离线生成 · 矢量快照 · 一圈 8 秒</span>
+        <span id="status" role="status" aria-live="polite">已暂停，拖动时间切片开始探索。</span>
+      </footer>
+    </main>
+    <!-- usefulshelf-runtime:start -->
+    <script>
+      // Inlined into each downloadable template: no sibling runtime is required.
+      (() => {
+        "use strict";
+        const dictionary = {};
+        const lang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          "zh";
+        const chinese = lang !== "en";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+        const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        window.__usefulshelfConfigure = (config) => {
+          const accent = document.documentElement.dataset.skillAccent;
+          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+        };
+        window.__usefulshelfText = (value) => {
+          if (!chinese || typeof value !== "string") return value;
+          const exact = dictionary[normalize(value)];
+          if (exact !== undefined) return exact;
+          return value
+            .replace(/What is ([^?]+)\?/g, "什么是 $1？")
+            .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
+            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
+            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
+            .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
+            .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/added to your sky\./g, "已加入夜空。")
+            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(/· no transaction sent/g, "· 未发送真实交易");
+        };
+        function boot() {
+          if (chinese) {
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            let node;
+            while ((node = walker.nextNode())) {
+              if (
+                node.parentElement?.closest(
+                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
+                )
+              )
+                continue;
+              const next = window.__usefulshelfText(node.textContent);
+              if (next !== node.textContent) node.textContent = next;
+            }
+            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
+              for (const name of ["aria-label", "placeholder", "title"]) {
+                if (element.hasAttribute(name))
+                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+              }
+            }
+            document.title = window.__usefulshelfText(document.title);
+          }
+          if (parent === window) return;
+          // Freeze viewport-based demo heights before measuring, avoiding vh feedback
+          // when the parent grows the iframe. Intentional inner demo scrollers remain.
+          const initialHeight = Math.max(360, Math.min(760, innerHeight));
+          function fixRules(rules) {
+            for (const rule of rules) {
+              if (rule.cssRules) fixRules(rule.cssRules);
+              if (!rule.style) continue;
+              if (/v[hbs]/.test(rule.style.minHeight))
+                rule.style.setProperty("min-height", "0", "important");
+              if (/v[hbs]/.test(rule.style.height))
+                rule.style.setProperty("height", `${initialHeight}px`, "important");
+            }
+          }
+          for (const sheet of document.styleSheets) {
+            try {
+              fixRules(sheet.cssRules);
+            } catch {
+              /* Same-file styles are sufficient. */
+            }
+          }
+          for (const element of [document.documentElement, document.body]) {
+            element.style.setProperty("height", "auto", "important");
+            element.style.setProperty("min-height", "0", "important");
+          }
+          document.documentElement.style.overflowX = "clip";
+          let frame = 0,
+            lastHeight = 0;
+          const measure = () => {
+            frame = 0;
+            const height = Math.ceil(
+              Math.max(document.body.scrollHeight, document.body.getBoundingClientRect().height),
+            );
+            if (height > 0 && height <= 20000 && height !== lastHeight) {
+              lastHeight = height;
+              parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+            }
+          };
+          const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(measure);
+          };
+          const observer = new ResizeObserver(schedule);
+          observer.observe(document.body);
+          window.addEventListener("resize", schedule);
+          const onMessage = (event) => {
+            if (event.source === parent && event.data?.type === "usefulshelf:measure") {
+              // The first resize may precede parent hydration. A measurement request
+              // must acknowledge even an unchanged height, so that message is recovered.
+              lastHeight = 0;
+              schedule();
+            }
+          };
+          window.addEventListener("message", onMessage);
+          document.fonts?.ready.then(schedule);
+          window.addEventListener(
+            "pagehide",
+            () => {
+              observer.disconnect();
+              cancelAnimationFrame(frame);
+              window.removeEventListener("resize", schedule);
+              window.removeEventListener("message", onMessage);
+            },
+            { once: true },
+          );
+          schedule();
+        }
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        else boot();
+      })();
+    </script>
+    <!-- usefulshelf-runtime:end -->
+    <script>
+      const config = window.__usefulshelfConfigure({"title": null, "accent": "#ff7948", "grid": 31, "phase": 44, "mode": "spiral"}),
+        en =
+          (new URLSearchParams(location.search).get("lang") ||
+            document.documentElement.dataset.skillLang) === "en";
+      document.documentElement.lang = en ? "en" : "zh-CN";
+      const words = {
+        header: "01 — MATRIX MOTION STUDIO",
+        eyebrow: "SMALL DOTS. A MUCH BIGGER RHYTHM.",
+        intro:
+          "Scrub through time and watch a cool-white matrix curl into a spiral. Explore three patterns on their own or blend them in a continuous cycle. Save the red-to-yellow trails as a vector poster.",
+        spiral: "Square spiral",
+        rings: "Echo rings",
+        wave: "Flowing facets",
+        cycle: "Three-form cycle",
+        repeat: "Repeat loop",
+        phase: "Time slice",
+        density: "Matrix density",
+        play: "▷ Play one cycle",
+        save: "Save SVG ↗",
+        edition: "A SMALL DEVIATION FROM ORDER",
+        stageHint: "TAP / ARROW KEYS · NEXT FRAME",
+        footer: "Offline generation · Vector snapshot · 8-second cycle",
+      };
+      if (en) {
+        document.querySelectorAll("[data-i]").forEach((e) => (e.textContent = words[e.dataset.i]));
+        document.querySelector(".presets").setAttribute("aria-label", "Pattern");
+      }
+      document.querySelector("h1").textContent =
+        config.title ?? (en ? "Order, with\na little twist." : "让秩序，\n转个弯。");
+      const c = document.querySelector("canvas"),
+        ctx = c.getContext("2d"),
+        phaseInput = document.querySelector("#phase"),
+        gridInput = document.querySelector("#grid"),
+        play = document.querySelector("#play"),
+        status = document.querySelector("#status"),
+        motion = matchMedia("(prefers-reduced-motion: reduce)");
+      c.setAttribute(
+        "aria-label",
+        en
+          ? "Advance the pattern. Use left and right arrows to scrub."
+          : "点按推进时间，左右键逐格探索",
+      );
+      let size = 1,
+        phase = config.phase / 100,
+        n = config.grid,
+        mode = config.mode,
+        raf = 0,
+        playing = false,
+        started = 0,
+        initialPhase = phase;
+      const repeat = document.querySelector("#repeat");
+      const hot = [1, 3, 5].map((i) => parseInt(config.accent.slice(i, i + 2), 16));
+      phaseInput.value = config.phase;
+      gridInput.value = n;
+      const mix = (a, b, t) => a.map((x, i) => Math.round(x + (b[i] - x) * t));
+      const clamp = (x) => Math.max(0, Math.min(1, x));
+      function fieldAt(kind, x, y, r, angle, p) {
+        return kind === "spiral"
+          ? Math.sin(angle - r * 9 + p)
+          : kind === "rings"
+            ? Math.cos(r * 15 - p)
+            : Math.sin(x * 4 + y * 2 + p) * Math.cos(y * 2 - p);
+      }
+      function cells() {
+        const result = [],
+          step = 800 / n,
+          margin = 100;
+        for (let row = 0; row < n; row++)
+          for (let col = 0; col < n; col++) {
+            const x = (col - (n - 1) / 2) / (n / 2),
+              y = (row - (n - 1) / 2) / (n / 2),
+              r = Math.max(Math.abs(x), Math.abs(y)),
+              angle = Math.atan2(y, x),
+              p = phase * Math.PI * 2;
+            let field;
+            if (mode === "cycle") {
+              const k = (phase % 1) * 3,
+                index = Math.floor(k),
+                t = k - index,
+                ease = t * t * (3 - 2 * t),
+                forms = ["spiral", "rings", "wave"];
+              field =
+                fieldAt(forms[index], x, y, r, angle, p) * (1 - ease) +
+                fieldAt(forms[(index + 1) % 3], x, y, r, angle, p) * ease;
+            } else field = fieldAt(mode, x, y, r, angle, p);
+            const weight = Math.pow((field + 1) / 2, 1.65),
+              scale = 0.055 + 0.81 * weight,
+              trail = clamp(Math.min((field + 0.05) / 0.12, (0.97 - field) / 0.13)),
+              heat = clamp((field - 0.07) / 0.77),
+              warm =
+                heat < 0.5
+                  ? mix([255, 25, 15], hot, heat * 2)
+                  : mix(hot, [255, 245, 40], (heat - 0.5) * 2),
+              color = mix([210, 231, 253], warm, trail);
+            const width = step * scale;
+            result.push({
+              x: margin + (col + 0.5) * step - width / 2,
+              y: margin + (row + 0.5) * step - width / 2,
+              width,
+              color: `rgb(${color.join(",")})`,
+            });
+          }
+        return result;
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, size, size);
+        ctx.save();
+        ctx.scale(size / 1000, size / 1000);
+        for (const p of cells()) {
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.roundRect(p.x, p.y, p.width, p.width, p.width * 0.23);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+      function sync() {
+        phaseInput.value = Math.round(phase * 100);
+        document.querySelector("#phaseValue").textContent = Math.round(phase * 100) + " / 100";
+        document.querySelector("#gridValue").textContent = n + " × " + n;
+        document.querySelector("#cellCount").textContent = n * n + " CELLS";
+      }
+      function stop(message) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+        playing = false;
+        play.setAttribute("aria-pressed", "false");
+        play.textContent = repeat.checked
+          ? en
+            ? "▷ Play loop"
+            : "▷ 连续播放"
+          : en
+            ? words.play
+            : "▷ 播放一圈";
+        if (message) status.textContent = message;
+      }
+      function update(message) {
+        sync();
+        draw();
+        if (message) status.textContent = message;
+      }
+      function frame(now) {
+        const elapsed = now - started;
+        if (elapsed >= 8000 && !repeat.checked) {
+          phase = initialPhase;
+          update();
+          stop(
+            en
+              ? "One cycle complete. Save a frame or try another pattern."
+              : "一圈已完成。保存这一帧，或试试另一个图案。",
+          );
+          return;
+        }
+        phase = (initialPhase + elapsed / 8000) % 1;
+        update();
+        raf = requestAnimationFrame(frame);
+      }
+      function step(delta) {
+        stop();
+        phase = (phase + delta + 1) % 1;
+        update(
+          en
+            ? `Time slice ${Math.round(phase * 100)}. Paused.`
+            : `时间切片 ${Math.round(phase * 100)}，已暂停。`,
+        );
+      }
+      phaseInput.oninput = () => {
+        stop();
+        phase = Number(phaseInput.value) / 100;
+        update(
+          en ? `Time slice ${phaseInput.value}. Paused.` : `时间切片 ${phaseInput.value}，已暂停。`,
+        );
+      };
+      gridInput.oninput = () => {
+        n = Number(gridInput.value);
+        update(en ? `${n * n} cells in this pattern.` : `当前图案包含 ${n * n} 个单元。`);
+      };
+      document.querySelectorAll("[data-mode]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            mode = b.dataset.mode;
+            document
+              .querySelectorAll("[data-mode]")
+              .forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+            update(en ? `${words[mode]} selected.` : `已切换为${b.textContent}。`);
+          }),
+      );
+      play.onclick = () => {
+        if (playing) {
+          stop(en ? "Paused on this frame." : "已停在这一帧。");
+          return;
+        }
+        if (motion.matches) {
+          step(0.13);
+          status.textContent = en
+            ? "Static step applied. Reduced motion is enabled."
+            : "已前进一个静态切片。减少动态效果已启用。";
+          return;
+        }
+        playing = true;
+        initialPhase = phase;
+        started = performance.now();
+        play.setAttribute("aria-pressed", "true");
+        play.textContent = en ? "Ⅱ Pause" : "Ⅱ 暂停";
+        status.textContent = repeat.checked
+          ? en
+            ? "Looping until paused."
+            : "正在连续播放，点暂停即可停下。"
+          : en
+            ? "Playing one 8-second cycle."
+            : "正在播放一圈，8 秒后自动停止。";
+        raf = requestAnimationFrame(frame);
+      };
+      repeat.onchange = () => {
+        stop(
+          en ? "Playback preference updated. Press play to begin." : "播放方式已更新，点播放开始。",
+        );
+      };
+      c.onclick = () => step(0.07);
+      c.addEventListener("keydown", (e) => {
+        if (["ArrowLeft", "ArrowRight", "Enter", " "].includes(e.key)) {
+          e.preventDefault();
+          step(e.key === "ArrowLeft" ? -0.01 : 0.01);
+        }
+      });
+      document.querySelector("#save").onclick = () => {
+        const svg =
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000"><title>Dot matrix snapshot</title><rect width="1000" height="1000" fill="#050505"/>' +
+          cells()
+            .map(
+              (p) =>
+                `<rect x="${p.x.toFixed(3)}" y="${p.y.toFixed(3)}" width="${p.width.toFixed(3)}" height="${p.width.toFixed(3)}" rx="${(p.width * 0.23).toFixed(3)}" fill="${p.color}"/>`,
+            )
+            .join("") +
+          "</svg>";
+        const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" })),
+          a = document.createElement("a");
+        a.href = url;
+        a.download = "dot-matrix-snapshot.svg";
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1500);
+        status.textContent = en
+          ? `Saved ${n * n} editable cells as SVG.`
+          : `已保存 ${n * n} 个可编辑单元的 SVG。`;
+      };
+      new ResizeObserver(() => {
+        size = c.getBoundingClientRect().width;
+        const d = Math.min(devicePixelRatio || 1, 2);
+        c.width = size * d;
+        c.height = size * d;
+        ctx.setTransform(d, 0, 0, d, 0, 0);
+        draw();
+      }).observe(c);
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) stop(en ? "Paused while hidden." : "页面隐藏，已暂停。");
+      });
+      motion.addEventListener("change", () => {
+        if (motion.matches)
+          stop(
+            en
+              ? "Reduced motion enabled. Use the time slider."
+              : "减少动态效果已启用，请使用时间滑杆。",
+          );
+      });
+      document
+        .querySelectorAll("[data-mode]")
+        .forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.mode === mode)));
+      sync();
+      status.textContent = en
+        ? "Paused. Scrub the time slice to explore."
+        : "已暂停，拖动时间切片开始探索。";
+    </script>
+  </body>
+</html>

@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Prism Refraction Lab</title>
+    <style>
+      :root {
+        --accent: #b9a5ff;
+        font-family: Arial, "PingFang SC", sans-serif;
+        color: #eeedf5;
+        background: #09090d;
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:focus-visible,
+      input:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 4px;
+      }
+      .shell {
+        max-width: 1440px;
+        padding: 27px 5%;
+        margin: auto;
+        min-height: 730px;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        align-items: center;
+        font: 10px monospace;
+        color: #6d6b7b;
+        letter-spacing: 0.12em;
+      }
+      .brand {
+        color: #ece8f4;
+        font: 16px Arial;
+        letter-spacing: 0.12em;
+      }
+      .brand span {
+        color: var(--accent);
+        margin-right: 10px;
+      }
+      .top {
+        display: flex;
+        justify-content: space-between;
+        gap: 30px;
+        align-items: flex-end;
+        margin-top: 40px;
+      }
+      h1 {
+        font-size: clamp(34px, 4.5vw, 58px);
+        font-weight: 500;
+        letter-spacing: -0.055em;
+        line-height: 1.15;
+        margin: 0;
+        overflow-wrap: anywhere;
+        max-width: 660px;
+        white-space: pre-line;
+      }
+      .intro {
+        font-size: 12px;
+        line-height: 1.8;
+        color: #8e8a9e;
+        max-width: 330px;
+        margin: 0;
+      }
+      .stage {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        margin-top: 18px;
+        background: radial-gradient(ellipse at 48% 60%, #1c15292e, transparent 62%);
+        aspect-ratio: 2.35;
+        min-height: 260px;
+        max-height: 440px;
+      }
+      .stage svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+        overflow: hidden;
+      }
+      .edge {
+        position: absolute;
+        left: 0;
+        top: 22px;
+        color: #585463;
+        font: 9px monospace;
+        letter-spacing: 0.13em;
+      }
+      .bottomedge {
+        top: auto;
+        bottom: 12px;
+        left: auto;
+        right: 0;
+      }
+      .controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 32px;
+        border-top: 1px solid #302a3c;
+        padding-top: 24px;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        color: #aaa2b7;
+        font-size: 11px;
+        margin-bottom: 14px;
+      }
+      output {
+        font: 11px monospace;
+        color: var(--accent);
+      }
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+        cursor: pointer;
+      }
+      .swatches {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+      }
+      button {
+        border: 1px solid #3b324b;
+        background: transparent;
+        border-radius: 4px;
+        color: #bcb1cd;
+        padding: 10px 12px;
+        font-size: 11px;
+      }
+      button[aria-pressed="true"] {
+        color: #181024;
+        background: var(--accent);
+        border-color: var(--accent);
+      }
+      button:hover {
+        filter: brightness(1.2);
+      }
+      .actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-top: 24px;
+      }
+      .actions div {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .actions button {
+        border-radius: 24px;
+        padding: 12px 18px;
+      }
+      .actions .primary {
+        background: #e9e5f0;
+        color: #1f1828;
+        border-color: #e9e5f0;
+      }
+      #spectrumCount {
+        font: 10px monospace;
+        color: #776a89;
+      }
+      footer {
+        margin-top: 22px;
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        font: 10px/1.7 monospace;
+        color: #61576e;
+      }
+      #status {
+        color: #a99abe;
+      }
+      @media (max-width: 700px) {
+        .shell {
+          padding: 22px;
+        }
+        .top {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+          margin-top: 30px;
+        }
+        h1 {
+          font-size: 38px;
+        }
+        .intro {
+          max-width: none;
+        }
+        .stage {
+          margin-top: 8px;
+          min-height: 0;
+          aspect-ratio: 1.45;
+        }
+        .controls {
+          grid-template-columns: 1fr 1fr;
+          gap: 24px 20px;
+        }
+        .source {
+          grid-column: 1/-1;
+        }
+        .actions {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 14px;
+        }
+        .edge {
+          font-size: 8px;
+          top: 14px;
+        }
+        .bottomedge {
+          top: auto;
+          bottom: 8px;
+        }
+        footer {
+          flex-direction: column;
+          gap: 5px;
+        }
+        header {
+          font-size: 8px;
+        }
+        .brand {
+          font-size: 13px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header>
+        <div class="brand">
+          <span>△</span>
+          SPECTRUM / ROOM
+        </div>
+        <span data-i="header">02 — 光的拆解实验</span>
+      </header>
+      <section class="top">
+        <h1>把一束光，拆成彩虹。</h1>
+        <p class="intro" data-i="intro">
+          转动入射光，展开一片颜色。调节色散，切换单色，再将你的光谱带走。
+        </p>
+      </section>
+      <div class="stage">
+        <span class="edge" data-i="incident">入射光 / INPUT</span>
+        <svg
+          id="optics"
+          viewBox="0 0 900 460"
+          role="img"
+          aria-label="白光经过三角棱镜，分成七条彩色光束"
+        >
+          <defs>
+            <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+              <stop stop-color="#cdc4fa" stop-opacity=".12" />
+              <stop offset=".55" stop-color="#a594d5" stop-opacity=".015" />
+              <stop offset="1" stop-color="#bfaaff" stop-opacity=".08" />
+            </linearGradient>
+            <filter id="soft" x="-100%" y="-100%" width="300%" height="300%">
+              <feGaussianBlur stdDeviation="10" />
+            </filter>
+            <filter id="blend" x="-20%" y="-100%" width="140%" height="300%">
+              <feGaussianBlur stdDeviation="5" />
+            </filter>
+            <linearGradient id="inputfade">
+              <stop stop-color="#f7f3ff" stop-opacity="0" />
+              <stop offset=".38" stop-color="#f7f3ff" stop-opacity=".8" />
+              <stop offset="1" stop-color="#fff" />
+            </linearGradient>
+          </defs>
+          <g id="rays"></g>
+          <path
+            d="M430 95 270 370 590 370Z"
+            fill="url(#glass)"
+            stroke="#d9d3e9"
+            stroke-opacity=".7"
+            stroke-width="1.5"
+          />
+          <path
+            d="M430 95 438 102 598 377 590 370M270 370 278 377 598 377"
+            fill="none"
+            stroke="#7a6b90"
+            stroke-opacity=".4"
+          />
+          <path d="M430 108 290 353" fill="none" stroke="#f4efff" stroke-opacity=".2" />
+          <g id="pulseDot"></g>
+          <g font-family="monospace" font-size="8" fill="#675c79">
+            <text x="423" y="79">60°</text>
+            <text x="334" y="401">GEOMETRIC LIGHT STUDY</text>
+          </g>
+        </svg>
+        <span class="edge bottomedge" data-i="output">折射光 / OUTPUT</span>
+      </div>
+      <section class="controls">
+        <div>
+          <label class="row" for="angle">
+            <span data-i="angle">入射方向</span>
+            <output id="angleValue">−10°</output>
+          </label>
+          <input type="range" min="-25" max="25" value="-10" id="angle" />
+        </div>
+        <div>
+          <label class="row" for="spread">
+            <span data-i="spread">色散展开</span>
+            <output id="spreadValue">48°</output>
+          </label>
+          <input type="range" min="12" max="78" value="48" id="spread" />
+        </div>
+        <div class="source">
+          <div class="row" data-i="source">光源颜色</div>
+          <div class="swatches" role="group" aria-label="光源">
+            <button data-source="white" aria-pressed="true" data-i="white">白光</button>
+            <button data-source="red" aria-pressed="false" data-i="red">红光</button>
+            <button data-source="blue" aria-pressed="false" data-i="blue">蓝光</button>
+          </div>
+        </div>
+      </section>
+      <section class="actions">
+        <div>
+          <button id="pulse" class="primary" data-i="pulse">释放一束光 ↗</button>
+          <button id="reset" data-i="reset">回到起点 ↺</button>
+          <button id="save" data-i="save">保存 SVG ↓</button>
+        </div>
+        <span id="spectrumCount">7 条出射光束</span>
+      </section>
+      <footer>
+        <span data-i="footer">几何色散示意 · 非精密光学仿真</span>
+        <span id="status" role="status" aria-live="polite">七种颜色，来自同一束光。</span>
+      </footer>
+    </main>
+    <!-- usefulshelf-runtime:start -->
+    <script>
+      // Inlined into each downloadable template: no sibling runtime is required.
+      (() => {
+        "use strict";
+        const dictionary = {};
+        const lang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          "zh";
+        const chinese = lang !== "en";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+        const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        window.__usefulshelfConfigure = (config) => {
+          const accent = document.documentElement.dataset.skillAccent;
+          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+        };
+        window.__usefulshelfText = (value) => {
+          if (!chinese || typeof value !== "string") return value;
+          const exact = dictionary[normalize(value)];
+          if (exact !== undefined) return exact;
+          return value
+            .replace(/What is ([^?]+)\?/g, "什么是 $1？")
+            .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
+            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
+            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
+            .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
+            .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/added to your sky\./g, "已加入夜空。")
+            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(/· no transaction sent/g, "· 未发送真实交易");
+        };
+        function boot() {
+          if (chinese) {
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            let node;
+            while ((node = walker.nextNode())) {
+              if (
+                node.parentElement?.closest(
+                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
+                )
+              )
+                continue;
+              const next = window.__usefulshelfText(node.textContent);
+              if (next !== node.textContent) node.textContent = next;
+            }
+            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
+              for (const name of ["aria-label", "placeholder", "title"]) {
+                if (element.hasAttribute(name))
+                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+              }
+            }
+            document.title = window.__usefulshelfText(document.title);
+          }
+          if (parent === window) return;
+          // Freeze viewport-based demo heights before measuring, avoiding vh feedback
+          // when the parent grows the iframe. Intentional inner demo scrollers remain.
+          const initialHeight = Math.max(360, Math.min(760, innerHeight));
+          function fixRules(rules) {
+            for (const rule of rules) {
+              if (rule.cssRules) fixRules(rule.cssRules);
+              if (!rule.style) continue;
+              if (/v[hbs]/.test(rule.style.minHeight))
+                rule.style.setProperty("min-height", "0", "important");
+              if (/v[hbs]/.test(rule.style.height))
+                rule.style.setProperty("height", `${initialHeight}px`, "important");
+            }
+          }
+          for (const sheet of document.styleSheets) {
+            try {
+              fixRules(sheet.cssRules);
+            } catch {
+              /* Same-file styles are sufficient. */
+            }
+          }
+          for (const element of [document.documentElement, document.body]) {
+            element.style.setProperty("height", "auto", "important");
+            element.style.setProperty("min-height", "0", "important");
+          }
+          document.documentElement.style.overflowX = "clip";
+          let frame = 0,
+            lastHeight = 0;
+          const measure = () => {
+            frame = 0;
+            const height = Math.ceil(
+              Math.max(document.body.scrollHeight, document.body.getBoundingClientRect().height),
+            );
+            if (height > 0 && height <= 20000 && height !== lastHeight) {
+              lastHeight = height;
+              parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+            }
+          };
+          const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(measure);
+          };
+          const observer = new ResizeObserver(schedule);
+          observer.observe(document.body);
+          window.addEventListener("resize", schedule);
+          const onMessage = (event) => {
+            if (event.source === parent && event.data?.type === "usefulshelf:measure") {
+              // The first resize may precede parent hydration. A measurement request
+              // must acknowledge even an unchanged height, so that message is recovered.
+              lastHeight = 0;
+              schedule();
+            }
+          };
+          window.addEventListener("message", onMessage);
+          document.fonts?.ready.then(schedule);
+          window.addEventListener(
+            "pagehide",
+            () => {
+              observer.disconnect();
+              cancelAnimationFrame(frame);
+              window.removeEventListener("resize", schedule);
+              window.removeEventListener("message", onMessage);
+            },
+            { once: true },
+          );
+          schedule();
+        }
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        else boot();
+      })();
+    </script>
+    <!-- usefulshelf-runtime:end -->
+    <script>
+      const config = window.__usefulshelfConfigure({"title": null, "accent": "#b9a5ff", "spread": 48, "angle": -10}),
+        en =
+          (new URLSearchParams(location.search).get("lang") ||
+            document.documentElement.dataset.skillLang) === "en";
+      document.documentElement.lang = en ? "en" : "zh-CN";
+      const words = {
+        header: "02 — THE ANATOMY OF LIGHT",
+        intro:
+          "Turn the incoming beam and open a field of color. Adjust its spread, try a single color, and take your spectrum with you.",
+        incident: "INPUT / INCIDENT LIGHT",
+        output: "OUTPUT / REFRACTED LIGHT",
+        angle: "Incoming direction",
+        spread: "Spectral spread",
+        source: "Light source",
+        white: "White light",
+        red: "Red light",
+        blue: "Blue light",
+        pulse: "Send a light pulse ↗",
+        reset: "Reset the scene ↺",
+        save: "Save SVG ↓",
+        footer: "Geometric dispersion study · Not a precision optics simulation",
+      };
+      if (en) {
+        document.querySelectorAll("[data-i]").forEach((e) => (e.textContent = words[e.dataset.i]));
+        document.querySelector(".swatches").setAttribute("aria-label", "Light source");
+      }
+      document.querySelector("h1").textContent =
+        config.title ?? (en ? "One beam.\nA world of color." : "把一束光，\n拆成彩虹。");
+      const angle = document.querySelector("#angle"),
+        spread = document.querySelector("#spread"),
+        svg = document.querySelector("#optics"),
+        rays = document.querySelector("#rays"),
+        pulseLayer = document.querySelector("#pulseDot"),
+        status = document.querySelector("#status"),
+        motion = matchMedia("(prefers-reduced-motion: reduce)");
+      angle.value = config.angle;
+      spread.value = config.spread;
+      let source = "white",
+        raf = 0,
+        started = 0,
+        path = [];
+      const colors = ["#ff6663", "#ffac59", "#ffe46c", "#86f68d", "#75e8ee", "#8992ff", "#d58bff"];
+      const radians = (d) => (d * Math.PI) / 180;
+      function endpoint(deg) {
+        const dx = Math.cos(radians(deg)),
+          dy = Math.sin(radians(deg)),
+          tx = (884 - 511) / dx,
+          ty = dy > 0 ? (439 - 235) / dy : dy < 0 ? (21 - 235) / dy : Infinity,
+          t = Math.min(tx, ty);
+        return { x: 511 + dx * t, y: 235 + dy * t };
+      }
+      function clearPulse() {
+        cancelAnimationFrame(raf);
+        raf = 0;
+        pulseLayer.replaceChildren();
+      }
+      function render() {
+        clearPulse();
+        const a = Number(angle.value),
+          s = Number(spread.value),
+          startY = 235 - Math.tan(radians(a)) * 318;
+        let indices = source === "white" ? [0, 1, 2, 3, 4, 5, 6] : [source === "red" ? 0 : 5],
+          output = "";
+        for (const i of indices) {
+          const deg = a * 0.42 + 8 + ((i - 3) * s) / 6,
+            end = endpoint(deg),
+            lower = endpoint(deg - s / 12),
+            upper = endpoint(deg + s / 12),
+            color = colors[i];
+          output += `<path d="M511 235 L${lower.x} ${lower.y} L${upper.x} ${upper.y}Z" fill="${color}" opacity=".46" filter="url(#blend)"/><path d="M511 235 L${end.x} ${end.y}" fill="none" stroke="${color}" stroke-width="30" opacity=".28" filter="url(#soft)"/><path d="M511 235 L${end.x} ${end.y}" stroke="${color}" stroke-width="1.2" opacity=".3"/>`;
+        }
+        const input = source === "white" ? "#f6f1ff" : colors[indices[0]];
+        rays.innerHTML =
+          `<path d="M30 ${startY} L348 235 L511 235" fill="none" stroke="${input}" stroke-width="11" opacity=".16" filter="url(#soft)"/><path d="M30 ${startY} L348 235" fill="none" stroke="${input}" stroke-width="2.8"/><path d="M348 235 L511 235" fill="none" stroke="${input}" stroke-width="1.6" opacity=".55"/>` +
+          output;
+        path = [
+          { x: 30, y: startY },
+          { x: 348, y: 235 },
+          { x: 511, y: 235 },
+          endpoint(a * 0.42 + 8 + ((indices[Math.floor(indices.length / 2)] - 3) * s) / 6),
+        ];
+        document.querySelector("#angleValue").textContent = a + "°";
+        document.querySelector("#spreadValue").textContent = s + "°";
+        document.querySelector("#spectrumCount").textContent = en
+          ? `${indices.length} outgoing beam${indices.length === 1 ? "" : "s"}`
+          : `${indices.length} 条出射光束`;
+        svg.setAttribute(
+          "aria-label",
+          en
+            ? `${words[source]}, incoming direction ${a} degrees, spread ${s} degrees, ${indices.length} outgoing beams.`
+            : `${{ white: "白光", red: "红光", blue: "蓝光" }[source]}，入射方向 ${a} 度，色散展开 ${s} 度，${indices.length} 条出射光束。`,
+        );
+      }
+      function changed() {
+        render();
+        status.textContent = en
+          ? `Direction ${angle.value}° · spread ${spread.value}°.`
+          : `入射方向 ${angle.value}° · 色散展开 ${spread.value}°。`;
+      }
+      angle.oninput = changed;
+      spread.oninput = changed;
+      document.querySelectorAll("[data-source]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            source = b.dataset.source;
+            document
+              .querySelectorAll("[data-source]")
+              .forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+            render();
+            status.textContent = en ? `${words[source]} selected.` : `已切换为${b.textContent}。`;
+          }),
+      );
+      function pointAt(t) {
+        const lengths = path.slice(1).map((p, i) => Math.hypot(p.x - path[i].x, p.y - path[i].y)),
+          total = lengths.reduce((a, b) => a + b, 0);
+        let distance = t * total;
+        for (let i = 0; i < lengths.length; i++) {
+          if (distance <= lengths[i]) {
+            const p = distance / lengths[i];
+            return {
+              x: path[i].x + (path[i + 1].x - path[i].x) * p,
+              y: path[i].y + (path[i + 1].y - path[i].y) * p,
+            };
+          } else distance -= lengths[i];
+        }
+        return path.at(-1);
+      }
+      function frame(now) {
+        const t = Math.min((now - started) / 1500, 1),
+          p = pointAt(t);
+        pulseLayer.innerHTML = `<circle cx="${p.x}" cy="${p.y}" r="13" fill="#fff" opacity=".35" filter="url(#soft)"/><circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#fff"/>`;
+        if (t < 1) raf = requestAnimationFrame(frame);
+        else {
+          clearPulse();
+          status.textContent = en
+            ? "Pulse complete. Send another, or change the light."
+            : "光脉冲已完成。再发一束，或换一种光。";
+        }
+      }
+      document.querySelector("#pulse").onclick = () => {
+        clearPulse();
+        if (motion.matches) {
+          status.textContent = en
+            ? "Static light paths shown. Reduced motion is enabled."
+            : "已显示静态光路。减少动态效果已启用。";
+          return;
+        }
+        started = performance.now();
+        status.textContent = en
+          ? "A pulse is travelling through the prism."
+          : "一束光脉冲正在穿过棱镜。";
+        raf = requestAnimationFrame(frame);
+      };
+      document.querySelector("#reset").onclick = () => {
+        angle.value = config.angle;
+        spread.value = config.spread;
+        source = "white";
+        document
+          .querySelectorAll("[data-source]")
+          .forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.source === "white")));
+        render();
+        status.textContent = en
+          ? "Scene reset. White light is ready."
+          : "已回到起点，白光已准备好。";
+      };
+      document.querySelector("#save").onclick = () => {
+        const clone = svg.cloneNode(true);
+        clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        clone.setAttribute("width", "1800");
+        clone.setAttribute("height", "920");
+        clone.querySelector("#pulseDot").replaceChildren();
+        const background = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        background.setAttribute("width", "900");
+        background.setAttribute("height", "460");
+        background.setAttribute("fill", "#09090d");
+        clone.insertBefore(background, clone.firstChild);
+        const url = URL.createObjectURL(
+            new Blob([new XMLSerializer().serializeToString(clone)], { type: "image/svg+xml" }),
+          ),
+          a = document.createElement("a");
+        a.href = url;
+        a.download = "prism-light-study.svg";
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1500);
+        status.textContent = en
+          ? "Your current light paths were saved as SVG."
+          : "当前光路已保存为 SVG。";
+      };
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          const active = Boolean(raf);
+          clearPulse();
+          if (active)
+            status.textContent = en ? "Pulse stopped while hidden." : "页面隐藏，光脉冲已停止。";
+        }
+      });
+      motion.addEventListener("change", () => {
+        if (motion.matches) {
+          clearPulse();
+          status.textContent = en
+            ? "Reduced motion enabled. Light paths remain visible."
+            : "减少动态效果已启用，静态光路保持可见。";
+        }
+      });
+      render();
+      status.textContent = en ? "Seven colors, one incoming beam." : "七种颜色，来自同一束光。";
+    </script>
+  </body>
+</html>

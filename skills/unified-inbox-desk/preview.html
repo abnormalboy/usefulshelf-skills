@@ -1,0 +1,1358 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>把一天，理清楚。</title>
+    <style>
+      :root {
+        --accent: #557966;
+        --bg: #f3f0e9;
+        --ink: #2d382f;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font: 14px system-ui;
+      }
+      main {
+        width: 100%;
+        max-width: 1140px;
+        margin: auto;
+        padding: 26px 28px;
+        min-height: 720px;
+      }
+      .mast {
+        display: flex;
+        justify-content: space-between;
+        font:
+          10px ui-monospace,
+          monospace;
+        letter-spacing: 0.14em;
+        border-bottom: 1px solid #34453524;
+        padding-bottom: 16px;
+      }
+      .hero {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 30px;
+        margin: 26px 0;
+      }
+      h1 {
+        font:
+          clamp(35px, 4.5vw, 54px)/1.12 Georgia,
+          serif;
+        letter-spacing: -0.045em;
+        margin: 0 0 12px;
+        overflow-wrap: anywhere;
+        text-wrap: balance;
+      }
+      .sub {
+        font-size: 12px;
+        color: #768171;
+        line-height: 1.7;
+        margin: 0;
+        max-width: 560px;
+      }
+      .count {
+        flex-shrink: 0;
+        font:
+          42px Georgia,
+          serif;
+        text-align: right;
+        color: var(--accent);
+      }
+      .count span {
+        display: block;
+        font:
+          10px ui-monospace,
+          monospace;
+        letter-spacing: 0.05em;
+        color: #84917c;
+        margin-top: 5px;
+      }
+      .desk {
+        background: #fffef9;
+        border: 1px solid #cbd2c580;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 18px 50px #5263490a;
+      }
+      .chrome {
+        padding: 13px 19px;
+        background: #e9eee4;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font:
+          10px ui-monospace,
+          monospace;
+        color: #75836a;
+      }
+      .dots {
+        display: flex;
+        gap: 5px;
+      }
+      .dots i {
+        width: 7px;
+        height: 7px;
+        background: #bec7b5;
+        border-radius: 50%;
+      }
+      .toolbar {
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 20px;
+        border-bottom: 1px solid #d9dfd2;
+      }
+      .filters {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+      }
+      .filters button {
+        border: 0;
+        background: none;
+        padding: 8px 12px;
+        border-radius: 20px;
+        font: 11px system-ui;
+        color: #849178;
+        cursor: pointer;
+      }
+      .filters button[aria-pressed="true"] {
+        background: var(--accent);
+        color: white;
+      }
+      #search {
+        width: 180px;
+        min-width: 0;
+        background: #f3f5ef;
+        border: 1px solid transparent;
+        border-radius: 6px;
+        padding: 9px 12px;
+        font: 11px system-ui;
+        color: var(--ink);
+      }
+      .columns {
+        display: grid;
+        grid-template-columns: minmax(245px, 0.85fr) minmax(0, 1.2fr);
+        min-height: 351px;
+      }
+      .list {
+        border-right: 1px solid #dde2d7;
+        padding: 9px;
+      }
+      .message {
+        display: grid;
+        grid-template-columns: 32px minmax(0, 1fr) auto;
+        gap: 10px;
+        width: 100%;
+        border: 0;
+        background: transparent;
+        border-radius: 9px;
+        padding: 15px 11px;
+        text-align: left;
+        color: var(--ink);
+        cursor: pointer;
+      }
+      .message[aria-pressed="true"] {
+        background: #edf1e7;
+      }
+      .avatar {
+        height: 30px;
+        width: 30px;
+        border-radius: 10px;
+        background: var(--av, #e9dbc7);
+        display: grid;
+        place-items: center;
+        font:
+          12px Georgia,
+          serif;
+      }
+      .message strong {
+        font-size: 11px;
+        display: block;
+        font-weight: 600;
+      }
+      .message small {
+        font-size: 10px;
+        display: block;
+        color: #87907d;
+        margin-top: 5px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .message em {
+        font:
+          9px ui-monospace,
+          monospace;
+        color: #929988;
+        font-style: normal;
+      }
+      .reader {
+        padding: 23px 27px;
+        min-width: 0;
+      }
+      #channel {
+        font:
+          9px ui-monospace,
+          monospace;
+        color: var(--accent);
+        letter-spacing: 0.12em;
+      }
+      h2 {
+        font:
+          25px/1.2 Georgia,
+          serif;
+        margin: 12px 0 8px;
+        overflow-wrap: anywhere;
+      }
+      #sender {
+        font: 10px system-ui;
+        color: #9aa18d;
+      }
+      #body {
+        font: 12px/1.8 system-ui;
+        color: #6e7b65;
+        min-height: 61px;
+        margin: 20px 0;
+      }
+      .reader-actions {
+        display: flex;
+        gap: 13px;
+        margin-bottom: 18px;
+      }
+      .reader-actions button {
+        padding: 0;
+        border: 0;
+        background: none;
+        font: 11px system-ui;
+        color: var(--accent);
+        cursor: pointer;
+      }
+      .draft-label {
+        font: 10px system-ui;
+        color: #7a8670;
+        display: block;
+        margin-bottom: 8px;
+      }
+      textarea {
+        resize: vertical;
+        width: 100%;
+        min-height: 66px;
+        max-height: 180px;
+        padding: 10px 12px;
+        background: #f5f7f0;
+        border: 1px solid #e0e6d7;
+        border-radius: 7px;
+        color: var(--ink);
+        font: 12px/1.5 system-ui;
+      }
+      .save {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-top: 9px;
+      }
+      .save small {
+        font: 9px system-ui;
+        color: #909a84;
+      }
+      .save button {
+        border: 0;
+        background: var(--ink);
+        color: white;
+        border-radius: 18px;
+        padding: 8px 13px;
+        font: 10px system-ui;
+        cursor: pointer;
+      }
+      .bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+        margin-top: 20px;
+      }
+      .mix {
+        display: flex;
+        overflow: hidden;
+        height: 5px;
+        background: #e2e7da;
+        border-radius: 3px;
+        width: 190px;
+      }
+      .mix i {
+        height: 100%;
+      }
+      .mix-label {
+        font:
+          9px ui-monospace,
+          monospace;
+        color: #87917e;
+        margin-top: 7px;
+      }
+      #status {
+        font: 11px/1.6 system-ui;
+        color: #728366;
+        min-height: 20px;
+      }
+      .undo {
+        border: 0;
+        border-bottom: 1px solid currentColor;
+        background: none;
+        color: var(--accent);
+        font: 11px system-ui;
+        cursor: pointer;
+        padding: 0 0 2px;
+      }
+      .undo:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 3px;
+      }
+      .empty {
+        font: 12px system-ui;
+        color: #929c85;
+        padding: 35px 20px;
+        line-height: 1.8;
+      }
+      @media (max-width: 670px) {
+        main {
+          padding: 22px 17px;
+        }
+        .hero {
+          display: block;
+        }
+        .count {
+          display: none;
+        }
+        .toolbar {
+          align-items: stretch;
+          gap: 12px;
+          flex-direction: column;
+          padding: 14px;
+        }
+        .filters {
+          gap: 1px;
+        }
+        .filters button {
+          padding: 8px 10px;
+        }
+        #search {
+          width: 100%;
+        }
+        .columns {
+          grid-template-columns: 1fr;
+        }
+        .list {
+          border-right: 0;
+          border-bottom: 1px solid #dde2d7;
+          max-height: 260px;
+          overflow: auto;
+        }
+        .reader {
+          padding: 22px;
+        }
+        .bottom {
+          flex-wrap: wrap;
+        }
+        .mast {
+          font-size: 8px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+      body {
+        background:
+          radial-gradient(ellipse at 15% 20%, #d4ee76 0, transparent 49%),
+          radial-gradient(ellipse at 87% 25%, #8ed8c5 0, transparent 42%),
+          radial-gradient(ellipse at 77% 93%, #e397b5 0, transparent 47%),
+          radial-gradient(ellipse at 14% 89%, #f0cf78 0, transparent 50%), var(--bg);
+        background-attachment: fixed;
+        min-height: 100vh;
+      }
+      main {
+        max-width: 590px;
+        min-height: 0;
+        margin: 64px auto;
+        padding: 27px 28px 20px;
+        background: #f6f3ec;
+        border-radius: 29px;
+        box-shadow: 0 30px 90px #555c4327;
+      }
+      .mast {
+        letter-spacing: 0.03em;
+        border: 0;
+        padding-bottom: 0;
+        font: 11px system-ui;
+        align-items: center;
+      }
+      .mast .mark {
+        display: inline-grid;
+        place-items: center;
+        width: 22px;
+        height: 22px;
+        background: #171b19;
+        color: white;
+        border-radius: 7px;
+        margin-right: 8px;
+      }
+      .hero {
+        margin: 25px 0 22px;
+        display: block;
+      }
+      h1 {
+        font-size: clamp(35px, 4.5vw, 47px);
+        line-height: 1.07;
+        letter-spacing: -0.04em;
+        white-space: pre-line;
+      }
+      .sub {
+        font-size: 13px;
+        color: #59615c;
+        line-height: 1.65;
+      }
+      .count {
+        display: none;
+      }
+      .view-switch {
+        display: flex;
+        gap: 4px;
+      }
+      .view-switch button {
+        font: 10px system-ui;
+        border: 0;
+        background: transparent;
+        padding: 6px 9px;
+        border-radius: 15px;
+        color: #767e74;
+        cursor: pointer;
+      }
+      .view-switch button[aria-pressed="true"] {
+        background: #e6e9df;
+        color: #25382c;
+      }
+      .insight-app {
+        background: #fff;
+        border: 1px solid #ecebe7;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 16px 27px #3f493314;
+      }
+      .insight-chrome {
+        padding: 11px 14px;
+        background: #f1f2f1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 10px;
+        color: #849087;
+      }
+      .analysis-body {
+        padding: 17px 18px 16px;
+      }
+      .question {
+        margin: 0 0 20px auto;
+        max-width: 84%;
+        background: #181b19;
+        color: #fff;
+        padding: 11px 14px;
+        border-radius: 15px 15px 3px 15px;
+        font: 12px/1.5 system-ui;
+      }
+      .analysis-kicker {
+        font: 10px system-ui;
+        color: #919a95;
+        margin: 0 0 9px;
+        display: flex;
+        justify-content: space-between;
+      }
+      #analysis-answer {
+        font: 12px/1.65 system-ui;
+        margin: 0 0 18px;
+        color: #36443d;
+      }
+      .chart-heading {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 10px;
+        color: #87928b;
+        margin-bottom: 9px;
+      }
+      .analysis-bar {
+        height: 10px;
+        display: flex;
+        gap: 1px;
+        border-radius: 6px;
+        overflow: hidden;
+        background: #f0f1ed;
+      }
+      .analysis-bar span {
+        height: 100%;
+        transition: width 0.3s;
+      }
+      .analysis-legend {
+        display: grid;
+        gap: 2px;
+        margin-top: 12px;
+      }
+      .legend-row {
+        display: grid;
+        grid-template-columns: 9px minmax(0, 1fr) auto auto;
+        align-items: center;
+        gap: 9px;
+        border: 0;
+        border-radius: 6px;
+        background: transparent;
+        padding: 6px 0;
+        width: 100%;
+        text-align: left;
+        font: 11px system-ui;
+        color: #39463f;
+        cursor: pointer;
+      }
+      .legend-row[aria-pressed="true"] {
+        background: #f0f3ea;
+        padding-left: 6px;
+        padding-right: 6px;
+      }
+      .legend-row i {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+      }
+      .legend-row strong {
+        font-size: 11px;
+      }
+      .legend-row small {
+        font-size: 10px;
+        color: #939b96;
+        min-width: 46px;
+        text-align: right;
+      }
+      .analysis-options {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding: 12px 18px;
+        border-top: 1px solid #eeefea;
+        background: #fcfcfa;
+      }
+      .analysis-options label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font: 10px system-ui;
+        color: #778379;
+      }
+      .analysis-options select {
+        max-width: 100%;
+        border: 1px solid #dfe4da;
+        background: #fff;
+        border-radius: 5px;
+        padding: 6px;
+        color: #3e5143;
+        font: 10px system-ui;
+      }
+      .analysis-note {
+        font: 10px/1.6 system-ui;
+        color: #87927e;
+        margin: 15px 0 0;
+      }
+      #analysis-focus {
+        min-height: 16px;
+        margin: 9px 0 0;
+        font: 10px/1.5 system-ui;
+        color: var(--accent);
+      }
+      .bottom {
+        margin-top: 14px;
+        gap: 7px;
+      }
+      #status {
+        font-size: 10px;
+        color: #7d8876;
+      }
+      .work-open {
+        max-width: 1060px;
+      }
+      .work-open .hero {
+        max-width: 590px;
+      }
+      .work-open .count {
+        display: block;
+      }
+      .work-open .mast {
+        gap: 16px;
+      }
+      @media (max-width: 670px) {
+        main {
+          width: calc(100% - 30px);
+          margin: 25px auto;
+          padding: 23px 17px 17px;
+          border-radius: 23px;
+        }
+        .mast {
+          font-size: 10px;
+          gap: 8px;
+        }
+        .view-switch button {
+          padding: 6px;
+        }
+        .analysis-body {
+          padding: 15px;
+        }
+        .question {
+          max-width: 92%;
+        }
+        .analysis-options {
+          padding: 12px 15px;
+        }
+        .analysis-options label {
+          flex: 1 1 130px;
+          align-items: start;
+          flex-direction: column;
+        }
+        .analysis-options select {
+          width: 100%;
+        }
+        h1 {
+          font-size: 37px;
+        }
+        .save {
+          flex-wrap: wrap;
+        }
+        .bottom {
+          flex-direction: column;
+          align-items: start;
+        }
+        select:focus-visible {
+          outline: 3px solid var(--accent);
+          outline-offset: 3px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="mast">
+        <span>
+          <span class="mark" aria-hidden="true">✳</span>
+          <span data-zh="轻巧收件工作台" data-en="A little clarity">轻巧收件工作台</span>
+        </span>
+        <div class="view-switch" role="group" aria-label="视图">
+          <button id="analysis-view" aria-pressed="true" data-zh="洞察" data-en="Insights">
+            洞察
+          </button>
+          <button id="desk-view" aria-pressed="false" data-zh="工作台" data-en="Inbox desk">
+            工作台
+          </button>
+        </div>
+      </div>
+      <div class="hero">
+        <div>
+          <h1>把一天，理清楚。</h1>
+          <p class="sub" id="subtitle">问一个小问题，让每段对话都有清晰的去处。</p>
+        </div>
+        <div class="count">
+          <b id="count">5</b>
+          <span data-zh="条消息，慢慢处理" data-en="MESSAGES, AT YOUR PACE">条消息，慢慢处理</span>
+        </div>
+      </div>
+      <section id="insight-view" class="insight-app" aria-label="渠道洞察">
+        <div class="insight-chrome">
+          <span class="dots" aria-hidden="true">
+            <i></i>
+            <i></i>
+            <i></i>
+          </span>
+          <span data-zh="一天，看得更清楚" data-en="A clearer picture">一天，看得更清楚</span>
+          <span>⌘</span>
+        </div>
+        <div class="analysis-body">
+          <p id="analysis-question" class="question"></p>
+          <p class="analysis-kicker">
+            <span data-zh="整理与分析" data-en="A moment of clarity">整理与分析</span>
+            <span aria-hidden="true">↗</span>
+          </p>
+          <p id="analysis-answer"></p>
+          <div class="chart-heading">
+            <span id="chart-heading"></span>
+            <span id="analysis-total"></span>
+          </div>
+          <div id="analysis-bar" class="analysis-bar" aria-hidden="true"></div>
+          <div id="analysis-legend" class="analysis-legend"></div>
+          <p id="analysis-focus"></p>
+        </div>
+        <div class="analysis-options">
+          <label for="question-select">
+            <span data-zh="换个问题" data-en="Ask about">换个问题</span>
+            <select id="question-select">
+              <option
+                value="volume"
+                data-zh="消息从哪里来？"
+                data-en="Where do messages come from?"
+              >
+                消息从哪里来？
+              </option>
+              <option value="resolved" data-zh="哪些已被处理？" data-en="What has been resolved?">
+                哪些已被处理？
+              </option>
+              <option value="attention" data-zh="哪里需要关注？" data-en="What needs attention?">
+                哪里需要关注？
+              </option>
+            </select>
+          </label>
+          <label for="period">
+            <span data-zh="时间" data-en="Period">时间</span>
+            <select id="period">
+              <option value="week" data-zh="最近 7 天" data-en="Last 7 days">最近 7 天</option>
+              <option value="month" data-zh="最近 30 天" data-en="Last 30 days">最近 30 天</option>
+            </select>
+          </label>
+        </div>
+      </section>
+      <p
+        id="insight-note"
+        class="analysis-note"
+        data-zh="虚构数据 · 点击渠道比较占比。分析在本地完成，无需连接账号。"
+        data-en="Sample data · Select a channel to compare its share. Everything stays on this page."
+      >
+        虚构数据 · 点击渠道比较占比。分析在本地完成，无需连接账号。
+      </p>
+      <section id="work-view" hidden>
+        <section class="desk">
+          <div class="chrome">
+            <span class="dots">
+              <i></i>
+              <i></i>
+              <i></i>
+            </span>
+            <span>DAYROOM</span>
+            <span data-zh="本地演示" data-en="LOCAL DEMO">本地演示</span>
+          </div>
+          <div class="toolbar">
+            <div class="filters" role="group" aria-label="消息渠道">
+              <button data-filter="all" aria-pressed="true" data-zh="全部" data-en="All">
+                全部
+              </button>
+              <button data-filter="email" aria-pressed="false" data-zh="邮件" data-en="Email">
+                邮件
+              </button>
+              <button data-filter="chat" aria-pressed="false" data-zh="聊天" data-en="Chat">
+                聊天
+              </button>
+              <button data-filter="note" aria-pressed="false" data-zh="便签" data-en="Notes">
+                便签
+              </button>
+              <button data-filter="pinned" aria-pressed="false" data-zh="置顶" data-en="Pinned">
+                置顶
+              </button>
+            </div>
+            <input id="search" type="search" aria-label="搜索消息" placeholder="搜索这一天…" />
+          </div>
+          <div class="columns">
+            <div class="list" id="list"></div>
+            <section class="reader" id="reader">
+              <span id="channel"></span>
+              <h2 id="subject"></h2>
+              <div id="sender"></div>
+              <p id="body"></p>
+              <div class="reader-actions">
+                <button id="pin"></button>
+                <button id="archive" data-zh="归档这条 ↗" data-en="Archive message ↗">
+                  归档这条 ↗
+                </button>
+              </div>
+              <label
+                class="draft-label"
+                for="draft"
+                data-zh="给这条消息留一份回复草稿"
+                data-en="A REPLY DRAFT FOR THIS MESSAGE"
+              >
+                给这条消息留一份回复草稿
+              </label>
+              <textarea id="draft" maxlength="2000"></textarea>
+              <div class="save">
+                <small data-zh="只存于当前页面，不会发送" data-en="This page only. Never sent.">
+                  只存于当前页面，不会发送
+                </small>
+                <button id="restore" data-zh="恢复已存草稿" data-en="Restore saved draft">
+                  恢复已存草稿
+                </button>
+                <button id="save" data-zh="保存草稿" data-en="Save draft">保存草稿</button>
+              </div>
+            </section>
+          </div>
+        </section>
+      </section>
+      <div class="bottom">
+        <div id="desk-mix" hidden>
+          <div class="mix" id="mix"></div>
+          <div
+            class="mix-label"
+            data-zh="邮件 / 聊天 / 便签 · 当前消息占比"
+            data-en="EMAIL / CHAT / NOTES · CURRENT MIX"
+          >
+            邮件 / 聊天 / 便签 · 当前消息占比
+          </div>
+        </div>
+        <div
+          id="status"
+          role="status"
+          data-zh="今天的消息都在这里。选一条，慢慢来。"
+          data-en="Everything is here. One message at a time."
+        >
+          今天的消息都在这里。选一条，慢慢来。
+        </div>
+        <button class="undo" id="undo" hidden disabled data-zh="撤销归档" data-en="Undo archive">
+          撤销归档
+        </button>
+      </div>
+    </main>
+    <!-- usefulshelf-runtime:start -->
+    <script>
+      // Inlined into each downloadable template: no sibling runtime is required.
+      (() => {
+        "use strict";
+        const dictionary = {};
+        const lang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          "zh";
+        const chinese = lang !== "en";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+        const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        window.__usefulshelfConfigure = (config) => {
+          const accent = document.documentElement.dataset.skillAccent;
+          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+        };
+        window.__usefulshelfText = (value) => {
+          if (!chinese || typeof value !== "string") return value;
+          const exact = dictionary[normalize(value)];
+          if (exact !== undefined) return exact;
+          return value
+            .replace(/What is ([^?]+)\?/g, "什么是 $1？")
+            .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
+            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
+            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
+            .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
+            .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/added to your sky\./g, "已加入夜空。")
+            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(/· no transaction sent/g, "· 未发送真实交易");
+        };
+        function boot() {
+          if (chinese) {
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            let node;
+            while ((node = walker.nextNode())) {
+              if (
+                node.parentElement?.closest(
+                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
+                )
+              )
+                continue;
+              const next = window.__usefulshelfText(node.textContent);
+              if (next !== node.textContent) node.textContent = next;
+            }
+            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
+              for (const name of ["aria-label", "placeholder", "title"]) {
+                if (element.hasAttribute(name))
+                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+              }
+            }
+            document.title = window.__usefulshelfText(document.title);
+          }
+          if (parent === window) return;
+          // Freeze viewport-based demo heights before measuring, avoiding vh feedback
+          // when the parent grows the iframe. Intentional inner demo scrollers remain.
+          const initialHeight = Math.max(360, Math.min(760, innerHeight));
+          function fixRules(rules) {
+            for (const rule of rules) {
+              if (rule.cssRules) fixRules(rule.cssRules);
+              if (!rule.style) continue;
+              if (/v[hbs]/.test(rule.style.minHeight))
+                rule.style.setProperty("min-height", "0", "important");
+              if (/v[hbs]/.test(rule.style.height))
+                rule.style.setProperty("height", `${initialHeight}px`, "important");
+            }
+          }
+          for (const sheet of document.styleSheets) {
+            try {
+              fixRules(sheet.cssRules);
+            } catch {
+              /* Same-file styles are sufficient. */
+            }
+          }
+          for (const element of [document.documentElement, document.body]) {
+            element.style.setProperty("height", "auto", "important");
+            element.style.setProperty("min-height", "0", "important");
+          }
+          document.documentElement.style.overflowX = "clip";
+          let frame = 0,
+            lastHeight = 0;
+          const measure = () => {
+            frame = 0;
+            const height = Math.ceil(
+              Math.max(document.body.scrollHeight, document.body.getBoundingClientRect().height),
+            );
+            if (height > 0 && height <= 20000 && height !== lastHeight) {
+              lastHeight = height;
+              parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+            }
+          };
+          const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(measure);
+          };
+          const observer = new ResizeObserver(schedule);
+          observer.observe(document.body);
+          window.addEventListener("resize", schedule);
+          const onMessage = (event) => {
+            if (event.source === parent && event.data?.type === "usefulshelf:measure") {
+              // The first resize may precede parent hydration. A measurement request
+              // must acknowledge even an unchanged height, so that message is recovered.
+              lastHeight = 0;
+              schedule();
+            }
+          };
+          window.addEventListener("message", onMessage);
+          document.fonts?.ready.then(schedule);
+          window.addEventListener(
+            "pagehide",
+            () => {
+              observer.disconnect();
+              cancelAnimationFrame(frame);
+              window.removeEventListener("resize", schedule);
+              window.removeEventListener("message", onMessage);
+            },
+            { once: true },
+          );
+          schedule();
+        }
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        else boot();
+      })();
+    </script>
+    <!-- usefulshelf-runtime:end -->
+    <script>
+      (() => {
+        "use strict";
+        const config = window.__usefulshelfConfigure({"title": "\u628a\u4e00\u5929\uff0c\u7406\u6e05\u695a\u3002", "subtitle": "\u95ee\u4e00\u4e2a\u5c0f\u95ee\u9898\uff0c\u8ba9\u6bcf\u6bb5\u5bf9\u8bdd\u90fd\u6709\u6e05\u6670\u7684\u53bb\u5904\u3002", "accent": "#557966", "bg": "#f3f0e9", "customTitle": false, "customSubtitle": false}),
+          en =
+            (new URLSearchParams(location.search).get("lang") ||
+              document.documentElement.dataset.skillLang) === "en",
+          L = (a, b) => (en ? b : a);
+        document.documentElement.lang = en ? "en" : "zh-CN";
+        document
+          .querySelectorAll("[data-en]")
+          .forEach((e) => (e.textContent = e.dataset[en ? "en" : "zh"]));
+        if (en && !config.customTitle)
+          document.querySelector("h1").textContent = "A little room for clarity.";
+        if (en && !config.customSubtitle)
+          document.querySelector("#subtitle").textContent =
+            "One thoughtful question. A clearer view of every conversation.";
+        const messages = [
+          {
+            id: 1,
+            type: "email",
+            name: L("米娅", "Mia"),
+            subject: L("周五，来喝杯咖啡？", "Coffee on Friday?"),
+            body: L(
+              "发现一家很安静的新店，靠窗的位置刚刚好。周五下午三点，要不要一起带上笔记本来聊聊新想法？",
+              "I found a quiet little café with a lovely window seat. Friday at three? Bring your notebook and your latest ideas.",
+            ),
+            time: "09:42",
+            color: "#e6d3ba",
+          },
+          {
+            id: 2,
+            type: "chat",
+            name: L("林森", "Lin"),
+            subject: L("小花园的第一版草图", "The little garden sketches"),
+            body: L(
+              "草图里的入口换成了蜿蜒小路，留了更多地方给野花。想听听你对长椅位置的看法。",
+              "The new sketches have a winding path and more room for wildflowers. I would love your thoughts on where the bench should go.",
+            ),
+            time: "09:18",
+            color: "#d7dfc4",
+          },
+          {
+            id: 3,
+            type: "note",
+            name: L("给自己", "To myself"),
+            subject: L("一个值得记住的灵感", "A thought worth keeping"),
+            body: L(
+              "让每个页面里都有一处可以停下来欣赏的小地方。可以是一段好文字，也可以是一盏温暖的灯。",
+              "Leave one small place to pause on every page. Maybe a thoughtful sentence. Maybe a warm little light.",
+            ),
+            time: "08:55",
+            color: "#e9dbcf",
+          },
+          {
+            id: 4,
+            type: "email",
+            name: L("诺亚", "Noah"),
+            subject: L("你的印刷样张好了", "Your print proofs are ready"),
+            body: L(
+              "暖白色纸张的那一版已经做好了。油墨比屏幕上更柔和，随时可以来工作室看看。",
+              "The warm-white paper proofs are ready. The ink feels softer in person. Drop by the studio whenever you like.",
+            ),
+            time: "08:30",
+            color: "#d2dce5",
+          },
+          {
+            id: 5,
+            type: "chat",
+            name: L("小禾", "June"),
+            subject: L("送你一份歌单", "A playlist for your afternoon"),
+            body: L(
+              "给慢慢做事的下午准备了几首轻轻的歌。下一次见面，我们一起交换最近喜欢的声音。",
+              "A few gentle songs for an unhurried afternoon. Next time we meet, let us trade the sounds we have been enjoying.",
+            ),
+            time: "08:04",
+            color: "#dfd2e4",
+          },
+        ].map((m) => ({ ...m, pinned: false, archived: false, draft: "", saved: "", read: false }));
+        let filter = "all",
+          selected = 1;
+        const history = [],
+          list = document.querySelector("#list"),
+          status = document.querySelector("#status"),
+          draft = document.querySelector("#draft"),
+          search = document.querySelector("#search");
+        search.placeholder = L("搜索这一天…", "Search your day…");
+        search.setAttribute("aria-label", L("搜索消息", "Search messages"));
+        document
+          .querySelector(".filters")
+          .setAttribute("aria-label", L("消息渠道", "Message channels"));
+        function current() {
+          return messages.find((m) => m.id === selected);
+        }
+        function visible() {
+          const q = search.value.trim().toLocaleLowerCase();
+          return messages
+            .filter(
+              (m) =>
+                !m.archived &&
+                (filter === "all" || (filter === "pinned" && m.pinned) || m.type === filter) &&
+                [m.name, m.subject, m.body].join(" ").toLocaleLowerCase().includes(q),
+            )
+            .sort((a, b) => Number(b.pinned) - Number(a.pinned));
+        }
+        function renderList() {
+          list.replaceChildren();
+          const entries = visible();
+          entries.forEach((m) => {
+            const b = document.createElement("button");
+            b.className = "message";
+            b.setAttribute("aria-pressed", String(m.id === selected));
+            const avatar = document.createElement("span");
+            avatar.className = "avatar";
+            avatar.style.setProperty("--av", m.color);
+            avatar.textContent = m.name[0];
+            const words = document.createElement("span"),
+              strong = document.createElement("strong"),
+              small = document.createElement("small"),
+              time = document.createElement("em");
+            strong.textContent = (m.pinned ? "★ " : "") + m.name;
+            small.textContent = m.subject;
+            time.textContent = m.time;
+            words.append(strong, small);
+            b.append(avatar, words, time);
+            b.addEventListener("click", () => {
+              selected = m.id;
+              m.read = true;
+              render();
+            });
+            list.append(b);
+          });
+          if (!entries.length) {
+            const p = document.createElement("p");
+            p.className = "empty";
+            p.textContent = L(
+              "这里暂时很安静。试试其他渠道或搜索词。",
+              "A quiet corner. Try another channel or search.",
+            );
+            list.append(p);
+          }
+          const active = messages.filter((m) => !m.archived);
+          document.querySelector("#count").textContent = active.length;
+          const mix = document.querySelector("#mix");
+          mix.replaceChildren();
+          ["email", "chat", "note"].forEach((t, i) => {
+            const bar = document.createElement("i");
+            bar.style.width =
+              (active.length
+                ? (active.filter((m) => m.type === t).length / active.length) * 100
+                : 0) + "%";
+            bar.style.background = ["#ddb878", "#8da880", "#9daec0"][i];
+            mix.append(bar);
+          });
+          document.querySelector("#undo").disabled = !history.length;
+        }
+        function render() {
+          const entries = visible();
+          if (!entries.some((m) => m.id === selected)) selected = entries[0]?.id ?? null;
+          renderList();
+          const m = current();
+          document.querySelector("#reader").hidden = !m;
+          if (!m) return;
+          document.querySelector("#channel").textContent = L(
+            { email: "邮件", chat: "聊天", note: "便签" }[m.type],
+            m.type.toUpperCase(),
+          );
+          document.querySelector("#subject").textContent = m.subject;
+          document.querySelector("#sender").textContent = m.name + " · " + m.time;
+          document.querySelector("#body").textContent = m.body;
+          document.querySelector("#pin").textContent = m.pinned
+            ? L("取消置顶 ☆", "Unpin message ☆")
+            : L("置顶这条 ★", "Pin message ★");
+          document.querySelector("#pin").setAttribute("aria-pressed", String(m.pinned));
+          draft.value = m.draft;
+          draft.setAttribute("aria-label", L("回复草稿", "Reply draft"));
+        }
+        document.querySelectorAll("[data-filter]").forEach((b) =>
+          b.addEventListener("click", () => {
+            filter = b.dataset.filter;
+            document
+              .querySelectorAll("[data-filter]")
+              .forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+            render();
+            status.textContent =
+              L("当前显示 ", "Showing ") + visible().length + L(" 条消息。", " messages.");
+          }),
+        );
+        search.addEventListener("input", render);
+        draft.addEventListener("input", () => {
+          const m = current();
+          if (m) m.draft = draft.value;
+        });
+        document.querySelector("#pin").addEventListener("click", () => {
+          const m = current();
+          if (!m) return;
+          m.pinned = !m.pinned;
+          status.textContent = m.pinned
+            ? L("重要的消息，放在最上面。", "Pinned to keep it close.")
+            : L("已取消置顶。", "Message unpinned.");
+          render();
+        });
+        document.querySelector("#archive").addEventListener("click", () => {
+          const m = current();
+          if (!m) return;
+          m.archived = true;
+          history.push(m.id);
+          status.textContent = L("已归档：", "Archived: ") + m.subject;
+          render();
+        });
+        document.querySelector("#undo").addEventListener("click", () => {
+          const id = history.pop();
+          if (!id) return;
+          messages.find((m) => m.id === id).archived = false;
+          selected = id;
+          filter = "all";
+          search.value = "";
+          document
+            .querySelectorAll("[data-filter]")
+            .forEach((x) => x.setAttribute("aria-pressed", String(x.dataset.filter === "all")));
+          render();
+          status.textContent = L("那条消息又回来了。", "That message is back in your inbox.");
+        });
+        document.querySelector("#restore").addEventListener("click", () => {
+          const m = current();
+          if (!m) return;
+          m.draft = m.saved;
+          draft.value = m.saved;
+          status.textContent = L("已恢复上一次保存的草稿。", "Restored the last saved draft.");
+        });
+        document.querySelector("#save").addEventListener("click", () => {
+          const m = current();
+          if (!m) return;
+          m.saved = m.draft;
+          status.textContent = m.draft.trim()
+            ? L(
+                "草稿已留在这条消息里，尚未发送。",
+                "Draft saved with this message. Nothing was sent.",
+              )
+            : L("空草稿已保存。", "Empty draft saved.");
+        });
+        render();
+        const channelNames = [
+            L("邮件", "Email"),
+            L("聊天", "Chat"),
+            L("网站", "Website"),
+            L("语音", "Voice"),
+            L("便签", "Notes"),
+          ],
+          channelColors = ["#f5bc4d", "#42b98a", "#68b4dc", "#858cdf", "#de7092"];
+        const samples = {
+          week: { volume: [2648, 174, 83, 39, 24], resolved: [2360, 123, 52, 21, 19] },
+          month: { volume: [9180, 1150, 630, 280, 160], resolved: [7820, 930, 490, 192, 134] },
+        };
+        let question = "volume",
+          period = "week",
+          focused = -1;
+        const questions = {
+          volume: L("这段时间，消息都从哪里来？", "Where have our conversations come from?"),
+          resolved: L("帮我看看，哪些消息已经处理好了？", "What have we already taken care of?"),
+          attention: L(
+            "接下来，哪些渠道需要多一点关注？",
+            "Which channels need a little more attention?",
+          ),
+        };
+        function analysis(announce = false) {
+          const data = samples[period],
+            values =
+              question === "attention"
+                ? data.volume.map((v, i) => v - data.resolved[i])
+                : data[question],
+            total = values.reduce((a, b) => a + b, 0),
+            top = values.indexOf(Math.max(...values)),
+            pct = (i) => ((values[i] / total) * 100).toFixed(1),
+            days = period === "week" ? 7 : 30;
+          document.querySelector("#analysis-question").textContent = questions[question];
+          document.querySelector("#analysis-answer").textContent =
+            question === "volume"
+              ? L(
+                  `最近 ${days} 天，共收到 ${total.toLocaleString()} 条消息。${channelNames[top]}占 ${pct(top)}%，是最活跃的渠道。`,
+                  `${total.toLocaleString()} conversations in the last ${days} days. ${channelNames[top]} leads with ${pct(top)}% of the total.`,
+                )
+              : question === "resolved"
+                ? L(
+                    `最近 ${days} 天，已处理 ${total.toLocaleString()} 条消息。${channelNames[top]}贡献了最多的已处理记录，给下一件事腾出了空间。`,
+                    `${total.toLocaleString()} conversations resolved in ${days} days. ${channelNames[top]} accounts for the largest share—more room for what comes next.`,
+                  )
+                : L(
+                    `最近 ${days} 天，还有 ${total.toLocaleString()} 条消息待处理。${channelNames[top]}的待处理量最高，可以从这里开始。`,
+                    `${total.toLocaleString()} conversations still need attention over ${days} days. Start with ${channelNames[top]}, where the remaining count is highest.`,
+                  );
+          document.querySelector("#chart-heading").textContent = L(
+            { volume: "消息渠道分布", resolved: "已处理渠道分布", attention: "待处理渠道分布" }[
+              question
+            ],
+            {
+              volume: "Conversations by channel",
+              resolved: "Resolved by channel",
+              attention: "Needs attention by channel",
+            }[question],
+          );
+          document.querySelector("#analysis-total").textContent =
+            total.toLocaleString() + L(" 条", " total");
+          const bar = document.querySelector("#analysis-bar"),
+            legend = document.querySelector("#analysis-legend");
+          bar.replaceChildren();
+          legend.replaceChildren();
+          values.forEach((v, i) => {
+            const segment = document.createElement("span");
+            segment.style.width = (v / total) * 100 + "%";
+            segment.style.background = channelColors[i];
+            segment.style.opacity = focused < 0 || focused === i ? "1" : ".25";
+            bar.append(segment);
+            const row = document.createElement("button");
+            row.className = "legend-row";
+            row.setAttribute("aria-pressed", String(focused === i));
+            row.setAttribute(
+              "aria-label",
+              channelNames[i] + ": " + v.toLocaleString() + ", " + pct(i) + "%",
+            );
+            const dot = document.createElement("i"),
+              name = document.createElement("span"),
+              count = document.createElement("strong"),
+              share = document.createElement("small");
+            dot.style.background = channelColors[i];
+            name.textContent = channelNames[i];
+            count.textContent = v.toLocaleString();
+            share.textContent = pct(i) + "%";
+            row.append(dot, name, count, share);
+            row.onclick = () => {
+              focused = focused === i ? -1 : i;
+              analysis(true);
+              document.querySelectorAll(".legend-row")[i].focus();
+            };
+            legend.append(row);
+          });
+          document.querySelector("#analysis-focus").textContent =
+            focused < 0
+              ? L(
+                  "选择一行，看看它在全局里的位置。",
+                  "Select a channel to see its place in the whole.",
+                )
+              : L(
+                  `${channelNames[focused]} · ${values[focused].toLocaleString()} 条 · 占 ${pct(focused)}%`,
+                  `${channelNames[focused]} · ${values[focused].toLocaleString()} conversations · ${pct(focused)}%`,
+                );
+          if (announce)
+            status.textContent =
+              focused < 0
+                ? L("已更新渠道分析。", "Channel analysis updated.")
+                : document.querySelector("#analysis-focus").textContent;
+        }
+        document
+          .querySelector("#question-select")
+          .setAttribute("aria-label", L("换个问题", "Ask about"));
+        document.querySelector("#period").setAttribute("aria-label", L("时间", "Period"));
+        document.querySelector("#question-select").onchange = (e) => {
+          question = e.target.value;
+          focused = -1;
+          analysis(true);
+        };
+        document.querySelector("#period").onchange = (e) => {
+          period = e.target.value;
+          analysis(true);
+        };
+        function view(work) {
+          document.querySelector("#work-view").hidden = !work;
+          document.querySelector("#insight-view").hidden = work;
+          document.querySelector("#insight-note").hidden = work;
+          document.querySelector("#desk-mix").hidden = !work;
+          document.querySelector("#undo").hidden = !work;
+          document.querySelector("main").classList.toggle("work-open", work);
+          document.querySelector("#analysis-view").setAttribute("aria-pressed", String(!work));
+          document.querySelector("#desk-view").setAttribute("aria-pressed", String(work));
+          status.textContent = work
+            ? L(
+                "工作台已打开。搜索、保存草稿或归档消息。",
+                "Inbox desk open. Search, save drafts, or archive a message.",
+              )
+            : L("选择一个问题，探索每个渠道。", "Choose a question, then explore the channels.");
+        }
+        document.querySelector("#analysis-view").onclick = () => view(false);
+        document.querySelector("#desk-view").onclick = () => view(true);
+        document.querySelector(".view-switch").setAttribute("aria-label", L("视图", "View"));
+        document
+          .querySelector("#insight-view")
+          .setAttribute("aria-label", L("渠道洞察", "Channel insights"));
+        analysis();
+        view(false);
+      })();
+    </script>
+  </body>
+</html>

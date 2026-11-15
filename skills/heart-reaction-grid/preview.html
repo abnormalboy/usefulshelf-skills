@@ -1,0 +1,1063 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>点赞反馈动效</title>
+    <style>
+      :root {
+        --accent: #ff527b;
+        --bg: #151417;
+        --surface: #211c24;
+        --ink: #f4f1f3;
+        --muted: #b4a7bd;
+        --line: #4b3d52;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: Arial, "PingFang SC", sans-serif;
+      }
+      button {
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+      }
+      button:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 5px;
+      }
+      button:disabled {
+        opacity: 0.45;
+        cursor: default;
+      }
+      .shell {
+        max-width: 1160px;
+        margin: auto;
+        padding: 0 30px;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 24px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .brand {
+        font-size: 14px;
+        font-weight: 600;
+        overflow-wrap: anywhere;
+      }
+      .brand:before {
+        content: "♥";
+        color: var(--accent);
+        margin-right: 9px;
+      }
+      .header-note {
+        font: 10px/1.6 monospace;
+        color: var(--muted);
+        text-align: right;
+      }
+      .intro {
+        padding: 36px 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 310px;
+        gap: 50px;
+        align-items: center;
+      }
+      .eyebrow {
+        color: var(--accent);
+        font-size: 11px;
+      }
+      h1 {
+        font-size: clamp(31px, 3.5vw, 45px);
+        font-weight: 500;
+        letter-spacing: -0.04em;
+        line-height: 1.2;
+        margin: 18px 0;
+        overflow-wrap: anywhere;
+      }
+      .intro p {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.9;
+        overflow-wrap: anywhere;
+      }
+      .legend {
+        display: flex;
+        gap: 22px;
+        color: #cfbbdb;
+        font-size: 11px;
+        margin-top: 22px;
+        flex-wrap: wrap;
+      }
+      .legend span:before {
+        content: "✓";
+        color: var(--accent);
+        margin-right: 7px;
+      }
+      .lab {
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        background: var(--surface);
+        padding: 20px;
+      }
+      .lab h2 {
+        font-size: 13px;
+        font-weight: 500;
+        margin: 0;
+      }
+      .lab-stage {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        min-height: 112px;
+      }
+      .heart-wrap {
+        position: relative;
+        display: inline-flex;
+        width: 23px;
+        height: 23px;
+        flex: none;
+      }
+      .heart {
+        width: 100%;
+        height: 100%;
+        fill: transparent;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        overflow: visible;
+      }
+      .lab-heart {
+        width: 44px;
+        height: 44px;
+        color: #997ea6;
+        margin: 0 5px;
+      }
+      .lab-heart.filled {
+        color: var(--accent);
+      }
+      .filled .heart {
+        fill: var(--accent);
+      }
+      .lab-heart.pressed .heart {
+        transform: scale(0.83);
+      }
+      .lab-state {
+        font-size: 11px;
+        line-height: 1.6;
+      }
+      .lab-state small {
+        display: block;
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 10px;
+      }
+      .lab-controls {
+        display: flex;
+        gap: 9px;
+      }
+      .control {
+        border: 1px solid #846391;
+        background: transparent;
+        min-height: 40px;
+        border-radius: 7px;
+        font-size: 11px;
+        padding: 10px 14px;
+      }
+      .control:hover:not(:disabled) {
+        background: #3d2b46;
+      }
+      .primary {
+        background: var(--ink);
+        color: #2b222f;
+        border-color: var(--ink);
+      }
+      .toolbar {
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        padding: 15px 0;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      .filters {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+      .filter {
+        border: 1px solid transparent;
+        background: transparent;
+        font-size: 12px;
+        color: var(--muted);
+        border-radius: 25px;
+        padding: 10px 14px;
+        min-height: 40px;
+      }
+      .filter[aria-pressed="true"] {
+        color: var(--ink);
+        border-color: #9673a5;
+      }
+      .totals {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .count {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .count strong {
+        color: var(--accent);
+        font-size: 18px;
+        font-weight: 500;
+      }
+      .reset {
+        background: none;
+        border: 0;
+        border-bottom: 1px solid #a781b5;
+        font-size: 11px;
+        padding: 7px 0;
+        min-height: 36px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin: 24px 0;
+      }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--surface);
+        overflow: hidden;
+        min-width: 0;
+      }
+      .card-top {
+        padding: 16px 20px;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px solid #47364f;
+        font-size: 10px;
+        color: #d0b8dd;
+      }
+      .sample {
+        color: #b090bf;
+        font-size: 9px;
+      }
+      .card-body {
+        padding: 22px 20px;
+        display: flex;
+        gap: 19px;
+        align-items: center;
+        min-height: 125px;
+      }
+      .art {
+        flex: none;
+        width: 56px;
+        height: 64px;
+        border: 1px solid #89659b;
+        border-radius: 4px;
+        background: #3d2947;
+        display: grid;
+        align-content: center;
+        gap: 6px;
+        padding: 11px;
+      }
+      .art i {
+        height: 3px;
+        background: #c8a3d9;
+        border-radius: 2px;
+      }
+      .art i:nth-child(2) {
+        width: 65%;
+      }
+      .art i:nth-child(3) {
+        width: 84%;
+      }
+      .art-1 {
+        border-radius: 50% 50% 4px 4px;
+        background: #304034;
+        border-color: #587a60;
+      }
+      .art-1 i {
+        background: #acbe9d;
+      }
+      .art-2 {
+        background: #45362d;
+        border-color: #886753;
+      }
+      .art-2 i {
+        background: #d0ad89;
+      }
+      .art-3 {
+        background: #2a3a46;
+        border-color: #517b92;
+      }
+      .art-3 i {
+        background: #9eb9c9;
+      }
+      .card h3 {
+        font-size: 16px;
+        line-height: 1.4;
+        font-weight: 500;
+        margin: 0 0 9px;
+        overflow-wrap: anywhere;
+      }
+      .card p {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.75;
+        margin: 0;
+      }
+      .card-bottom {
+        display: flex;
+        gap: 13px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 20px;
+        border-top: 1px solid #47364f;
+      }
+      .local-note {
+        font-size: 10px;
+        line-height: 1.5;
+        color: #c0a1cf;
+      }
+      .like {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 43px;
+        padding: 9px 13px;
+        border: 1px solid #9270a0;
+        border-radius: 25px;
+        background: none;
+        font-size: 11px;
+        flex: none;
+        color: #e0c1ef;
+      }
+      .like:active {
+        transform: scale(0.96);
+      }
+      .like[aria-pressed="true"] {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: #402432;
+      }
+      .like[aria-pressed="true"] .heart {
+        fill: var(--accent);
+      }
+      .like-count {
+        padding-left: 8px;
+        border-left: 1px solid currentColor;
+        min-width: 16px;
+      }
+      .burst .heart {
+        animation: pop 0.45s cubic-bezier(0.25, 1.3, 0.4, 1);
+      }
+      .particle {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: var(--accent);
+        opacity: 0;
+        pointer-events: none;
+      }
+      .burst .particle {
+        animation: burst 0.48s ease-out both;
+      }
+      .empty {
+        text-align: center;
+        color: var(--muted);
+        border: 1px dashed #8a609e;
+        border-radius: 12px;
+        padding: 35px 20px;
+        font-size: 13px;
+        margin: 24px 0;
+      }
+      .feedback {
+        min-height: 22px;
+        color: #e3c3f1;
+        font-size: 12px;
+        line-height: 1.6;
+        margin: 10px 0 22px;
+      }
+      .foot {
+        border-top: 1px solid var(--line);
+        padding: 20px 0 25px;
+        color: #b799c5;
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        font-size: 10px;
+        line-height: 1.7;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      @keyframes pop {
+        0% {
+          transform: scale(0.75);
+        }
+        48% {
+          transform: scale(1.24);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      @keyframes burst {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.5);
+        }
+        18% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2);
+        }
+      }
+      @media (max-width: 780px) {
+        .shell {
+          padding: 0 22px;
+        }
+        .intro {
+          grid-template-columns: 1fr;
+          gap: 22px;
+          padding: 28px 0;
+        }
+        h1 {
+          font-size: 35px;
+        }
+        .intro p {
+          margin-bottom: 0;
+        }
+        .lab {
+          padding: 18px;
+        }
+        .lab-stage {
+          min-height: 92px;
+        }
+        .grid {
+          gap: 14px;
+        }
+        .card-body {
+          padding: 20px 16px;
+          gap: 13px;
+        }
+        .card-top,
+        .card-bottom {
+          padding: 14px 16px;
+        }
+        .art {
+          width: 46px;
+          height: 58px;
+          padding: 9px;
+        }
+        .card h3 {
+          font-size: 15px;
+        }
+      }
+      @media (max-width: 560px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .header-note {
+          font-size: 9px;
+          max-width: 110px;
+        }
+        .brand {
+          font-size: 13px;
+        }
+        h1 {
+          font-size: 32px;
+        }
+        .legend {
+          gap: 12px;
+        }
+        .toolbar {
+          gap: 12px;
+        }
+        .totals {
+          width: 100%;
+          justify-content: space-between;
+        }
+        .filter {
+          font-size: 11px;
+          padding: 9px 12px;
+        }
+        .foot {
+          flex-direction: column;
+          gap: 7px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+        .lab-heart.pressed .heart,
+        .like:active {
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header>
+        <div class="brand" data-copy="label">点赞反馈动效</div>
+        <span class="header-note" data-copy="headerNote">交互组件演示 / 纯前端</span>
+      </header>
+      <main>
+        <section class="intro">
+          <div>
+            <span class="eyebrow" data-copy="eyebrow">让每次点击都有可见回应</span>
+            <h1 data-copy="title">点一下，让反馈更明确。</h1>
+            <p data-copy="subtitle">点击卡片下方的按钮点赞，再点一次取消。每次操作都会更新当前卡片和总计；独立试播只展示动效。</p>
+            <div class="legend">
+              <span data-copy="stepOne">点击点赞，计数 +1</span>
+              <span data-copy="stepTwo">再次点击，取消点赞</span>
+            </div>
+          </div>
+          <aside class="lab" aria-labelledby="lab-title">
+            <h2 id="lab-title" data-copy="labTitle">动效试播 · 独立于点赞状态</h2>
+            <div class="lab-stage">
+              <span class="heart-wrap lab-heart" id="lab-heart" aria-hidden="true">
+                <svg class="heart" viewBox="0 0 48 48">
+                  <path d="M24 41S5 29 5 16C5 6 17 3 24 12C31 3 43 6 43 16C43 29 24 41 24 41Z" />
+                </svg>
+              </span>
+              <div class="lab-state">
+                <span id="lab-state" role="status" aria-live="polite">准备试播</span>
+                <small data-copy="labNote">不更改下方卡片的赞数</small>
+              </div>
+            </div>
+            <div class="lab-controls">
+              <button class="control primary" id="preview" data-copy="preview">试播一次</button>
+              <button class="control" id="stop" data-copy="stop" disabled>停止</button>
+            </div>
+          </aside>
+        </section>
+        <section aria-labelledby="collection-title">
+          <div class="toolbar">
+            <div class="filters" role="group" aria-label="筛选卡片">
+              <button class="filter" data-filter="all" aria-pressed="true" data-copy="all">
+                全部卡片
+              </button>
+              <button class="filter" data-filter="liked" aria-pressed="false" data-copy="liked">
+                已点赞
+              </button>
+              <button class="filter" data-filter="unliked" aria-pressed="false" data-copy="unliked">
+                未点赞
+              </button>
+            </div>
+            <div class="totals">
+              <span class="count" id="count"></span>
+              <button class="reset" id="reset" disabled data-copy="reset">重置点赞</button>
+            </div>
+          </div>
+          <h2 id="collection-title" hidden data-copy="collectionTitle">点赞使用场景</h2>
+          <div class="grid" id="grid"></div>
+          <p class="empty" id="empty" hidden></p>
+          <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+        </section>
+        <noscript><p>Enable JavaScript to try the like buttons.</p></noscript>
+      </main>
+      <footer class="foot">
+        <span data-copy="boundary">赞数只在当前页面中变化，不会提交到服务器；刷新后归零。</span>
+        <span data-copy="accessibility">支持键盘操作与系统「减少动态效果」设置。</span>
+      </footer>
+    </div>
+    <!-- usefulshelf-runtime:start -->
+    <script>
+      // Inlined into each downloadable template: no sibling runtime is required.
+      (() => {
+        "use strict";
+        const dictionary = {};
+        const lang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          "zh";
+        const chinese = lang !== "en";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+        const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        window.__usefulshelfConfigure = (config) => {
+          const accent = document.documentElement.dataset.skillAccent;
+          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+        };
+        window.__usefulshelfText = (value) => {
+          if (!chinese || typeof value !== "string") return value;
+          const exact = dictionary[normalize(value)];
+          if (exact !== undefined) return exact;
+          return value
+            .replace(/What is ([^?]+)\?/g, "什么是 $1？")
+            .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
+            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
+            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
+            .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
+            .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/added to your sky\./g, "已加入夜空。")
+            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(/· no transaction sent/g, "· 未发送真实交易");
+        };
+        function boot() {
+          if (chinese) {
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            let node;
+            while ((node = walker.nextNode())) {
+              if (
+                node.parentElement?.closest(
+                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
+                )
+              )
+                continue;
+              const next = window.__usefulshelfText(node.textContent);
+              if (next !== node.textContent) node.textContent = next;
+            }
+            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
+              for (const name of ["aria-label", "placeholder", "title"]) {
+                if (element.hasAttribute(name))
+                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+              }
+            }
+            document.title = window.__usefulshelfText(document.title);
+          }
+          if (parent === window) return;
+          // Freeze viewport-based demo heights before measuring, avoiding vh feedback
+          // when the parent grows the iframe. Intentional inner demo scrollers remain.
+          const initialHeight = Math.max(360, Math.min(760, innerHeight));
+          function fixRules(rules) {
+            for (const rule of rules) {
+              if (rule.cssRules) fixRules(rule.cssRules);
+              if (!rule.style) continue;
+              if (/v[hbs]/.test(rule.style.minHeight))
+                rule.style.setProperty("min-height", "0", "important");
+              if (/v[hbs]/.test(rule.style.height))
+                rule.style.setProperty("height", `${initialHeight}px`, "important");
+            }
+          }
+          for (const sheet of document.styleSheets) {
+            try {
+              fixRules(sheet.cssRules);
+            } catch {
+              /* Same-file styles are sufficient. */
+            }
+          }
+          for (const element of [document.documentElement, document.body]) {
+            element.style.setProperty("height", "auto", "important");
+            element.style.setProperty("min-height", "0", "important");
+          }
+          document.documentElement.style.overflowX = "clip";
+          let frame = 0,
+            lastHeight = 0;
+          const measure = () => {
+            frame = 0;
+            const height = Math.ceil(
+              Math.max(document.body.scrollHeight, document.body.getBoundingClientRect().height),
+            );
+            if (height > 0 && height <= 20000 && height !== lastHeight) {
+              lastHeight = height;
+              parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+            }
+          };
+          const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(measure);
+          };
+          const observer = new ResizeObserver(schedule);
+          observer.observe(document.body);
+          window.addEventListener("resize", schedule);
+          const onMessage = (event) => {
+            if (event.source === parent && event.data?.type === "usefulshelf:measure") {
+              // The first resize may precede parent hydration. A measurement request
+              // must acknowledge even an unchanged height, so that message is recovered.
+              lastHeight = 0;
+              schedule();
+            }
+          };
+          window.addEventListener("message", onMessage);
+          document.fonts?.ready.then(schedule);
+          window.addEventListener(
+            "pagehide",
+            () => {
+              observer.disconnect();
+              cancelAnimationFrame(frame);
+              window.removeEventListener("resize", schedule);
+              window.removeEventListener("message", onMessage);
+            },
+            { once: true },
+          );
+          schedule();
+        }
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        else boot();
+      })();
+    </script>
+    <!-- usefulshelf-runtime:end -->
+    <script>
+      const config = window.__usefulshelfConfigure({"custom": {"title": null, "subtitle": null, "label": null}, "stagger": 420});
+      (() => {
+        "use strict";
+        const locale =
+          (new URLSearchParams(location.search).get("lang") ||
+            document.documentElement.dataset.skillLang) === "en"
+            ? "en"
+            : "zh";
+        document.documentElement.lang = locale;
+        const strings = {
+          zh: {
+            label: "点赞反馈动效",
+            title: "点一下，让反馈更明确。",
+            subtitle:
+              "点击卡片下方的按钮点赞，再点一次取消。每次操作都会更新当前卡片和总计；独立试播只展示动效。",
+            headerNote: "交互组件演示 / 纯前端",
+            eyebrow: "让每次点击都有可见回应",
+            stepOne: "点击点赞，计数 +1",
+            stepTwo: "再次点击，取消点赞",
+            labTitle: "动效试播 · 独立于点赞状态",
+            labNote: "不更改下方卡片的赞数",
+            preview: "试播一次",
+            stop: "停止",
+            all: "全部卡片",
+            liked: "已点赞",
+            unliked: "未点赞",
+            reset: "重置点赞",
+            collectionTitle: "点赞使用场景",
+            boundary: "赞数只在当前页面中变化，不会提交到服务器；刷新后归零。",
+            accessibility: "支持键盘操作与系统「减少动态效果」设置。",
+            filterLabel: "筛选卡片",
+            sample: "示例卡片",
+            local: "当前卡片的演示赞数",
+            like: "点赞",
+            likeLabel: "点赞：",
+            unlikeLabel: "取消点赞：",
+            ready: "准备试播",
+            press: "按压反馈",
+            fill: "点亮与粒子反馈",
+            done: "试播完成，点赞未改变",
+            stopped: "试播已停止",
+            motion: "已按系统设置减少动态效果",
+            hidden: "页面隐藏，试播已停止",
+            emptyLiked: "还没有点赞。切换到「全部卡片」试着点一个。",
+            emptyUnliked: "所有卡片都已点赞。切换到「已点赞」可以取消。",
+            totalBefore: "已点赞 ",
+            totalAfter: " / 4 张",
+            resetDone: "已重置点赞：4 张卡片的赞数全部归零。",
+            added: "已点赞，当前卡片 1 赞。",
+            removed: "已取消点赞，当前卡片 0 赞。",
+            titles: ["教程内容卡", "作品展示卡", "产品更新卡", "社区讨论卡"],
+            types: ["内容阅读", "作品展示", "功能反馈", "社区交流"],
+            bodies: [
+              "在内容底部放一个轻量反馈入口。",
+              "用清晰选中态，表达对作品的认可。",
+              "为新功能提供一步完成的反馈。",
+              "让读者的支持有明确、即时的回应。",
+            ],
+            filtered: "筛选已切换，点赞状态保持不变。",
+          },
+          en: {
+            label: "Like button feedback",
+            title: "One click. Clear feedback.",
+            subtitle:
+              "Like a card, then click again to undo. Each action updates its count and the total. The separate preview demonstrates motion only.",
+            headerNote: "INTERACTION COMPONENT / FRONTEND ONLY",
+            eyebrow: "MAKE EVERY CLICK VISIBLE",
+            stepOne: "Like once, count +1",
+            stepTwo: "Click again to undo",
+            labTitle: "Motion preview · separate from likes",
+            labNote: "Does not change the card counts",
+            preview: "Preview once",
+            stop: "Stop",
+            all: "All cards",
+            liked: "Liked",
+            unliked: "Not liked",
+            reset: "Reset likes",
+            collectionTitle: "Like button use cases",
+            boundary:
+              "Counts stay in this page and are never sent to a server. Refreshing resets them.",
+            accessibility: "Keyboard accessible. Respects reduced-motion preferences.",
+            filterLabel: "Filter cards",
+            sample: "SAMPLE CARD",
+            local: "Local demo like count",
+            like: "Like",
+            likeLabel: "Like: ",
+            unlikeLabel: "Unlike: ",
+            ready: "Ready to preview",
+            press: "Press feedback",
+            fill: "Fill and particle feedback",
+            done: "Preview complete. Likes unchanged.",
+            stopped: "Preview stopped",
+            motion: "Reduced motion preference applied",
+            hidden: "Page hidden. Preview stopped.",
+            emptyLiked: "No likes yet. Choose All cards and try a like button.",
+            emptyUnliked: "Every card is liked. Choose Liked to undo one.",
+            totalBefore: "Liked ",
+            totalAfter: " / 4 cards",
+            resetDone: "Likes reset. All four card counts are now zero.",
+            added: "Liked. This card now has 1 like.",
+            removed: "Like removed. This card now has 0 likes.",
+            titles: [
+              "Tutorial content card",
+              "Portfolio showcase",
+              "Product update",
+              "Community discussion",
+            ],
+            types: ["CONTENT READING", "CREATIVE WORK", "FEATURE FEEDBACK", "COMMUNITY"],
+            bodies: [
+              "A lightweight feedback action at the end of an article.",
+              "A clear selected state shows appreciation for a piece of work.",
+              "One simple action lets people respond to a new feature.",
+              "Make support from readers visible and immediate.",
+            ],
+            filtered: "Filter changed. Your likes are unchanged.",
+          },
+        };
+        const t = strings[locale];
+        document
+          .querySelectorAll("[data-copy]")
+          .forEach((el) => (el.textContent = t[el.dataset.copy]));
+        for (const key of ["title", "subtitle", "label"])
+          if (config.custom[key] !== null)
+            document.querySelector('[data-copy="' + key + '"]').textContent = config.custom[key];
+        document.title = config.custom.label ?? t.label;
+        document.querySelector(".filters").setAttribute("aria-label", t.filterLabel);
+        document.querySelector("noscript")?.remove();
+        const media = matchMedia("(prefers-reduced-motion: reduce)"),
+          grid = document.querySelector("#grid"),
+          feedback = document.querySelector("#feedback"),
+          labHeart = document.querySelector("#lab-heart"),
+          labState = document.querySelector("#lab-state"),
+          preview = document.querySelector("#preview"),
+          stop = document.querySelector("#stop"),
+          reset = document.querySelector("#reset"),
+          likes = [false, false, false, false];
+        let filter = "all",
+          timer = 0,
+          previewRun = 0;
+        const cards = [],
+          buttons = [];
+        const svg =
+          '<svg class="heart" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 41S5 29 5 16C5 6 17 3 24 12C31 3 43 6 43 16C43 29 24 41 24 41Z"/></svg>';
+        function particles(wrap) {
+          for (let i = 0; i < 6; i++) {
+            const dot = document.createElement("i");
+            dot.className = "particle";
+            dot.style.setProperty("--dx", Math.cos((i * Math.PI) / 3) * 26 + "px");
+            dot.style.setProperty("--dy", Math.sin((i * Math.PI) / 3) * 26 + "px");
+            wrap.append(dot);
+          }
+        }
+        function burst(el) {
+          el.classList.remove("burst");
+          if (!media.matches) {
+            void el.offsetWidth;
+            el.classList.add("burst");
+          }
+        }
+        particles(labHeart);
+        labHeart.addEventListener("animationend", (e) => {
+          if (e.animationName === "pop") labHeart.classList.remove("burst");
+        });
+        t.titles.forEach((title, i) => {
+          const card = document.createElement("article");
+          card.className = "card";
+          const top = document.createElement("div");
+          top.className = "card-top";
+          const type = document.createElement("span");
+          type.textContent = t.types[i];
+          const sample = document.createElement("span");
+          sample.className = "sample";
+          sample.textContent = t.sample;
+          top.append(type, sample);
+          const body = document.createElement("div");
+          body.className = "card-body";
+          const art = document.createElement("div");
+          art.className = "art art-" + i;
+          art.setAttribute("aria-hidden", "true");
+          art.innerHTML = "<i></i><i></i><i></i>";
+          const copy = document.createElement("div"),
+            h3 = document.createElement("h3"),
+            p = document.createElement("p");
+          h3.textContent = title;
+          p.textContent = t.bodies[i];
+          copy.append(h3, p);
+          body.append(art, copy);
+          const bottom = document.createElement("div");
+          bottom.className = "card-bottom";
+          const note = document.createElement("span");
+          note.className = "local-note";
+          note.textContent = t.local;
+          const button = document.createElement("button");
+          button.className = "like";
+          button.type = "button";
+          const wrap = document.createElement("span");
+          wrap.className = "heart-wrap";
+          wrap.setAttribute("aria-hidden", "true");
+          wrap.innerHTML = svg;
+          particles(wrap);
+          const label = document.createElement("span");
+          label.className = "like-label";
+          const count = document.createElement("span");
+          count.className = "like-count";
+          count.setAttribute("aria-hidden", "true");
+          button.append(wrap, label, count);
+          button.onclick = () => {
+            const focused = document.activeElement === button;
+            likes[i] = !likes[i];
+            sync();
+            if (likes[i]) burst(wrap);
+            else wrap.classList.remove("burst");
+            feedback.textContent = title + " · " + (likes[i] ? t.added : t.removed);
+            if (focused && card.hidden) {
+              const next = buttons
+                .slice(i + 1)
+                .concat(buttons.slice(0, i))
+                .find((b) => !b.closest(".card").hidden);
+              (next || document.querySelector('[data-filter="' + filter + '"]')).focus();
+            }
+          };
+          wrap.addEventListener("animationend", (e) => {
+            if (e.animationName === "pop") wrap.classList.remove("burst");
+          });
+          bottom.append(note, button);
+          card.append(top, body, bottom);
+          grid.append(card);
+          cards.push(card);
+          buttons.push(button);
+        });
+        function sync() {
+          const total = likes.filter(Boolean).length;
+          buttons.forEach((button, i) => {
+            button.setAttribute("aria-pressed", String(likes[i]));
+            button.setAttribute(
+              "aria-label",
+              (likes[i] ? t.unlikeLabel : t.likeLabel) +
+                t.titles[i] +
+                (locale === "en" ? ". Count: " : "，当前赞数：") +
+                (likes[i] ? 1 : 0),
+            );
+            button.querySelector(".like-label").textContent = likes[i] ? t.liked : t.like;
+            button.querySelector(".like-count").textContent = likes[i] ? "1" : "0";
+            cards[i].hidden =
+              filter === "liked" ? !likes[i] : filter === "unliked" ? likes[i] : false;
+          });
+          const count = document.querySelector("#count");
+          count.textContent = t.totalBefore;
+          const strong = document.createElement("strong");
+          strong.textContent = String(total);
+          count.append(strong, document.createTextNode(t.totalAfter));
+          reset.disabled = total === 0;
+          document
+            .querySelectorAll("[data-filter]")
+            .forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.filter === filter)));
+          const empty = document.querySelector("#empty");
+          empty.hidden = cards.some((c) => !c.hidden);
+          empty.textContent = filter === "liked" ? t.emptyLiked : t.emptyUnliked;
+        }
+        document.querySelectorAll("[data-filter]").forEach(
+          (b) =>
+            (b.onclick = () => {
+              filter = b.dataset.filter;
+              sync();
+              feedback.textContent = t.filtered;
+            }),
+        );
+        reset.onclick = () => {
+          likes.fill(false);
+          filter = "all";
+          document.querySelectorAll(".like .burst").forEach((el) => el.classList.remove("burst"));
+          sync();
+          feedback.textContent = t.resetDone;
+          document.querySelector('[data-filter="all"]').focus();
+        };
+        function stopPreview(message) {
+          const restoreFocus = document.activeElement === stop;
+          previewRun++;
+          clearTimeout(timer);
+          timer = 0;
+          labHeart.classList.remove("pressed", "filled", "burst");
+          preview.disabled = false;
+          stop.disabled = true;
+          labState.textContent = message ?? t.ready;
+          if (restoreFocus) preview.focus();
+        }
+        preview.onclick = () => {
+          stopPreview();
+          const run = previewRun;
+          preview.disabled = true;
+          stop.disabled = false;
+          labState.textContent = media.matches ? t.fill : t.press;
+          if (!media.matches) labHeart.classList.add("pressed");
+          timer = setTimeout(
+            () => {
+              if (run !== previewRun) return;
+              labHeart.classList.remove("pressed");
+              labHeart.classList.add("filled");
+              burst(labHeart);
+              labState.textContent = t.fill;
+              timer = setTimeout(() => {
+                if (run !== previewRun) return;
+                stopPreview(t.done);
+              }, config.stagger * 2);
+            },
+            media.matches ? 0 : config.stagger,
+          );
+        };
+        stop.onclick = () => {
+          stopPreview(t.stopped);
+          preview.focus();
+        };
+        media.addEventListener("change", () => {
+          stopPreview(t.motion);
+          document.querySelectorAll(".burst").forEach((el) => el.classList.remove("burst"));
+        });
+        document.addEventListener("visibilitychange", () => {
+          if (document.hidden && !stop.disabled) stopPreview(t.hidden);
+        });
+        labState.textContent = t.ready;
+        sync();
+      })();
+    </script>
+    <script>
+      // Optional host sizing keeps embedded controls in the page's normal scroll flow.
+      if (window.parent !== window) {
+        let previousHeight = 0;
+        const reportHeight = () => {
+          const height = Math.ceil(document.body.getBoundingClientRect().height);
+          if (height !== previousHeight) {
+            previousHeight = height;
+            window.parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+          }
+        };
+        window.addEventListener("message", (event) => {
+          if (event.source === window.parent && event.data?.type === "usefulshelf:measure") {
+            previousHeight = 0;
+            reportHeight();
+          }
+        });
+        new ResizeObserver(reportHeight).observe(document.body);
+        requestAnimationFrame(reportHeight);
+      }
+    </script>
+  </body>
+</html>

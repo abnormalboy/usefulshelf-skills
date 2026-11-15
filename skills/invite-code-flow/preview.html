@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Peel to Reveal an Invite Code</title>
+    <style>
+      :root {
+        --bg: #f1f3ee;
+        --accent: #499d64;
+        --ink: #272c29;
+        --muted: #738077;
+        --ease: cubic-bezier(0.25, 0.85, 0.25, 1);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        font-family:
+          Inter,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        color: var(--ink);
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+      }
+      button:focus-visible,
+      [tabindex]:focus-visible {
+        outline: 3px solid #397653;
+        outline-offset: 5px;
+      }
+      .page {
+        max-width: 1200px;
+        min-height: 100svh;
+        margin: auto;
+        padding: 40px 56px;
+        display: flex;
+        flex-direction: column;
+      }
+      .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .brand {
+        font-weight: 650;
+        letter-spacing: -0.02em;
+        color: #414a42;
+        font-size: 15px;
+      }
+      .center {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 64px 0;
+        text-align: center;
+      }
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        color: #748077;
+      }
+      h1 {
+        font-size: clamp(32px, 4.5vw, 54px);
+        font-weight: 500;
+        letter-spacing: -0.04em;
+        margin: 22px 0 18px;
+        line-height: 1.18;
+        max-width: 20ch;
+      }
+      .description {
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.85;
+        max-width: 43ch;
+        margin: 0;
+      }
+      .steps {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 11px;
+        color: #849085;
+        margin: 29px 0 0;
+      }
+      .steps b {
+        font-weight: 400;
+        color: #b0b9ae;
+      }
+      .interaction {
+        --ticket-height: 160px;
+        width: min(400px, 100%);
+        margin: 46px 0 0;
+        min-height: 280px;
+        position: relative;
+      }
+      .ticket {
+        position: relative;
+        height: var(--ticket-height);
+        border: 1px solid #d4dbcc;
+        border-radius: 5px;
+        background: #fffef8;
+        box-shadow: 0 12px 30px #2937240c;
+        text-align: left;
+      }
+      .expanded {
+        height: 100%;
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 18px;
+      }
+      .code-label {
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        color: #84907c;
+      }
+      .code-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .code-text {
+        min-width: 0;
+        flex: 1;
+        color: #354536;
+        font:
+          600 clamp(15px, 3vw, 21px) ui-monospace,
+          SFMono-Regular,
+          Consolas,
+          monospace;
+        user-select: all;
+        cursor: text;
+        overflow-wrap: anywhere;
+      }
+      .copy {
+        flex: none;
+        background: var(--accent);
+        color: white;
+        border: 0;
+        border-radius: 6px;
+        padding: 13px 15px;
+        font-size: 12px;
+        font-weight: 600;
+        min-width: 76px;
+      }
+      .copy.copied {
+        background: #253d2d;
+      }
+      .copy:disabled {
+        cursor: wait;
+      }
+      .reveal {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        border: 0;
+        background: none;
+        cursor: grab;
+        touch-action: pan-y;
+        color: var(--ink);
+        z-index: 2;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      .reveal:active {
+        cursor: grabbing;
+      }
+      .paper {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        pointer-events: none;
+      }
+      .paper-label {
+        font-size: 18px;
+        fill: #43533c;
+        font-weight: 550;
+        letter-spacing: 1px;
+      }
+      .paper-hint {
+        font-size: 11px;
+        fill: #7f8978;
+      }
+      .paper-number {
+        font-size: 9px;
+        fill: #9ba18e;
+        letter-spacing: 2px;
+      }
+      .open .reveal {
+        pointer-events: none;
+      }
+      .collapse {
+        position: absolute;
+        top: var(--ticket-height);
+        left: 0;
+        right: 0;
+        width: max-content;
+        margin: 23px auto 0;
+        display: block;
+        border: 0;
+        border-bottom: 1px solid #bec8b7;
+        padding: 5px 0;
+        background: transparent;
+        color: #67765e;
+        font-size: 12px;
+        visibility: hidden;
+      }
+      .open .collapse {
+        visibility: visible;
+      }
+      .instruction {
+        position: absolute;
+        top: var(--ticket-height);
+        left: 0;
+        right: 0;
+        margin: 23px 0 0;
+        font-size: 12px;
+        color: #86907e;
+      }
+      .open .instruction {
+        display: none;
+      }
+      .status {
+        font-size: 12px;
+        color: #56725e;
+        margin: 75px 0 0;
+        min-height: 40px;
+        line-height: 1.65;
+      }
+      .usage {
+        font-size: 11px;
+        color: #869286;
+        line-height: 1.7;
+        margin: 5px 0;
+      }
+      .bottom {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: center;
+        border-top: 1px solid #dce1da;
+        padding-top: 19px;
+        font-size: 10px;
+        color: #7e8b80;
+      }
+      .hint {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .dot {
+        height: 5px;
+        width: 5px;
+        background: var(--accent);
+        border-radius: 50%;
+      }
+      @media (max-width: 550px) {
+        .page {
+          padding: 26px 22px;
+        }
+        .center {
+          padding: 58px 0 35px;
+        }
+        .top {
+          font-size: 10px;
+          gap: 12px;
+        }
+        h1 {
+          font-size: 32px;
+        }
+        .description {
+          font-size: 13px;
+        }
+        .interaction {
+          margin-top: 30px;
+        }
+        .expanded {
+          padding: 18px;
+        }
+        .interaction {
+          --ticket-height: 145px;
+        }
+        .code-text {
+          font-size: 15px;
+        }
+        .copy {
+          padding: 15px;
+          min-width: 74px;
+        }
+        .bottom {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 12px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="top">
+        <div class="brand" data-copy="brand">Invite a teammate</div>
+        <span data-copy="preview">Interaction preview</span>
+      </header>
+      <section class="center">
+        <div class="eyebrow" data-copy="eyebrow">A small detail in an invitation flow</div>
+        <h1>Peel to Reveal an Invite Code</h1>
+        <p class="description">Click or drag the covering paper to the left to reveal the invitation code. Copy it, then cover it again.</p>
+        <div class="steps" aria-label="Steps">
+          <span data-copy="step1">1 · Reveal</span>
+          <b aria-hidden="true">→</b>
+          <span data-copy="step2">2 · Copy</span>
+          <b aria-hidden="true">→</b>
+          <span data-copy="step3">3 · Share</span>
+        </div>
+        <div class="interaction">
+          <div class="ticket">
+            <div class="expanded" id="expanded" inert aria-hidden="true">
+              <span class="code-label" data-copy="codeLabel">Your invitation code</span>
+              <div class="code-row">
+                <span class="code-text" tabindex="0"></span>
+                <button class="copy" type="button">Copy code</button>
+              </div>
+            </div>
+            <button
+              class="reveal"
+              type="button"
+              aria-expanded="false"
+              aria-controls="expanded"
+              aria-label="Peel back the paper"
+            >
+              <svg
+                class="paper"
+                viewBox="0 0 400 160"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <defs>
+                  <linearGradient id="paperFace" x2="0" y2="1">
+                    <stop stop-color="#fdfcf5" />
+                    <stop offset="1" stop-color="#eeeee3" />
+                  </linearGradient>
+                  <linearGradient id="paperBack">
+                    <stop stop-color="#b5b9a8" />
+                    <stop offset=".18" stop-color="#e6e8d9" />
+                    <stop offset=".65" stop-color="#fffff6" />
+                    <stop offset="1" stop-color="#d8ddc9" />
+                  </linearGradient>
+                  <pattern id="grain" width="5" height="5" patternUnits="userSpaceOnUse">
+                    <path d="M0 1h1m2 2h1" stroke="#7d8064" stroke-opacity=".1" stroke-width=".5" />
+                  </pattern>
+                  <filter id="foldShadow" x="-80%" y="-40%" width="260%" height="190%">
+                    <feDropShadow
+                      dx="8"
+                      dy="9"
+                      stdDeviation="7"
+                      flood-color="#334126"
+                      flood-opacity=".2"
+                    />
+                  </filter>
+                  <clipPath id="paperClip"><path class="paper-clip" /></clipPath>
+                </defs>
+                <g clip-path="url(#paperClip)">
+                  <rect width="400" height="160" rx="4" fill="url(#paperFace)" />
+                  <rect width="400" height="160" fill="url(#grain)" />
+                  <path
+                    d="M20 20h360v120H20z"
+                    fill="none"
+                    stroke="#d9ddca"
+                    stroke-dasharray="2 4"
+                  />
+                  <text x="36" y="41" class="paper-number">FOR YOU · 001</text>
+                  <text x="36" y="83" class="paper-label" data-copy="paperTitle">
+                    An invitation for you
+                  </text>
+                  <text x="36" y="111" class="paper-hint" data-copy="paperHint">
+                    Peel from the right edge ←
+                  </text>
+                </g>
+                <path
+                  class="paper-fold"
+                  fill="url(#paperBack)"
+                  stroke="#cdd2bf"
+                  stroke-width=".6"
+                  filter="url(#foldShadow)"
+                />
+                <path
+                  class="paper-crease"
+                  fill="none"
+                  stroke="#fffef5"
+                  stroke-opacity=".8"
+                  stroke-width="1"
+                />
+              </svg>
+            </button>
+          </div>
+          <p class="instruction" data-copy="instruction">
+            Click the paper, or drag it to the left.
+          </p>
+          <button class="collapse" type="button" data-copy="collapse">Cover the code again</button>
+          <p class="status" role="status" aria-live="polite"></p>
+        </div>
+      </section>
+      <footer class="bottom">
+        <span data-copy="footer">For teammate invitations, early access, or member referrals.</span>
+        <span class="hint">
+          <i class="dot"></i>
+          <span data-copy="boundary">Sample code only · no sign-up or verification</span>
+        </span>
+      </footer>
+    </main>
+    <!-- usefulshelf-runtime:start -->
+    <script>
+      // Inlined into each downloadable template: no sibling runtime is required.
+      (() => {
+        "use strict";
+        const dictionary = {};
+        const lang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          "zh";
+        const chinese = lang !== "en";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+        const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        window.__usefulshelfConfigure = (config) => {
+          const accent = document.documentElement.dataset.skillAccent;
+          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+        };
+        window.__usefulshelfText = (value) => {
+          if (!chinese || typeof value !== "string") return value;
+          const exact = dictionary[normalize(value)];
+          if (exact !== undefined) return exact;
+          return value
+            .replace(/What is ([^?]+)\?/g, "什么是 $1？")
+            .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
+            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
+            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
+            .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
+            .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/added to your sky\./g, "已加入夜空。")
+            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(/· no transaction sent/g, "· 未发送真实交易");
+        };
+        function boot() {
+          if (chinese) {
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            let node;
+            while ((node = walker.nextNode())) {
+              if (
+                node.parentElement?.closest(
+                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
+                )
+              )
+                continue;
+              const next = window.__usefulshelfText(node.textContent);
+              if (next !== node.textContent) node.textContent = next;
+            }
+            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
+              for (const name of ["aria-label", "placeholder", "title"]) {
+                if (element.hasAttribute(name))
+                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+              }
+            }
+            document.title = window.__usefulshelfText(document.title);
+          }
+          if (parent === window) return;
+          // Freeze viewport-based demo heights before measuring, avoiding vh feedback
+          // when the parent grows the iframe. Intentional inner demo scrollers remain.
+          const initialHeight = Math.max(360, Math.min(760, innerHeight));
+          function fixRules(rules) {
+            for (const rule of rules) {
+              if (rule.cssRules) fixRules(rule.cssRules);
+              if (!rule.style) continue;
+              if (/v[hbs]/.test(rule.style.minHeight))
+                rule.style.setProperty("min-height", "0", "important");
+              if (/v[hbs]/.test(rule.style.height))
+                rule.style.setProperty("height", `${initialHeight}px`, "important");
+            }
+          }
+          for (const sheet of document.styleSheets) {
+            try {
+              fixRules(sheet.cssRules);
+            } catch {
+              /* Same-file styles are sufficient. */
+            }
+          }
+          for (const element of [document.documentElement, document.body]) {
+            element.style.setProperty("height", "auto", "important");
+            element.style.setProperty("min-height", "0", "important");
+          }
+          document.documentElement.style.overflowX = "clip";
+          let frame = 0,
+            lastHeight = 0;
+          const measure = () => {
+            frame = 0;
+            const height = Math.ceil(
+              Math.max(document.body.scrollHeight, document.body.getBoundingClientRect().height),
+            );
+            if (height > 0 && height <= 20000 && height !== lastHeight) {
+              lastHeight = height;
+              parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+            }
+          };
+          const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(measure);
+          };
+          const observer = new ResizeObserver(schedule);
+          observer.observe(document.body);
+          window.addEventListener("resize", schedule);
+          const onMessage = (event) => {
+            if (event.source === parent && event.data?.type === "usefulshelf:measure") {
+              // The first resize may precede parent hydration. A measurement request
+              // must acknowledge even an unchanged height, so that message is recovered.
+              lastHeight = 0;
+              schedule();
+            }
+          };
+          window.addEventListener("message", onMessage);
+          document.fonts?.ready.then(schedule);
+          window.addEventListener(
+            "pagehide",
+            () => {
+              observer.disconnect();
+              cancelAnimationFrame(frame);
+              window.removeEventListener("resize", schedule);
+              window.removeEventListener("message", onMessage);
+            },
+            { once: true },
+          );
+          schedule();
+        }
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        else boot();
+      })();
+    </script>
+    <!-- usefulshelf-runtime:end -->
+    <script>
+      const config = window.__usefulshelfConfigure({"title": "Peel to Reveal an Invite Code", "subtitle": "Click or drag the covering paper to the left to reveal the invitation code. Copy it, then cover it again.", "accent": "#499d64", "bg": "#f1f3ee", "code": "HELLO-GOOD", "customTitle": false, "customSubtitle": false});
+      const messages = {
+        zh: {
+          brand: "邀请你的伙伴",
+          preview: "交互效果预览",
+          eyebrow: "邀请流程中的一个小细节",
+          title: "邀请码揭纸动效",
+          subtitle: "邀请码藏在纸片下面。从右侧轻轻揭起，让纸沿着折边卷开，露出留给伙伴的邀请。",
+          step1: "1 · 揭开纸片",
+          step2: "2 · 复制代码",
+          step3: "3 · 分享给伙伴",
+          steps: "操作步骤",
+          reveal: "揭开覆盖纸",
+          collapse: "重新盖上纸片",
+          paperTitle: "一份给你的邀请",
+          paperHint: "从右侧揭开纸片 ←",
+          instruction: "点击纸片，或按住向左拖动。",
+          copy: "复制代码",
+          copying: "正在复制…",
+          copied: "已复制 ✓",
+          success: "邀请码已复制，可以粘贴到消息中分享。",
+          manual: "未能自动复制。已选中邀请码，请使用设备的“复制”命令。",
+          unselected: "未能自动复制。请长按或选中上方邀请码后手动复制。",
+          footer: "适用于团队邀请、内测邀请或会员推荐。",
+          boundary: "示例代码 · 不注册、不验证身份",
+          codeLabel: "你的邀请码",
+        },
+        en: {
+          brand: "Invite a teammate",
+          preview: "Interaction preview",
+          eyebrow: "A small detail in an invitation flow",
+          title: "Peel to reveal an invite code",
+          subtitle:
+            "An invitation waits beneath a sheet of paper. Lift the right edge and peel it back to uncover the code.",
+          step1: "1 · Peel",
+          step2: "2 · Copy",
+          step3: "3 · Share",
+          steps: "Steps",
+          reveal: "Peel back the paper",
+          collapse: "Cover the code again",
+          paperTitle: "An invitation for you",
+          paperHint: "Peel from the right edge ←",
+          instruction: "Click the paper, or drag it to the left.",
+          copy: "Copy code",
+          copying: "Copying…",
+          copied: "Copied ✓",
+          success: "Invitation code copied. Paste it into a message to share.",
+          manual:
+            "Automatic copy was unavailable. The code is selected; use your device’s Copy command.",
+          unselected:
+            "Automatic copy was unavailable. Select or long-press the code above to copy it manually.",
+          footer: "For teammate invitations, early access, or member referrals.",
+          boundary: "Sample code only · no sign-up or verification",
+          codeLabel: "Your invitation code",
+        },
+      };
+      const lang =
+          (new URLSearchParams(location.search).get("lang") ||
+            document.documentElement.dataset.skillLang) === "en"
+            ? "en"
+            : "zh",
+        text = messages[lang];
+      document.documentElement.lang = lang;
+      document
+        .querySelectorAll("[data-copy]")
+        .forEach((el) => (el.textContent = text[el.dataset.copy]));
+      document.querySelector("h1").textContent = config.customTitle ? config.title : text.title;
+      document.querySelector(".description").textContent = config.customSubtitle
+        ? config.subtitle
+        : text.subtitle;
+      document.title = document.querySelector("h1").textContent;
+      document.querySelector(".steps").setAttribute("aria-label", text.steps);
+      const widget = document.querySelector(".interaction"),
+        reveal = document.querySelector(".reveal"),
+        expanded = document.querySelector(".expanded"),
+        collapse = document.querySelector(".collapse"),
+        copy = document.querySelector(".copy"),
+        code = document.querySelector(".code-text"),
+        status = document.querySelector(".status");
+      let open = false,
+        copyRun = 0,
+        pending = null;
+      code.textContent = config.code;
+      code.setAttribute("aria-label", text.codeLabel);
+      copy.textContent = text.copy;
+      function cancelPending() {
+        if (!pending) return;
+        clearTimeout(pending.timeout);
+        pending = null;
+      }
+      reveal.setAttribute("aria-label", text.reveal);
+      const clip = document.querySelector(".paper-clip"),
+        fold = document.querySelector(".paper-fold"),
+        crease = document.querySelector(".paper-crease");
+      const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+      let progress = 0,
+        animation = 0,
+        gesture = null,
+        suppressClick = false;
+      function drawPaper(value) {
+        progress = value;
+        // The code never moves: only the opaque sheet and its curled reverse side do.
+        const x = 378 - 414 * value,
+          curl = 22 + Math.sin(Math.PI * value) * 55,
+          lift = 5 + Math.sin(Math.PI * value) * 23;
+        clip.setAttribute("d", `M0 0H${Math.max(0, x)}Q${x - 7} 80 ${Math.max(0, x)} 160H0Z`);
+        fold.setAttribute(
+          "d",
+          `M${x} 0 C${x + curl * 0.35} ${-lift},${x + curl * 0.85} ${-lift},${x + curl} ${-lift * 0.35} C${x + curl - 10} 45,${x + curl - 10} 113,${x + curl} ${160 - lift * 0.35} C${x + curl * 0.65} ${160 - lift},${x + curl * 0.3} ${160 - lift},${x} 160 Q${x - 7} 80,${x} 0Z`,
+        );
+        crease.setAttribute("d", `M${x} 0Q${x - 7} 80 ${x} 160`);
+      }
+      function animatePaper(target) {
+        cancelAnimationFrame(animation);
+        if (reduced.matches) {
+          drawPaper(target);
+          return;
+        }
+        const from = progress,
+          start = performance.now(),
+          duration = 650 * Math.max(0.35, Math.abs(target - from));
+        const tick = (now) => {
+          const elapsed = Math.min(1, (now - start) / duration),
+            ease = 1 - Math.pow(1 - elapsed, 3);
+          drawPaper(from + (target - from) * ease);
+          if (elapsed < 1) animation = requestAnimationFrame(tick);
+        };
+        animation = requestAnimationFrame(tick);
+      }
+      function setOpen(value) {
+        open = value;
+        copyRun++;
+        cancelPending();
+        widget.classList.toggle("open", value);
+        reveal.inert = value;
+        expanded.inert = !value;
+        expanded.setAttribute("aria-hidden", String(!value));
+        reveal.setAttribute("aria-expanded", String(value));
+        collapse.inert = !value;
+        animatePaper(value ? 1 : 0);
+        (value ? copy : reveal).focus({ preventScroll: true });
+        status.textContent = "";
+        copy.textContent = text.copy;
+        copy.classList.remove("copied");
+        copy.disabled = false;
+      }
+      reveal.addEventListener("click", (event) => {
+        const ignore = suppressClick && event.detail > 0;
+        suppressClick = false;
+        if (!ignore) setOpen(true);
+      });
+      reveal.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0 || open) return;
+        cancelAnimationFrame(animation);
+        suppressClick = false;
+        gesture = { id: event.pointerId, x: event.clientX, from: progress, dragged: false };
+        reveal.setPointerCapture(event.pointerId);
+      });
+      reveal.addEventListener("pointermove", (event) => {
+        if (!gesture || event.pointerId !== gesture.id) return;
+        const delta = gesture.x - event.clientX;
+        if (Math.abs(delta) > 6) gesture.dragged = true;
+        if (gesture.dragged)
+          drawPaper(Math.max(0, Math.min(1, gesture.from + delta / reveal.clientWidth)));
+      });
+      function endGesture(event, cancelled) {
+        if (!gesture || event.pointerId !== gesture.id) return;
+        const dragged = gesture.dragged;
+        gesture = null;
+        if (reveal.hasPointerCapture(event.pointerId))
+          reveal.releasePointerCapture(event.pointerId);
+        if (dragged) {
+          suppressClick = true;
+          setOpen(!cancelled && progress >= 0.38);
+        } else if (cancelled) animatePaper(0);
+      }
+      reveal.addEventListener("pointerup", (event) => endGesture(event, false));
+      reveal.addEventListener("pointercancel", (event) => endGesture(event, true));
+      reveal.addEventListener("lostpointercapture", (event) => {
+        if (gesture) endGesture(event, true);
+      });
+      collapse.addEventListener("click", () => setOpen(false));
+      widget.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && (open || gesture)) {
+          event.preventDefault();
+          gesture = null;
+          setOpen(false);
+        }
+      });
+      collapse.inert = true;
+      drawPaper(0);
+      function selectCode() {
+        try {
+          code.focus();
+          const selection = window.getSelection(),
+            range = document.createRange();
+          range.selectNodeContents(code);
+          selection.removeAllRanges();
+          selection.addRange(range);
+          return selection.toString() === config.code;
+        } catch {
+          return false;
+        }
+      }
+      function finish(run, ok) {
+        if (run !== copyRun || !open) return;
+        copy.disabled = false;
+        copy.textContent = ok ? text.copied : text.copy;
+        copy.classList.toggle("copied", ok);
+        status.textContent = ok ? text.success : selectCode() ? text.manual : text.unselected;
+      }
+      function legacyCopy() {
+        const input = document.createElement("textarea");
+        input.value = config.code;
+        input.setAttribute("readonly", "");
+        input.style.cssText =
+          "position:fixed;left:0;top:0;width:1px;height:1px;opacity:0;pointer-events:none";
+        document.body.append(input);
+        let ok = false;
+        try {
+          input.select();
+          ok = document.execCommand("copy") === true;
+        } catch {
+        } finally {
+          input.remove();
+          copy.focus();
+        }
+        return ok;
+      }
+      // An embedded page delegates clipboard access to the host's user-visible bridge.
+      window.addEventListener("message", (event) => {
+        if (event.source !== window.parent || !pending) return;
+        const result = event.data;
+        if (
+          !result ||
+          result.type !== "usefulshelf:copy-result" ||
+          result.requestId !== pending.id ||
+          typeof result.ok !== "boolean"
+        )
+          return;
+        const run = pending.run;
+        cancelPending();
+        finish(run, result.ok);
+      });
+      copy.addEventListener("click", () => {
+        const run = ++copyRun;
+        cancelPending();
+        copy.disabled = true;
+        copy.textContent = text.copying;
+        copy.classList.remove("copied");
+        status.textContent = "";
+        if (window.parent !== window) {
+          const id =
+            "invite-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
+          pending = {
+            id,
+            run,
+            timeout: setTimeout(() => {
+              if (pending?.id === id) {
+                cancelPending();
+                finish(run, false);
+              }
+            }, 2000),
+          };
+          window.parent.postMessage(
+            { type: "usefulshelf:copy", requestId: id, text: config.code },
+            "*",
+          );
+          return;
+        }
+        // Begin modern copying first, then attempt the legacy fallback before this click's activation expires.
+        let modern;
+        try {
+          modern = navigator.clipboard?.writeText(config.code);
+        } catch {}
+        const legacy = legacyCopy();
+        if (legacy) {
+          finish(run, true);
+          if (modern && typeof modern.catch === "function") modern.catch(() => {});
+          return;
+        }
+        if (modern && typeof modern.then === "function") {
+          let settled = false;
+          const timeout = setTimeout(() => {
+            settled = true;
+            finish(run, false);
+          }, 2000);
+          modern.then(
+            () => {
+              if (settled) return;
+              clearTimeout(timeout);
+              finish(run, true);
+            },
+            () => {
+              if (settled) return;
+              clearTimeout(timeout);
+              finish(run, false);
+            },
+          );
+        } else finish(run, false);
+      });
+    </script>
+    <script>
+      // Optional host sizing keeps embedded controls in the page's normal scroll flow.
+      if (window.parent !== window) {
+        let previousHeight = 0;
+        const reportHeight = () => {
+          const height = Math.ceil(document.body.getBoundingClientRect().height);
+          if (height !== previousHeight) {
+            previousHeight = height;
+            window.parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+          }
+        };
+        window.addEventListener("message", (event) => {
+          if (event.source === window.parent && event.data?.type === "usefulshelf:measure") {
+            previousHeight = 0;
+            reportHeight();
+          }
+        });
+        new ResizeObserver(reportHeight).observe(document.body);
+        requestAnimationFrame(reportHeight);
+      }
+    </script>
+  </body>
+</html>

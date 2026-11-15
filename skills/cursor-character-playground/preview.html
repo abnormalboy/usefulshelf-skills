@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Cursor Character Playground</title>
+    <style>
+      :root {
+        --accent: #454bc5;
+        font-family: Arial, "PingFang SC", sans-serif;
+        color: #282727;
+        background: #faf9f6;
+        color-scheme: light;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:focus-visible,
+      input:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 5px;
+      }
+      .shell {
+        max-width: 1200px;
+        padding: 27px 5%;
+        margin: auto;
+        min-height: 730px;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        font: 10px monospace;
+        color: #898782;
+        letter-spacing: 0.12em;
+        border-bottom: 1px solid #dedbd5;
+        padding-bottom: 18px;
+      }
+      .brand {
+        color: #45433e;
+      }
+      h1 {
+        text-align: center;
+        font-size: clamp(28px, 3.5vw, 44px);
+        font-weight: 500;
+        letter-spacing: -0.045em;
+        margin: 29px 0 10px;
+        white-space: pre-line;
+        overflow-wrap: anywhere;
+      }
+      .intro {
+        font-size: 12px;
+        line-height: 1.8;
+        color: #8a8882;
+        text-align: center;
+        margin: 0 auto;
+        max-width: 680px;
+      }
+      .arena {
+        height: 270px;
+        position: relative;
+        margin-top: 15px;
+        border-radius: 8px;
+        background-image: radial-gradient(#d9d6ce 0.6px, transparent 0.6px);
+        background-size: 18px 18px;
+        overflow: hidden;
+      }
+      .arena::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        box-shadow: inset 0 0 50px 35px #faf9f6;
+        pointer-events: none;
+      }
+      .cursor {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 170px;
+        height: 170px;
+        transform: translate(-50%, -50%);
+        filter: drop-shadow(7px 12px 9px #38373126);
+        pointer-events: none;
+        z-index: 3;
+        transition:
+          width 0.2s,
+          height 0.2s;
+      }
+      .cursor svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .arena.playing {
+        cursor: none;
+      }
+      .arena.playing .cursor {
+        transition: none;
+      }
+      .arena-note {
+        position: absolute;
+        left: 20px;
+        top: 18px;
+        font: 9px monospace;
+        color: #aba69b;
+        z-index: 4;
+        pointer-events: none;
+      }
+      .specimen {
+        position: absolute;
+        bottom: 20px;
+        right: 22px;
+        font: 9px monospace;
+        color: #aba69b;
+        z-index: 4;
+        pointer-events: none;
+      }
+      .target {
+        position: absolute;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px dashed var(--accent);
+        color: var(--accent);
+        background: #faf9f6;
+        z-index: 2;
+        transform: translate(-50%, -50%);
+        font: 13px monospace;
+        cursor: none;
+      }
+      .target:disabled {
+        background: var(--accent);
+        color: white;
+        border-style: solid;
+        opacity: 0.5;
+      }
+      .target[hidden] {
+        display: none;
+      }
+      .epoch {
+        text-align: center;
+        margin-top: 3px;
+      }
+      .year {
+        font:
+          33px Georgia,
+          serif;
+        letter-spacing: -0.04em;
+      }
+      .era-name {
+        font-size: 11px;
+        color: #8d877d;
+        margin-top: 6px;
+      }
+      .timeline {
+        max-width: 760px;
+        margin: 24px auto 0;
+        position: relative;
+        padding-top: 4px;
+      }
+      .bars {
+        height: 45px;
+        display: flex;
+        gap: 4px;
+        align-items: flex-end;
+        pointer-events: none;
+      }
+      .bars i {
+        flex: 1;
+        min-width: 0;
+        background: #ddd9d1;
+        display: block;
+        border-radius: 1px;
+      }
+      .bars i.active {
+        background: var(--accent);
+      }
+      #era {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 52px;
+        margin: 0;
+        opacity: 0.001;
+        cursor: ew-resize;
+      }
+      #era:focus-visible {
+        outline-offset: 7px;
+      }
+      .ends {
+        display: flex;
+        justify-content: space-between;
+        color: #999389;
+        font: 10px monospace;
+        margin-top: 10px;
+      }
+      .controls {
+        border-top: 1px solid #dedbd5;
+        display: grid;
+        grid-template-columns: 1fr 1fr auto;
+        gap: 30px;
+        align-items: center;
+        padding-top: 21px;
+        margin-top: 25px;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 10px;
+        color: #82796e;
+        margin-bottom: 10px;
+      }
+      input[type="range"] {
+        accent-color: var(--accent);
+        width: 100%;
+        cursor: pointer;
+      }
+      .colors {
+        display: flex;
+        gap: 8px;
+      }
+      .colors button {
+        height: 29px;
+        width: 29px;
+        border-radius: 50%;
+        padding: 0;
+        border: 4px solid #faf9f6;
+        outline: 1px solid #d0c9bb;
+      }
+      .colors button[aria-pressed="true"] {
+        outline: 2px solid var(--accent);
+      }
+      button {
+        border: 1px solid #cbc5b9;
+        border-radius: 22px;
+        padding: 11px 16px;
+        background: transparent;
+        color: #675e51;
+        font-size: 11px;
+      }
+      button:hover {
+        filter: brightness(0.9);
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .actions .primary {
+        background: #282727;
+        color: #fff;
+        border-color: #282727;
+      }
+      footer {
+        margin-top: 22px;
+        display: flex;
+        justify-content: space-between;
+        gap: 22px;
+        font: 9px/1.8 monospace;
+        color: #999083;
+      }
+      #status {
+        color: #756654;
+      }
+      .sr {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+      }
+      @media (max-width: 700px) {
+        .shell {
+          padding: 22px;
+        }
+        header {
+          font-size: 8px;
+        }
+        h1 {
+          font-size: 32px;
+          margin-top: 27px;
+        }
+        .intro {
+          font-size: 11px;
+        }
+        .arena {
+          height: 260px;
+        }
+        .controls {
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+        }
+        .actions {
+          grid-column: 1/-1;
+          justify-content: stretch;
+        }
+        .actions button {
+          flex: 1;
+          padding: 12px;
+        }
+        .bars {
+          gap: 3px;
+        }
+        .cursor {
+          width: 150px;
+          height: 150px;
+        }
+        footer {
+          flex-direction: column;
+          gap: 6px;
+        }
+        .arena-note {
+          left: 12px;
+          font-size: 8px;
+        }
+        .specimen {
+          right: 12px;
+          font-size: 8px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header>
+        <span class="brand">POINT / OF VIEW</span>
+        <span data-i="header">03 — 指针形态档案</span>
+      </header>
+      <h1>小小指针，也有进化史。</h1>
+      <p class="intro" data-i="intro">
+        从像素阶梯到柔和曲线，一支箭头，换了许多种性格。拖动时间轴，再亲自试用你喜欢的那一款。
+      </p>
+      <div class="arena" id="arena">
+        <span class="arena-note" data-i="arenaNote">一支箭头，无数次出发。</span>
+        <div class="cursor" id="cursor" role="img" aria-label="当前指针形态"></div>
+        <button class="target" data-point="0" hidden aria-label="捕捉目标 1">1</button>
+        <button class="target" data-point="1" hidden aria-label="捕捉目标 2">2</button>
+        <button class="target" data-point="2" hidden aria-label="捕捉目标 3">3</button>
+        <span class="specimen" id="score" data-i="specimen">POINTER SPECIMEN / 04</span>
+      </div>
+      <div class="epoch">
+        <div class="year" id="year">2012</div>
+        <div class="era-name" id="eraName">精密轮廓</div>
+      </div>
+      <div class="timeline">
+        <div class="bars" id="bars" aria-hidden="true"></div>
+        <label for="era" class="sr" data-i="eraLabel">指针时代</label>
+        <input type="range" min="0" max="5" value="3" id="era" />
+        <div class="ends">
+          <span>1968</span>
+          <span data-i="today">当下</span>
+        </div>
+      </div>
+      <section class="controls">
+        <div>
+          <label class="row" for="size">
+            <span data-i="size">指针尺寸</span>
+            <output id="sizeValue">80%</output>
+          </label>
+          <input type="range" min="40" max="140" value="80" id="size" />
+        </div>
+        <div>
+          <div class="row" data-i="ink">指针墨色</div>
+          <div class="colors" role="group" aria-label="指针墨色">
+            <button
+              style="background: #27272a"
+              data-color="dark"
+              aria-label="石墨黑"
+              aria-pressed="true"
+            ></button>
+            <button
+              style="background: var(--accent)"
+              data-color="accent"
+              aria-label="强调色"
+              aria-pressed="false"
+            ></button>
+            <button
+              style="background: #fff"
+              data-color="light"
+              aria-label="纸白色"
+              aria-pressed="false"
+            ></button>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="try" class="primary" data-i="try">试用这支指针 ↗</button>
+          <button id="save" data-i="save">带走 SVG ↓</button>
+        </div>
+      </section>
+      <footer>
+        <span data-i="footer">六种独立形态研究 · 拖动或左右键切换</span>
+        <span id="status" role="status" aria-live="polite">拖动时间轴，发现下一种性格。</span>
+      </footer>
+    </main>
+    <!-- usefulshelf-runtime:start -->
+    <script>
+      // Inlined into each downloadable template: no sibling runtime is required.
+      (() => {
+        "use strict";
+        const dictionary = {};
+        const lang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          "zh";
+        const chinese = lang !== "en";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+        const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        window.__usefulshelfConfigure = (config) => {
+          const accent = document.documentElement.dataset.skillAccent;
+          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+        };
+        window.__usefulshelfText = (value) => {
+          if (!chinese || typeof value !== "string") return value;
+          const exact = dictionary[normalize(value)];
+          if (exact !== undefined) return exact;
+          return value
+            .replace(/What is ([^?]+)\?/g, "什么是 $1？")
+            .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
+            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
+            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
+            .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
+            .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/added to your sky\./g, "已加入夜空。")
+            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(/· no transaction sent/g, "· 未发送真实交易");
+        };
+        function boot() {
+          if (chinese) {
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            let node;
+            while ((node = walker.nextNode())) {
+              if (
+                node.parentElement?.closest(
+                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
+                )
+              )
+                continue;
+              const next = window.__usefulshelfText(node.textContent);
+              if (next !== node.textContent) node.textContent = next;
+            }
+            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
+              for (const name of ["aria-label", "placeholder", "title"]) {
+                if (element.hasAttribute(name))
+                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+              }
+            }
+            document.title = window.__usefulshelfText(document.title);
+          }
+          if (parent === window) return;
+          // Freeze viewport-based demo heights before measuring, avoiding vh feedback
+          // when the parent grows the iframe. Intentional inner demo scrollers remain.
+          const initialHeight = Math.max(360, Math.min(760, innerHeight));
+          function fixRules(rules) {
+            for (const rule of rules) {
+              if (rule.cssRules) fixRules(rule.cssRules);
+              if (!rule.style) continue;
+              if (/v[hbs]/.test(rule.style.minHeight))
+                rule.style.setProperty("min-height", "0", "important");
+              if (/v[hbs]/.test(rule.style.height))
+                rule.style.setProperty("height", `${initialHeight}px`, "important");
+            }
+          }
+          for (const sheet of document.styleSheets) {
+            try {
+              fixRules(sheet.cssRules);
+            } catch {
+              /* Same-file styles are sufficient. */
+            }
+          }
+          for (const element of [document.documentElement, document.body]) {
+            element.style.setProperty("height", "auto", "important");
+            element.style.setProperty("min-height", "0", "important");
+          }
+          document.documentElement.style.overflowX = "clip";
+          let frame = 0,
+            lastHeight = 0;
+          const measure = () => {
+            frame = 0;
+            const height = Math.ceil(
+              Math.max(document.body.scrollHeight, document.body.getBoundingClientRect().height),
+            );
+            if (height > 0 && height <= 20000 && height !== lastHeight) {
+              lastHeight = height;
+              parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+            }
+          };
+          const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(measure);
+          };
+          const observer = new ResizeObserver(schedule);
+          observer.observe(document.body);
+          window.addEventListener("resize", schedule);
+          const onMessage = (event) => {
+            if (event.source === parent && event.data?.type === "usefulshelf:measure") {
+              // The first resize may precede parent hydration. A measurement request
+              // must acknowledge even an unchanged height, so that message is recovered.
+              lastHeight = 0;
+              schedule();
+            }
+          };
+          window.addEventListener("message", onMessage);
+          document.fonts?.ready.then(schedule);
+          window.addEventListener(
+            "pagehide",
+            () => {
+              observer.disconnect();
+              cancelAnimationFrame(frame);
+              window.removeEventListener("resize", schedule);
+              window.removeEventListener("message", onMessage);
+            },
+            { once: true },
+          );
+          schedule();
+        }
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        else boot();
+      })();
+    </script>
+    <!-- usefulshelf-runtime:end -->
+    <script>
+      const config = window.__usefulshelfConfigure({"title": null, "accent": "#454bc5", "era": 3, "size": 80}),
+        en =
+          (new URLSearchParams(location.search).get("lang") ||
+            document.documentElement.dataset.skillLang) === "en";
+      document.documentElement.lang = en ? "en" : "zh-CN";
+      const words = {
+        header: "03 — AN ARCHIVE OF POINTER SHAPES",
+        intro:
+          "From pixel steps to soft curves: one arrow, many personalities. Scrub through the timeline, then take your favorite for a test drive.",
+        arenaNote: "ONE ARROW. SO MANY BEGINNINGS.",
+        eraLabel: "Pointer era",
+        today: "Now",
+        size: "Pointer size",
+        ink: "Pointer ink",
+        try: "Try this cursor ↗",
+        save: "Keep SVG ↓",
+        footer: "Six independent shape studies · Drag or use arrow keys",
+      };
+      if (en)
+        document.querySelectorAll("[data-i]").forEach((e) => {
+          if (words[e.dataset.i]) e.textContent = words[e.dataset.i];
+        });
+      document.querySelector("h1").textContent =
+        config.title ?? (en ? "A tiny arrow. A lot of character." : "小小指针，也有进化史。");
+      const eras = [
+        {
+          year: "1968",
+          hotspot: [25, 12],
+          zh: "线条的开端",
+          en: "A line takes direction",
+          d: "M25 12L25 79L40 62L53 91L65 85L53 57L76 57Z",
+          type: "line",
+        },
+        {
+          year: "1984",
+          hotspot: [20, 10],
+          zh: "像素的阶梯",
+          en: "The pixel staircase",
+          d: "M20 10H26V16H32V22H38V28H44V34H50V40H56V46H62V52H68V58H48V64H54V76H60V88H48V82H42V70H36V64H30V70H24V76H20Z",
+          type: "pixel",
+        },
+        {
+          year: "1995",
+          hotspot: [22, 10],
+          zh: "清晰的边界",
+          en: "A sharper silhouette",
+          d: "M22 10L22 80L40 62L52 90L67 83L54 57H79Z",
+          type: "solid",
+        },
+        {
+          year: "2012",
+          hotspot: [23, 10],
+          zh: "精密的轮廓",
+          en: "A precise outline",
+          d: "M23 10L23 80L41 62L54 91L68 85L55 57L79 57Z",
+          type: "outline",
+        },
+        {
+          year: "2020",
+          hotspot: [24.234568, 10.222222],
+          zh: "柔和的转折",
+          en: "Softer around the edges",
+          d: "M23 13Q23 8 27 12L78 53Q83 58 77 59L57 60L69 84Q70 87 67 89L57 93Q54 94 52 91L40 65L27 79Q23 83 23 78Z",
+          type: "soft",
+        },
+        {
+          year: "2026",
+          hotspot: [21.888889, 10],
+          zh: "自由的姿态",
+          en: "Room for expression",
+          d: "M21 14Q19 8 25 11L81 45Q88 50 80 54L61 63L56 87Q54 96 48 89L16 43Q13 38 18 37L32 34Z",
+          type: "expressive",
+        },
+      ];
+      const arena = document.querySelector("#arena"),
+        cursor = document.querySelector("#cursor"),
+        eraInput = document.querySelector("#era"),
+        sizeInput = document.querySelector("#size"),
+        status = document.querySelector("#status"),
+        tryButton = document.querySelector("#try"),
+        targets = [...document.querySelectorAll("[data-point]")];
+      let era = config.era,
+        color = "dark",
+        playing = false,
+        caught = new Set(),
+        position = { x: 50, y: 50 };
+      eraInput.value = era;
+      sizeInput.value = config.size;
+      const bars = document.querySelector("#bars");
+      for (let i = 0; i < 54; i++) {
+        const bar = document.createElement("i");
+        bars.append(bar);
+      }
+      function shape() {
+        const e = eras[era],
+          fill = color === "dark" ? "#27272a" : color === "accent" ? config.accent : "#ffffff",
+          stroke = color === "light" ? "#27272a" : e.type === "line" ? fill : "#ffffff",
+          actualFill = e.type === "line" ? "none" : fill;
+        return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="${e.d}" fill="${actualFill}" stroke="${stroke}" stroke-width="${e.type === "line" ? 2.4 : 2}" stroke-linejoin="${e.type === "pixel" ? "miter" : "round"}"/>${e.type === "expressive" ? '<circle cx="36" cy="35" r="3.2" fill="' + (color === "light" ? "#27272a" : "#ffffff") + '"/>' : ""}</svg>`;
+      }
+      function place(x, y) {
+        position = { x, y };
+        const [hx, hy] = playing ? eras[era].hotspot : [50, 50];
+        cursor.style.transform = `translate(${-hx}%,${-hy}%)`;
+        cursor.style.left = x + "%";
+        cursor.style.top = y + "%";
+      }
+      function render() {
+        cursor.innerHTML = shape();
+        place(position.x, position.y);
+        cursor.style.width = Number(sizeInput.value) * (playing ? 0.62 : 1.85) + "px";
+        cursor.style.height = Number(sizeInput.value) * (playing ? 0.62 : 1.85) + "px";
+        document.querySelector("#sizeValue").textContent = sizeInput.value + "%";
+        document.querySelector("#year").textContent = eras[era].year;
+        document.querySelector("#eraName").textContent = eras[era][en ? "en" : "zh"];
+        cursor.setAttribute(
+          "aria-label",
+          (en ? "Current pointer: " : "当前指针：") + eras[era][en ? "en" : "zh"],
+        );
+        eraInput.setAttribute(
+          "aria-valuetext",
+          eras[era].year + " · " + eras[era][en ? "en" : "zh"],
+        );
+        [...bars.children].forEach((b, i) => {
+          const distance = Math.abs(i - (era / 5) * 53);
+          b.style.height = 10 + 30 * Math.exp((-distance * distance) / 85) + "px";
+          b.classList.toggle("active", distance < 4.5);
+        });
+        if (!playing)
+          document.querySelector("#score").textContent = "POINTER SPECIMEN / 0" + (era + 1);
+      }
+      function endTrial() {
+        playing = false;
+        caught.clear();
+        arena.classList.remove("playing");
+        targets.forEach((b) => {
+          b.hidden = true;
+          b.disabled = false;
+        });
+        tryButton.textContent = en ? words.try : "试用这支指针 ↗";
+        place(50, 50);
+      }
+      eraInput.oninput = () => {
+        endTrial();
+        era = Number(eraInput.value);
+        render();
+        status.textContent = en
+          ? `${eras[era].year}: ${eras[era].en}.`
+          : `${eras[era].year}：${eras[era].zh}。`;
+      };
+      sizeInput.oninput = () => {
+        render();
+        status.textContent = en
+          ? `Pointer size ${sizeInput.value}%.`
+          : `指针尺寸 ${sizeInput.value}%。`;
+      };
+      document.querySelectorAll("[data-color]").forEach((b) => {
+        if (en)
+          b.setAttribute(
+            "aria-label",
+            { dark: "Graphite ink", accent: "Accent ink", light: "Paper white" }[b.dataset.color],
+          );
+        b.onclick = () => {
+          color = b.dataset.color;
+          document
+            .querySelectorAll("[data-color]")
+            .forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+          render();
+          status.textContent = b.getAttribute("aria-label");
+        };
+      });
+      if (en) document.querySelector(".colors").setAttribute("aria-label", "Pointer ink");
+      targets.forEach((b, i) => {
+        if (en) b.setAttribute("aria-label", "Capture target " + (i + 1));
+        b.onclick = (e) => {
+          if (!playing || caught.has(i)) return;
+          const wasFocused = document.activeElement === b;
+          caught.add(i);
+          b.disabled = true;
+          b.textContent = "✓";
+          if (e.detail === 0) place(parseFloat(b.style.left), parseFloat(b.style.top));
+          document.querySelector("#score").textContent = caught.size + " / 3";
+          if (caught.size === 3) {
+            status.textContent = en
+              ? "3 of 3 captured. This cursor is ready for another adventure."
+              : "3 个目标全部捕捉。这支指针准备好再出发了。";
+            tryButton.textContent = en ? "Replay target test ↻" : "再玩一次 ↻";
+            tryButton.focus();
+          } else {
+            status.textContent = en
+              ? `${caught.size} of 3 captured. Find the next target.`
+              : `已捕捉 ${caught.size} / 3，寻找下一个目标。`;
+            if (wasFocused) targets.find((x) => !x.disabled)?.focus();
+          }
+        };
+      });
+      tryButton.onclick = () => {
+        playing = true;
+        caught.clear();
+        arena.classList.add("playing");
+        targets.forEach((b, i) => {
+          b.hidden = false;
+          b.disabled = false;
+          b.textContent = i + 1;
+          b.style.left = [23, 73, 54][i] + (era % 2 ? 3 : -3) + "%";
+          b.style.top = [33, 41, 73][i] + "%";
+        });
+        cursor.style.width = Number(sizeInput.value) * 0.62 + "px";
+        cursor.style.height = Number(sizeInput.value) * 0.62 + "px";
+        place(50, 50);
+        document.querySelector("#score").textContent = "0 / 3";
+        tryButton.textContent = en ? "Reset target test ↺" : "重置小挑战 ↺";
+        status.textContent = en
+          ? "Capture all three targets. Pointer, touch, or Tab and Enter all work."
+          : "捕捉三个目标。可以点按，也可以用 Tab 和回车。";
+      };
+      arena.addEventListener("pointermove", (e) => {
+        if (!playing) return;
+        const b = arena.getBoundingClientRect();
+        place(((e.clientX - b.left) / b.width) * 100, ((e.clientY - b.top) / b.height) * 100);
+      });
+      arena.addEventListener("pointerleave", () => {
+        if (playing) place(50, 50);
+      });
+      document.querySelector("#save").onclick = () => {
+        const output = shape().replace(
+          'viewBox="0 0 100 100"',
+          'viewBox="0 0 100 100" width="' +
+            Math.round(Number(sizeInput.value) * 4) +
+            '" height="' +
+            Math.round(Number(sizeInput.value) * 4) +
+            '"',
+        );
+        const url = URL.createObjectURL(new Blob([output], { type: "image/svg+xml" })),
+          a = document.createElement("a");
+        a.href = url;
+        a.download = "pointer-" + eras[era].year + ".svg";
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1500);
+        status.textContent = en
+          ? `${eras[era].year} pointer saved as an editable SVG.`
+          : `${eras[era].year} 指针已保存为可编辑 SVG。`;
+      };
+      render();
+      status.textContent = en
+        ? "Scrub the timeline to discover another personality."
+        : "拖动时间轴，发现下一种性格。";
+    </script>
+  </body>
+</html>

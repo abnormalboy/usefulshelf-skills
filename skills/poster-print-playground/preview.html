@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>把灵感，印成一张。</title>
+    <style>
+      :root {
+        --accent: #d95133;
+        --bg: #f3f0e9;
+        --ink: #282d27;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font:
+          14px system-ui,
+          sans-serif;
+      }
+      main {
+        width: 100%;
+        max-width: 1050px;
+        margin: auto;
+        padding: 25px 28px;
+        min-height: 720px;
+      }
+      .mast {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #282d2733;
+        padding-bottom: 15px;
+        font:
+          10px ui-monospace,
+          monospace;
+        letter-spacing: 0.13em;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+        gap: 60px;
+        margin-top: 28px;
+        align-items: start;
+      }
+      h1 {
+        font:
+          clamp(35px, 4.4vw, 51px)/1.2 Georgia,
+          serif;
+        letter-spacing: -0.045em;
+        margin: 10px 0 15px;
+        overflow-wrap: anywhere;
+        text-wrap: balance;
+      }
+      .sub {
+        font-size: 13px;
+        line-height: 1.7;
+        color: #74766b;
+        max-width: 360px;
+      }
+      .kicker {
+        font:
+          10px ui-monospace,
+          monospace;
+        color: var(--accent);
+        letter-spacing: 0.13em;
+      }
+      .field {
+        display: block;
+        margin: 21px 0 9px;
+        font-size: 11px;
+        color: #676e61;
+      }
+      input[type="text"] {
+        width: 100%;
+        border: 0;
+        border-bottom: 1px solid #8a8f7b;
+        background: none;
+        padding: 11px 0;
+        font:
+          19px Georgia,
+          serif;
+        color: var(--ink);
+      }
+      .choice {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+      }
+      .choice button {
+        padding: 9px 12px;
+        background: none;
+        border: 1px solid #87917866;
+        border-radius: 20px;
+        font: 11px system-ui;
+        color: inherit;
+        cursor: pointer;
+      }
+      .choice button[aria-pressed="true"] {
+        background: var(--ink);
+        color: #fff;
+      }
+      .swatch {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 6px;
+        background: var(--c);
+      }
+      button:focus-visible,
+      input:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 4px;
+      }
+      .download {
+        margin-top: 24px;
+        width: 100%;
+        padding: 14px 20px;
+        border: 0;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 4px;
+        font: 13px system-ui;
+        cursor: pointer;
+      }
+      .poster-frame {
+        background: #e3e3d9;
+        padding: 24px 28px;
+        display: grid;
+        place-items: center;
+        min-width: 0;
+      }
+      .poster-frame svg {
+        width: 100%;
+        height: auto;
+        max-width: 324px;
+        display: block;
+        box-shadow: 0 15px 24px #333a2924;
+      }
+      .thumbs {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 15px;
+      }
+      .thumbs button {
+        padding: 5px;
+        background: transparent;
+        border: 1px solid transparent;
+        cursor: pointer;
+        min-width: 0;
+      }
+      .thumbs button[aria-pressed="true"] {
+        border-color: var(--accent);
+        background: #fff9;
+      }
+      .thumbs svg {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .thumbs span {
+        font:
+          9px ui-monospace,
+          monospace;
+        display: block;
+        margin-top: 6px;
+        color: var(--ink);
+      }
+      #status {
+        min-height: 30px;
+        line-height: 1.5;
+        font-size: 11px;
+        color: #68715f;
+        margin-top: 15px;
+      }
+      .foot {
+        margin-top: 22px;
+        padding-top: 13px;
+        border-top: 1px solid #282d2722;
+        font:
+          9px ui-monospace,
+          monospace;
+        letter-spacing: 0.12em;
+        color: #808371;
+      }
+      @media (max-width: 660px) {
+        main {
+          padding: 22px 18px;
+        }
+        .layout {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+        .poster-frame {
+          padding: 22px;
+        }
+        .poster-frame svg {
+          max-width: 310px;
+        }
+        h1 {
+          max-width: 450px;
+        }
+        .sub {
+          max-width: 100%;
+        }
+        .mast {
+          font-size: 8px;
+        }
+        .thumbs {
+          gap: 5px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="mast">
+        <span>SMALL PRESS / PRINT ROOM</span>
+        <span data-zh="四张海报 · 无限小想法" data-en="FOUR PRINTS · ENDLESS LITTLE IDEAS">
+          四张海报 · 无限小想法
+        </span>
+      </div>
+      <div class="layout">
+        <section>
+          <span class="kicker">FORM / SIGNAL / HUMAN / OBJECT</span>
+          <h1>把灵感，印成一张。</h1>
+          <p class="sub" id="subtitle">四种画面，三套油墨。改一行文字，印一份属于你的灵感。</p>
+          <label
+            class="field"
+            for="headline"
+            data-zh="海报上的一句话"
+            data-en="YOUR POSTER HEADLINE"
+          >
+            海报上的一句话
+          </label>
+          <input
+            id="headline"
+            type="text"
+            maxlength="48"
+            value="慢一点，也很好"
+            aria-label="海报文字"
+          />
+          <span class="field" data-zh="挑选油墨" data-en="CHOOSE YOUR INK">挑选油墨</span>
+          <div class="choice" id="palettes">
+            <button data-palette="0" aria-pressed="true">
+              <i class="swatch" style="--c: #d95133"></i>
+              <span data-zh="赤陶" data-en="Terracotta">赤陶</span>
+            </button>
+            <button data-palette="1" aria-pressed="false">
+              <i class="swatch" style="--c: #4163a8"></i>
+              <span data-zh="蓝调" data-en="Blue hour">蓝调</span>
+            </button>
+            <button data-palette="2" aria-pressed="false">
+              <i class="swatch" style="--c: #517057"></i>
+              <span data-zh="苔绿" data-en="Moss">苔绿</span>
+            </button>
+          </div>
+          <span class="field" data-zh="排版方式" data-en="COMPOSITION">排版方式</span>
+          <div class="choice" id="layouts">
+            <button data-layout="0" aria-pressed="true" data-zh="留白版" data-en="Airy">
+              留白版
+            </button>
+            <button data-layout="1" aria-pressed="false" data-zh="大字版" data-en="Bold type">
+              大字版
+            </button>
+          </div>
+          <button
+            class="download"
+            id="download"
+            data-zh="下载这张 SVG 海报 ↓"
+            data-en="Download SVG poster ↓"
+          >
+            下载这张 SVG 海报 ↓
+          </button>
+          <p
+            id="status"
+            role="status"
+            data-zh="从右侧挑一张，开始你的印刷小实验。"
+            data-en="Pick a print and make it your own."
+          >
+            从右侧挑一张，开始你的印刷小实验。
+          </p>
+        </section>
+        <section aria-label="海报预览" id="preview-area">
+          <div class="poster-frame" id="poster"></div>
+          <div class="thumbs" id="thumbs" role="group" aria-label="选择海报"></div>
+        </section>
+      </div>
+      <div class="foot">FOUR DISTINCT SYSTEMS. ONE PRINT ROOM. / VECTOR EDITION 002</div>
+    </main>
+    <!-- usefulshelf-runtime:start -->
+    <script>
+      // Inlined into each downloadable template: no sibling runtime is required.
+      (() => {
+        "use strict";
+        const dictionary = {};
+        const lang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          "zh";
+        const chinese = lang !== "en";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+        const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        window.__usefulshelfConfigure = (config) => {
+          const accent = document.documentElement.dataset.skillAccent;
+          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+        };
+        window.__usefulshelfText = (value) => {
+          if (!chinese || typeof value !== "string") return value;
+          const exact = dictionary[normalize(value)];
+          if (exact !== undefined) return exact;
+          return value
+            .replace(/What is ([^?]+)\?/g, "什么是 $1？")
+            .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
+            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
+            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
+            .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
+            .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/added to your sky\./g, "已加入夜空。")
+            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(/· no transaction sent/g, "· 未发送真实交易");
+        };
+        function boot() {
+          if (chinese) {
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            let node;
+            while ((node = walker.nextNode())) {
+              if (
+                node.parentElement?.closest(
+                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
+                )
+              )
+                continue;
+              const next = window.__usefulshelfText(node.textContent);
+              if (next !== node.textContent) node.textContent = next;
+            }
+            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
+              for (const name of ["aria-label", "placeholder", "title"]) {
+                if (element.hasAttribute(name))
+                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+              }
+            }
+            document.title = window.__usefulshelfText(document.title);
+          }
+          if (parent === window) return;
+          // Freeze viewport-based demo heights before measuring, avoiding vh feedback
+          // when the parent grows the iframe. Intentional inner demo scrollers remain.
+          const initialHeight = Math.max(360, Math.min(760, innerHeight));
+          function fixRules(rules) {
+            for (const rule of rules) {
+              if (rule.cssRules) fixRules(rule.cssRules);
+              if (!rule.style) continue;
+              if (/v[hbs]/.test(rule.style.minHeight))
+                rule.style.setProperty("min-height", "0", "important");
+              if (/v[hbs]/.test(rule.style.height))
+                rule.style.setProperty("height", `${initialHeight}px`, "important");
+            }
+          }
+          for (const sheet of document.styleSheets) {
+            try {
+              fixRules(sheet.cssRules);
+            } catch {
+              /* Same-file styles are sufficient. */
+            }
+          }
+          for (const element of [document.documentElement, document.body]) {
+            element.style.setProperty("height", "auto", "important");
+            element.style.setProperty("min-height", "0", "important");
+          }
+          document.documentElement.style.overflowX = "clip";
+          let frame = 0,
+            lastHeight = 0;
+          const measure = () => {
+            frame = 0;
+            const height = Math.ceil(
+              Math.max(document.body.scrollHeight, document.body.getBoundingClientRect().height),
+            );
+            if (height > 0 && height <= 20000 && height !== lastHeight) {
+              lastHeight = height;
+              parent.postMessage({ type: "usefulshelf:resize", height }, "*");
+            }
+          };
+          const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(measure);
+          };
+          const observer = new ResizeObserver(schedule);
+          observer.observe(document.body);
+          window.addEventListener("resize", schedule);
+          const onMessage = (event) => {
+            if (event.source === parent && event.data?.type === "usefulshelf:measure") {
+              // The first resize may precede parent hydration. A measurement request
+              // must acknowledge even an unchanged height, so that message is recovered.
+              lastHeight = 0;
+              schedule();
+            }
+          };
+          window.addEventListener("message", onMessage);
+          document.fonts?.ready.then(schedule);
+          window.addEventListener(
+            "pagehide",
+            () => {
+              observer.disconnect();
+              cancelAnimationFrame(frame);
+              window.removeEventListener("resize", schedule);
+              window.removeEventListener("message", onMessage);
+            },
+            { once: true },
+          );
+          schedule();
+        }
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        else boot();
+      })();
+    </script>
+    <!-- usefulshelf-runtime:end -->
+    <script>
+      (() => {
+        "use strict";
+        const config = window.__usefulshelfConfigure({"title": "\u628a\u7075\u611f\uff0c\u5370\u6210\u4e00\u5f20\u3002", "subtitle": "\u56db\u79cd\u753b\u9762\uff0c\u4e09\u5957\u6cb9\u58a8\u3002\u6539\u4e00\u884c\u6587\u5b57\uff0c\u5370\u4e00\u4efd\u5c5e\u4e8e\u4f60\u7684\u7075\u611f\u3002", "accent": "#d95133", "bg": "#f3f0e9", "customTitle": false, "customSubtitle": false}),
+          en =
+            (new URLSearchParams(location.search).get("lang") ||
+              document.documentElement.dataset.skillLang) === "en",
+          L = (zh, english) => (en ? english : zh);
+        document.documentElement.lang = en ? "en" : "zh-CN";
+        document
+          .querySelectorAll("[data-en]")
+          .forEach((e) => (e.textContent = e.dataset[en ? "en" : "zh"]));
+        if (en && !config.customTitle)
+          document.querySelector("h1").textContent = "Good ideas deserve good paper.";
+        if (en && !config.customSubtitle)
+          document.querySelector("#subtitle").textContent =
+            "Four visual worlds: a tactile card, connected signals, a human conversation, and a layered object. Make each one your own.";
+        const input = document.querySelector("#headline");
+        input.value = L("把想法带向远方", "IDEAS, TAKEN FURTHER");
+        input.setAttribute("aria-label", L("海报文字", "Poster headline"));
+        document
+          .querySelector("#preview-area")
+          .setAttribute("aria-label", L("海报预览", "Poster preview"));
+        document
+          .querySelector("#thumbs")
+          .setAttribute("aria-label", L("选择海报", "Choose a poster"));
+        let selected = 0,
+          palette = 0,
+          layout = 0;
+        const colors = [
+            [config.accent, "#f1e4cc", "#332d27"],
+            ["#4163a8", "#e8e5db", "#202f52"],
+            ["#517057", "#e9ebd4", "#293e2d"],
+          ],
+          names = [
+            ["透视实体卡", "Perspective card"],
+            ["数据与节点", "Signal network"],
+            ["人物与对话", "Human dialogue"],
+            ["分层静物", "Layered object"],
+          ],
+          esc = (s) =>
+            s.replace(
+              /[&<>"']/g,
+              (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[c],
+            );
+        const metricCanvas = document.createElement("canvas"),
+          metrics = metricCanvas.getContext("2d");
+        const graphemes = (text) =>
+          typeof Intl.Segmenter === "function"
+            ? [...new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(text)].map(
+                (x) => x.segment,
+              )
+            : Array.from(text);
+        function fitHeadline(text, width, height, maxSize) {
+          const units = graphemes(text);
+          let result;
+          for (let size = maxSize; size >= 8; size--) {
+            metrics.font = `700 ${size}px Arial, sans-serif`;
+            const lines = [];
+            let line = "";
+            for (const unit of units) {
+              if (unit === "\n") {
+                lines.push(line);
+                line = "";
+                continue;
+              }
+              if (line && metrics.measureText(line + unit).width > width - 2) {
+                const space = line.lastIndexOf(" ");
+                if (space > 0) {
+                  lines.push(line.slice(0, space));
+                  line = line.slice(space + 1) + unit;
+                } else {
+                  lines.push(line);
+                  line = unit;
+                }
+              } else line += unit;
+            }
+            if (line || !lines.length) lines.push(line);
+            const lineHeight = size * 1.15;
+            result = { size, lineHeight, lines };
+            if (
+              lines.length * lineHeight <= height &&
+              lines.every((x) => metrics.measureText(x).width <= width - 2)
+            )
+              break;
+          }
+          return result;
+        }
+        function titleBlock(text, box, fill, maxSize) {
+          const fit = fitHeadline(text, box.w, box.h, maxSize);
+          return `<text data-headline="true" x="${box.x}" y="${box.y + fit.size}" fill="${fill}" font-family="Arial, sans-serif" font-size="${fit.size}" font-weight="700">${fit.lines.map((line, j) => `<tspan x="${box.x}" dy="${j ? fit.lineHeight : 0}">${esc(line)}</tspan>`).join("")}</text>`;
+        }
+        function posterScene(i, a, id) {
+          const defs = `<defs><linearGradient id="${id}card" x2=".2" y2="1"><stop stop-color="#fff"/><stop offset=".55" stop-color="#f6f7f5"/><stop offset="1" stop-color="#cfd3d0"/></linearGradient><linearGradient id="${id}metal"><stop stop-color="#737e80"/><stop offset=".25" stop-color="#eef4f2"/><stop offset=".5" stop-color="#a3afac"/><stop offset=".76" stop-color="#f3f6f2"/><stop offset="1" stop-color="#788581"/></linearGradient><linearGradient id="${id}mist" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ccd8dd"/><stop offset=".7" stop-color="#f2f5f5"/><stop offset="1" stop-color="#fff"/></linearGradient><linearGradient id="${id}skin" x1="0" y1="0" x2="1" y2=".4"><stop stop-color="#d3d0c7"/><stop offset=".45" stop-color="#a7a59d"/><stop offset="1" stop-color="#686d67"/></linearGradient><linearGradient id="${id}fabric" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a7aca4"/><stop offset="1" stop-color="#303a35"/></linearGradient><linearGradient id="${id}glass"><stop stop-color="#fff" stop-opacity=".95"/><stop offset=".2" stop-color="#c1d7d0" stop-opacity=".65"/><stop offset=".7" stop-color="#f4fffb" stop-opacity=".92"/><stop offset="1" stop-color="#8aa49c" stop-opacity=".65"/></linearGradient><filter id="${id}shadow" x="-.5" y="-.5" width="2" height="2"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#263c35" flood-opacity=".16"/></filter><pattern id="${id}ribs" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 0H5" stroke="#8a9891" opacity=".2"/></pattern></defs>`;
+          if (i === 0)
+            return (
+              defs +
+              `<rect width="400" height="520" fill="#fcfcf8"/><text x="24" y="33" font-family="monospace" font-size="8" fill="${a}" letter-spacing="1.5">FORM / EVERYDAY EDITION</text><text x="376" y="33" text-anchor="end" font-family="monospace" font-size="7" fill="${a}">01—04</text><g transform="translate(31 219) rotate(-26) skewX(12)"><rect x="3" y="7" width="368" height="194" rx="14" fill="#c0c7c2" opacity=".32"/><rect x="0" y="0" width="368" height="194" rx="14" fill="url(#${id}card)" stroke="#c9d1cb"/><rect x="5" y="5" width="358" height="184" rx="10" fill="url(#${id}ribs)" stroke="#fff"/><text x="27" y="57" font-family="Arial,sans-serif" font-size="25" fill="${a}" letter-spacing="2">MOMENT</text><text x="29" y="78" font-family="monospace" font-size="6" fill="#89948d" letter-spacing="2">MEMBERSHIP / 0001</text><rect x="29" y="115" width="52" height="38" rx="7" fill="url(#${id}metal)" stroke="#a7b2ad"/><path d="M46 115V153M63 115V153M29 128H81M29 141H81" stroke="#f9fcf9" stroke-width=".7"/><circle cx="311" cy="149" r="14" fill="none" stroke="${a}"/><circle cx="329" cy="149" r="14" fill="none" stroke="${a}"/></g><text x="25" y="493" font-family="monospace" font-size="7" fill="${a}" letter-spacing="1.3">A SMALL PASS TO BIG POSSIBILITIES</text>`
+            );
+          if (i === 1)
+            return (
+              defs +
+              `<rect width="400" height="520" fill="#101512"/><path d="M23 46H377M23 46V493M377 46V493" fill="none" stroke="#68776c" stroke-dasharray="2 4" opacity=".4"/><text x="24" y="31" fill="#a7b4a9" font-family="monospace" font-size="7" letter-spacing="2">INPUT / PATTERNS / OUTCOME</text><g font-family="Arial,sans-serif" font-size="10" fill="#d9e2d9">${[
+                [30, 171, "Observation"],
+                [84, 226, "Conversation"],
+                [134, 274, "Experiment"],
+                [182, 320, "Understanding"],
+              ]
+                .map(
+                  ([x, y, label], n) =>
+                    `<path d="M${x} ${y}V${385 + n * 27}L253 475L374 369" fill="none" stroke="#809083" stroke-dasharray="2 4" opacity=".45"/><circle cx="${x}" cy="${y}" r="5" fill="${a}" opacity=".25"/><circle cx="${x}" cy="${y}" r="2" fill="#eef9ef"/><text x="${x + 9}" y="${y + 3}">${label}</text><path d="M${x} ${385 + n * 27}L253 475L${x} 520Z" fill="#c6d5c9" opacity="${0.12 + n * 0.07}"/>`,
+                )
+                .join(
+                  "",
+                )}</g><path d="M206 520L377 348V520Z" fill="#ebf2e9"/><path d="M226 499L377 348" stroke="${a}" stroke-width="2"/><circle cx="377" cy="348" r="3.5" fill="#fff"/><text x="360" y="475" text-anchor="end" fill="#667b69" font-family="monospace" font-size="8" letter-spacing="2">A CLEARER WAY</text>`
+            );
+          if (i === 2)
+            return (
+              defs +
+              `<rect width="400" height="520" fill="#fafbf7"/><rect x="9" y="9" width="382" height="369" fill="#a4aaa1"/><path d="M105 378Q130 329 217 314L284 301Q361 299 391 332V378Z" fill="url(#${id}fabric)"/><path d="M231 305L239 236L308 239L319 314Q275 347 231 305Z" fill="url(#${id}skin)"/><path d="M221 101Q234 47 296 63Q358 77 350 155L338 234Q324 277 285 282Q248 279 226 244L210 196Q195 186 203 164L215 146Z" fill="url(#${id}skin)"/><path d="M204 158Q174 107 208 64Q246 17 304 38Q367 36 377 97Q385 140 349 183L351 122Q308 136 277 94Q244 137 214 139Z" fill="#313a34"/><path d="M216 87Q251 38 308 60M235 73Q274 52 323 79M321 65Q355 82 353 116" fill="none" stroke="#708073" stroke-width="2" opacity=".55"/><path d="M237 162Q251 152 266 160M299 158Q312 151 325 161" fill="none" stroke="#4c554c" stroke-width="3"/><path d="M245 166Q253 161 261 165M303 165Q310 160 319 165" fill="none" stroke="#313d35" stroke-width="2"/><path d="M280 163L268 202Q278 207 290 201" fill="none" stroke="#777f71" stroke-width="2"/><path d="M259 229Q279 239 305 222" fill="none" stroke="#565f53" stroke-width="3"/><path d="M267 247Q285 252 301 241" fill="none" stroke="#bbc0b0" stroke-width="3" opacity=".6"/><g><rect x="23" y="130" width="191" height="76" rx="9" fill="#f3f7ef" opacity=".38" stroke="#f7fff2" stroke-opacity=".25"/><text x="36" y="152" fill="#fff" font-family="Arial,sans-serif" font-size="9">${L("让下一步，变得简单一点。", "Make the next step feel simpler.")}</text><circle cx="40" cy="185" r="7" fill="#fff" opacity=".18"/><path d="M36 185H44M40 181V189" stroke="#fafff2"/><circle cx="66" cy="185" r="6" fill="none" stroke="#fafff2"/><path d="M60 185H72M66 179V191" stroke="#fafff2" stroke-width=".7"/></g><text x="24" y="359" font-size="7" font-family="monospace" fill="#f1f5e9" letter-spacing="1.5">BETTER QUESTIONS / HUMAN ANSWERS</text><rect x="24" y="395" width="18" height="3" fill="${a}"/>`
+            );
+          return (
+            defs +
+            `<rect width="400" height="520" fill="url(#${id}mist)"/><text x="24" y="32" fill="#66797d" font-family="monospace" font-size="7" letter-spacing="2">STILL / OBJECT STUDY 004</text><g filter="url(#${id}shadow)"><path d="M116 180L225 126L337 174L222 236Z" fill="#f7faf8"/><path d="M116 180L222 236V266L116 209Z" fill="#cbd7d5"/><path d="M222 236L337 174V205L222 266Z" fill="#e0e7e5"/><path d="M136 179L225 139L314 174L222 220Z" fill="none" stroke="#e5ebe9"/><text x="175" y="161" transform="rotate(23 175 161)" font-family="Arial,sans-serif" font-size="12" fill="#758f86" letter-spacing="3">STILL</text></g><g filter="url(#${id}shadow)"><path d="M92 394L220 329L340 387L214 461Z" fill="#f7faf8"/><path d="M92 394L214 461V494L92 426Z" fill="#c8d5d1"/><path d="M214 461L340 387V420L214 494Z" fill="#e3ebe7"/><path d="M115 393L219 344L315 388L212 446Z" fill="#bccfc7"/><path d="M131 391L219 353L294 389L212 431Z" fill="#dce9e1"/></g><g transform="translate(188 250) rotate(-8)"><rect x="2" y="30" width="65" height="111" rx="15" fill="url(#${id}glass)" stroke="#8ca59b"/><ellipse cx="34" cy="141" rx="27" ry="6" fill="#a7bfb4" opacity=".6"/><rect x="10" y="14" width="49" height="28" rx="4" fill="url(#${id}metal)" stroke="#9aaba3"/><ellipse cx="34" cy="15" rx="24" ry="5" fill="#e7edeb"/><rect x="7" y="62" width="55" height="51" rx="2" fill="#f8fbf4" opacity=".95"/><text x="13" y="79" font-family="Arial,sans-serif" font-size="13" fill="${a}">STILL</text><text x="13" y="93" font-family="monospace" font-size="5" fill="#748c7c">BOTANICAL SCENT</text><text x="13" y="104" font-family="monospace" font-size="5" fill="#748c7c">30 mL / EDITION 01</text><path d="M13 44V57M13 119V131" stroke="#fff" stroke-width="4" opacity=".8"/></g><g stroke="#fff" fill="none" opacity=".8"><path d="M23 215H127M23 306H175M23 410H101"/></g><g fill="#8b9e9b" font-family="monospace" font-size="6"><text x="24" y="208">01 / OPEN</text><text x="24" y="299">02 / PAUSE</text><text x="24" y="403">03 / KEEP</text></g>`
+          );
+        }
+        function svg(i, thumb = false) {
+          const a = colors[palette][0],
+            id = "print" + i + (thumb ? "thumb" : "main"),
+            text = input.value.trim() || L("留一点想象", "LEAVE ROOM FOR POSSIBILITY");
+          const boxes = [
+              { x: 24, y: 376, w: 352, h: 99 },
+              { x: 29, y: 61, w: 340, h: 84 },
+              { x: 24, y: 411, w: 352, h: 74 },
+              { x: 24, y: 52, w: 352, h: 73 },
+            ],
+            inks = [a, "#eef3ec", "#38473d", "#536b62"],
+            max = [layout ? 54 : 43, layout ? 40 : 30, layout ? 37 : 27, layout ? 37 : 27];
+          return `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="520" viewBox="0 0 400 520" role="img" aria-label="${esc(names[i][en ? 1 : 0])}" data-system="${["perspective-card", "data-nodes", "human-dialogue", "layered-product"][i]}">${posterScene(i, a, id)}${titleBlock(text, boxes[i], inks[i], max[i])}</svg>`;
+        }
+        function render() {
+          document.querySelector("#poster").innerHTML = svg(selected);
+          document.querySelectorAll("#thumbs button").forEach((b, i) => {
+            b.innerHTML = svg(i, true) + "<span>0" + (i + 1) + "</span>";
+            b.setAttribute("aria-pressed", String(i === selected));
+          });
+        }
+        names.forEach((n, i) => {
+          const b = document.createElement("button");
+          b.setAttribute("aria-label", n[en ? 1 : 0]);
+          b.addEventListener("click", () => {
+            selected = i;
+            render();
+            document.querySelector("#status").textContent =
+              L("正在编辑：", "Editing: ") + n[en ? 1 : 0];
+          });
+          document.querySelector("#thumbs").append(b);
+        });
+        input.addEventListener("input", render);
+        document.querySelectorAll("[data-palette]").forEach((b) =>
+          b.addEventListener("click", () => {
+            palette = Number(b.dataset.palette);
+            document
+              .querySelectorAll("[data-palette]")
+              .forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+            render();
+            document.querySelector("#status").textContent = L(
+              "新油墨已印上画面。",
+              "Fresh ink, freshly printed.",
+            );
+          }),
+        );
+        document.querySelectorAll("[data-layout]").forEach((b) =>
+          b.addEventListener("click", () => {
+            layout = Number(b.dataset.layout);
+            document
+              .querySelectorAll("[data-layout]")
+              .forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+            render();
+          }),
+        );
+        document.querySelector("#download").addEventListener("click", () => {
+          const blob = new Blob([svg(selected)], { type: "image/svg+xml" }),
+            url = URL.createObjectURL(blob),
+            a = document.createElement("a");
+          a.href = url;
+          a.download = "small-press-" + (selected + 1) + ".svg";
+          a.click();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+          document.querySelector("#status").textContent = L(
+            "SVG 已准备好，保留了你的文字与配色。",
+            "SVG ready with your words and chosen ink.",
+          );
+        });
+        render();
+      })();
+    </script>
+  </body>
+</html>
