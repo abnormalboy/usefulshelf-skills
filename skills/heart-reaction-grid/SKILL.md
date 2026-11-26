@@ -13,7 +13,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 ## 核心实现规范
 
-四张场景卡片各保存一个布尔点赞值，单项计数只能是 0 或 1，总数取和。筛选只改变可见性，不修改点赞。按钮文案、aria-pressed、图形和状态同时更新。独立演示心形与真实四个布尔值隔离，一个可取消定时器和 runId 管理按压/填色粒子/完成三个阶段；重置、隐藏页和减少动态效果都终止旧回调。
+四张曜石黑玻璃场景卡片各保存一个布尔点赞值，单项计数只能是 0 或 1，总数取和。筛选只改变可见性，不修改点赞。按钮文案、aria-pressed、发光心形、径向扩散环与 10 枚多色火花粒子同时更新。独立演示心形控制台与真实四个布尔值隔离，一个可取消定时器和 runId 管理按压/填色粒子/完成三个阶段；重置、隐藏页和减少动态效果都终止旧回调。
 
 ## 参数与内容边界
 
@@ -45,14 +45,15 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ```css
 :root {
   --accent: #ff527b;
-  --bg: #151417;
-  --surface: #211c24;
-  --ink: #f4f1f3;
-  --muted: #b4a7bd;
-  --line: #4b3d52;
+  --bg: #0d0f14;
+  --surface: #141821;
+  --surface-elev: #1a1f2b;
+  --ink: #f4f6fa;
+  --muted: #9fa9ba;
+  --line: rgba(255, 255, 255, 0.09);
 }
 body {
-  font-family: Arial, "PingFang SC", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Segoe UI", sans-serif;
 }
 ```
 
@@ -72,25 +73,27 @@ The following specification is included in full so this document works without a
 
 ### Like-feedback component model
 
-Four explicit contexts illustrate tutorial content, portfolio work, product updates, and community discussion. The UI cards have no fabricated histories, timestamps, or user activity. Each includes a content preview, an identifiable like button, and its local count.
+Four explicit contexts illustrate tutorial content, portfolio work, product updates, and community discussion. The UI cards have no fabricated histories, timestamps, or user activity. Each includes a bespoke SVG scene glyph, an identifiable like button, and its local count.
+
+#### Visual craft and surfaces
+
+Built as a high-craft obsidian creator studio (`--bg: #0d0f14`, elevated dark glass cards `#141821` → `#1a1f2b`, subtle architectural dot matrix, razor-thin specular top rims) so the luminous ruby-coral `--accent` (`#ff527b`) heart reactions carry clear focal energy. Liked cards illuminate with a subtle accent perimeter tint while keeping >= 4.5:1 AA contrast across every label, counter, and filter control.
 
 #### User state
 
 Four boolean likes are the source of truth. Each card count is one when selected and zero otherwise; the total is their sum. Filters only change visibility. A toggle updates pressed state, the action label, card count, total, reset availability, and status text.
 
-Reset clears all booleans and restores the All filter. If a toggle hides the focused card, move focus to the next visible card or active filter. Filled hearts, button text, counts, and pressed state together express selection; color is not the only cue.
+Reset clears all booleans and restores the All filter. If a toggle hides the focused card, move focus to the next visible card or active filter. Filled hearts, glowing radial ring + 10-particle burst, button text, counts, and pressed state together express selection; color is not the only cue.
 
 #### Separate demonstration state
 
-The preview heart has no connection to the likes array. One cancellable timer advances its press, fill/particle, and completion phases. A run identifier invalidates stale callbacks. Stop, page visibility, and motion-preference changes cancel pending work. There is no initial autoplay and no repeating loop.
+The preview heart sits inside an elevated obsidian telemetry console with no connection to the likes array. One cancellable timer advances its press, fill/particle, and completion phases. A run identifier invalidates stale callbacks. Stop, page visibility, and motion-preference changes cancel pending work. There is no initial autoplay and no repeating loop.
 
-The historical stagger argument now controls delay between preview phases. It does not change user cards. Reduced motion removes scale and particle animation while keeping all semantic actions usable.
+The historical stagger argument controls delay between preview phases. It does not change user cards. Reduced motion removes scale, ring, and particle animation while keeping all semantic actions usable.
 
-#### Visual and language behavior
+#### Language and boundaries
 
-A dark neutral surface keeps feedback prominent. Small geometric document symbols illustrate the four cards. At narrow widths, two columns become one, with comfortable button targets and wrapped controls.
-
-A Chinese and English dictionary supplies visible text and accessible labels. Runtime language follows ?lang=zh or ?lang=en, defaulting to Chinese. Explicit text overrides are never translated or inserted as HTML. Query parameters cannot inject arbitrary content.
+A Chinese and English dictionary supplies visible text and accessible labels. Runtime language follows `?lang=zh` or `?lang=en`. Explicit text overrides are never translated or inserted as HTML. Query parameters cannot inject arbitrary content.
 
 This demo is offline and ephemeral. Replace local state with application-owned state only during integration. Real backend use needs its own requests, error handling, optimistic-update rollback, and persistence; this template does not implement or claim them.
 

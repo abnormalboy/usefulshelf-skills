@@ -45,10 +45,14 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ```css
 :root {
   --accent: #a5e6ff;
+  --bg: #050a10;
+  --deck: rgba(11, 22, 34, 0.82);
+  --ink: #eff8fc;
+  --muted: #9eb9c9;
   color-scheme: dark;
-  font-family: Arial, "PingFang SC", sans-serif;
-  background: #060b10;
-  color: #eef7fa;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
 }
 ```
 
@@ -66,9 +70,18 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### Interaction and rendering notes
 
-The crystal is an eight-sided silhouette partitioned into 24 non-overlapping triangles. Fracture interpolates radial displacement and rotation; refreeze returns those exact vertices to their original positions. Keep the integrity meter tied to the target fracture amount, not an unrelated decorative number. An impact changes the seeded directions, including when fully fractured. The 850 ms requestAnimationFrame sequence stops at its endpoint. Reduced motion commits the endpoint immediately. The canvas has Enter/Space equivalents, and all state controls remain ordinary HTML buttons and a range input. A ResizeObserver rebuilds only canvas pixel dimensions, preserving the crystal state. The narrow layout stacks text, crystal, and controls.
+The crystal is an eight-sided silhouette partitioned into 24 non-overlapping triangles suspended inside a glacial midnight optical chamber (`#050a10`). Each facet receives directional specular shading, clipped internal caustic sheen, and razor-sharp rim strokes; glittering shard motes and an expanding shockwave ring accentuate impacts. Fracture interpolates radial displacement and rotation; refreeze returns those exact vertices to their original positions. Keep the integrity meter and 12-segment cryo bar tied to the target fracture amount, not an unrelated decorative number. An impact changes the seeded directions, including when fully fractured. The 850 ms requestAnimationFrame sequence stops at its endpoint. Reduced motion commits the endpoint immediately. The canvas has Enter/Space equivalents, and all state controls remain ordinary HTML buttons and a range input. A ResizeObserver rebuilds only canvas pixel dimensions, preserving the crystal state. The narrow layout stacks text, crystal, and controls.
+
+#### Visual tokens
+
+- Glacial midnight backdrop: `#050a10` (`--bg`)
+- Cryo glass telemetry deck: `rgba(11, 22, 34, 0.82)` (`--deck`)
+- Primary text: `#eff8fc` (`--ink`)
+- Secondary text: `#9eb9c9` (`--muted`)
+- Default accent: `#a5e6ff` (`--accent`)
 
 ## 可选完整包工作流 / Optional package workflow
 

@@ -45,9 +45,13 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ```css
 :root {
   --accent: #b9a5ff;
-  font-family: Arial, "PingFang SC", sans-serif;
-  color: #eeedf5;
-  background: #09090d;
+  --bg: #07070c;
+  --deck: rgba(16, 15, 26, 0.86);
+  --ink: #f3f1fa;
+  --muted: #aca4c2;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  color: var(--ink);
+  background: var(--bg);
   color-scheme: dark;
 }
 ```
@@ -69,15 +73,24 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### Rendering and interaction
 
-This is a geometric visual study rather than a precision optics solver. The white beam enters the triangular silhouette on its left face, crosses the interior, and splits on the right face. Seven warm-to-cool beams use a bounded fan angle. Monochrome modes select one ray from that same geometry. Changing incoming direction and spectral spread changes ray endpoints; each endpoint intersects the visible drawing boundary without changing direction.
+This is a geometric visual study rather than a precision optics solver. Inside a dark optical-room bench (`#07070c`) with etched grid lines and goniometer arcs, a multi-pass incident laser beam enters the jewel-beveled triangular crystal prism on its left face, forms a luminous internal caustic path, and splits on the right face into seven contiguous warm-to-cool spectral wedges (`#ff4d5a` through `#c76bff`). Monochrome modes select one ray from that same geometry. Changing incoming direction and spectral spread changes ray endpoints; each endpoint intersects the visible drawing boundary without changing direction.
 
-SVG contains the entire scene: paths, gradients, glass outlines, and softly blurred light. The exported clone receives explicit dimensions and a dark background and excludes the transient pulse. All interpolated path values are numeric, and palette values are fixed or validated; user copy never enters path markup.
+SVG contains the entire scene: emitter housing, paths, crystal bevel gradients, vertex glints, and softly blurred spectral dispersion. The exported clone receives explicit dimensions (`1800 × 920`) and a dark `#07070c` background and excludes the transient pulse. All interpolated path values are numeric, and palette values are fixed or validated; user copy never enters path markup.
 
 A 1.5-second pulse traverses the actual piecewise center path at constant path speed. Starting another pulse cancels the previous one. Parameter changes, hidden pages, and reduced motion cancel the pulse. The static scene stays fully visible. Keep numeric readouts, source pressed states, and the SVG's accessible description synchronized. The controls use ordinary labeled range inputs and buttons, so the entire experience works without dragging.
 
-Use contiguous, softly blended spectral wedges for the main rainbow, with faint center rays for legibility. Keep adjacent color boundaries touching as dispersion changes. Include the blend filter in exported SVGs so their material matches the preview.
+Use contiguous, softly blended spectral wedges for the main rainbow, with crisp center filament rays for legibility. Keep adjacent color boundaries touching as dispersion changes. Include the blend filter in exported SVGs so their material matches the preview.
+
+#### Visual tokens
+
+- Dark optical bench backdrop: `#07070c` (`--bg`)
+- Optical lab deck: `rgba(16, 15, 26, 0.86)` (`--deck`)
+- Primary text: `#f3f1fa` (`--ink`)
+- Secondary text: `#aca4c2` (`--muted`)
+- Default accent: `#b9a5ff` (`--accent`)
 
 ## 可选完整包工作流 / Optional package workflow
 

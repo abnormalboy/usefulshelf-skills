@@ -8,208 +8,377 @@
       :root {
         --accent: #6f4b99;
         --bg: #f3f0e9;
-        --ink: #342d3f;
+        --ink: #261e33;
+        --muted: #504561;
+        --rule: rgba(54, 40, 74, 0.14);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       * {
         box-sizing: border-box;
       }
       body {
         margin: 0;
-        background: var(--bg);
+        min-height: 100vh;
+        background-color: var(--bg);
+        background-image:
+          radial-gradient(ellipse 64% 56% at 14% 12%, rgba(226, 206, 248, 0.42), transparent 68%),
+          radial-gradient(ellipse 58% 52% at 88% 18%, rgba(255, 224, 214, 0.4), transparent 66%),
+          radial-gradient(ellipse 68% 54% at 62% 94%, rgba(206, 236, 244, 0.36), transparent 72%);
         color: var(--ink);
-        font: 14px system-ui;
+        font:
+          14px/1.55 -apple-system,
+          BlinkMacSystemFont,
+          "PingFang SC",
+          "Hiragino Sans GB",
+          "Noto Sans CJK SC",
+          system-ui,
+          sans-serif;
       }
       main {
         width: 100%;
-        max-width: 1040px;
-        margin: auto;
-        padding: 28px;
-        min-height: 720px;
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 18px 32px 22px;
       }
       .mast {
         display: flex;
         justify-content: space-between;
-        border-bottom: 1px solid #41334e24;
-        padding-bottom: 16px;
+        align-items: center;
+        gap: 12px;
+        border-bottom: 1px solid var(--rule);
+        padding-bottom: 11px;
         font:
-          10px ui-monospace,
+          600 11px/1.2 ui-monospace,
+          "SFMono-Regular",
+          Menlo,
           monospace;
-        letter-spacing: 0.14em;
+        letter-spacing: 0.13em;
+        color: var(--muted);
+      }
+      .header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 28px;
+        margin: 18px 0 18px;
       }
       h1 {
         font:
-          clamp(36px, 5vw, 60px)/1.08 Georgia,
+          600 clamp(32px, 4.1vw, 50px)/1.08 "Iowan Old Style",
+          "Palatino Linotype",
+          Georgia,
+          "Songti SC",
+          "Noto Serif CJK SC",
           serif;
-        letter-spacing: -0.05em;
-        margin: 30px 0 13px;
+        letter-spacing: -0.035em;
+        margin: 0;
         overflow-wrap: anywhere;
+        text-wrap: balance;
+        color: #1f172b;
+      }
+      :lang(zh) h1 {
+        font-size: clamp(30px, 3.5vw, 44px);
+        line-height: 1.16;
+        letter-spacing: -0.015em;
+        word-break: keep-all;
       }
       .sub {
-        color: #5b5064;
-        line-height: 1.7;
-        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.62;
+        font-size: 13.5px;
         margin: 0;
-        max-width: 600px;
+        max-width: 390px;
+        text-wrap: pretty;
       }
       .workspace {
         display: grid;
-        grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.8fr);
-        gap: 24px;
-        margin-top: 28px;
+        grid-template-columns: minmax(0, 1.38fr) minmax(268px, 0.78fr);
+        gap: 22px;
         align-items: stretch;
       }
       .shelf {
-        padding: 24px 16px;
-        background: #fffafa;
-        border-radius: 16px;
+        padding: 20px 18px;
+        background: linear-gradient(
+          165deg,
+          rgba(255, 255, 255, 0.88) 0%,
+          rgba(251, 248, 255, 0.82) 100%
+        );
+        border: 1px solid rgba(255, 255, 255, 0.92);
+        border-radius: 26px;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 1),
+          0 20px 44px rgba(58, 38, 88, 0.08),
+          0 2px 8px rgba(58, 38, 88, 0.05),
+          0 0 0 1px rgba(84, 64, 112, 0.1);
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 11px;
+        gap: 12px;
         align-content: center;
       }
       .sweet {
-        border: 1px solid transparent;
-        background: transparent;
-        padding: 4px 2px 10px;
-        border-radius: 13px;
+        border: 1.5px solid transparent;
+        background: rgba(255, 255, 255, 0.45);
+        padding: 10px 8px 12px;
+        border-radius: 18px;
         cursor: pointer;
         min-width: 0;
         transition:
-          background 0.2s,
-          transform 0.2s;
+          background-color 0.2s ease,
+          border-color 0.2s ease,
+          transform 0.24s cubic-bezier(0.22, 0.85, 0.3, 1),
+          box-shadow 0.24s ease;
         color: var(--ink);
+        -webkit-tap-highlight-color: transparent;
+      }
+      @media (hover: hover) {
+        .sweet:hover {
+          transform: translateY(-4px);
+          background: rgba(255, 255, 255, 0.9);
+          box-shadow: 0 12px 24px rgba(58, 38, 88, 0.09);
+        }
       }
       .sweet[aria-pressed="true"] {
-        background: #eee7f1;
-        border-color: #bdabc9;
-      }
-      .sweet:hover {
-        transform: translateY(-4px);
+        background: linear-gradient(180deg, #ffffff, #f3edf9);
+        border-color: color-mix(in srgb, var(--accent) 55%, #ffffff 45%);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 1),
+          0 12px 24px color-mix(in srgb, var(--accent) 16%, transparent);
       }
       .sweet svg {
         width: 100%;
         height: auto;
-        max-width: 145px;
+        max-width: 146px;
         display: block;
-        margin: auto;
+        margin: 0 auto 2px;
         overflow: visible;
       }
       .sweet span {
+        display: block;
         font:
-          10px ui-monospace,
-          monospace;
+          600 11.5px/1.2 -apple-system,
+          BlinkMacSystemFont,
+          system-ui,
+          sans-serif;
+        color: var(--ink);
+        letter-spacing: 0.01em;
       }
       .panel {
-        border: 1px solid #cabfce80;
-        border-radius: 15px;
-        padding: 22px;
-        background: #ffffff55;
+        border: 1px solid rgba(255, 255, 255, 0.92);
+        border-radius: 26px;
+        padding: 18px 22px 18px;
+        background: linear-gradient(
+          165deg,
+          rgba(255, 255, 255, 0.84) 0%,
+          rgba(247, 242, 253, 0.78) 100%
+        );
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 1),
+          0 20px 44px rgba(58, 38, 88, 0.09),
+          0 0 0 1px rgba(84, 64, 112, 0.12);
         min-width: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
       }
       #large {
-        max-width: 185px;
-        margin: -5px auto 8px;
+        width: 100%;
+        max-width: 196px;
+        margin: 0 auto 4px;
+        padding: 6px;
+        border-radius: 20px;
+        background: radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.85), transparent 72%);
       }
       #large svg {
         width: 100%;
         height: auto;
         display: block;
-        transition: transform 0.25s;
+        overflow: visible;
+        transition: transform 0.25s ease;
       }
       .controls label {
-        font-size: 11px;
+        font:
+          600 12px/1.2 -apple-system,
+          BlinkMacSystemFont,
+          system-ui,
+          sans-serif;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin: 13px 0;
-        color: #564960;
+        margin: 12px 0 6px;
+        color: var(--ink);
+      }
+      .controls output {
+        font:
+          600 11.5px/1.2 ui-monospace,
+          "SFMono-Regular",
+          Menlo,
+          monospace;
+        font-variant-numeric: tabular-nums;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: rgba(82, 58, 118, 0.08);
+        color: var(--ink);
       }
       .controls input[type="color"] {
-        width: 38px;
-        height: 27px;
-        border: 0;
-        background: none;
+        width: 44px;
+        height: 28px;
+        border: 2px solid #ffffff;
+        border-radius: 999px;
+        background: transparent;
         padding: 0;
         cursor: pointer;
+        box-shadow:
+          0 2px 6px rgba(40, 26, 60, 0.16),
+          0 0 0 1px rgba(40, 26, 60, 0.15);
+      }
+      .controls input[type="color"]::-webkit-color-swatch-wrapper {
+        padding: 0;
+      }
+      .controls input[type="color"]::-webkit-color-swatch {
+        border: 0;
+        border-radius: 999px;
       }
       .controls input[type="range"] {
         width: 100%;
+        height: 6px;
         accent-color: var(--accent);
+        cursor: pointer;
       }
       .download {
         width: 100%;
-        border: 0;
-        background: var(--accent);
-        color: #fff;
-        border-radius: 22px;
-        padding: 12px 10px;
-        font: 12px system-ui;
+        border: 1px solid color-mix(in srgb, var(--accent) 85%, #000 15%);
+        background-color: var(--accent);
+        background-image: linear-gradient(
+          180deg,
+          color-mix(in srgb, var(--accent) 88%, #fff 12%),
+          var(--accent)
+        );
+        color: #ffffff;
+        border-radius: 999px;
+        padding: 12px 14px;
+        font:
+          600 13px/1.2 -apple-system,
+          BlinkMacSystemFont,
+          system-ui,
+          sans-serif;
         cursor: pointer;
-        margin-top: 13px;
+        margin-top: 14px;
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.28) inset,
+          0 10px 20px color-mix(in srgb, var(--accent) 28%, transparent);
+        transition:
+          transform 0.16s ease,
+          box-shadow 0.16s ease,
+          filter 0.16s ease;
+        -webkit-tap-highlight-color: transparent;
+      }
+      @media (hover: hover) {
+        .download:hover {
+          transform: translateY(-1px);
+          filter: brightness(1.05);
+          box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.34) inset,
+            0 13px 24px color-mix(in srgb, var(--accent) 34%, transparent);
+        }
       }
       .reset {
         border: 0;
-        background: none;
+        background: transparent;
         text-decoration: underline;
-        color: #5a4866;
-        font: 12px system-ui;
+        text-underline-offset: 3px;
+        color: var(--muted);
+        font:
+          600 12px/1.2 -apple-system,
+          BlinkMacSystemFont,
+          system-ui,
+          sans-serif;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 36px;
-        padding: 8px 14px;
+        min-height: 34px;
+        padding: 6px 12px;
         width: 100%;
-        margin: 8px auto 0;
+        margin: 6px auto 0;
+      }
+      @media (hover: hover) {
+        .reset:hover {
+          color: var(--ink);
+        }
       }
       #status {
         font:
-          11px/1.6 ui-monospace,
+          500 12px/1.5 ui-monospace,
+          "SFMono-Regular",
+          Menlo,
           monospace;
-        min-height: 34px;
-        color: #5b4e63;
-        margin-top: 17px;
+        min-height: 22px;
+        color: var(--muted);
+        margin: 14px 0 0;
       }
       button:focus-visible,
       input:focus-visible {
-        outline: 3px solid var(--accent);
-        outline-offset: 4px;
+        outline: 2.5px solid var(--accent);
+        outline-offset: 3px;
       }
       .foot {
         font:
-          9px ui-monospace,
+          600 10.5px/1.4 ui-monospace,
+          "SFMono-Regular",
+          Menlo,
           monospace;
-        letter-spacing: 0.12em;
-        color: #5e5366;
-        margin-top: 24px;
-        border-top: 1px solid #41334e24;
-        padding-top: 16px;
+        letter-spacing: 0.11em;
+        color: var(--muted);
+        margin-top: 14px;
+        border-top: 1px solid var(--rule);
+        padding-top: 11px;
       }
-      @media (max-width: 620px) {
+      @media (max-width: 760px) {
         main {
-          padding: 22px 18px;
+          padding: 18px 16px 22px;
+        }
+        .header-row {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+          margin: 14px 0 16px;
+        }
+        .sub {
+          max-width: 100%;
         }
         .workspace {
           grid-template-columns: 1fr;
+          gap: 16px;
         }
         .shelf {
-          padding: 17px 9px;
+          padding: 14px 10px;
           gap: 8px;
+          border-radius: 20px;
+        }
+        .sweet {
+          padding: 6px 4px 10px;
+          border-radius: 14px;
         }
         .sweet svg {
-          max-width: 125px;
+          max-width: 116px;
         }
         .panel {
           display: grid;
-          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
           gap: 14px;
-          padding: 18px;
+          align-items: center;
+          padding: 16px;
+          border-radius: 20px;
         }
         #large {
           margin: auto;
         }
         .mast {
-          font-size: 8px;
+          font-size: 9.5px;
+          letter-spacing: 0.08em;
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -231,8 +400,10 @@
           六枚小图标 · 一点好心情
         </span>
       </div>
-      <h1>A little gloss goes a long way.</h1>
-      <p class="sub" id="subtitle">Pick a shape, tune the light, and take a little happy icon home.</p>
+      <div class="header-row">
+        <h1>A little gloss goes a long way.</h1>
+        <p class="sub" id="subtitle">Pick a shape, tune the light, and take a little happy icon home.</p>
+      </div>
       <div class="workspace">
         <section class="shelf" id="shelf" role="group" aria-label="图标选择"></section>
         <aside class="panel">
@@ -375,6 +546,10 @@
             .replace(
               /Files stay on this device\. Maximum (\d+) MB\./g,
               "文件留在此设备，最大 $1 MB。",
+            )
+            .replace(
+              /Packed ([\d,]+) bytes\. CRC32 ([0-9a-f]+)\. Download contains the complete file, ready to decode\./gi,
+              "已打包 $1 字节。CRC32 $2。下载文件包含完整内容，可直接解码。",
             )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
@@ -586,7 +761,7 @@
             ["花朵", "Flower"],
             ["书本", "Book"],
           ],
-          defaults = ["#6684db", "#92c94e", "#e57cb6", "#58bfd8", "#b98be0", "#eeb85c"],
+          defaults = ["#5c7ee6", "#6fc458", "#e56bb0", "#45b6dd", "#a874dc", "#f0a943"],
           colors = [...defaults],
           shelf = document.querySelector("#shelf"),
           large = document.querySelector("#large"),
@@ -596,24 +771,122 @@
           status = document.querySelector("#status");
         let selected = 4;
         const values = names.map(() => ({ gloss: 70, tilt: 0 }));
-        function symbol(i) {
+
+        function symbol(i, id) {
           if (i === 0)
-            return '<rect x="57" y="69" width="88" height="66" rx="17"/><path d="M76 69L83 58H113L121 69Z"/><circle cx="101" cy="102" r="22" fill="#8b8ba0"/><circle cx="101" cy="102" r="14" fill="#454253"/><circle cx="107" cy="97" r="5" fill="#c6c5d5"/><circle cx="130" cy="82" r="4" fill="#fff"/>';
+            return `<rect x="55" y="68" width="90" height="66" rx="18"/>
+              <path d="M76 68L84 55H116L124 68Z"/>
+              <circle cx="100" cy="102" r="24" fill="#d8dae8"/>
+              <circle cx="100" cy="102" r="19" fill="#46455d"/>
+              <circle cx="100" cy="102" r="12" fill="url(#${id}lens)"/>
+              <circle cx="106" cy="96" r="4.8" fill="#ffffff" opacity=".88"/>
+              <circle cx="94" cy="107" r="2.2" fill="#99e2ff" opacity=".75"/>
+              <circle cx="131" cy="82" r="4.5" fill="#fff7cc"/>`;
           if (i === 1)
-            return '<path d="M58 100Q56 64 101 63Q144 63 146 98Q148 133 104 136L82 151L79 131Q57 125 58 100Z"/><circle cx="85" cy="94" r="4" fill="#567542"/><circle cx="118" cy="94" r="4" fill="#567542"/><path d="M85 110Q101 124 118 110" fill="none" stroke="#567542" stroke-width="4" stroke-linecap="round"/>';
+            return `<path d="M54 98Q52 61 100 60Q147 60 148 97Q149 132 104 135L81 151L78 131Q54 124 54 98Z"/>
+              <circle cx="84" cy="93" r="5" fill="#2d5a30"/>
+              <circle cx="82.5" cy="91.5" r="1.6" fill="#ffffff"/>
+              <circle cx="117" cy="93" r="5" fill="#2d5a30"/>
+              <circle cx="115.5" cy="91.5" r="1.6" fill="#ffffff"/>
+              <ellipse cx="74" cy="104" rx="6" ry="3.5" fill="#ff96b0" opacity=".45"/>
+              <ellipse cx="127" cy="104" rx="6" ry="3.5" fill="#ff96b0" opacity=".45"/>
+              <path d="M84 109Q100 123 117 109" fill="none" stroke="#2d5a30" stroke-width="4.2" stroke-linecap="round"/>`;
           if (i === 2)
-            return '<path d="M100 51L115 85L151 100L115 114L100 151L85 114L50 100L85 85Z"/><circle cx="141" cy="56" r="6"/><circle cx="55" cy="140" r="4"/>';
+            return `<path d="M100 46L115 84L154 100L115 115L100 154L85 115L46 100L85 84Z"/>
+              <path d="M100 58L108 88L138 100L108 108L100 138L92 108L62 100L92 88Z" fill="#ffffff" opacity=".45"/>
+              <circle cx="142" cy="58" r="7" fill="#fff8d6"/>
+              <circle cx="56" cy="140" r="4.5" fill="#fff8d6"/>
+              <circle cx="138" cy="138" r="3" fill="#ffffff" opacity=".85"/>`;
           if (i === 3)
-            return '<circle cx="127" cy="79" r="29" fill="#ffdf83"/><path d="M62 129Q39 126 45 106Q48 91 65 89Q68 66 91 70Q111 70 116 91Q143 89 146 110Q148 132 125 132Z"/>';
+            return `<circle cx="126" cy="79" r="28" fill="url(#${id}sun)"/>
+              <circle cx="126" cy="79" r="34" fill="#ffe78f" opacity=".28"/>
+              <path d="M58 132Q36 130 41 109Q45 93 64 91Q68 67 93 70Q114 71 119 92Q146 90 149 112Q151 134 126 134Z"/>
+              <path d="M68 99Q84 85 106 95" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity=".65"/>`;
           if (i === 4)
-            return '<g><ellipse cx="101" cy="78" rx="18" ry="32"/><ellipse cx="101" cy="78" rx="18" ry="32" transform="rotate(72 101 102)"/><ellipse cx="101" cy="78" rx="18" ry="32" transform="rotate(144 101 102)"/><ellipse cx="101" cy="78" rx="18" ry="32" transform="rotate(216 101 102)"/><ellipse cx="101" cy="78" rx="18" ry="32" transform="rotate(288 101 102)"/></g><circle cx="101" cy="102" r="17" fill="#ffe08d"/>';
-          return '<g transform="rotate(-9 100 100)"><rect x="67" y="60" width="77" height="94" rx="10" fill="#966c42"/><rect x="60" y="54" width="77" height="94" rx="10"/><path d="M73 55V144" stroke="#d8c4a4" stroke-width="3"/><path d="M86 79H121M86 89H112M86 118H115" stroke="#a48058" stroke-width="5" stroke-linecap="round"/></g>';
+            return `<g>
+                <ellipse cx="100" cy="74" rx="19" ry="33"/>
+                <ellipse cx="100" cy="74" rx="19" ry="33" transform="rotate(72 100 102)"/>
+                <ellipse cx="100" cy="74" rx="19" ry="33" transform="rotate(144 100 102)"/>
+                <ellipse cx="100" cy="74" rx="19" ry="33" transform="rotate(216 100 102)"/>
+                <ellipse cx="100" cy="74" rx="19" ry="33" transform="rotate(288 100 102)"/>
+              </g>
+              <circle cx="100" cy="102" r="20" fill="url(#${id}sun)"/>
+              <circle cx="95" cy="96" r="5" fill="#ffffff" opacity=".65"/>`;
+          return `<g transform="rotate(-8 100 102)">
+              <rect x="66" y="61" width="76" height="92" rx="11" fill="#8b5a2f"/>
+              <rect x="59" y="55" width="76" height="92" rx="11"/>
+              <path d="M72 56V146" stroke="#d5bb93" stroke-width="3.5"/>
+              <path d="M107 55V77L113 72L119 77V55Z" fill="#e25d52"/>
+              <path d="M84 82H121M84 95H114M84 118H116" stroke="#9e764d" stroke-width="5" stroke-linecap="round"/>
+            </g>`;
         }
+
         function svg(i, id) {
           const v = values[i],
-            c = colors[i];
-          return `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="210" viewBox="0 0 200 210" role="img" aria-label="${names[i][en ? 1 : 0]}"><defs><radialGradient id="${id}body" cx=".34" cy=".25" r=".8"><stop stop-color="#fff" stop-opacity=".55"/><stop offset=".48" stop-color="${c}"/><stop offset="1" stop-color="#443958" stop-opacity=".35"/></radialGradient><linearGradient id="${id}symbol" x2=".3" y2="1"><stop stop-color="#fffefc"/><stop offset="1" stop-color="#e3dae5"/></linearGradient><filter id="${id}shadow" x="-.4" y="-.4" width="1.8" height="1.8"><feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2f193c" flood-opacity=".22"/></filter><radialGradient id="${id}shine"><stop stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><ellipse cx="100" cy="185" rx="61" ry="11" fill="#382b4520"/><g transform="rotate(${v.tilt} 100 100)"><circle cx="100" cy="100" r="83" fill="${c}"/><circle cx="100" cy="100" r="83" fill="url(#${id}body)"/><circle cx="100" cy="100" r="79" fill="none" stroke="#fff" stroke-opacity=".32" stroke-width="1.5"/><g fill="url(#${id}symbol)" filter="url(#${id}shadow)">${symbol(i)}</g><ellipse cx="70" cy="48" rx="40" ry="23" transform="rotate(-24 70 48)" fill="url(#${id}shine)" opacity="${v.gloss / 100}"/><path d="M44 141Q79 183 129 165" fill="none" stroke="#fff" stroke-opacity="${v.gloss / 550}" stroke-width="4" stroke-linecap="round"/></g></svg>`;
+            c = colors[i],
+            g = v.gloss / 100;
+          return `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="216" viewBox="0 0 200 216" role="img" aria-label="${names[i][en ? 1 : 0]}">
+            <defs>
+              <radialGradient id="${id}caustic" cx=".5" cy=".5" r=".5">
+                <stop offset="0" stop-color="${c}" stop-opacity=".46"/>
+                <stop offset=".65" stop-color="${c}" stop-opacity=".16"/>
+                <stop offset="1" stop-color="${c}" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="${id}body" cx=".34" cy=".24" r=".78">
+                <stop offset="0" stop-color="#ffffff" stop-opacity="${(0.52 + g * 0.28).toFixed(2)}"/>
+                <stop offset=".38" stop-color="${c}" stop-opacity=".15"/>
+                <stop offset=".78" stop-color="#2a163f" stop-opacity=".22"/>
+                <stop offset="1" stop-color="#1d0d2e" stop-opacity=".42"/>
+              </radialGradient>
+              <radialGradient id="${id}subsurface" cx=".5" cy=".86" r=".58">
+                <stop offset="0" stop-color="#ffffff" stop-opacity="${(0.28 + g * 0.34).toFixed(2)}"/>
+                <stop offset=".55" stop-color="${c}" stop-opacity=".18"/>
+                <stop offset="1" stop-color="${c}" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="${id}dome" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ffffff" stop-opacity="${(0.22 + g * 0.72).toFixed(2)}"/>
+                <stop offset=".58" stop-color="#ffffff" stop-opacity="${(0.06 + g * 0.22).toFixed(2)}"/>
+                <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="${id}rim" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ffffff" stop-opacity=".85"/>
+                <stop offset=".5" stop-color="#ffffff" stop-opacity=".16"/>
+                <stop offset="1" stop-color="#ffffff" stop-opacity=".62"/>
+              </linearGradient>
+              <linearGradient id="${id}symbol" x1=".15" y1="0" x2=".35" y2="1">
+                <stop offset="0" stop-color="#ffffff"/>
+                <stop offset=".68" stop-color="#f6f1fa"/>
+                <stop offset="1" stop-color="#dcd2e6"/>
+              </linearGradient>
+              <linearGradient id="${id}lens" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#3a5299"/>
+                <stop offset=".5" stop-color="#23243b"/>
+                <stop offset="1" stop-color="#5a397a"/>
+              </linearGradient>
+              <radialGradient id="${id}sun" cx=".35" cy=".32" r=".7">
+                <stop offset="0" stop-color="#fff8d1"/>
+                <stop offset=".6" stop-color="#ffd563"/>
+                <stop offset="1" stop-color="#e89a2c"/>
+              </radialGradient>
+              <filter id="${id}shadow" x="-.35" y="-.35" width="1.7" height="1.7">
+                <feDropShadow dx="0" dy="5" stdDeviation="3.5" flood-color="#200d30" flood-opacity=".28"/>
+              </filter>
+            </defs>
+            <ellipse cx="100" cy="193" rx="68" ry="15" fill="url(#${id}caustic)"/>
+            <ellipse cx="100" cy="192" rx="46" ry="8" fill="#2a1d3a" opacity=".16"/>
+            <g transform="rotate(${v.tilt} 100 100)">
+              <circle cx="100" cy="100" r="82" fill="${c}"/>
+              <circle cx="100" cy="100" r="82" fill="url(#${id}body)"/>
+              <circle cx="100" cy="100" r="82" fill="url(#${id}subsurface)"/>
+              <circle cx="100" cy="100" r="78.5" fill="none" stroke="url(#${id}rim)" stroke-width="2.2"/>
+              <g fill="url(#${id}symbol)" filter="url(#${id}shadow)">${symbol(i, id)}</g>
+              <ellipse cx="100" cy="54" rx="58" ry="30" fill="url(#${id}dome)"/>
+              <ellipse cx="68" cy="48" rx="22" ry="11" transform="rotate(-26 68 48)" fill="#ffffff" opacity="${(g * 0.72).toFixed(2)}"/>
+              <path d="M46 144Q100 184 154 144" fill="none" stroke="#ffffff" stroke-opacity="${(0.14 + g * 0.34).toFixed(2)}" stroke-width="4.5" stroke-linecap="round"/>
+            </g>
+          </svg>`;
         }
+
         function render() {
           shelf.querySelectorAll("button").forEach((b, i) => {
             b.innerHTML = svg(i, "small" + i) + "<span>" + names[i][en ? 1 : 0] + "</span>";
@@ -626,6 +899,7 @@
           document.querySelector("#light-value").textContent = light.value + "%";
           document.querySelector("#tilt-value").textContent = tilt.value + "°";
         }
+
         names.forEach((n, i) => {
           const b = document.createElement("button");
           b.className = "sweet";

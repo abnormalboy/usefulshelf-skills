@@ -8,7 +8,11 @@
       :root {
         --accent: #b34d31;
         --bg: #f4f1e9;
-        --ink: #302f2a;
+        --ink: #24211c;
+        --muted: #524c42;
+        --rule: rgba(36, 33, 28, 0.16);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       * {
         box-sizing: border-box;
@@ -20,137 +24,233 @@
       body {
         width: 100%;
         min-width: 0;
+        min-height: 100vh;
         margin: 0;
-        background: var(--bg);
+        background-color: var(--bg);
+        background-image:
+          radial-gradient(ellipse 75% 55% at 50% 0%, rgba(255, 252, 244, 0.78), transparent 72%),
+          radial-gradient(ellipse 70% 50% at 86% 96%, rgba(168, 134, 96, 0.16), transparent 70%),
+          url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIj48ZmlsdGVyIGlkPSJuIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iMC44MiIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWx0ZXI9InVybCgjbikiIG9wYWNpdHk9IjAuMDM2Ii8+PC9zdmc+");
         color: var(--ink);
         font:
-          15px system-ui,
+          15px/1.55 -apple-system,
+          BlinkMacSystemFont,
+          "PingFang SC",
+          "Hiragino Sans GB",
+          "Noto Sans CJK SC",
+          system-ui,
           sans-serif;
       }
       main {
         display: block;
         width: 100%;
         min-width: 0;
-        max-width: 1060px;
-        margin: auto;
-        padding: 32px 30px;
-        min-height: 720px;
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 20px 32px 24px;
       }
       .mast {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         gap: 12px;
-        border-bottom: 1px solid #302f2a26;
-        padding-bottom: 18px;
+        border-bottom: 1.5px solid rgba(36, 33, 28, 0.2);
+        padding-bottom: 11px;
         font:
-          10px ui-monospace,
+          600 11px/1.2 ui-monospace,
+          "SFMono-Regular",
+          Menlo,
           monospace;
-        letter-spacing: 0.15em;
+        letter-spacing: 0.14em;
+        color: var(--muted);
       }
       .intro {
         display: grid;
         min-width: 0;
         width: 100%;
-        grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-        gap: 45px;
+        grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.95fr);
+        gap: 36px;
         align-items: end;
-        margin: 31px 0 30px;
+        margin: 18px 0 18px;
       }
       h1 {
         font:
-          clamp(39px, 5vw, 63px)/1.04 Georgia,
+          600 clamp(34px, 4.3vw, 52px)/1.06 "Iowan Old Style",
+          "Palatino Linotype",
+          Georgia,
+          "Songti SC",
+          "Noto Serif CJK SC",
           serif;
-        letter-spacing: -0.05em;
+        letter-spacing: -0.035em;
         margin: 0;
         overflow-wrap: anywhere;
         text-wrap: balance;
+        color: #1c1915;
       }
       .intro p {
         max-width: 400px;
-        color: #59554d;
-        line-height: 1.65;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.62;
         margin: 0;
         text-wrap: pretty;
       }
       :lang(zh) h1 {
-        font-size: clamp(34px, 4.2vw, 54px);
-        line-height: 1.14;
-        letter-spacing: -0.02em;
-        text-wrap: balance;
+        font-size: clamp(30px, 3.6vw, 46px);
+        line-height: 1.16;
+        letter-spacing: -0.015em;
+        word-break: keep-all;
       }
       :lang(zh) .intro p {
         max-width: 420px;
-        text-wrap: balance;
+      }
+      .shelf-wrap {
+        position: relative;
+        border-radius: 20px;
+        background:
+          radial-gradient(ellipse 80% 45% at 50% 8%, rgba(255, 253, 246, 0.72), transparent 72%),
+          linear-gradient(180deg, #e7dfd1 0%, #ddd3c2 68%, #cfc2ac 100%);
+        border: 1px solid rgba(54, 45, 32, 0.16);
+        box-shadow:
+          inset 0 2px 12px rgba(48, 38, 24, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.65),
+          0 18px 36px rgba(48, 38, 24, 0.08);
+        overflow: hidden;
+      }
+      .shelf-wrap::after {
+        content: "";
+        position: absolute;
+        left: 24px;
+        right: 24px;
+        bottom: 18px;
+        height: 4px;
+        border-radius: 999px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(62, 48, 30, 0.22) 15%,
+          rgba(62, 48, 30, 0.22) 85%,
+          transparent
+        );
+        pointer-events: none;
       }
       .deck {
         display: flex;
+        justify-content: center;
         width: 100%;
         min-width: 0;
         max-width: 100%;
-        gap: 26px;
-        padding: 32px 24px 33px;
+        gap: 28px;
+        padding: 32px 32px 34px;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
-        perspective: 900px;
+        perspective: 1100px;
         scrollbar-width: thin;
-        scrollbar-color: #b8b0a0 transparent;
+        scrollbar-color: #a89b87 transparent;
       }
       .cartridge {
         position: relative;
-        flex: 0 0 192px;
-        height: 232px;
-        background: #cdc8bb;
-        border: 1px solid #a7a293;
-        border-radius: 10px 10px 4px 4px;
+        flex: 0 0 202px;
+        height: 244px;
+        background: linear-gradient(155deg, #dfd8ca 0%, #c8c0af 58%, #b3aa97 100%);
+        border: 1px solid rgba(64, 56, 44, 0.34);
+        border-radius: 12px 12px 5px 5px;
         box-shadow:
-          inset 4px 3px 0 #eee9dc,
-          inset -7px -2px 0 #aaa596,
-          8px 12px 10px #30302013;
-        transform: rotateY(-13deg) rotateZ(2deg);
+          inset 2px 2px 0 rgba(255, 253, 247, 0.72),
+          inset -6px -3px 0 rgba(78, 70, 56, 0.22),
+          inset 0 14px 18px rgba(255, 255, 255, 0.14),
+          10px 14px 18px rgba(34, 28, 18, 0.16),
+          3px 4px 6px rgba(34, 28, 18, 0.12);
+        transform: rotateY(-12deg) rotateZ(1.6deg);
         cursor: pointer;
-        padding: 0 14px;
+        padding: 0;
         color: var(--ink);
         scroll-snap-align: center;
         transition:
-          transform 0.35s,
-          box-shadow 0.35s;
+          transform 0.32s cubic-bezier(0.22, 0.8, 0.24, 1),
+          box-shadow 0.32s cubic-bezier(0.22, 0.8, 0.24, 1);
         text-align: left;
+        -webkit-tap-highlight-color: transparent;
       }
       .cartridge:nth-child(2) {
-        background: #b6c3b5;
+        background: linear-gradient(155deg, #c6d4c4 0%, #aabaa8 58%, #91a48f 100%);
       }
       .cartridge:nth-child(3) {
-        background: #c6b5a6;
+        background: linear-gradient(155deg, #d7c3b4 0%, #bda493 58%, #a68b79 100%);
       }
       .cartridge:nth-child(4) {
-        background: #b2b9c8;
+        background: linear-gradient(155deg, #c1c9d8 0%, #a4aec2 58%, #8b96ac 100%);
       }
+      /* Molded upper grip ridges */
       .cartridge::before {
         content: "";
         position: absolute;
-        left: 12px;
-        right: 12px;
-        top: 15px;
-        height: 27px;
-        background: repeating-linear-gradient(to bottom, #35382b28 0 2px, transparent 2px 5px);
+        left: 14px;
+        right: 16px;
+        top: 13px;
+        height: 26px;
+        border-radius: 3px;
+        background: repeating-linear-gradient(
+          to bottom,
+          rgba(34, 30, 24, 0.24) 0 1.5px,
+          rgba(255, 255, 255, 0.42) 1.5px 3px,
+          transparent 3px 5.5px
+        );
       }
+      /* Exposed gold-plated PCB edge connector teeth */
       .cartridge::after {
         content: "";
         position: absolute;
-        left: 41px;
-        right: 41px;
+        left: 38px;
+        right: 40px;
         bottom: 0;
-        height: 16px;
-        background: repeating-linear-gradient(to right, #9b8d58 0 6px, #483b2c 6px 8px);
-        border: 5px solid #888777;
+        height: 15px;
+        border-radius: 3px 3px 0 0;
+        background:
+          linear-gradient(180deg, rgba(255, 244, 198, 0.45), transparent 55%),
+          repeating-linear-gradient(to right, #c7a658 0 6px, #352b1f 6px 8.5px);
+        border: 4px solid rgba(56, 50, 42, 0.46);
         border-bottom: 0;
+        box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.35);
+      }
+      /* Hardware status LED notch */
+      .led {
+        position: absolute;
+        top: 14px;
+        right: 18px;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: rgba(44, 38, 32, 0.25);
+        box-shadow: inset 0 1px 1.5px rgba(0, 0, 0, 0.4);
+        transition:
+          background-color 0.25s ease,
+          box-shadow 0.25s ease;
+        z-index: 2;
+      }
+      .cartridge[aria-pressed="true"] .led {
+        background: var(--accent);
+        box-shadow:
+          0 0 8px var(--accent),
+          inset 0 1px 1px rgba(255, 255, 255, 0.65);
+      }
+      @media (hover: hover) {
+        .cartridge:hover:not([aria-pressed="true"]) {
+          transform: translateY(-6px) rotateY(-8deg) rotateZ(0.5deg);
+          box-shadow:
+            inset 2px 2px 0 rgba(255, 253, 247, 0.78),
+            inset -6px -3px 0 rgba(78, 70, 56, 0.22),
+            12px 22px 24px rgba(34, 28, 18, 0.22);
+        }
       }
       .cartridge[aria-pressed="true"] {
-        transform: translateY(-9px) rotateY(-3deg) rotateZ(-3deg);
+        transform: translateY(-13px) rotateY(-2deg) rotateZ(-1.4deg);
         box-shadow:
-          inset 4px 3px 0 #eee9dc,
-          inset -7px -2px 0 #aaa596,
-          9px 21px 16px #30302024;
+          inset 2px 2px 0 rgba(255, 253, 247, 0.82),
+          inset -6px -3px 0 rgba(78, 70, 56, 0.22),
+          0 0 0 2px var(--accent),
+          12px 28px 30px rgba(34, 28, 18, 0.26),
+          0 6px 12px rgba(34, 28, 18, 0.14);
       }
       .cartridge:focus-visible {
         outline: 3px solid var(--accent);
@@ -160,206 +260,242 @@
         position: absolute;
         left: 14px;
         right: 18px;
-        top: 53px;
-        bottom: 28px;
-        background: #f7f1df;
-        border: 1px solid #8d887c;
-        border-radius: 3px;
+        top: 48px;
+        bottom: 24px;
+        background: #fbf7ec;
+        border: 1px solid rgba(64, 58, 48, 0.34);
+        border-radius: 5px;
         overflow: hidden;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.9),
+          0 1px 2px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
       }
       .art {
-        height: 94px;
+        height: 102px;
+        width: 100%;
         position: relative;
         overflow: hidden;
-        background: #df986a;
-        display: grid;
-        place-items: center;
+        display: block;
+        border-bottom: 1px solid rgba(40, 36, 30, 0.14);
       }
-      .art:before,
-      .art:after {
-        content: "";
-        position: absolute;
-      }
-      .art.one:before {
-        width: 72px;
-        height: 72px;
-        background: #ab4930;
-        border-radius: 50%;
-        top: 13px;
-      }
-      .art.one:after {
-        width: 160px;
-        height: 80px;
-        background: #f8d68e;
-        transform: rotate(-25deg);
-        top: 55px;
-      }
-      .art.two {
-        background: #506751;
-      }
-      .art.two:before {
-        width: 94px;
-        height: 94px;
-        border: 12px solid #b9d1a9;
-        transform: rotate(45deg);
-        top: 25px;
-      }
-      .art.two:after {
-        width: 50px;
-        height: 50px;
-        background: #dfb154;
-        border-radius: 50%;
-        top: 15px;
-      }
-      .art.three {
-        background: #cab2cf;
-      }
-      .art.three:before {
-        width: 80px;
-        height: 100px;
-        background: repeating-linear-gradient(90deg, #684e74 0 12px, transparent 12px 24px);
-        transform: rotate(25deg);
-      }
-      .art.four {
-        background: #243843;
-      }
-      .art.four:before {
-        width: 75px;
-        height: 75px;
-        border: 1px solid #8fc1c6;
-        border-radius: 50%;
-        box-shadow:
-          0 0 0 14px #8fc1c633,
-          0 0 0 28px #8fc1c622;
-      }
-      .art.four:after {
-        width: 10px;
-        height: 10px;
-        background: #edac62;
-        border-radius: 50%;
-        top: 13px;
-        left: 40px;
+      .art svg {
+        width: 100%;
+        height: 100%;
+        display: block;
       }
       .label strong {
         display: block;
         font:
-          17px Georgia,
+          700 15.5px/1.2 "Iowan Old Style",
+          Georgia,
+          "Songti SC",
           serif;
-        padding: 10px 10px 3px;
+        padding: 9px 10px 2px;
+        color: #1f1c18;
       }
       .label small {
-        padding: 0 10px;
+        display: block;
+        padding: 0 10px 6px;
         font:
-          9px ui-monospace,
+          600 9.5px/1.2 ui-monospace,
+          "SFMono-Regular",
+          Menlo,
           monospace;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.08em;
+        color: var(--muted);
       }
       .chapter {
         display: grid;
         min-width: 0;
-        grid-template-columns: 160px minmax(0, 1fr) auto;
+        grid-template-columns: 146px minmax(0, 1fr) auto;
         align-items: center;
-        gap: 24px;
-        margin-top: 20px;
-        padding: 25px 0;
-        border-top: 1px solid #302f2a26;
-        border-bottom: 1px solid #302f2a26;
+        gap: 28px;
+        margin-top: 18px;
+        padding: 20px 26px;
+        background: linear-gradient(180deg, rgba(255, 253, 248, 0.92), rgba(248, 244, 234, 0.86));
+        border: 1px solid rgba(36, 33, 28, 0.14);
+        border-radius: 16px;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.88),
+          0 12px 26px rgba(42, 34, 24, 0.06);
       }
       .chapter .year {
         font:
-          50px Georgia,
+          600 48px/1 "Iowan Old Style",
+          Georgia,
           serif;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.03em;
         color: var(--accent);
+        padding-right: 20px;
+        border-right: 1px solid var(--rule);
       }
       h2 {
         font:
-          24px Georgia,
+          600 22px/1.25 "Iowan Old Style",
+          Georgia,
+          "Songti SC",
           serif;
         margin: 0 0 6px;
+        color: #1d1a16;
       }
       .chapter p {
         margin: 0;
-        max-width: 530px;
-        color: #59544b;
-        font-size: 13px;
+        max-width: 540px;
+        color: var(--muted);
+        font-size: 13.5px;
         line-height: 1.6;
+        text-wrap: pretty;
+      }
+      .chapter-meta {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
       }
       .number {
         font:
-          11px ui-monospace,
+          600 11px/1.2 ui-monospace,
+          "SFMono-Regular",
+          Menlo,
           monospace;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.08em;
+        color: var(--ink);
+        padding: 6px 11px;
+        border-radius: 999px;
+        background: rgba(36, 33, 28, 0.06);
+        border: 1px solid rgba(36, 33, 28, 0.12);
         white-space: nowrap;
+      }
+      .pips {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .pip {
+        width: 20px;
+        height: 4px;
+        border-radius: 999px;
+        background: rgba(36, 33, 28, 0.15);
+        transition:
+          background-color 0.2s ease,
+          width 0.2s ease;
+      }
+      .pip.seen {
+        background: rgba(36, 33, 28, 0.42);
+      }
+      .pip.active {
+        width: 30px;
+        background: var(--accent);
       }
       .bottom {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 15px;
-        margin-top: 24px;
+        gap: 16px;
+        margin-top: 16px;
       }
       .bottom button {
-        background: var(--ink);
-        color: #fff;
-        border: 0;
-        border-radius: 24px;
-        padding: 13px 21px;
+        background-color: #1e1b17;
+        background-image: linear-gradient(180deg, #2d2924, #1e1b17);
+        color: #ffffff;
+        border: 1px solid #161411;
+        border-radius: 999px;
+        padding: 12px 22px;
         cursor: pointer;
-        font: 12px system-ui;
+        font:
+          600 13px/1.2 -apple-system,
+          BlinkMacSystemFont,
+          system-ui,
+          sans-serif;
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.18) inset,
+          0 8px 18px rgba(32, 26, 18, 0.18);
+        transition:
+          transform 0.16s ease,
+          box-shadow 0.16s ease;
+        -webkit-tap-highlight-color: transparent;
+      }
+      @media (hover: hover) {
+        .bottom button:hover {
+          transform: translateY(-1px);
+          box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.24) inset,
+            0 12px 22px rgba(32, 26, 18, 0.24);
+        }
       }
       .bottom button:focus-visible {
-        outline: 3px solid var(--accent);
+        outline: 2.5px solid var(--accent);
         outline-offset: 4px;
       }
       #discovered {
         font:
-          11px ui-monospace,
+          600 11.5px/1.4 ui-monospace,
+          "SFMono-Regular",
+          Menlo,
           monospace;
-        color: #59544b;
+        font-variant-numeric: tabular-nums;
+        color: var(--muted);
       }
-      @media (max-width: 650px) {
+      @media (max-width: 960px) {
+        .deck {
+          justify-content: flex-start;
+        }
+      }
+      @media (max-width: 680px) {
         main {
-          padding: 24px 18px;
+          padding: 18px 16px 22px;
         }
         .intro {
           grid-template-columns: minmax(0, 1fr);
-          gap: 17px;
+          gap: 12px;
+          margin: 14px 0 16px;
         }
         .intro p {
-          font-size: 13px;
+          font-size: 13.5px;
+        }
+        .shelf-wrap {
+          border-radius: 16px;
         }
         .deck {
-          width: calc(100% + 36px);
-          max-width: calc(100% + 36px);
-          margin: 0 -18px;
-          padding: 25px 35px 28px;
-          gap: 25px;
+          padding: 26px 24px 28px;
+          gap: 20px;
         }
         .cartridge {
-          flex-basis: 166px;
-          height: 216px;
+          flex-basis: 176px;
+          height: 222px;
         }
         .art {
-          height: 80px;
+          height: 88px;
         }
         .chapter {
-          grid-template-columns: 82px minmax(0, 1fr);
-          gap: 14px;
+          grid-template-columns: 1fr;
+          gap: 12px;
+          padding: 18px 18px;
         }
         .chapter .year {
-          font-size: 35px;
+          font-size: 36px;
+          padding-right: 0;
+          padding-bottom: 10px;
+          border-right: 0;
+          border-bottom: 1px solid var(--rule);
         }
-        .number {
-          grid-column: 2;
+        .chapter-meta {
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
         }
         .bottom {
-          align-items: flex-start;
-        }
-        #discovered {
-          max-width: 120px;
-          line-height: 1.6;
+          flex-wrap: wrap;
+          align-items: center;
         }
         .mast {
-          font-size: 9px;
+          font-size: 9.5px;
+          letter-spacing: 0.08em;
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -380,35 +516,151 @@
         <h1>Memories, ready to play.</h1>
         <p>Four chapters. One small collection. Pick a cartridge and see what it holds.</p>
       </div>
-      <div class="deck" role="group" aria-label="Memory cartridges">
-        <button class="cartridge" aria-pressed="true" aria-label="Play First spark, 2018">
-          <span class="label">
-            <span class="art one"></span>
-            <strong>First spark</strong>
-            <small>2018 / EXPERIMENT</small>
-          </span>
-        </button>
-        <button class="cartridge" aria-pressed="false" aria-label="Play Into the wild, 2020">
-          <span class="label">
-            <span class="art two"></span>
-            <strong>Into the wild</strong>
-            <small>2020 / EXPLORE</small>
-          </span>
-        </button>
-        <button class="cartridge" aria-pressed="false" aria-label="Play Make together, 2023">
-          <span class="label">
-            <span class="art three"></span>
-            <strong>Make together</strong>
-            <small>2023 / COLLABORATE</small>
-          </span>
-        </button>
-        <button class="cartridge" aria-pressed="false" aria-label="Play New horizons, 2026">
-          <span class="label">
-            <span class="art four"></span>
-            <strong>New horizons</strong>
-            <small>2026 / IMAGINE</small>
-          </span>
-        </button>
+      <div class="shelf-wrap">
+        <div class="deck" role="group" aria-label="Memory cartridges">
+          <button class="cartridge" aria-pressed="true" aria-label="Play First spark, 2018">
+            <span class="led" aria-hidden="true"></span>
+            <span class="label">
+              <span class="art one" aria-hidden="true">
+                <svg viewBox="0 0 168 102" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="c1sky" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0" stop-color="#f2ba7e" />
+                      <stop offset="1" stop-color="#dd7a4c" />
+                    </linearGradient>
+                  </defs>
+                  <rect width="168" height="102" fill="url(#c1sky)" />
+                  <circle cx="84" cy="48" r="34" fill="#fbe09d" opacity=".45" />
+                  <circle cx="84" cy="48" r="24" fill="#b43d25" />
+                  <path d="M0 78Q48 54 96 72T168 62V102H0Z" fill="#f7d283" />
+                  <path d="M0 88Q58 70 116 86T168 78V102H0Z" fill="#703524" opacity=".68" />
+                  <path
+                    d="M84 12V19M54 22L59 27M114 22L109 27"
+                    stroke="#fff5da"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </span>
+              <strong>First spark</strong>
+              <small>2018 / EXPERIMENT</small>
+            </span>
+          </button>
+          <button class="cartridge" aria-pressed="false" aria-label="Play Into the wild, 2020">
+            <span class="led" aria-hidden="true"></span>
+            <span class="label">
+              <span class="art two" aria-hidden="true">
+                <svg viewBox="0 0 168 102" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="c2sky" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0" stop-color="#48634d" />
+                      <stop offset="1" stop-color="#2e4434" />
+                    </linearGradient>
+                  </defs>
+                  <rect width="168" height="102" fill="url(#c2sky)" />
+                  <circle cx="118" cy="30" r="15" fill="#e8ba5d" />
+                  <circle
+                    cx="118"
+                    cy="30"
+                    r="24"
+                    fill="none"
+                    stroke="#e8ba5d"
+                    stroke-opacity=".35"
+                    stroke-dasharray="2 4"
+                  />
+                  <path d="M-8 102L46 34L98 102Z" fill="#7fa078" />
+                  <path d="M46 34L64 58L51 64L38 56Z" fill="#dfecd6" opacity=".7" />
+                  <path d="M56 102L108 42L174 102Z" fill="#5e825c" />
+                  <path
+                    d="M12 86Q84 68 156 88"
+                    fill="none"
+                    stroke="#c8dfba"
+                    stroke-width="1.2"
+                    opacity=".65"
+                  />
+                </svg>
+              </span>
+              <strong>Into the wild</strong>
+              <small>2020 / EXPLORE</small>
+            </span>
+          </button>
+          <button class="cartridge" aria-pressed="false" aria-label="Play Make together, 2023">
+            <span class="led" aria-hidden="true"></span>
+            <span class="label">
+              <span class="art three" aria-hidden="true">
+                <svg viewBox="0 0 168 102" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="168" height="102" fill="#d9c6d8" />
+                  <path d="M0 0H84V102H0Z" fill="#cbb3cb" />
+                  <circle cx="54" cy="51" r="30" fill="#6d4c78" />
+                  <circle cx="114" cy="51" r="30" fill="#cb7758" opacity=".88" />
+                  <circle cx="84" cy="51" r="18" fill="#f7e8ca" opacity=".92" />
+                  <path
+                    d="M24 20H144M24 82H144"
+                    stroke="#473350"
+                    stroke-width="1"
+                    stroke-dasharray="3 4"
+                    opacity=".45"
+                  />
+                  <circle cx="84" cy="51" r="5" fill="#4b3556" />
+                </svg>
+              </span>
+              <strong>Make together</strong>
+              <small>2023 / COLLABORATE</small>
+            </span>
+          </button>
+          <button class="cartridge" aria-pressed="false" aria-label="Play New horizons, 2026">
+            <span class="led" aria-hidden="true"></span>
+            <span class="label">
+              <span class="art four" aria-hidden="true">
+                <svg viewBox="0 0 168 102" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="c4sky" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0" stop-color="#1c303e" />
+                      <stop offset="1" stop-color="#2c4959" />
+                    </linearGradient>
+                  </defs>
+                  <rect width="168" height="102" fill="url(#c4sky)" />
+                  <circle
+                    cx="84"
+                    cy="56"
+                    r="40"
+                    fill="none"
+                    stroke="#8dc4ca"
+                    stroke-width="1"
+                    opacity=".32"
+                  />
+                  <circle
+                    cx="84"
+                    cy="56"
+                    r="27"
+                    fill="none"
+                    stroke="#8dc4ca"
+                    stroke-width="1.2"
+                    opacity=".62"
+                  />
+                  <circle cx="84" cy="56" r="14" fill="#3a6375" stroke="#bfe4e8" stroke-width="1" />
+                  <ellipse
+                    cx="84"
+                    cy="56"
+                    rx="52"
+                    ry="15"
+                    transform="rotate(-18 84 56)"
+                    fill="none"
+                    stroke="#f0b265"
+                    stroke-width="1.4"
+                    opacity=".85"
+                  />
+                  <circle cx="122" cy="30" r="5.5" fill="#f2b264" />
+                  <circle cx="34" cy="24" r="1.5" fill="#ffffff" opacity=".85" />
+                  <circle cx="144" cy="68" r="1.8" fill="#ffffff" opacity=".7" />
+                  <circle cx="48" cy="76" r="1.3" fill="#a8e2e6" opacity=".8" />
+                </svg>
+              </span>
+              <strong>New horizons</strong>
+              <small>2026 / IMAGINE</small>
+            </span>
+          </button>
+        </div>
       </div>
       <section class="chapter" aria-live="polite" aria-atomic="true">
         <div class="year" id="year">2018</div>
@@ -419,7 +671,15 @@
             beginnings have a way of growing.
           </p>
         </div>
-        <span class="number" id="number">PLAYING 01 / 04</span>
+        <div class="chapter-meta">
+          <span class="number" id="number">PLAYING 01 / 04</span>
+          <div class="pips" id="pips" aria-hidden="true">
+            <span class="pip active seen"></span>
+            <span class="pip"></span>
+            <span class="pip"></span>
+            <span class="pip"></span>
+          </div>
+        </div>
       </section>
       <div class="bottom">
         <button id="shuffle">Draw another memory ↗</button>
@@ -566,6 +826,10 @@
             .replace(
               /Files stay on this device\. Maximum (\d+) MB\./g,
               "文件留在此设备，最大 $1 MB。",
+            )
+            .replace(
+              /Packed ([\d,]+) bytes\. CRC32 ([0-9a-f]+)\. Download contains the complete file, ready to decode\./gi,
+              "已打包 $1 字节。CRC32 $2。下载文件包含完整内容，可直接解码。",
             )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
@@ -749,6 +1013,7 @@
       (() => {
         "use strict";
         const cards = [...document.querySelectorAll(".cartridge")],
+          pips = [...document.querySelectorAll("#pips .pip")],
           data = [
             [
               "2018",
@@ -785,6 +1050,10 @@
           active = i;
           seen.add(i);
           cards.forEach((b, n) => b.setAttribute("aria-pressed", String(n === i)));
+          pips.forEach((p, n) => {
+            p.classList.toggle("active", n === i);
+            p.classList.toggle("seen", seen.has(n));
+          });
           const d = data[i];
           document.querySelector("#year").textContent = d[0];
           document.querySelector("#name").textContent = d[1];

@@ -44,12 +44,14 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 ```css
 :root {
-  --accent: #e4bb32;
-  --bg: #f8f8f3;
-  --ink: #222423;
+  --accent: #dca822;
+  --bg: #f6f3eb;
+  --ink: #1c1e1b;
+  --muted: #50564d;
+  --rule: #d9d4c6;
 }
 body {
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", "Helvetica Neue", sans-serif;
 }
 ```
 
@@ -97,9 +99,10 @@ body {
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### Design and behavior
 
-A warm off-white page, small studio wordmark, wide navigation, and large serif statement give the thin golden ring enough room. Three slightly different inline SVG paths produce a deliberate, drawn gesture. Each ring belongs to its button, so wrapping and resizing do not require global coordinate measurements.
+A tactile Swiss-Japanese warm cotton paper page (`#f6f3eb`) with subtle inline SVG grain, double-rule architectural masthead, wide editorial navigation, and elevated folio showcase panel frame the calligraphic ochre-gold highlight loop (`#dca822`). Each tab renders a double-stroke inline SVG loop — a translucent highlighter wash under-stroke paired with a crisp tapered pen loop — with staggered draw-in animation. Each ring belongs to its button, so wrapping and resizing require no global coordinate measurements.
 
 #### Interaction contract
 

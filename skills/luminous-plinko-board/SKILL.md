@@ -45,9 +45,13 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ```css
 :root {
   --accent: #b5d8ff;
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  background: #0b1019;
-  color: #e8edf6;
+  --bg: #070b14;
+  --chassis: rgba(14, 22, 38, 0.88);
+  --ink: #eef4fc;
+  --muted: #9eb0cb;
+  font-family: "SF Pro Display", Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
   color-scheme: dark;
 }
 ```
@@ -72,15 +76,24 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### Light, collisions and observable outcomes
 
-Use a fixed 640 × 460 simulation space independent of displayed size. A bounded 120 Hz accumulator separates physics from refresh rate. Semi-implicit integration adds gravity before position. Circle overlaps are resolved along the collision normal, then inward velocity is reflected using restitution. A small horizontal nudge prevents exact top-of-peg equilibria. Side walls reflect velocity. Ball-to-ball collisions are deliberately absent; this experiment compares independent journeys through a peg field.
+Use a fixed 640 × 460 simulation space independent of displayed size inside a midnight optical glass chassis (`#070b14` backdrop, `#040812` board bay). A bounded 120 Hz accumulator separates physics from refresh rate. Semi-implicit integration adds gravity before position. Circle overlaps are resolved along the collision normal, then inward velocity is reflected using restitution. A small horizontal nudge prevents exact top-of-peg equilibria. Side walls reflect velocity. Ball-to-ball collisions are deliberately absent; this experiment compares independent journeys through a peg field.
 
-Light is layered as radial color followed by short geometric peg shadows, peg surfaces, ball trails and a white ball core. It is a Canvas 2D approximation, not ray tracing. The canvas backing store is twice its coordinate size. Keep active balls capped at 24 and trails bounded. Only real peg impacts increment collision counts, and only crossing the collection line increments one histogram bin. The last completed trajectory remains available as an inspectable dashed path. No score, prize or wagering exists.
+Light is layered as finely etched calibration rails, radial additive color blooms, directional geometric peg shadows, machined optical glass pegs that emit expanding hit ripples on collision, tapered comet-tail ball streaks, and illuminated collector slots. It is a Canvas 2D approximation, not ray tracing. The canvas backing store is twice its coordinate size (`1280 × 920`). Keep active balls capped at 24 and trails bounded. Only real peg impacts increment collision counts, and only crossing the collection line increments one histogram bin. The last completed trajectory remains available as an inspectable dashed path. No score, prize or wagering exists.
 
 Launch position and bounciness controls change actual simulation variables. Release, pause, single-second step, reset and path visibility all work repeatedly. Under reduced-motion preferences, begin paused with a static sample field; advancing one second computes 120 steps and renders once. Resume is an explicit user choice. Keep the DOM histogram and live status so the canvas is not the sole representation of results.
 
 For validation, reset, release one ball and advance several seconds: exactly one bin should gain one landing. Repeat at another launch position; counts must accumulate and reset must zero all state. Check that keyboard activation on the canvas releases a ball and moving shadows remain visible while paused. Extreme restitution or gravity changes may alter time to landing; do not fabricate outcomes to satisfy a presentation timer.
+
+#### Visual tokens
+
+- Deep midnight navy backdrop: `#070b14` (`--bg`)
+- Frosted instrument panel: `rgba(14, 22, 38, 0.88)` (`--chassis`)
+- Primary text: `#eef4fc` (`--ink`)
+- Secondary text: `#9eb0cb` (`--muted`)
+- Default accent: `#b5d8ff` (`--accent`)
 
 ## 可选完整包工作流 / Optional package workflow
 

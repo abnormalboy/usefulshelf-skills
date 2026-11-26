@@ -8,105 +8,247 @@
       :root {
         --accent: #ac492e;
         --bg: #f4f1e9;
-        --icing: #ead2a9;
-        --ink: #352c24;
+        --icing: #f3ddb0;
+        --icing-hi: #fff6df;
+        --icing-edge: #d8b574;
+        --speck: #6e4522;
+        --crust: #c8894b;
+        --crust-deep: #8c5323;
+        --ink: #2c2118;
+        --muted: #5a4b3d;
+        --linen-line: color-mix(in srgb, var(--ink) 14%, transparent);
+        --ease-spring: cubic-bezier(0.22, 1.28, 0.36, 1);
       }
       * {
         box-sizing: border-box;
+      }
+      html {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       body {
         margin: 0;
         background: var(--bg);
         color: var(--ink);
-        font:
-          15px system-ui,
+        font-family:
+          -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Segoe UI",
           sans-serif;
+        font-size: 1rem;
+        position: relative;
+        overflow-x: clip;
+      }
+      /* Warm Tokyo patisserie linen weave + sunlit counter glow */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background-image:
+          radial-gradient(
+            ellipse 76% 58% at 50% 18%,
+            rgba(255, 252, 244, 0.72) 0%,
+            rgba(255, 250, 240, 0.14) 55%,
+            rgba(116, 84, 52, 0.08) 100%
+          ),
+          repeating-linear-gradient(
+            0deg,
+            rgba(86, 64, 42, 0.022) 0px,
+            rgba(86, 64, 42, 0.022) 1px,
+            transparent 1px,
+            transparent 5px
+          ),
+          repeating-linear-gradient(
+            90deg,
+            rgba(86, 64, 42, 0.022) 0px,
+            rgba(86, 64, 42, 0.022) 1px,
+            transparent 1px,
+            transparent 5px
+          );
       }
       main {
-        max-width: 1000px;
-        margin: auto;
-        min-height: 720px;
-        padding: 36px 28px 28px;
+        position: relative;
+        z-index: 1;
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 26px 28px 28px;
         text-align: center;
       }
       .mast {
         display: flex;
         justify-content: space-between;
-        font:
-          11px ui-monospace,
-          monospace;
+        align-items: center;
+        gap: 16px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.72rem;
+        font-weight: 500;
         letter-spacing: 0.14em;
-        border-bottom: 1px solid #352c2424;
-        padding-bottom: 17px;
+        color: var(--muted);
+        border-top: 1px solid var(--linen-line);
+        border-bottom: 1px solid var(--linen-line);
+        padding: 11px 4px;
+      }
+      .mast-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .mast-brand::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+      }
+      .hero-head {
+        margin: 26px auto 0;
+        max-width: 680px;
       }
       h1 {
-        font:
-          clamp(38px, 6vw, 64px)/1.07 Georgia,
-          serif;
-        letter-spacing: -0.055em;
-        margin: 38px auto 13px;
-        max-width: 760px;
+        font-family: Georgia, "Songti SC", "STSong", "Noto Serif SC", "Times New Roman", serif;
+        font-size: clamp(2.25rem, 5.2vw, 3.65rem);
+        font-weight: 500;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        margin: 0 auto 10px;
+        color: var(--ink);
         overflow-wrap: anywhere;
+        text-wrap: balance;
       }
-      p {
-        color: #5d5246;
-        line-height: 1.6;
-        max-width: 520px;
+      :lang(zh) h1 {
+        letter-spacing: -0.01em;
+        line-height: 1.16;
+      }
+      .hero-head p {
+        color: var(--muted);
+        font-size: 0.94rem;
+        line-height: 1.58;
+        max-width: 48ch;
         margin: 0 auto;
+        text-wrap: pretty;
       }
       .flavors {
-        display: flex;
-        gap: 7px;
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 8px;
         justify-content: center;
-        margin: 25px auto;
+        margin: 20px auto 14px;
+        padding: 5px;
+        border-radius: 999px;
+        background: rgba(255, 253, 248, 0.72);
+        border: 1px solid rgba(94, 72, 48, 0.14);
+        box-shadow:
+          0 2px 8px rgba(72, 49, 26, 0.06),
+          inset 0 1px 0 rgba(255, 255, 255, 0.9);
       }
-      .flavors button,
-      .reset {
-        border: 1px solid #352c2433;
-        border-radius: 22px;
+      .flavors button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 36px;
+        border: 1px solid transparent;
+        border-radius: 999px;
         background: transparent;
-        color: inherit;
-        padding: 10px 16px;
-        font: 12px inherit;
+        color: var(--ink);
+        padding: 7px 16px 7px 12px;
+        font-family: inherit;
+        font-size: 0.84rem;
+        font-weight: 550;
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        transition:
+          background-color 180ms ease,
+          color 180ms ease,
+          box-shadow 180ms ease,
+          transform 140ms ease;
+      }
+      @media (hover: hover) {
+        .flavors button:hover:not([aria-pressed="true"]) {
+          background: rgba(92, 68, 44, 0.08);
+        }
       }
       .flavors button[aria-pressed="true"] {
         background: var(--ink);
-        color: #fff;
+        color: #fffbf4;
+        box-shadow:
+          0 4px 12px rgba(44, 33, 24, 0.24),
+          inset 0 1px 0 rgba(255, 255, 255, 0.16);
       }
       .flavors i {
         display: inline-block;
-        width: 9px;
-        height: 9px;
+        width: 12px;
+        height: 12px;
         border-radius: 50%;
-        margin-right: 6px;
-        background: var(--chip);
+        background: radial-gradient(
+          circle at 35% 30%,
+          rgba(255, 255, 255, 0.75) 0%,
+          var(--chip) 52%,
+          color-mix(in srgb, var(--chip) 72%, #3a2310) 100%
+        );
+        box-shadow:
+          inset 0 -1px 2px rgba(44, 28, 12, 0.28),
+          0 1px 2px rgba(44, 28, 12, 0.22);
+        border: 1px solid rgba(255, 255, 255, 0.45);
       }
       button:focus-visible {
         outline: 3px solid var(--accent);
-        outline-offset: 5px;
+        outline-offset: 4px;
+      }
+      /* Glazed Japanese stoneware dessert plate */
+      .plate-stage {
+        position: relative;
+        max-width: 560px;
+        margin: 6px auto 10px;
+        display: grid;
+        place-items: center;
       }
       .plate {
         position: relative;
-        max-width: 530px;
-        height: 260px;
-        margin: 0 auto;
+        width: min(520px, 100%);
+        height: 268px;
         display: grid;
         place-items: center;
         border-radius: 50%;
         background: radial-gradient(
-          ellipse,
-          #f9f7f1 58%,
-          #d4cdbd 59%,
-          #faf8f3 61%,
-          #e7e1d6 69%,
-          transparent 70%
+          ellipse 50% 50% at 50% 49%,
+          #fdfbf6 0%,
+          #f8f4ea 52%,
+          #eae2d1 58%,
+          #fbf8f1 61%,
+          #f3ecde 68%,
+          #dfd5c1 72%,
+          rgba(164, 145, 118, 0.18) 74%,
+          transparent 76%
         );
+        filter: drop-shadow(0 18px 24px rgba(71, 51, 30, 0.13))
+          drop-shadow(0 4px 8px rgba(71, 51, 30, 0.08));
+      }
+      /* Delicate patisserie gilt hairline inner rim */
+      .plate::before {
+        content: "";
+        position: absolute;
+        width: 79%;
+        height: 76%;
+        border-radius: 50%;
+        border: 1px solid rgba(182, 146, 94, 0.34);
+        box-shadow: inset 0 1px 6px rgba(102, 78, 50, 0.08);
+        pointer-events: none;
+      }
+      .plate::after {
+        content: "";
+        position: absolute;
+        width: 89%;
+        height: 87%;
+        border-radius: 50%;
+        border: 1px dashed rgba(178, 145, 98, 0.24);
+        pointer-events: none;
       }
       .treat {
         position: relative;
-        width: min(390px, 90%);
-        height: 190px;
+        z-index: 2;
+        width: min(392px, 88%);
+        height: 188px;
         border: 0;
         background: none;
         cursor: pointer;
@@ -114,115 +256,223 @@
         color: var(--ink);
         padding: 0;
         -webkit-tap-highlight-color: transparent;
+        transition: transform 220ms var(--ease-spring);
+      }
+      @media (hover: hover) {
+        .treat:hover {
+          transform: translateY(-3px) scale(1.015);
+        }
+      }
+      .treat:active {
+        transform: translateY(1px) scale(0.965);
+      }
+      .treat.nibble {
+        animation: nibble 260ms var(--ease-spring);
+      }
+      @keyframes nibble {
+        0% {
+          transform: scale(0.95) rotate(-0.8deg);
+        }
+        45% {
+          transform: scale(1.03) rotate(0.6deg);
+        }
+        100% {
+          transform: scale(1) rotate(0deg);
+        }
       }
       .treat svg {
         display: block;
         width: 100%;
         height: 100%;
         overflow: visible;
-        filter: drop-shadow(0 9px 5px #57452c24);
       }
-      .treat:active {
-        transform: scale(0.97);
+      .cookie-base {
+        fill: url(#crustGrad);
+        stroke: var(--crust-deep);
+        stroke-width: 1.5;
       }
-      .cookie {
-        fill: var(--icing);
-        stroke: var(--accent);
-        stroke-width: 2.5;
+      .cookie-icing {
+        fill: url(#icingGrad);
+        stroke: var(--icing-edge);
+        stroke-width: 1.4;
       }
-      .icing {
+      .cookie-stitch {
         fill: none;
         stroke: var(--accent);
-        stroke-width: 1;
-        stroke-dasharray: 2 7;
-        opacity: 0.45;
+        stroke-width: 1.25;
+        stroke-dasharray: 2.5 6.5;
+        stroke-linecap: round;
+        opacity: 0.48;
+      }
+      .cookie-gloss {
+        fill: url(#glossGrad);
+        pointer-events: none;
       }
       .bite-label {
-        font:
-          italic 35px Georgia,
-          serif;
-        fill: var(--ink);
+        font-family: Georgia, "Songti SC", "Times New Roman", serif;
+        font-style: italic;
+        font-size: 32px;
+        font-weight: 500;
+        fill: #2c1e14;
+        letter-spacing: -0.02em;
       }
       .crumb {
         position: absolute;
-        width: 7px;
-        height: 7px;
-        border-radius: 2px;
-        background: var(--accent);
+        width: var(--sz, 7px);
+        height: var(--sz, 7px);
+        border-radius: 35% 65% 55% 45% / 45% 40% 60% 55%;
+        background: var(--crumb-bg, var(--crust));
+        box-shadow: inset -1px -1px 0 rgba(62, 34, 12, 0.28);
         pointer-events: none;
-        animation: crumb 0.8s ease-out forwards;
+        z-index: 4;
+        animation: crumb 0.78s cubic-bezier(0.18, 0.72, 0.32, 1) forwards;
       }
       .empty {
         position: absolute;
         inset: 0;
         display: grid;
         place-items: center;
-        font:
-          italic 33px Georgia,
-          serif;
+        font-family: Georgia, "Songti SC", serif;
+        font-style: italic;
+        font-size: clamp(1.7rem, 4vw, 2.15rem);
+        color: var(--ink);
+        letter-spacing: -0.02em;
       }
       .empty[hidden] {
         display: none;
       }
       @keyframes crumb {
-        to {
-          transform: translate(var(--dx), var(--dy)) rotate(250deg);
+        0% {
+          transform: translate(0, 0) scale(1) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(var(--dx), var(--dy)) scale(0.45) rotate(var(--rot, 240deg));
           opacity: 0;
         }
       }
-      .progress {
+      .telemetry {
         display: flex;
-        gap: 9px;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-top: 8px;
+      }
+      .progress {
+        display: inline-flex;
+        gap: 10px;
         justify-content: center;
-        margin: 19px auto 12px;
+        align-items: center;
+        padding: 7px 14px;
+        border-radius: 999px;
+        background: rgba(255, 253, 248, 0.7);
+        border: 1px solid rgba(94, 72, 48, 0.12);
       }
       .progress span {
-        width: 7px;
-        height: 7px;
-        border: 1px solid var(--accent);
+        width: 9px;
+        height: 9px;
+        border: 1.5px solid color-mix(in srgb, var(--accent) 65%, var(--ink));
         border-radius: 50%;
+        background: rgba(255, 252, 246, 0.9);
+        transition:
+          background-color 220ms ease,
+          transform 220ms var(--ease-spring),
+          box-shadow 220ms ease;
       }
       .progress span.done {
         background: var(--accent);
+        border-color: var(--accent);
+        transform: scale(1.18);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
       }
       #status {
-        min-height: 28px;
-        font:
-          12px ui-monospace,
-          monospace;
+        min-height: 24px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.82rem;
+        font-weight: 500;
+        font-variant-numeric: tabular-nums;
         color: var(--ink);
+        letter-spacing: 0.01em;
       }
       .reset {
-        margin-top: 16px;
+        margin-top: 4px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-height: 40px;
+        padding: 9px 20px;
+        border-radius: 999px;
+        border: 1px solid color-mix(in srgb, var(--accent) 34%, rgba(44, 33, 24, 0.22));
+        background: linear-gradient(180deg, #fffdf9 0%, #f5ecdc 100%);
+        color: var(--ink);
+        font-family: inherit;
+        font-size: 0.84rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow:
+          0 2px 6px rgba(56, 38, 20, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        -webkit-tap-highlight-color: transparent;
+        transition:
+          transform 160ms var(--ease-spring),
+          border-color 160ms ease,
+          box-shadow 160ms ease,
+          background 160ms ease;
+      }
+      @media (hover: hover) {
+        .reset:hover {
+          border-color: var(--accent);
+          box-shadow:
+            0 6px 14px rgba(56, 38, 20, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.95);
+          transform: translateY(-1px);
+        }
+      }
+      .reset:active {
+        transform: translateY(1px);
       }
       .note {
-        margin-top: 29px;
-        font:
-          10px ui-monospace,
-          monospace;
+        margin-top: 22px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.7rem;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: #5b5145;
+        color: var(--muted);
       }
-      @media (max-width: 480px) {
+      @media (max-width: 520px) {
         main {
-          padding: 24px 18px;
-          min-height: 660px;
-        }
-        h1 {
-          margin-top: 32px;
-        }
-        .plate {
-          height: 210px;
-        }
-        .treat {
-          height: 156px;
-        }
-        .flavors button {
-          padding: 9px 11px;
+          padding: 18px 16px 24px;
         }
         .mast {
-          font-size: 9px;
+          font-size: 0.64rem;
+          letter-spacing: 0.08em;
+          padding: 9px 2px;
+        }
+        .hero-head {
+          margin-top: 20px;
+        }
+        h1 {
+          font-size: 2.05rem;
+        }
+        .hero-head p {
+          font-size: 0.88rem;
+        }
+        .flavors {
+          margin: 16px auto 10px;
+        }
+        .flavors button {
+          padding: 7px 12px 7px 10px;
+          font-size: 0.8rem;
+        }
+        .plate {
+          height: 220px;
+        }
+        .treat {
+          height: 158px;
+        }
+        .bite-label {
+          font-size: 30px;
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -241,60 +491,162 @@
   <body>
     <main>
       <div class="mast">
-        <span>THE LITTLE TREAT SHOP</span>
+        <span class="mast-brand">THE LITTLE TREAT SHOP</span>
         <span>FRESHLY CLICKED · 06 BITES</span>
       </div>
-      <h1>A little bite of joy.</h1>
-      <p>Choose a flavor. Take six little bites. Leave no crumbs behind.</p>
+      <header class="hero-head">
+        <h1>A little bite of joy.</h1>
+        <p>Choose a flavor. Take six little bites. Leave no crumbs behind.</p>
+      </header>
       <div class="flavors" role="group" aria-label="Cookie flavor">
-        <button aria-pressed="true" data-flavor="Vanilla" data-color="#ead2a9">
-          <i style="--chip: #d6b57e"></i>
+        <button
+          type="button"
+          aria-pressed="true"
+          data-flavor="Vanilla"
+          data-color="#f3ddb0"
+          data-hi="#fff7e2"
+          data-edge="#d4ae6a"
+          data-speck="#6b4423"
+        >
+          <i style="--chip: #e4c283"></i>
           Vanilla
         </button>
-        <button aria-pressed="false" data-flavor="Berry" data-color="#edbbc5">
-          <i style="--chip: #c37e91"></i>
+        <button
+          type="button"
+          aria-pressed="false"
+          data-flavor="Berry"
+          data-color="#f2b5c4"
+          data-hi="#ffe5ec"
+          data-edge="#cf7d94"
+          data-speck="#8c2947"
+        >
+          <i style="--chip: #d46d89"></i>
           Berry
         </button>
-        <button aria-pressed="false" data-flavor="Matcha" data-color="#c2d0a7">
-          <i style="--chip: #819966"></i>
+        <button
+          type="button"
+          aria-pressed="false"
+          data-flavor="Matcha"
+          data-color="#bfd09d"
+          data-hi="#e5f0ce"
+          data-edge="#8aa264"
+          data-speck="#3f5a29"
+        >
+          <i style="--chip: #7d9b58"></i>
           Matcha
         </button>
       </div>
-      <div class="plate">
-        <button class="treat" id="bite" aria-label="Take a bite">
-          <svg viewBox="0 0 420 200" aria-hidden="true">
-            <defs>
-              <mask id="cookie-mask">
-                <rect width="420" height="200" fill="white" />
-                <g id="holes" fill="black"></g>
-              </mask>
-            </defs>
-            <g id="cookie" mask="url(#cookie-mask)">
-              <rect class="cookie" x="22" y="39" width="376" height="126" rx="63" />
-              <rect class="icing" x="33" y="50" width="354" height="104" rx="52" />
-              <text class="bite-label" x="210" y="116" text-anchor="middle">take a bite.</text>
-              <g fill="var(--accent)" opacity=".35">
-                <circle cx="65" cy="94" r="2" />
-                <circle cx="100" cy="70" r="2" />
-                <circle cx="329" cy="138" r="2" />
-                <circle cx="349" cy="89" r="2" />
-                <circle cx="159" cy="142" r="2" />
+      <div class="plate-stage">
+        <div class="plate">
+          <button class="treat" id="bite" type="button" aria-label="Take a bite">
+            <svg viewBox="0 0 420 200" aria-hidden="true">
+              <defs>
+                <linearGradient id="crustGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#dea15d" />
+                  <stop offset="52%" stop-color="#c98544" />
+                  <stop offset="100%" stop-color="#9e5e29" />
+                </linearGradient>
+                <linearGradient id="icingGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="var(--icing-hi)" />
+                  <stop offset="28%" stop-color="var(--icing)" />
+                  <stop offset="100%" stop-color="var(--icing-edge)" />
+                </linearGradient>
+                <linearGradient id="glossGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.62" />
+                  <stop offset="55%" stop-color="#ffffff" stop-opacity="0.16" />
+                  <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+                </linearGradient>
+                <filter id="cookieShadow" x="-12%" y="-18%" width="124%" height="148%">
+                  <feDropShadow
+                    dx="0"
+                    dy="10"
+                    stdDeviation="7"
+                    flood-color="#4e3418"
+                    flood-opacity="0.24"
+                  />
+                  <feDropShadow
+                    dx="0"
+                    dy="3"
+                    stdDeviation="2"
+                    flood-color="#3c240d"
+                    flood-opacity="0.18"
+                  />
+                </filter>
+                <mask id="cookie-mask">
+                  <rect width="420" height="200" fill="white" />
+                  <g id="holes" fill="black"></g>
+                </mask>
+              </defs>
+              <g filter="url(#cookieShadow)">
+                <g id="cookie" mask="url(#cookie-mask)">
+                  <!-- Baked golden sablé biscuit rim & thickness -->
+                  <rect class="cookie-base" x="18" y="34" width="384" height="134" rx="67" />
+                  <!-- Crisp biscuit bevel shadow -->
+                  <rect
+                    x="22"
+                    y="38"
+                    width="376"
+                    height="122"
+                    rx="61"
+                    fill="none"
+                    stroke="#f7d19b"
+                    stroke-opacity="0.45"
+                    stroke-width="2"
+                  />
+                  <!-- Glossy artisanal flavor ganache layer -->
+                  <rect class="cookie-icing" x="28" y="42" width="364" height="114" rx="57" />
+                  <!-- Specular top icing glaze highlight -->
+                  <path
+                    class="cookie-gloss"
+                    d="M84 48 H336 C362 48 380 65 382 86 C355 72 288 66 210 66 C132 66 65 72 38 86 C40 65 58 48 84 48 Z"
+                  />
+                  <!-- Patisserie piped dotted accent frame -->
+                  <rect class="cookie-stitch" x="38" y="51" width="344" height="96" rx="48" />
+                  <!-- Vanilla bean / berry / matcha micro-speckles -->
+                  <g fill="var(--speck)" opacity="0.44">
+                    <circle cx="64" cy="96" r="2.2" />
+                    <circle cx="88" cy="70" r="1.7" />
+                    <circle cx="118" cy="134" r="2" />
+                    <circle cx="154" cy="64" r="1.5" />
+                    <circle cx="286" cy="63" r="1.8" />
+                    <circle cx="332" cy="133" r="2.2" />
+                    <circle cx="352" cy="88" r="1.9" />
+                    <circle cx="316" cy="75" r="1.4" />
+                    <circle cx="176" cy="139" r="1.7" />
+                    <circle cx="246" cy="138" r="1.5" />
+                  </g>
+                  <!-- Subtle embossed highlight behind script -->
+                  <text
+                    class="bite-label"
+                    x="210"
+                    y="112"
+                    text-anchor="middle"
+                    fill="#ffffff"
+                    opacity="0.45"
+                    transform="translate(0 1.2)"
+                  >
+                    take a bite.
+                  </text>
+                  <text class="bite-label" x="210" y="112" text-anchor="middle">take a bite.</text>
+                </g>
               </g>
-            </g>
-          </svg>
-          <span class="empty" hidden>One more?</span>
-        </button>
+            </svg>
+            <span class="empty" hidden>One more?</span>
+          </button>
+        </div>
       </div>
-      <div class="progress" aria-hidden="true">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+      <div class="telemetry">
+        <div class="progress" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div id="status" role="status">Vanilla · 6 bites to happiness</div>
+        <button class="reset" id="reset" type="button">Bake a fresh one ↻</button>
       </div>
-      <div id="status" role="status">Vanilla · 6 bites to happiness</div>
-      <button class="reset" id="reset">Bake a fresh one ↻</button>
       <div class="note">Zero calories. Quite a lot of delight.</div>
     </main>
     <!-- usefulshelf-runtime:start -->
@@ -316,6 +668,7 @@
           "FRESHLY CLICKED · 06 BITES": "新鲜出炉 · 六口快乐",
           List: "列表",
           Matcha: "抹茶",
+          New: "新建",
           "One more?": "再来一枚？",
           Peach: "蜜桃",
           Select: "选择",
@@ -424,6 +777,10 @@
             .replace(
               /Files stay on this device\. Maximum (\d+) MB\./g,
               "文件留在此设备，最大 $1 MB。",
+            )
+            .replace(
+              /Packed ([\d,]+) bytes\. CRC32 ([0-9a-f]+)\. Download contains the complete file, ready to decode\./gi,
+              "已打包 $1 字节。CRC32 $2。下载文件包含完整内容，可直接解码。",
             )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
@@ -608,7 +965,8 @@
         "use strict";
         let bites = 0,
           rounds = 0,
-          flavor = window.__usefulshelfText("Vanilla");
+          flavor = window.__usefulshelfText("Vanilla"),
+          flavorColor = "#f3ddb0";
         const button = document.querySelector("#bite"),
           holes = document.querySelector("#holes"),
           status = document.querySelector("#status"),
@@ -658,25 +1016,39 @@
             return;
           }
           const [x, y, r] = positions[bites];
-          for (let i = 0; i < 4; i++) {
+          const offsets = [
+            [-19, -11, 0.72],
+            [17, -13, 0.78],
+            [-14, 13, 0.76],
+            [18, 12, 0.74],
+            [0, 0, 0.82],
+          ];
+          for (const [ox, oy, scale] of offsets) {
             const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            c.setAttribute("cx", x + (i % 2 ? 17 : -17));
-            c.setAttribute("cy", y + (i < 2 ? 12 : -12));
-            c.setAttribute("r", r * 0.78);
+            c.setAttribute("cx", x + ox);
+            c.setAttribute("cy", y + oy);
+            c.setAttribute("r", r * scale);
             holes.append(c);
           }
           bites++;
           if (bites === 6) rounds++;
           if (!reduced.matches) {
-            for (let i = 0; i < 9; i++) {
+            button.classList.remove("nibble");
+            void button.offsetWidth;
+            button.classList.add("nibble");
+            const palette = [flavorColor, "#d08e4a", "#9f5f28", "var(--accent)"];
+            for (let i = 0; i < 12; i++) {
               const c = document.createElement("i");
               c.className = "crumb";
               c.style.left = (x / 420) * 100 + "%";
               c.style.top = (y / 200) * 100 + "%";
-              c.style.setProperty("--dx", Math.random() * 160 - 80 + "px");
-              c.style.setProperty("--dy", 30 + Math.random() * 100 + "px");
+              c.style.setProperty("--sz", 4.5 + Math.random() * 5.5 + "px");
+              c.style.setProperty("--dx", Math.random() * 170 - 85 + "px");
+              c.style.setProperty("--dy", 26 + Math.random() * 104 + "px");
+              c.style.setProperty("--rot", Math.round(Math.random() * 340 - 170) + "deg");
+              c.style.setProperty("--crumb-bg", palette[i % palette.length]);
               button.append(c);
-              setTimeout(() => c.remove(), 850);
+              setTimeout(() => c.remove(), 820);
             }
           }
           update();
@@ -685,7 +1057,12 @@
         document.querySelectorAll("[data-flavor]").forEach((b) =>
           b.addEventListener("click", () => {
             flavor = window.__usefulshelfText(b.dataset.flavor);
-            document.documentElement.style.setProperty("--icing", b.dataset.color);
+            flavorColor = b.dataset.color;
+            const root = document.documentElement.style;
+            root.setProperty("--icing", b.dataset.color);
+            root.setProperty("--icing-hi", b.dataset.hi);
+            root.setProperty("--icing-edge", b.dataset.edge);
+            root.setProperty("--speck", b.dataset.speck);
             document
               .querySelectorAll("[data-flavor]")
               .forEach((x) => x.setAttribute("aria-pressed", String(x === b)));

@@ -46,10 +46,12 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 :root {
   --accent: #b34d31;
   --bg: #f4f1e9;
-  --ink: #302f2a;
+  --ink: #24211c;
+  --muted: #524c42;
+  --rule: rgba(36, 33, 28, 0.16);
 }
 body {
-  font: 15px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font: 15px/1.55 -apple-system, BlinkMacSystemFont, "PingFang SC", system-ui, sans-serif;
 }
 ```
 
@@ -65,16 +67,17 @@ body {
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### Component design notes
 
 #### Interaction contract
-Keep the carousel as native horizontal overflow with scroll snap. The pressed cartridge is the active chapter and updates a single polite region containing its year, heading and story. Left/right wrap; Home/End select the edges. The draw action prefers unseen chapters, then excludes the currently active one. The discovery Set lasts for the current page visit only.
+Keep the collector deck as native horizontal overflow with scroll snap inside a recessed warm sandstone-travertine museum display rail. The pressed cartridge is the active chapter, illuminates its top hardware LED notch, elevates with a deepened floor shadow, and updates a single polite chapter plaque containing its year (`tabular-nums`), heading, story, and discovery pips. Left/right wrap; Home/End select the edges. The draw action prefers unseen chapters, then excludes the currently active one. The discovery Set lasts for the current page visit only.
 
-#### Adapting content
-Edit both the four cartridge labels and the `data` array in the template together. The story text is assigned with `textContent`. These are example memories, not a real person's biography. Keep visible focus rings on the angled cartridges. Scroll only the deck rather than the entire document when selecting a chapter.
+#### Adapting content & tokens
+Core tokens: `--bg: #f4f1e9`, `--ink: #24211c`, `--muted: #524c42`, `--accent: #b34d31`. Edit both the four cartridge labels and the `data` array in the template together. Story text is assigned with `textContent`. Keep visible focus rings on the angled cartridges and scroll only the deck rather than the entire document when selecting a chapter.
 
-#### Visual construction
-Each cartridge uses a plastic body, inset highlight, ribbed top, exposed contacts and a paper label. CSS silhouettes make four separate illustrations. Moderate 3D rotation preserves legibility; the selected cartridge lifts without changing document flow. At narrow widths, neighboring cartridges remain reachable by native swipe. Reduced motion removes transitions and smooth scrolling.
+#### Hardware construction
+Each cartridge combines an anodized/matte tactile plastic shell (Sand-Ivory, Sage-Olive, Terracotta-Clay, Slate-Cobalt), precision molded upper grip ridges, exposed gold-plated PCB edge contacts, an active accent LED indicator, and a recessed paper label hosting a custom art-directed inline SVG cover illustration. Moderate 3D rotation preserves legibility; the selected cartridge lifts smoothly without shifting document flow. Reduced motion disables transitions and smooth scrolling.
 
 ## 可选完整包工作流 / Optional package workflow
 

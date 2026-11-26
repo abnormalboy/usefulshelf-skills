@@ -6,140 +6,225 @@
     <title>每个作品，都有故事。</title>
     <style>
       :root {
-        --accent: #cf6948;
-        --bg: #171917;
-        --ink: #eeece6;
+        --accent: #d9724e;
+        --bg: #131513;
+        --ink: #f2efe7;
+        --muted: #aab1a5;
+        --line: rgba(255, 255, 255, 0.1);
+        --surface: rgba(255, 255, 255, 0.045);
       }
       * {
         box-sizing: border-box;
       }
+      html {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
       body {
         margin: 0;
-        background: var(--bg);
+        background-color: var(--bg);
+        background-image:
+          radial-gradient(ellipse 76% 52% at 50% 8%, rgba(235, 224, 204, 0.08), transparent 66%),
+          radial-gradient(
+            circle at 84% 78%,
+            color-mix(in srgb, var(--accent) 9%, transparent),
+            transparent 46%
+          );
         color: var(--ink);
-        font: 13px system-ui;
+        font:
+          13.5px/1.5 -apple-system,
+          BlinkMacSystemFont,
+          "PingFang SC",
+          "Segoe UI",
+          "Helvetica Neue",
+          sans-serif;
+        overflow-x: clip;
       }
       main {
         width: 100%;
-        max-width: 1510px;
+        max-width: 1440px;
         margin: auto;
-        padding: 23px 30px;
-        min-height: 740px;
+        padding: 20px 36px 24px;
+        min-height: 700px;
       }
       .mast {
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 20px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--line);
         font:
-          11px ui-monospace,
+          500 11px/1.4 ui-monospace,
+          SFMono-Regular,
+          Menlo,
           monospace;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.1em;
         color: #c2c8bc;
       }
       .mark {
-        display: flex;
-        gap: 9px;
+        display: inline-flex;
+        gap: 10px;
         align-items: center;
+        color: var(--ink);
       }
       .mark i {
-        width: 7px;
-        height: 7px;
+        width: 8px;
+        height: 8px;
         background: var(--accent);
         border-radius: 50%;
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
       }
       .intro {
         display: flex;
         justify-content: space-between;
-        gap: 30px;
-        align-items: baseline;
-        margin: 22px 0 16px;
+        gap: 32px;
+        align-items: flex-end;
+        margin: 18px 0 16px;
       }
       h1 {
-        font:
-          22px/1.35 Georgia,
-          serif;
+        font-family: "Iowan Old Style", "Palatino Linotype", "Songti SC", "STSong", Georgia, serif;
+        font-size: clamp(24px, 2.5vw, 34px);
+        font-weight: 500;
+        line-height: 1.2;
         letter-spacing: -0.02em;
         overflow-wrap: anywhere;
         margin: 0;
-        max-width: 58%;
+        max-width: 56%;
+        text-wrap: balance;
+      }
+      :lang(zh) h1 {
+        font-family: "Songti SC", "STSong", "Noto Serif CJK SC", Georgia, serif;
+        font-weight: 600;
+        word-break: keep-all;
       }
       .sub {
-        font-size: 12px;
-        line-height: 1.7;
+        font-size: 13px;
+        line-height: 1.65;
         max-width: 440px;
-        color: #b2b9ac;
+        color: var(--muted);
         margin: 0;
+        text-wrap: pretty;
       }
       .tools {
         display: flex;
         justify-content: space-between;
-        gap: 14px;
+        align-items: center;
+        gap: 12px;
         flex-wrap: wrap;
         position: relative;
-        z-index: 4;
+        z-index: 6;
       }
       .tools > div {
-        display: flex;
-        gap: 6px;
+        display: inline-flex;
+        gap: 3px;
+        padding: 4px;
+        border-radius: 999px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         flex-wrap: wrap;
       }
       .tools button {
-        border: 0;
-        border-bottom: 2px solid transparent;
-        background: none;
-        color: #aeb6a6;
-        padding: 7px 10px;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        background: transparent;
+        color: #b4bbb0;
+        padding: 6px 14px;
         font:
-          12px system-ui,
+          500 12.5px/1.3 -apple-system,
+          BlinkMacSystemFont,
+          "PingFang SC",
           sans-serif;
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
         transition:
-          color 0.16s,
-          border-color 0.16s;
+          color 160ms ease,
+          background-color 160ms ease,
+          border-color 160ms ease;
       }
-      .tools button:hover {
-        color: #f3f3eb;
+      @media (hover: hover) {
+        .tools button:hover {
+          color: var(--ink);
+          background: rgba(255, 255, 255, 0.06);
+        }
       }
       .tools button[aria-pressed="true"] {
-        color: #f3f3eb;
-        border-color: var(--accent);
+        color: #fffdf8;
+        background: color-mix(in srgb, var(--accent) 26%, rgba(255, 255, 255, 0.1));
+        border-color: color-mix(in srgb, var(--accent) 52%, rgba(255, 255, 255, 0.18));
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
       }
       .gallery {
         position: relative;
         perspective: 1450px;
-        height: 540px;
-        min-height: 540px;
+        height: 520px;
+        min-height: 520px;
         width: 100%;
         max-width: 1240px;
-        margin: 14px auto 18px;
+        margin: 10px auto 14px;
         overflow: hidden;
         isolation: isolate;
         --look-x: 0deg;
         --look-y: 0deg;
       }
+      .gallery::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 52%;
+        width: min(760px, 84%);
+        height: 360px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: radial-gradient(
+          ellipse at center,
+          rgba(232, 222, 202, 0.06) 0%,
+          rgba(232, 222, 202, 0) 70%
+        );
+        pointer-events: none;
+        z-index: 0;
+      }
       .project {
         position: relative;
         min-width: 0;
         padding: 0;
-        border: 1px solid #ffffff1c;
-        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 10px;
         overflow: hidden;
-        background: #232622;
-        color: #f3f2ec;
+        background: #1c1e1b;
+        color: #f4f2ec;
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
         transition:
-          transform 0.55s cubic-bezier(0.2, 0.75, 0.2, 1),
-          opacity 0.4s;
+          transform 540ms cubic-bezier(0.2, 0.78, 0.2, 1),
+          opacity 360ms ease,
+          border-color 220ms ease,
+          box-shadow 260ms ease;
         transform-style: preserve-3d;
         outline-offset: 6px;
-        box-shadow: 0 14px 28px #0008;
+        box-shadow:
+          0 22px 44px rgba(0, 0, 0, 0.56),
+          0 4px 12px rgba(0, 0, 0, 0.32),
+          inset 0 1px 0 rgba(255, 255, 255, 0.24);
+      }
+      .project::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.14) 0%,
+          rgba(255, 255, 255, 0) 36%
+        );
+        pointer-events: none;
       }
       .project svg {
         display: block;
         width: 100%;
         height: auto;
-        filter: grayscale(1);
       }
       .project .caption {
         position: absolute;
@@ -150,17 +235,22 @@
         justify-content: space-between;
         align-items: baseline;
         margin: 0;
-        padding: 20px 10px 8px;
+        padding: 12px 12px 10px;
         background: linear-gradient(
           to top,
-          rgba(16, 18, 16, 0.94) 52%,
-          rgba(16, 18, 16, 0.72) 82%,
-          transparent
+          rgba(14, 16, 14, 0.92) 0%,
+          rgba(14, 16, 14, 0.76) 72%,
+          rgba(14, 16, 14, 0) 100%
         );
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
         font:
-          12px/1.3 system-ui,
+          500 12.5px/1.3 -apple-system,
+          BlinkMacSystemFont,
+          "PingFang SC",
           sans-serif;
-        color: #f3f2ec;
+        color: #f6f4ee;
         letter-spacing: 0.01em;
         text-align: left;
         gap: 6px;
@@ -168,21 +258,34 @@
       }
       .project .caption small {
         font:
-          11px ui-monospace,
+          500 11px ui-monospace,
+          SFMono-Regular,
+          Menlo,
           monospace;
-        color: #cdd3c5;
+        font-variant-numeric: tabular-nums;
+        color: #cfd4c7;
       }
       .gallery[data-layout="scatter"] .project {
         position: absolute;
-        width: clamp(165px, 20%, 245px);
+        width: clamp(168px, 19%, 234px);
         left: var(--sx);
         top: var(--sy);
         transform: translate(-50%, -50%) translateZ(var(--depth))
           rotateY(calc(var(--tilt) + var(--look-y))) rotateX(var(--look-x)) rotateZ(var(--twist));
-        opacity: 0.96;
+        opacity: 0.97;
         z-index: var(--order);
       }
-      .gallery[data-layout="scatter"] .project:hover,
+      @media (hover: hover) {
+        .gallery[data-layout="scatter"] .project:hover {
+          opacity: 1;
+          z-index: 30;
+          border-color: rgba(255, 255, 255, 0.34);
+          box-shadow:
+            0 30px 60px rgba(0, 0, 0, 0.68),
+            0 0 0 1px color-mix(in srgb, var(--accent) 40%, rgba(255, 255, 255, 0.2));
+          transform: translate(-50%, -50%) translateZ(125px) rotateY(0deg) rotateZ(0deg);
+        }
+      }
       .gallery[data-layout="scatter"] .project:focus-visible {
         opacity: 1;
         z-index: 30;
@@ -191,33 +294,42 @@
       .gallery[data-layout="grid"] {
         display: grid;
         height: auto;
-        min-height: 530px;
+        min-height: 490px;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 24px;
         max-width: 920px;
-        padding: 23px 30px;
+        padding: 18px 24px;
         overflow: visible;
       }
       .gallery[data-layout="grid"] .project {
-        max-width: 240px;
+        max-width: 248px;
         width: 100%;
         justify-self: center;
       }
-      .gallery[data-layout="grid"] .project:hover {
-        transform: translateY(-6px);
+      @media (hover: hover) {
+        .gallery[data-layout="grid"] .project:hover {
+          transform: translateY(-6px);
+          border-color: rgba(255, 255, 255, 0.32);
+        }
       }
       .gallery[data-layout="orbit"] {
-        height: 540px;
-        min-height: 540px;
+        height: 500px;
+        min-height: 500px;
       }
       .gallery[data-layout="orbit"] .project {
         position: absolute;
-        width: 260px;
-        left: calc(50% - 130px);
-        top: 85px;
+        width: 252px;
+        left: calc(50% - 126px);
+        top: 68px;
         transform: translateX(var(--x)) translateZ(var(--z)) rotateY(var(--r));
         opacity: var(--opacity);
         z-index: var(--order);
+      }
+      .gallery[data-layout="orbit"] .project[data-center="true"] {
+        border-color: rgba(255, 255, 255, 0.32);
+        box-shadow:
+          0 28px 60px rgba(0, 0, 0, 0.68),
+          0 0 42px color-mix(in srgb, var(--accent) 18%, transparent);
       }
       .gallery[data-layout="orbit"] .project:not([data-center="true"]) .caption {
         visibility: hidden;
@@ -230,146 +342,182 @@
         align-items: center;
         justify-content: space-between;
         gap: 20px;
-        padding-top: 6px;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
       }
       .arrows {
         display: flex;
-        gap: 7px;
+        gap: 8px;
       }
       .arrows button {
-        border: 1px solid #4a5144;
+        border: 1px solid rgba(255, 255, 255, 0.18);
         border-radius: 50%;
-        width: 32px;
-        height: 32px;
-        color: #dce1d3;
-        background: none;
+        width: 36px;
+        height: 36px;
+        color: var(--ink);
+        background: var(--surface);
         cursor: pointer;
+        display: grid;
+        place-items: center;
+        transition:
+          background-color 160ms ease,
+          border-color 160ms ease;
+      }
+      @media (hover: hover) {
+        .arrows button:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: var(--accent);
+        }
       }
       .arrows[hidden] {
         display: none;
       }
       #status {
         font:
-          12px/1.6 system-ui,
+          12.5px/1.6 -apple-system,
+          BlinkMacSystemFont,
+          "PingFang SC",
           sans-serif;
-        color: #b2b9ac;
+        color: #c5cbc0;
       }
       .edition {
         font:
-          10px ui-monospace,
+          500 10.5px ui-monospace,
+          SFMono-Regular,
+          Menlo,
           monospace;
-        letter-spacing: 0.1em;
-        color: #9da696;
+        letter-spacing: 0.12em;
+        color: #9ba396;
       }
       button:focus-visible {
         outline: 2px solid var(--accent);
-        outline-offset: 5px;
+        outline-offset: 4px;
       }
       dialog {
-        width: min(750px, calc(100vw - 32px));
+        width: min(760px, calc(100vw - 32px));
         max-height: calc(100vh - 40px);
         overflow: auto;
         padding: 0;
-        background: #e8e7df;
-        border: 0;
-        border-radius: 4px;
-        color: #30382c;
+        background: linear-gradient(180deg, #f3f0e7 0%, #e7e3d6 100%);
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        border-radius: 16px;
+        color: #242921;
+        box-shadow: 0 36px 80px rgba(0, 0, 0, 0.65);
       }
       dialog::backdrop {
-        background: #060a07d9;
-        backdrop-filter: blur(6px);
+        background: rgba(8, 10, 8, 0.78);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
       }
       .dialog-inner {
-        padding: 24px;
+        padding: 28px;
       }
       .dialog-top {
         display: flex;
         justify-content: space-between;
         align-items: center;
         font:
-          11px ui-monospace,
+          600 11px ui-monospace,
+          SFMono-Regular,
+          Menlo,
           monospace;
-        color: #4c5844;
+        letter-spacing: 0.1em;
+        color: #4f5848;
       }
       .close {
-        background: none;
-        border: 1px solid #8a947d;
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid #aeb4a4;
         border-radius: 50%;
-        width: 32px;
-        height: 32px;
-        color: #2f3b28;
+        width: 36px;
+        height: 36px;
+        color: #242921;
+        font-size: 18px;
         cursor: pointer;
+        display: grid;
+        place-items: center;
       }
       .case-grid {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        gap: 27px;
+        grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+        gap: 30px;
         align-items: center;
-        margin-top: 18px;
+        margin-top: 20px;
+      }
+      #case-art {
+        padding: 10px;
+        border-radius: 12px;
+        background: #1b1d19;
+        box-shadow: 0 18px 36px rgba(20, 24, 19, 0.24);
       }
       #case-art svg {
         width: 100%;
         height: auto;
         display: block;
-        filter: grayscale(1);
+        border-radius: 6px;
       }
       h2 {
-        font:
-          32px/1.1 Georgia,
-          serif;
-        margin: 8px 0 15px;
+        font-family: "Iowan Old Style", "Palatino Linotype", "Songti SC", "STSong", Georgia, serif;
+        font-size: 32px;
+        font-weight: 500;
+        line-height: 1.15;
+        margin: 0 0 14px;
       }
       #case-story {
-        font: 13px/1.8 system-ui;
-        color: #424d3b;
+        font-size: 14px;
+        line-height: 1.8;
+        color: #3d4537;
       }
       .case-note {
-        font: 11px system-ui;
-        color: #4c5844;
-        border-top: 1px solid #bcc4b1;
-        padding-top: 13px;
+        font-size: 11.5px;
+        color: #525c4b;
+        border-top: 1px solid #c6cbb9;
+        padding-top: 14px;
         margin-top: 20px;
       }
       @media (max-width: 650px) {
         main {
-          padding: 20px 16px;
+          padding: 18px 16px 22px;
         }
         .mast {
           font-size: 10px;
           gap: 10px;
+          padding-bottom: 12px;
         }
         .intro {
           display: block;
-          margin: 18px 0 12px;
+          margin: 14px 0 12px;
         }
         h1 {
-          font-size: 22px;
+          font-size: 24px;
           max-width: 100%;
           margin-bottom: 6px;
         }
         .sub {
-          font-size: 12px;
-          max-width: 360px;
+          font-size: 12.5px;
+          max-width: 100%;
         }
         .tools {
-          gap: 8px 10px;
-          margin-bottom: 8px;
+          gap: 8px;
+          margin-bottom: 6px;
+        }
+        .tools > div {
+          padding: 3px;
         }
         .tools button {
           font-size: 12px;
-          padding: 7px 8px;
-          min-height: 34px;
+          padding: 6px 10px;
+          min-height: 32px;
         }
         .gallery {
-          height: 648px;
-          min-height: 648px;
-          margin: 16px 0 14px;
+          height: 696px;
+          min-height: 696px;
+          margin: 12px 0 12px;
           width: 100%;
         }
         .gallery[data-layout="scatter"] .project {
-          width: 42%;
-          min-width: 132px;
-          max-width: 152px;
+          width: 43%;
+          min-width: 136px;
+          max-width: 156px;
           left: var(--mx);
           top: var(--my);
           transform: translate(-50%, -50%) translateZ(0) rotateZ(var(--twist));
@@ -381,19 +529,19 @@
         }
         .gallery[data-layout="grid"] {
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 18px 14px;
+          gap: 16px 12px;
           padding: 12px 0;
           height: auto;
           min-height: 0;
         }
         .gallery[data-layout="orbit"] {
-          height: 460px;
-          min-height: 460px;
+          height: 440px;
+          min-height: 440px;
         }
         .gallery[data-layout="orbit"] .project {
-          width: 210px;
-          left: calc(50% - 105px);
-          top: 78px;
+          width: 214px;
+          left: calc(50% - 107px);
+          top: 66px;
         }
         .edition {
           display: none;
@@ -406,7 +554,7 @@
           margin: auto;
         }
         h2 {
-          font-size: 28px;
+          font-size: 26px;
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -609,6 +757,10 @@
               /Files stay on this device\. Maximum (\d+) MB\./g,
               "文件留在此设备，最大 $1 MB。",
             )
+            .replace(
+              /Packed ([\d,]+) bytes\. CRC32 ([0-9a-f]+)\. Download contains the complete file, ready to decode\./gi,
+              "已打包 $1 字节。CRC32 $2。下载文件包含完整内容，可直接解码。",
+            )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
 
@@ -790,7 +942,7 @@
     <script>
       (() => {
         "use strict";
-        const config = window.__usefulshelfConfigure({"title": "\u6bcf\u4e2a\u4f5c\u54c1\uff0c\u90fd\u6709\u6545\u4e8b\u3002", "subtitle": "\u7ffb\u9605\u4e00\u95f4\u72ec\u7acb\u5de5\u4f5c\u5ba4\u7684\u521b\u4f5c\u7b14\u8bb0\uff0c\u53d1\u73b0\u6bcf\u4e2a\u5c0f\u4f5c\u54c1\u80cc\u540e\u7684\u60f3\u6cd5\u3002", "accent": "#cf6948", "bg": "#171917", "customTitle": false, "customSubtitle": false}),
+        const config = window.__usefulshelfConfigure({"title": "\u6bcf\u4e2a\u4f5c\u54c1\uff0c\u90fd\u6709\u6545\u4e8b\u3002", "subtitle": "\u7ffb\u9605\u4e00\u95f4\u72ec\u7acb\u5de5\u4f5c\u5ba4\u7684\u521b\u4f5c\u7b14\u8bb0\uff0c\u53d1\u73b0\u6bcf\u4e2a\u5c0f\u4f5c\u54c1\u80cc\u540e\u7684\u60f3\u6cd5\u3002", "accent": "#d9724e", "bg": "#131513", "customTitle": false, "customSubtitle": false}),
           resolvedLang =
             new URLSearchParams(location.search).get("lang") ||
             document.documentElement.dataset.skillLang ||
@@ -865,38 +1017,97 @@
           },
         ];
         function art(i, instance = "card") {
-          const ink = ["#353b32", "#aba58b", "#343f36", "#ac7762", "#343c33", "#d3c8b1"][i],
-            paper = ["#c9c6b4", "#363e35", "#dad8c6", "#c5bda8", "#c1bca8", "#434e42"][i];
-          let shapes = "";
-          if (i === 0)
-            shapes =
-              '<ellipse cx="145" cy="216" rx="82" ry="12" fill="#252c2322"/><path d="M138 119H153V205H138Z" fill="#82765c"/><ellipse cx="145" cy="207" rx="51" ry="9" fill="#8b8064"/><path d="M61 127Q75 37 145 39Q219 43 233 127Z" fill="#5e6d58"/><ellipse cx="147" cy="127" rx="86" ry="15" fill="#f4dda3"/>';
-          if (i === 1)
-            shapes =
-              '<path d="M38 270V93Q38 15 115 15Q192 15 192 93V270" fill="#c9c3a9"/><path d="M65 270V99Q65 44 115 44Q164 44 164 99V270" fill="#6c7560"/><path d="M106 270V123Q106 68 158 68Q211 68 211 123V270" fill="#a6ae92"/><path d="M132 270V130Q132 99 158 99Q185 99 185 130V270" fill="#434f40"/><path d="M198 0H300V270H226V112Q226 35 198 0" fill="#898f77"/>';
-          if (i === 2)
-            shapes =
-              '<g transform="rotate(-12 145 133)"><rect x="60" y="39" width="182" height="214" fill="#989d84"/><rect x="50" y="30" width="182" height="214" fill="#ede9d6"/><path d="M70 31V241" stroke="#cacbb4"/><path d="M140 207V98M140 154Q93 151 97 115Q138 117 140 154M140 185Q185 178 186 143Q145 147 140 185" stroke="#5d7257" fill="none" stroke-width="3"/><text x="90" y="69" fill="#505d47" font-family="Georgia" font-size="17">SUNDAY</text></g>';
-          if (i === 3)
-            shapes =
-              '<ellipse cx="148" cy="228" rx="83" ry="10" fill="#574b3d22"/><path d="M115 68Q155 50 186 66L177 108Q227 140 207 210Q161 249 93 216Q73 155 117 111Z" fill="#9a6c57"/><ellipse cx="150" cy="65" rx="37" ry="9" fill="#614b3f"/><path d="M146 76Q151 151 125 213" fill="none" stroke="#c49a7f" stroke-width="14" opacity=".5"/>';
-          if (i === 4)
-            shapes =
-              '<rect x="39" y="17" width="189" height="173" fill="#8f9f86"/><path d="M48 24H219V180H48Z" fill="#dce0c6"/><path d="M132 23V179M46 105H219" stroke="#7c8a70" stroke-width="7"/><path d="M20 211H267V224H20Z" fill="#88775b"/><path d="M42 224V264M247 224V264" stroke="#71644e" stroke-width="9"/><path d="M186 160H228L222 200H194Z" fill="#ac7e61"/><path d="M207 170V117M207 146Q168 143 175 115Q204 118 207 146M207 157Q237 149 239 129Q209 133 207 157" fill="#516747"/>';
-          if (i === 5)
-            shapes =
-              '<g fill="none" stroke="#c6bc9f" stroke-width="3">' +
-              Array.from(
-                { length: 12 },
-                (_, n) =>
-                  `<ellipse cx="150" cy="135" rx="${30 + n * 8}" ry="${15 + n * 9}" transform="rotate(${n * 4} 150 135)"/>`,
-              ).join("") +
-              '</g><circle cx="150" cy="135" r="9" fill="' +
-              config.accent +
-              '"/>';
+          const wallTop = ["#40473c", "#303630", "#c6c0ae", "#443d36", "#394139", "#242a25"][i];
+          const wallBot = ["#1f231e", "#1d221d", "#948f7e", "#26211d", "#202520", "#131714"][i];
           const id = "study" + i + instance;
-          shapes = shapes.replace(/#5e6d58|#9a6c57/g, "url(#" + id + "object)");
-          return `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="375" viewBox="0 0 300 375" aria-hidden="true"><defs><linearGradient id="${id}paper" x1="0" y1="0" x2="1" y2=".8"><stop stop-color="${paper}"/><stop offset="1" stop-color="${ink}"/></linearGradient><linearGradient id="${id}object"><stop stop-color="#c7c9b7"/><stop offset=".35" stop-color="#8b927d"/><stop offset=".76" stop-color="#4b5845"/><stop offset="1" stop-color="#78836a"/></linearGradient><radialGradient id="${id}light" cx=".22" cy=".16" r=".95"><stop stop-color="#fff" stop-opacity=".24"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/></radialGradient><filter id="${id}shade" x="-.4" y="-.3" width="1.8" height="1.8"><feDropShadow dx="14" dy="18" stdDeviation="12" flood-color="#000" flood-opacity=".28"/></filter></defs><rect width="300" height="375" fill="url(#${id}paper)"/>${[0, 3].includes(i) ? '<path d="M0 292L300 257V375H0Z" fill="#292d24" opacity=".24"/><path d="M0 52L176 0H211L0 208Z" fill="#fff" opacity=".10"/>' : ""}<g transform="translate(0 42)" filter="url(#${id}shade)">${shapes}</g><rect width="300" height="375" fill="url(#${id}light)"/><rect x=".5" y=".5" width="299" height="374" fill="none" stroke="#fff" opacity=".07"/></svg>`;
+          let extraDefs = "";
+          let scene = "";
+          if (i === 0) {
+            extraDefs =
+              `<radialGradient id="${id}glow" cx="50%" cy="48%" r="48%"><stop offset="0%" stop-color="#ffe5a3" stop-opacity="0.72"/><stop offset="52%" stop-color="#f2ba68" stop-opacity="0.22"/><stop offset="100%" stop-color="#f2ba68" stop-opacity="0"/></radialGradient>` +
+              `<linearGradient id="${id}shadeG" x1="0.1" y1="0" x2="0.95" y2="1"><stop offset="0%" stop-color="#90a188"/><stop offset="48%" stop-color="#5a6a55"/><stop offset="100%" stop-color="#313c2f"/></linearGradient>` +
+              `<linearGradient id="${id}brass" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#6b5c42"/><stop offset="45%" stop-color="#d5c095"/><stop offset="100%" stop-color="#5c4d36"/></linearGradient>`;
+            scene =
+              `<path d="M0 282L300 264V375H0Z" fill="#181b17"/>` +
+              `<ellipse cx="150" cy="286" rx="108" ry="22" fill="url(#${id}glow)"/>` +
+              `<ellipse cx="150" cy="264" rx="56" ry="11" fill="#0d0f0d" opacity="0.52"/>` +
+              `<rect x="142" y="156" width="16" height="106" rx="4" fill="url(#${id}brass)"/>` +
+              `<ellipse cx="150" cy="259" rx="52" ry="10" fill="url(#${id}brass)"/>` +
+              `<ellipse cx="150" cy="256" rx="46" ry="7" fill="#dfd0ae" opacity="0.45"/>` +
+              `<path d="M56 170C70 72 230 72 244 170Z" fill="url(#${id}shadeG)"/>` +
+              `<path d="M84 150C98 92 162 84 196 102" fill="none" stroke="#dbe5d1" stroke-opacity="0.34" stroke-width="5" stroke-linecap="round"/>` +
+              `<ellipse cx="150" cy="170" rx="94" ry="17" fill="#fae0a1"/>` +
+              `<ellipse cx="150" cy="170" rx="74" ry="11" fill="#fff4d2"/>`;
+          }
+          if (i === 1) {
+            extraDefs =
+              `<linearGradient id="${id}stone1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e3dcc8"/><stop offset="100%" stop-color="#9e9680"/></linearGradient>` +
+              `<linearGradient id="${id}stone2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#b4b099"/><stop offset="100%" stop-color="#6b6d5d"/></linearGradient>` +
+              `<linearGradient id="${id}sun" x1="0" y1="0" x2="1" y2="0.8"><stop offset="0%" stop-color="#fff4d6" stop-opacity="0.34"/><stop offset="100%" stop-color="#fff4d6" stop-opacity="0"/></linearGradient>`;
+            scene =
+              `<rect width="300" height="375" fill="#2c322b"/>` +
+              `<path d="M0 300L300 284V375H0Z" fill="#595a4b"/>` +
+              `<path d="M24 375V130A96 96 0 0 1 216 130V375H182V138A62 62 0 0 0 58 138V375Z" fill="url(#${id}stone1)"/>` +
+              `<path d="M86 375V166A68 68 0 0 1 222 166V375H194V170A40 40 0 0 0 114 170V375Z" fill="url(#${id}stone2)"/>` +
+              `<path d="M138 375V200A38 38 0 0 1 214 200V375Z" fill="#3a4238"/>` +
+              `<path d="M204 0H300V375H228V122C228 60 214 22 204 0Z" fill="#8f8c78"/>` +
+              `<polygon points="48,38 222,124 148,375 0,308" fill="url(#${id}sun)"/>`;
+          }
+          if (i === 2) {
+            extraDefs = `<linearGradient id="${id}page" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f8f4e8"/><stop offset="100%" stop-color="#dfd9c5"/></linearGradient>`;
+            scene =
+              `<g transform="rotate(-9 150 184)">` +
+              `<rect x="66" y="64" width="180" height="236" rx="4" fill="#6f7363"/>` +
+              `<rect x="55" y="52" width="180" height="236" rx="4" fill="url(#${id}page)"/>` +
+              `<line x1="77" y1="53" x2="77" y2="287" stroke="#c7c2ad" stroke-width="1.5"/>` +
+              `<line x1="92" y1="106" x2="216" y2="106" stroke="#b9b49f" stroke-width="1"/>` +
+              `<text x="92" y="94" fill="#343c32" font-family="Georgia, serif" font-size="18" letter-spacing="3">SUNDAY</text>` +
+              `<path d="M154 252V132M154 186C112 184 114 146 154 150M154 218C198 212 198 174 154 182M154 156C184 148 182 124 154 132" stroke="#4c6449" fill="none" stroke-width="2.4" stroke-linecap="round"/>` +
+              `<circle cx="154" cy="132" r="3" fill="${config.accent}"/>` +
+              `<text x="92" y="271" fill="#6c7364" font-family="ui-monospace, monospace" font-size="7.6" letter-spacing="1.1">EDITION 04 · NOTES</text>` +
+              `</g>`;
+          }
+          if (i === 3) {
+            extraDefs =
+              `<linearGradient id="${id}clay" x1="0.15" y1="0.1" x2="0.9" y2="0.95"><stop offset="0%" stop-color="#d7ab90"/><stop offset="38%" stop-color="#a87058"/><stop offset="78%" stop-color="#674336"/><stop offset="100%" stop-color="#452c24"/></linearGradient>` +
+              `<linearGradient id="${id}beam" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fff4dd" stop-opacity="0.22"/><stop offset="100%" stop-color="#fff4dd" stop-opacity="0"/></linearGradient>`;
+            scene =
+              `<polygon points="0,42 195,0 245,0 0,210" fill="url(#${id}beam)"/>` +
+              `<path d="M0 286L300 264V375H0Z" fill="#211d1a"/>` +
+              `<ellipse cx="152" cy="296" rx="76" ry="12" fill="#0a0908" opacity="0.52"/>` +
+              `<path d="M116 112C146 98 178 100 192 114L182 152C226 182 214 260 156 290C96 294 74 218 118 156Z" fill="url(#${id}clay)"/>` +
+              `<ellipse cx="154" cy="112" rx="38" ry="10" fill="#4f352c"/>` +
+              `<ellipse cx="154" cy="111" rx="31" ry="6.5" fill="#2c1d18"/>` +
+              `<path d="M134 134C116 178 114 236 136 274" fill="none" stroke="#f0d2bc" stroke-opacity="0.46" stroke-width="11" stroke-linecap="round"/>`;
+          }
+          if (i === 4) {
+            extraDefs =
+              `<linearGradient id="${id}sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#edf0df"/><stop offset="100%" stop-color="#cdd4bd"/></linearGradient>` +
+              `<linearGradient id="${id}oak" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#b49a74"/><stop offset="100%" stop-color="#756145"/></linearGradient>`;
+            scene =
+              `<rect x="38" y="42" width="194" height="176" rx="3" fill="#5e6958"/>` +
+              `<rect x="48" y="52" width="174" height="156" fill="url(#${id}sky)"/>` +
+              `<path d="M135 52V208M48 130H222" stroke="#5e6958" stroke-width="7"/>` +
+              `<polygon points="48,208 222,208 290,340 94,340" fill="#f7efd8" opacity="0.1"/>` +
+              `<rect x="24" y="250" width="252" height="15" rx="3" fill="url(#${id}oak)"/>` +
+              `<path d="M48 265V316M252 265V316" stroke="#6c5a41" stroke-width="9" stroke-linecap="round"/>` +
+              `<path d="M188 202H232L224 250H196Z" fill="#b97b5d"/>` +
+              `<path d="M210 206V146M210 184C172 178 176 144 210 156M210 194C244 186 244 156 210 172" stroke="#4f6d4a" fill="#4f6d4a" stroke-width="2"/>`;
+          }
+          if (i === 5) {
+            extraDefs = `<linearGradient id="${id}wave" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f2e4c2"/><stop offset="55%" stop-color="#b6ae93"/><stop offset="100%" stop-color="#6c7566"/></linearGradient>`;
+            let rings = "";
+            for (let n = 0; n < 13; n++) {
+              rings += `<ellipse cx="150" cy="182" rx="${26 + n * 8.5}" ry="${14 + n * 9.2}" transform="rotate(${n * 5} 150 182)" stroke-opacity="${(0.9 - n * 0.05).toFixed(2)}"/>`;
+            }
+            scene =
+              `<rect x="20" y="24" width="260" height="327" rx="4" fill="#181c19" stroke="#ffffff" stroke-opacity="0.08"/>` +
+              `<line x1="20" y1="56" x2="280" y2="56" stroke="#ffffff" stroke-opacity="0.08"/>` +
+              `<g fill="none" stroke="url(#${id}wave)" stroke-width="2.2">${rings}</g>` +
+              `<circle cx="150" cy="182" r="14" fill="${config.accent}"/>` +
+              `<circle cx="150" cy="182" r="4" fill="#181c19"/>`;
+          }
+          return `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="375" viewBox="0 0 300 375" aria-hidden="true"><defs><linearGradient id="${id}paper" x1="0" y1="0" x2="0.85" y2="1"><stop stop-color="${wallTop}"/><stop offset="1" stop-color="${wallBot}"/></linearGradient><radialGradient id="${id}light" cx=".24" cy=".16" r=".95"><stop stop-color="#fff8e8" stop-opacity=".18"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".38"/></radialGradient><filter id="${id}shade" x="-.3" y="-.3" width="1.6" height="1.6"><feDropShadow dx="10" dy="14" stdDeviation="10" flood-color="#000" flood-opacity=".32"/></filter>${extraDefs}</defs><rect width="300" height="375" fill="url(#${id}paper)"/><g filter="url(#${id}shade)">${scene}</g><rect width="300" height="375" fill="url(#${id}light)"/><rect x="8.5" y="8.5" width="283" height="358" rx="3" fill="none" stroke="#fff" stroke-opacity=".08"/></svg>`;
         }
         let filter = "all",
           layout = "scatter",
@@ -914,12 +1125,12 @@
           index = ((index % ids.length) + ids.length) % ids.length;
           gallery.dataset.layout = layout;
           const composition = [
-            [17, 36, -60, -12, -3, 25, 17],
-            [39, 30, 55, 7, 2, 75, 19],
-            [62, 35, 20, -9, -2, 24, 50],
-            [79, 56, 80, -15, 2, 76, 52],
-            [54, 73, -30, 8, -2, 25, 83],
-            [30, 73, 45, -5, 3, 75, 84],
+            [17, 34, -50, -11, -3, 27, 17],
+            [39, 29, 50, 7, 2, 73, 20],
+            [62, 33, 18, -9, -2, 27, 50],
+            [80, 53, 72, -13, 2, 73, 53],
+            [54, 67, -24, 7, -2, 27, 83],
+            [29, 67, 40, -5, 3, 73, 85],
           ];
           buttons.forEach((b, i) => {
             b.hidden = !ids.includes(i);

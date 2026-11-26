@@ -6,17 +6,17 @@
     <title>Dark documentation navigation</title>
     <style>
       :root {
-        --bg: #000000;
-        --surface: #1a1a1a;
-        --hover: #141414;
-        --text: #f2f2f2;
-        --muted: #9a9a9a;
-        --section: #7a7a7a;
-        --accent: #e23b3b;
-        --border: #222222;
-        --tree: #3a3a3a;
+        --bg: #090b10;
+        --surface: #151a24;
+        --hover: #10151f;
+        --text: #f3f5fa;
+        --muted: #98a3b8;
+        --section: #7c88a1;
+        --accent: #10b981;
+        --border: #1d2432;
+        --tree: #334056;
         --sidebar-w: 280px;
-        --radius: 6px;
+        --radius: 8px;
         --row-h: 36px;
         --font: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         --duration: 220ms;
@@ -30,24 +30,39 @@
         margin: 0;
         padding: 0;
         height: 100%;
-        background: var(--bg);
+        background-color: var(--bg);
         color: var(--text);
         font-family: var(--font);
         -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       body {
         display: flex;
         flex-direction: column;
         min-height: 100vh;
+        background-image:
+          radial-gradient(
+            ellipse 65% 42% at 62% 0%,
+            color-mix(in srgb, var(--accent) 11%, transparent),
+            transparent 64%
+          ),
+          radial-gradient(circle at 12% 18%, rgba(99, 102, 241, 0.06), transparent 44%);
       }
       .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 12;
         display: flex;
         align-items: center;
-        gap: 18px;
-        min-height: 52px;
+        gap: 20px;
+        min-height: 58px;
         flex-wrap: wrap;
-        padding: 0 18px;
+        padding: 0 22px;
         border-bottom: 1px solid var(--border);
+        background: color-mix(in srgb, var(--bg) 82%, transparent);
+        backdrop-filter: blur(18px) saturate(1.4);
+        -webkit-backdrop-filter: blur(18px) saturate(1.4);
+        box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.03);
         flex-shrink: 0;
       }
       .brand {
@@ -60,29 +75,81 @@
         font-size: 15px;
       }
       .logo {
-        width: 22px;
-        height: 22px;
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
         display: grid;
         place-items: center;
+        background: linear-gradient(
+          145deg,
+          color-mix(in srgb, var(--accent) 28%, #1d2636),
+          #101521
+        );
+        border: 1px solid color-mix(in srgb, var(--accent) 44%, rgba(255, 255, 255, 0.14));
+        box-shadow:
+          0 4px 14px color-mix(in srgb, var(--accent) 22%, rgba(0, 0, 0, 0.4)),
+          inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        color: var(--accent);
       }
       .logo svg {
-        width: 22px;
-        height: 22px;
+        width: 17px;
+        height: 17px;
         display: block;
       }
       .brand-name {
         color: var(--text);
-        font-weight: 600;
+        font-weight: 650;
+        letter-spacing: -0.015em;
       }
       .brand-docs {
         color: var(--muted);
         font-weight: 500;
+        font-size: 13.5px;
       }
       .brand-divider {
         width: 1px;
-        height: 14px;
-        background: #3a3a3a;
-        margin: 0 2px;
+        height: 15px;
+        background: var(--tree);
+        margin: 0 1px;
+      }
+      .topbar-meta {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .kbd-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface) 75%, transparent);
+        color: var(--muted);
+        font:
+          500 11.5px/1.2 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      }
+      .kbd-pill kbd {
+        display: inline-grid;
+        place-items: center;
+        min-width: 20px;
+        height: 19px;
+        padding: 0 5px;
+        border-radius: 5px;
+        border: 1px solid var(--tree);
+        background: var(--bg);
+        color: var(--text);
+        font:
+          600 10px/1 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
       }
       .menu-toggle {
         display: none;
@@ -90,23 +157,26 @@
         justify-content: center;
         gap: 6px;
         height: 34px;
-        padding: 0 10px;
+        padding: 0 11px;
         border: 1px solid var(--border);
         border-radius: var(--radius);
-        background: var(--hover);
+        background: var(--surface);
         color: var(--text);
         font: inherit;
         font-size: 12.5px;
         font-weight: 500;
         cursor: pointer;
         margin-left: auto;
+        -webkit-tap-highlight-color: transparent;
         transition:
           background var(--trans),
           border-color var(--trans);
       }
-      .menu-toggle:hover {
-        background: var(--surface);
-        border-color: var(--tree);
+      @media (hover: hover) {
+        .menu-toggle:hover {
+          background: var(--hover);
+          border-color: var(--tree);
+        }
       }
       .menu-toggle svg {
         width: 16px;
@@ -119,15 +189,15 @@
       .tabs {
         display: flex;
         align-items: stretch;
-        gap: 4px;
-        height: 52px;
+        gap: 6px;
+        height: 58px;
         max-width: 100%;
       }
       .tab {
         position: relative;
         display: flex;
         align-items: center;
-        padding: 0 12px;
+        padding: 0 14px;
         height: 100%;
         color: var(--muted);
         font-size: 13.5px;
@@ -136,26 +206,31 @@
         border: 0;
         cursor: pointer;
         border-radius: 0;
+        -webkit-tap-highlight-color: transparent;
         transition:
           color var(--trans),
           background var(--trans);
       }
-      .tab:hover {
-        color: var(--text);
+      @media (hover: hover) {
+        .tab:hover {
+          color: var(--text);
+        }
       }
       .tab[aria-selected="true"] {
         color: var(--text);
+        font-weight: 550;
         background: transparent;
       }
       .tab[aria-selected="true"]::after {
         content: "";
         position: absolute;
-        left: 8px;
-        right: 8px;
+        left: 10px;
+        right: 10px;
         bottom: 0;
         height: 2px;
         background: var(--accent);
         border-radius: 2px 2px 0 0;
+        box-shadow: 0 -2px 12px color-mix(in srgb, var(--accent) 65%, transparent);
       }
       .layout {
         display: flex;
@@ -167,10 +242,12 @@
         max-width: 100%;
         flex-shrink: 0;
         border-right: 1px solid var(--border);
-        padding: 18px 12px 28px;
+        background: color-mix(in srgb, var(--surface) 38%, var(--bg));
+        padding: 20px 14px 28px;
         overflow: auto;
+        overscroll-behavior: contain;
         scrollbar-width: thin;
-        scrollbar-color: #333 transparent;
+        scrollbar-color: var(--tree) transparent;
       }
       .section {
         margin-bottom: 22px;
@@ -180,8 +257,8 @@
         letter-spacing: 0.08em;
         text-transform: uppercase;
         color: var(--section);
-        font-weight: 560;
-        padding: 4px 10px 10px;
+        font-weight: 600;
+        padding: 4px 12px 10px;
         user-select: none;
       }
       .nav {
@@ -190,27 +267,30 @@
         padding: 0;
       }
       .nav-item {
-        margin: 1px 0;
+        margin: 2px 0;
       }
       .nav-btn {
+        position: relative;
         width: 100%;
         display: flex;
         align-items: center;
         gap: 10px;
         height: var(--row-h);
-        padding: 0 10px;
-        border: 0;
+        padding: 0 11px 0 12px;
+        border: 1px solid transparent;
         border-radius: var(--radius);
         background: transparent;
-        color: var(--text);
+        color: var(--muted);
         font: inherit;
         font-size: 13.5px;
         font-weight: 450;
         cursor: pointer;
         text-align: left;
+        -webkit-tap-highlight-color: transparent;
         transition:
           background var(--trans),
-          color var(--trans);
+          color var(--trans),
+          border-color var(--trans);
       }
       .nav-btn .ico {
         width: 18px;
@@ -218,14 +298,16 @@
         flex: 0 0 18px;
         display: grid;
         place-items: center;
-        opacity: 0.92;
+        opacity: 0.86;
       }
       .nav-btn .ico svg {
         width: 16px;
         height: 16px;
         stroke: currentColor;
         fill: none;
-        stroke-width: 1.5;
+        stroke-width: 1.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
       }
       .nav-btn .label {
         flex: 1;
@@ -248,26 +330,49 @@
         height: 14px;
         stroke: currentColor;
         fill: none;
-        stroke-width: 1.6;
+        stroke-width: 1.7;
       }
-      .nav-btn:hover,
+      @media (hover: hover) {
+        .nav-btn:hover {
+          background: var(--hover);
+          color: var(--text);
+        }
+      }
       .nav-btn:focus-visible {
         background: var(--hover);
+        color: var(--text);
         outline: none;
       }
       .nav-btn[aria-current="page"] {
-        background: var(--surface);
+        background: color-mix(in srgb, var(--accent) 11%, var(--surface));
+        border-color: color-mix(in srgb, var(--accent) 26%, var(--border));
         color: var(--text);
-        font-weight: 500;
+        font-weight: 550;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
+      .nav-btn[aria-current="page"]::before {
+        content: "";
+        position: absolute;
+        left: -1px;
+        top: 7px;
+        bottom: 7px;
+        width: 3px;
+        border-radius: 0 3px 3px 0;
+        background: var(--accent);
+        box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 75%, transparent);
+      }
+      .nav-btn[aria-current="page"] .ico {
+        color: var(--accent);
+        opacity: 1;
       }
       .nav-btn[aria-expanded="true"] .chev {
         transform: rotate(90deg);
-        opacity: 0.85;
+        opacity: 0.9;
       }
       .sub {
         list-style: none;
-        margin: 2px 0 6px;
-        padding: 0 0 0 0;
+        margin: 3px 0 7px;
+        padding: 0;
         overflow: hidden;
         max-height: 0;
         opacity: 0;
@@ -283,7 +388,7 @@
       }
       .sub-wrap {
         position: relative;
-        margin-left: 18px;
+        margin-left: 19px;
         padding-left: 14px;
       }
       .sub-wrap::before {
@@ -302,7 +407,7 @@
         align-items: center;
         height: 32px;
         padding: 0 10px 0 12px;
-        border: 0;
+        border: 1px solid transparent;
         border-radius: var(--radius);
         background: transparent;
         color: var(--muted);
@@ -311,9 +416,11 @@
         font-weight: 450;
         cursor: pointer;
         text-align: left;
+        -webkit-tap-highlight-color: transparent;
         transition:
           background var(--trans),
-          color var(--trans);
+          color var(--trans),
+          border-color var(--trans);
       }
       .sub-btn::before {
         content: "";
@@ -324,53 +431,247 @@
         height: 0;
         border-top: 1px dashed var(--tree);
       }
-      .sub-btn:hover,
+      @media (hover: hover) {
+        .sub-btn:hover {
+          background: var(--hover);
+          color: var(--text);
+        }
+      }
       .sub-btn:focus-visible {
         background: var(--hover);
         color: var(--text);
         outline: none;
       }
       .sub-btn[aria-current="page"] {
-        background: var(--surface);
+        background: color-mix(in srgb, var(--accent) 11%, var(--surface));
+        border-color: color-mix(in srgb, var(--accent) 26%, var(--border));
         color: var(--text);
+        font-weight: 550;
+      }
+      .sub-btn[aria-current="page"]::after {
+        content: "";
+        position: absolute;
+        left: -1px;
+        top: 6px;
+        bottom: 6px;
+        width: 2.5px;
+        border-radius: 0 3px 3px 0;
+        background: var(--accent);
+        box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 70%, transparent);
       }
       .main {
         flex: 1;
         min-width: 0;
         overflow-wrap: anywhere;
-        padding: 28px 36px;
+        padding: 36px 46px 44px;
         overflow: auto;
         color: var(--muted);
       }
-      .main h1 {
-        margin: 0 0 10px;
-        color: var(--text);
-        font-size: 28px;
-        font-weight: 600;
-        letter-spacing: -0.02em;
+      #content {
+        max-width: 810px;
       }
-      .main p {
-        max-width: 52ch;
-        line-height: 1.55;
-        font-size: 14.5px;
+      .doc-crumb {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+        font:
+          500 11.5px/1.3 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+        color: var(--accent);
+        letter-spacing: 0.04em;
+      }
+      .doc-crumb span {
+        color: var(--section);
+      }
+      .main h1 {
+        margin: 0 0 12px;
+        color: var(--text);
+        font-size: clamp(26px, 2.8vw, 34px);
+        font-weight: 650;
+        line-height: 1.18;
+        letter-spacing: -0.025em;
+      }
+      .main > #content > p {
+        max-width: 60ch;
+        line-height: 1.65;
+        font-size: 15.5px;
+        margin: 0;
+        color: #b4bece;
       }
       .badge {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        margin-top: 18px;
-        padding: 6px 10px;
+        gap: 8px;
+        margin-top: 20px;
+        padding: 7px 13px;
         border-radius: 999px;
         border: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface) 75%, transparent);
         font-size: 12px;
         color: var(--muted);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
       }
       .badge i {
         width: 6px;
         height: 6px;
         border-radius: 50%;
         background: var(--accent);
+        box-shadow: 0 0 8px var(--accent);
         display: inline-block;
+        flex-shrink: 0;
+      }
+      .doc-callout {
+        margin-top: 26px;
+        padding: 16px 18px;
+        border-radius: 12px;
+        border: 1px solid color-mix(in srgb, var(--accent) 26%, var(--border));
+        border-left: 3px solid var(--accent);
+        background: linear-gradient(
+          135deg,
+          color-mix(in srgb, var(--accent) 8%, var(--surface)) 0%,
+          color-mix(in srgb, var(--surface) 65%, var(--bg)) 100%
+        );
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
+      .doc-callout-icon {
+        width: 20px;
+        height: 20px;
+        color: var(--accent);
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .doc-callout-icon svg {
+        width: 18px;
+        height: 18px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 1.8;
+      }
+      .doc-callout-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+        margin: 0 0 4px;
+      }
+      .doc-callout-body {
+        font-size: 13px;
+        line-height: 1.58;
+        color: var(--muted);
+        margin: 0;
+      }
+      .doc-code-card {
+        margin-top: 20px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: linear-gradient(180deg, #10141e 0%, #0b0e16 100%);
+        overflow: hidden;
+        box-shadow:
+          0 16px 36px rgba(0, 0, 0, 0.36),
+          inset 0 1px 0 rgba(255, 255, 255, 0.07);
+      }
+      .doc-code-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 16px;
+        border-bottom: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.02);
+        font:
+          500 11.5px ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+        color: var(--muted);
+      }
+      .doc-code-head strong {
+        color: var(--text);
+        font-weight: 550;
+      }
+      .doc-code-tag {
+        padding: 2px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        color: var(--accent);
+        font-size: 10.5px;
+      }
+      .doc-code-card pre {
+        margin: 0;
+        padding: 16px 18px;
+        overflow-x: auto;
+        font:
+          12.5px/1.72 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          Consolas,
+          monospace;
+        color: #d7e2f4;
+      }
+      .tok-kw {
+        color: var(--accent);
+        font-weight: 500;
+      }
+      .tok-str {
+        color: #f3d28f;
+      }
+      .tok-num {
+        color: #7dd3fc;
+      }
+      .tok-key {
+        color: #c7d2fe;
+      }
+      .doc-cards {
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .doc-card {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 15px 16px;
+        border-radius: 11px;
+        border: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface) 64%, var(--bg));
+        color: var(--text);
+        text-decoration: none;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        transition:
+          border-color var(--trans),
+          background var(--trans),
+          transform 160ms ease;
+      }
+      @media (hover: hover) {
+        .doc-card:hover {
+          border-color: color-mix(in srgb, var(--accent) 48%, var(--border));
+          background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+          transform: translateY(-1px);
+        }
+      }
+      .doc-card strong {
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .doc-card strong i {
+        font-style: normal;
+        color: var(--accent);
+      }
+      .doc-card span {
+        font-size: 12.5px;
+        line-height: 1.5;
+        color: var(--muted);
+        text-wrap: balance;
       }
       button:focus-visible,
       a:focus-visible {
@@ -378,11 +679,15 @@
         outline-offset: 2px;
       }
       @media (max-width: 720px) {
+        .topbar-meta {
+          display: none;
+        }
         .menu-toggle {
           display: inline-flex;
         }
         .sidebar {
           display: none;
+          position: relative;
           width: 100%;
           border-right: 0;
           border-bottom: 1px solid var(--border);
@@ -390,24 +695,46 @@
         }
         .sidebar.mobile-open {
           display: block;
+          padding-bottom: 0;
+        }
+        .sidebar.mobile-open .section:last-child {
+          margin-bottom: 0;
+          padding-bottom: 34px;
+        }
+        .sidebar.mobile-open::after {
+          content: "";
+          display: block;
+          position: sticky;
+          bottom: 0;
+          height: 36px;
+          margin: -36px -14px 0;
+          pointer-events: none;
+          background: linear-gradient(
+            to bottom,
+            transparent 0%,
+            color-mix(in srgb, var(--surface) 38%, var(--bg)) 88%
+          );
         }
         .layout {
           flex-direction: column;
         }
         .main {
-          padding: 20px 18px;
+          padding: 22px 18px 28px;
         }
         .topbar {
           gap: 8px 10px;
-          padding: 6px 12px 0;
+          padding: 8px 14px 0;
         }
         .tabs {
           width: 100%;
-          height: 42px;
+          height: 44px;
         }
         .tab {
-          padding: 0 8px;
+          padding: 0 10px;
           font-size: 12.5px;
+        }
+        .doc-cards {
+          grid-template-columns: 1fr;
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -426,17 +753,31 @@
       >
         <span class="logo" aria-hidden="true">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <rect
-              x="4"
-              y="3"
-              width="16"
-              height="18"
-              rx="3"
+            <path
+              d="M12 3L20.5 7.75L12 12.5L3.5 7.75Z"
+              fill="currentColor"
+              fill-opacity="0.28"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M3.5 12L12 16.75L20.5 12"
               fill="none"
               stroke="currentColor"
               stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
             />
-            <path d="M8 8h8M8 12h8M8 16h5" fill="none" stroke="currentColor" stroke-width="1.6" />
+            <path
+              d="M3.5 16.25L12 21L20.5 16.25"
+              fill="none"
+              stroke="currentColor"
+              stroke-opacity="0.6"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
         </span>
         <span class="brand-name">Atlas</span>
@@ -480,6 +821,13 @@
           Query Reference
         </button>
       </nav>
+      <div class="topbar-meta" aria-hidden="true">
+        <span class="kbd-pill">
+          <kbd>←</kbd>
+          <kbd>→</kbd>
+          <span>v2.4</span>
+        </span>
+      </div>
     </header>
 
     <div class="layout">
@@ -601,11 +949,63 @@
 
       <main class="main">
         <div id="content" role="tabpanel" aria-labelledby="tab-documentation" tabindex="0">
+          <div class="doc-crumb" aria-hidden="true">
+            <span id="crumb-area">Platform Overview</span>
+            <span>/</span>
+            <code id="crumb-slug">what</code>
+          </div>
           <h1 id="page-title">What is Atlas?</h1>
           <p id="page-body">Explore the platform, follow the quickstart, and learn the core concepts.</p>
           <div class="badge">
             <i></i>
             Hover sidebar rows · expand Fundamentals / Console · tabs switch accent underline
+          </div>
+          <div class="doc-callout">
+            <span class="doc-callout-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 8.5v.2M12 12v4" stroke-linecap="round" />
+              </svg>
+            </span>
+            <div>
+              <p class="doc-callout-title" id="callout-title">Platform Overview</p>
+              <p class="doc-callout-body" id="callout-body">
+                Core concepts that underpin ingest, storage, and query behavior.
+              </p>
+            </div>
+          </div>
+          <div class="doc-code-card">
+            <div class="doc-code-head">
+              <strong id="snippet-file">atlas.config.ts</strong>
+              <span class="doc-code-tag" id="snippet-lang">TS</span>
+            </div>
+            <pre><code id="snippet-code">import { createClient } from "@atlas/sdk";
+
+const client = createClient({
+  region: "edge-auto",
+  dataset: "telemetry-prod",
+  batchSize: 500,
+});</code></pre>
+          </div>
+          <div class="doc-cards">
+            <a class="doc-card" href="#quickstart" data-jump="quickstart">
+              <strong>
+                <span>Quickstart</span>
+                <i aria-hidden="true">→</i>
+              </strong>
+              <span>
+                Get from zero to first query: create a dataset, send events, open the console.
+              </span>
+            </a>
+            <a class="doc-card" href="#edge" data-jump="edge">
+              <strong>
+                <span>Edge deployments</span>
+                <i aria-hidden="true">→</i>
+              </strong>
+              <span>
+                Run collectors closer to your traffic edge for lower latency and regional buffering.
+              </span>
+            </a>
           </div>
         </div>
       </main>
@@ -772,6 +1172,10 @@
             .replace(
               /Files stay on this device\. Maximum (\d+) MB\./g,
               "文件留在此设备，最大 $1 MB。",
+            )
+            .replace(
+              /Packed ([\d,]+) bytes\. CRC32 ([0-9a-f]+)\. Download contains the complete file, ready to decode\./gi,
+              "已打包 $1 字节。CRC32 $2。下载文件包含完整内容，可直接解码。",
             )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
@@ -994,11 +1398,76 @@
         mobileMq.addEventListener("change", () => setSidebarOpen(false));
         setSidebarOpen(false);
 
+        const crumbArea = document.getElementById("crumb-area");
+        const crumbSlug = document.getElementById("crumb-slug");
+        const snippetFile = document.getElementById("snippet-file");
+        const snippetLang = document.getElementById("snippet-lang");
+        const snippetCode = document.getElementById("snippet-code");
+        const snippets = {
+          what: {
+            file: "atlas.config.ts",
+            lang: "TS",
+            code: 'import { createClient } from "@atlas/sdk";\n\nconst client = createClient({\n  region: "edge-auto",\n  dataset: "telemetry-prod",\n  batchSize: 500,\n});',
+          },
+          quickstart: {
+            file: "ingest.sh",
+            lang: "SHELL",
+            code: 'atlas ingest --dataset telemetry-prod \\\n  --region edge-auto \\\n  --payload \'[{"service":"checkout","latency_ms":42,"ok":true}]\'',
+          },
+          edge: {
+            file: "edge-collector.yaml",
+            lang: "YAML",
+            code: "collector:\n  mode: regional-edge\n  flush_interval: 250ms\n  buffer_limit_mb: 64\n  compression: zstd",
+          },
+          query: {
+            file: "latency.apl",
+            lang: "APL",
+            code: "['telemetry-prod']\n| where _time > ago(1h) and status >= 500\n| summarize p95 = percentile(latency_ms, 95) by service\n| sort by p95 desc",
+          },
+          "console-query": {
+            file: "console.apl",
+            lang: "APL",
+            code: "['events-live']\n| where route startswith '/v2/'\n| summarize count() by bin(_time, 5m), region",
+          },
+        };
+
+        function paintSnippet(target, source) {
+          if (!target) return;
+          target.textContent = "";
+          const rx =
+            /("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|\b(import|from|const|where|summarize|sort|by|and|atlas|ingest)\b|\b([a-zA-Z_][\w-]*)(?=:)|\b(\d+(?:ms|m|h)?)\b/g;
+          let pos = 0;
+          let m;
+          while ((m = rx.exec(source))) {
+            if (m.index > pos) target.append(document.createTextNode(source.slice(pos, m.index)));
+            const s = document.createElement("span");
+            s.className = m[1] ? "tok-str" : m[2] ? "tok-kw" : m[3] ? "tok-key" : "tok-num";
+            s.textContent = m[0];
+            target.append(s);
+            pos = rx.lastIndex;
+          }
+          if (pos < source.length) target.append(document.createTextNode(source.slice(pos)));
+        }
+
+        function updateSnippet(key, areaLabel, slugLabel) {
+          const entry = snippets[key] || snippets.what;
+          if (crumbArea && areaLabel) crumbArea.textContent = areaLabel;
+          if (crumbSlug && slugLabel) crumbSlug.textContent = slugLabel;
+          if (snippetFile) snippetFile.textContent = entry.file;
+          if (snippetLang) snippetLang.textContent = entry.lang;
+          paintSnippet(snippetCode, entry.code);
+        }
+
         function setActive(id) {
           allNav.forEach((el) => {
             if (el.dataset.id === id) el.setAttribute("aria-current", "page");
             else el.removeAttribute("aria-current");
           });
+          const activeBtn = allNav.find((el) => el.dataset.id === id);
+          const secLabel = activeBtn
+            ?.closest(".section")
+            ?.querySelector(".section-label")
+            ?.textContent?.trim();
           const rawTitle = titles[id] || id;
           pageTitle.textContent = customTitles.has(id)
             ? rawTitle
@@ -1006,7 +1475,27 @@
           const body = bodies[id] || bodies._default;
           pageBody.textContent = customBodies.has(id) ? body : window.__usefulshelfText(body);
           document.body.dataset.active = id;
+          updateSnippet(id, secLabel || window.__usefulshelfText("Platform Overview"), id);
         }
+
+        document.querySelectorAll("[data-jump]").forEach((link) => {
+          link.addEventListener("click", (event) => {
+            event.preventDefault();
+            const targetId = link.dataset.jump;
+            const targetBtn = allNav.find((el) => el.dataset.id === targetId);
+            if (!targetBtn) return;
+            const parentSub = targetBtn.closest(".sub");
+            if (parentSub && !parentSub.classList.contains("open")) {
+              parentSub.inert = false;
+              parentSub.classList.add("open");
+              document
+                .querySelector(`[aria-controls="${parentSub.id}"]`)
+                ?.setAttribute("aria-expanded", "true");
+            }
+            activateDocumentation();
+            setActive(targetId);
+          });
+        });
 
         document.querySelectorAll(".nav-btn.expandable").forEach((btn) => {
           btn.addEventListener("click", () => {
@@ -1042,6 +1531,7 @@
             pageBody.textContent = window.__usefulshelfText(
               "Query operators, functions, and examples. Replace this sample content with your reference documentation.",
             );
+            updateSnippet("query", window.__usefulshelfText("Query Reference"), "apl-operators");
           } else {
             setActive(document.body.dataset.active || "what");
           }

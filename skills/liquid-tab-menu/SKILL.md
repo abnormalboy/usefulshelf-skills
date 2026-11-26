@@ -13,7 +13,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 ## 核心实现规范
 
-三个 72px 装饰圆通过 Gaussian blur 加 alpha threshold 在分离时粘连；清晰图标和透明原生按钮放在独立层，命中位置随 --size/--spread 同步。收起时两侧 inert/hidden；方向键/Home/End 可展开并选中，Escape 关闭还焦。豆子与杯子打开原生 dialog，保存 60 字名称与 100 字备注到内存列表，刷新清空；不伪称云同步。
+三个 72px 浓缩棕红液态球置于温润瓷白手冲咖啡日记卡底部凹槽中，通过 Gaussian blur 加 alpha threshold 在分离时粘连；独立前景层叠加高光弧面、清晰 SVG 图标与透明原生按钮，命中位置随 --size/--spread 同步。收起时两侧 inert/hidden；方向键/Home/End 可展开并选中，Escape 关闭还焦。豆子与杯子打开原生 dialog，保存 60 字名称与 100 字备注到内存列表，刷新清空；不伪称云同步。
 
 ## 参数与内容边界
 
@@ -46,12 +46,16 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 :root {
   --bg: #eee9e2;
   --accent: #642d2b;
+  --ink: #381e1a;
+  --muted: #5e4f47;
+  --porcelain: #fcf9f4;
+  --rim: #e4dacd;
   --spread: 89px;
   --size: 72px;
-  --ease: cubic-bezier(0.25, 1.15, 0.4, 1);
+  --ease: cubic-bezier(0.24, 1.18, 0.38, 1);
 }
 body {
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Segoe UI", sans-serif;
 }
 ```
 
@@ -70,19 +74,21 @@ The following specification is included in full so this document works without a
 
 ### Design and behavior
 
-A warm neutral canvas holds a burgundy coffee journal and a serif editorial title. Three 72 px circles separate horizontally from the center button. A Gaussian blur plus alpha threshold joins the decorative shapes as they travel, while transparent buttons on a separate layer keep icons and input sharp.
+An artisanal Kyoto specialty coffee journal on a warm ceramic-ivory washi canvas (`--bg: #eee9e2`), pairing an editorial serif headline (measured at `8.2em` in Chinese to guarantee zero single-character orphan wraps) with an elevated porcelain-white journal card (`#fcf9f4`) framed by a soft ceramic rim. The empty state features a hand-crafted SVG pour-over V60 dripper, glass server, and botanical coffee-cherry sprig vignette.
 
-The side controls are inert and hidden while collapsed. Opening updates `aria-expanded` and makes them operable. Arrow keys, Home, and End open the menu if necessary and move among beans, hub, and cup. Escape closes the menu and focuses the hub. Hover and focus share attraction styling; a reduced-motion preference removes both transitions and the SVG filter.
+At the base of the card, three 72 px espresso-mahogany (`--accent: #642d2b`) metaballs separate horizontally inside a recessed porcelain dock well. A Gaussian blur plus alpha threshold (`#liquid-filter`) creates silky organic bridges during travel, while sharp transparent native buttons on an upper layer carry crisp top specular highlights and 1.7 px stroke icons.
+
+The side controls are inert and hidden while collapsed. Opening updates `aria-expanded` and makes them operable. Arrow keys, Home, and End open the menu if necessary and move among beans, hub, and cup. Escape closes the menu and focuses the hub. Hover and focus share liquid attraction styling; `prefers-reduced-motion: reduce` removes both transitions and the SVG filter.
 
 #### Working demonstration
 
-Beans and cup actions open a native dialog with a required coffee name and optional note. Names accept up to 60 characters and notes up to 100; whitespace-only names are rejected. Saved entries replace the empty state. Each entry can be removed, and Clear journal resets the demonstration. Status updates use a polite live region. Entries are rendered with DOM text APIs, never HTML interpolation.
+Beans and cup actions open a native dialog with a required coffee name and optional note (`16px` mobile-safe inputs). Names accept up to 60 characters and notes up to 100; whitespace-only names are rejected. Saved entries replace the empty state as porcelain tasting cards with custom SVG bean/cup medallions. Each entry can be removed, and Clear journal resets the demonstration. Status updates use a polite live region. Entries are rendered with DOM text APIs, never HTML interpolation.
 
 The coffee journal intentionally stores data only in memory. There is no persistence, account, upload, or backend. Refreshing resets the journal. All graphics, fonts, styles, and scripts work without network requests.
 
 #### Geometry and limits
 
-Keep hit targets aligned with blob centers when changing `--spread` or `--size`. SVG filter behavior may differ slightly by browser; the functional controls work without the filter. The effect uses CSS interpolation and SVG compositing rather than a fluid simulator. Text and colors are configurable through a validating Python generator; unknown keys and unsafe CSS values are rejected.
+Keep hit targets aligned with blob centers when changing `--spread` or `--size`. SVG filter behavior may differ slightly by browser; the functional controls work without the filter. Text and colors are configurable through a validating Python generator; unknown keys and unsafe CSS values are rejected.
 
 ## 可选完整包工作流 / Optional package workflow
 

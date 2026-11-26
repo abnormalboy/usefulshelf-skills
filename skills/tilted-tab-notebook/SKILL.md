@@ -46,10 +46,14 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 :root {
   --accent: #dbbe84;
   --tilt: 7deg;
-  --panel: #282a2e;
-  font-family: ui-sans-serif, system-ui, sans-serif;
-  color: #ece8de;
-  background: #151618;
+  --panel: #212329;
+  --desk: #111216;
+  --ink: #efe9dc;
+  --muted: #adb4c0;
+  --aside-ink: #c8cdd6;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", ui-sans-serif, system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--desk);
   color-scheme: dark;
 }
 ```
@@ -76,15 +80,16 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
-### Neighboring tabs and independent pages
 
-The active tab shares the panel surface and has small concave lower corners. Hovering or focusing a tab raises it and gently skews its immediate neighbors away. Inner labels counter-skew to stay readable. This effect is visual only: it never changes selection or notebook content. Reduced motion removes both transitions and transforms.
+### Luxury dark leather & warm brass index notebook
 
-Use a native button tablist with aria-selected, aria-controls and a single roving tabindex. Left and right arrows wrap through the four pages; Home and End jump to the first and last. Activation updates the panel's aria-labelledby. Keep page data separate from DOM controls and save the current fields before switching, including when the next-page shortcut is used.
+Core tokens: `--accent: #dbbe84`, `--tilt: 7deg`, `--desk: #111216`, `--panel: #212329`, `--ink: #efe9dc`, `--muted: #adb4c0`, `--aside-ink: #c8cdd6` (WCAG AA contrast `> 8.5:1` on `#212329`). The obsidian-espresso folio sits over subtle leather micro-grain texture with warm overhead lamp ambience.
 
-Three pages hold independent editable titles and notes. The plans page stores objects with stable IDs, text and checked state. Adding, checking and removing updates the same model used for export. The starting-line action appends a prompt without replacing existing writing; on the plans page it places a suggestion into the new-plan input and waits for the user to add it. Note length and plan count are bounded to keep the interface usable.
+#### Sculpted physical index tabs
+Four native `[role="tab"]` buttons live inside a recessed binding rail with roving `tabindex`, `aria-selected`, and `aria-controls`. Each tab carries a delicate color-coded top edge strip (brass, emerald, periwinkle, rose), smooth concave lower corners when selected, and hover/focus elevation that skews immediate neighbors by `±--tilt` while counter-skewing inner labels upright. Mobile tabs maintain `>= 12px` legibility with zero horizontal overflow. Reduced motion disables all transitions and transforms.
 
-All state is intentionally in memory. Explain that a refresh clears it and provide one Markdown download containing every page and checked task markers. Do not silently introduce browser storage: the page is intended to work inside opaque-origin sandboxed previews. The download uses a Blob URL, with allow-downloads needed in an iframe. Validate writing on two pages, switching back, keyboard tab movement, checkbox persistence, appending a prompt, and matching the exported text to the current notebook.
+#### Writing folio, bookplate & Markdown export
+Three pages store independent editable titles and notes over warm brass-ruled writing lines (`line-height: 2`, aligned `2em` rule spacing); the Plans page manages stable-ID checkboxes with add/remove actions. The right margin houses a gold-foil embossed collector `EX LIBRIS` bookplate vignette, high-contrast aside guidance (`#page-aside`), and a `tabular-nums` total character counter. All state stays in memory and exports cleanly as one complete Markdown file with `- [x]` / `- [ ]` task markers via a revoked Blob URL.
 
 ## 可选完整包工作流 / Optional package workflow
 

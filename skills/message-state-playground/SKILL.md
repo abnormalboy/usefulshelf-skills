@@ -13,7 +13,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 ## 核心实现规范
 
-消息以稳定 ID 管理 draft/sending/delivered/failed/offline；重试原消息不能创建重复项。正常、失败一次、离线三个场景改变真实状态迁移，延迟只用于可读反馈。附件是本地副本，卡片收藏与三音符合成音频只在页面内运作；音频需用户触发。手机预览与事件日志观察同一状态源，取消旧操作防止异步覆盖。
+精密通讯设计实验台将五态发光胶囊步进器、信号模式控制、暗底等宽事件轨迹终端与立体边框聊天预览设备配对。消息以稳定 ID 管理 idle/composing/sending/delivered/failed；发送中呈现柔和流光反馈，重试原消息绝不创建重复项。正常、失败一次、离线三个场景改变真实状态迁移，延迟只用于可读反馈。附件是本地副本，日落风景卡片收藏与三音符合成音频只在页面内运作；音频需用户触发。手机预览与事件日志观察同一状态源，取消旧操作防止异步覆盖。
 
 ## 参数与内容边界
 
@@ -45,9 +45,16 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ```css
 :root {
   --accent: #376c82;
-  font-family: ui-sans-serif, system-ui, sans-serif;
-  color: #283431;
-  background: #eff0eb;
+  --bg: #edf1f4;
+  --panel: #ffffff;
+  --panel-soft: #f6f8fa;
+  --ink: #172329;
+  --muted: #495962;
+  --ok: #15734b;
+  --danger: #b83327;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Segoe UI", sans-serif;
 }
 ```
 
@@ -78,17 +85,17 @@ The following specification is included in full so this document works without a
 
 ### Inspectable message states
 
-The interface pairs a live state strip and bounded event trace with a phone-shaped chat preview. State is explicit: idle, composing, sending, delivered or failed. Delivery is a local simulation with a configurable latency; there is no server, real recipient or account connection. Preserve that explanation in the UI when adapting this template.
+Designed as a crisp Swiss precision communication lab (`--bg: #edf1f4` with architectural micro-grid, elevated studio control panel, and dark-glass monospace event trace terminal) paired with an elevated satin-bezel mobile chat device card. State is explicit in a sculpted 5-state pill stepper with luminous status dots: `idle`, `composing`, `sending`, `delivered` (emerald), or `failed` (crimson). Delivery is a local simulation with configurable latency; there is no server, real recipient, or account connection.
 
-One outgoing message can be pending at a time. Capture its content before transmission and preserve its identity on failure and retry. A fail-once scenario resets the next scenario to success, while offline remains offline until the user changes it. During sending, the draft and scenario cannot change; after failure the scenario can change but the original draft remains protected until retry or reset. A generation token invalidates stale completion callbacks after reset, and reset also clears the timer. Repeated retries must update the same bubble rather than duplicate it.
+One outgoing message can be pending at a time. Capture its content before transmission and preserve its identity on failure and retry. A fail-once scenario resets the next scenario to success, while offline remains offline until changed. During sending, the draft and scenario cannot change and the outgoing bubble displays a smooth shimmer sweep; after failure the scenario can change while the original draft stays protected until retry or reset. A generation token invalidates stale completion callbacks after reset, and reset clears the timer. Repeated retries update the same bubble rather than duplicating it.
 
-Rich examples have real local behavior: landscape cards can be saved and unsaved in the current session; the audio memo is an explicitly labeled, synthesized three-note PCM WAV with native playback controls; a selected local file becomes a downloadable object URL preserving its bytes. Files are never uploaded. A 10 MB cap bounds accidental attachment size. Reset revokes all attachment and audio URLs. User text and file names enter the DOM through textContent, not HTML markup.
+Rich examples have real local behavior: sunset landscape postcards can be saved and unsaved in the current session; the audio memo is an explicitly labeled, synthesized three-note PCM WAV with native playback controls; a selected local file becomes a downloadable object URL preserving its bytes (capped at 10 MB). Reset revokes all attachment and audio URLs. User text and file names enter the DOM through `textContent`, never HTML markup.
 
-The feed scrolls independently inside the phone. Status announcements and a visible uppercase state label make transitions inspectable without relying on animation. Reduced motion removes bubble arrival effects. Validate success, fail-once → retry without a duplicate, offline → retry while still offline, reset during sending, card toggling, audio decoding and local attachment byte equality.
+The feed scrolls independently inside the phone (`overscroll-behavior: contain`). All labels, counters, badges, and buttons maintain WCAG AA >= 4.5:1 contrast. Reduced motion disables bubble arrival and pending shimmer animations.
 
 #### Localized regions
 
-Both major regions have localized accessible names: Message state controls and Local chat preview in English, and their Chinese counterparts in the default interface. These names identify the state controls separately from the simulated conversation. Language changes do not alter message identity, retry behavior or audio/attachment processing.
+Both major regions carry localized accessible names (`Message state controls` / `Local chat preview` in English, and their Chinese counterparts in Chinese). Language changes do not alter message identity, retry behavior, or audio/attachment processing.
 
 ## 可选完整包工作流 / Optional package workflow
 

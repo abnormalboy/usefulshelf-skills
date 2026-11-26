@@ -44,17 +44,17 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 ```css
 :root {
-  --bg: #000000;
-  --surface: #1a1a1a;
-  --hover: #141414;
-  --text: #f2f2f2;
-  --muted: #9a9a9a;
-  --section: #7a7a7a;
-  --accent: #e23b3b;
-  --border: #222222;
-  --tree: #3a3a3a;
+  --bg: #090b10;
+  --surface: #151a24;
+  --hover: #10151f;
+  --text: #f3f5fa;
+  --muted: #98a3b8;
+  --section: #7c88a1;
+  --accent: #10b981;
+  --border: #1d2432;
+  --tree: #334056;
   --sidebar-w: 280px;
-  --radius: 6px;
+  --radius: 8px;
   --row-h: 36px;
   --font: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --duration: 220ms;
@@ -78,27 +78,28 @@ body {
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### Design and interaction reference
 
-The shell uses a black background, muted section labels, bright text, and a single accent color. Header tabs use a 2px accent underline; selected sidebar rows use a lighter surface. Generic inline line icons require no icon font.
+The shell uses a layered obsidian carbon palette (`#090b10` base, `#151a24` active surface, `#10151f` hover), frosted glass sticky header with a sculpted emerald prism emblem, luminous active left-rail bar on the selected row, subtle `← →` keyboard hints, and structured callout + code snippet + quick-jump prose cards. Header tabs use a glowing 2px accent underline; generic inline line icons require no icon font.
 
 #### Layout
 
-The body is a flex column. The header wraps when needed; below it, a fixed-width sidebar sits beside a flexible article panel. At 720px and below, navigation and content stack vertically; the sidebar has a 58vh maximum height and scrolls independently. Keep `min-width: 0` on the article panel so long text can wrap.
+The body is a flex column. The sticky frosted-glass header wraps cleanly on narrow screens; below it, a fixed-width sidebar sits beside a flexible article panel. At 720px and below, navigation collapses behind an accessible drawer toggle with `overscroll-behavior: contain`; the sidebar has a 58vh maximum height and scrolls independently. Keep `min-width: 0` on the article panel so long text can wrap.
 
 | Token | Default | Purpose |
 | --- | --- | --- |
-| `--bg` | `#000000` | Page background |
-| `--surface` | `#1a1a1a` | Selected row |
-| `--hover` | `#141414` | Hover feedback |
-| `--text` | `#f2f2f2` | Main text |
-| `--muted` | `#9a9a9a` | Secondary text |
-| `--section` | `#7a7a7a` | Group labels |
-| `--accent` | `#e23b3b` | Tab underline and focus ring |
-| `--border` | `#222222` | Dividers |
-| `--tree` | `#3a3a3a` | Dashed hierarchy connectors |
+| `--bg` | `#090b10` | Page background |
+| `--surface` | `#151a24` | Selected row & cards |
+| `--hover` | `#10151f` | Hover feedback |
+| `--text` | `#f3f5fa` | Main text |
+| `--muted` | `#98a3b8` | Secondary text |
+| `--section` | `#7c88a1` | Group labels |
+| `--accent` | `#10b981` | Active rail, tab underline & focus ring |
+| `--border` | `#1d2432` | Dividers |
+| `--tree` | `#334056` | Dashed hierarchy connectors |
 | `--sidebar-w` | `280px` | Desktop navigation width |
-| `--radius` | `6px` | Row corners |
+| `--radius` | `8px` | Row corners |
 | `--row-h` | `36px` | Top-level row height |
 | `--duration` | `220ms` | Transition duration |
 

@@ -44,19 +44,19 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 ```css
 :root {
-  --bg: #e8eaef;
+  --bg: #e2e6ee;
   --stage: #ffffff;
-  --text: #111111;
+  --text: #0f172a;
   --muted: #475569;
   --accent: #2f7dff;
-  --glass: rgba(255,255,255,0.62);
-  --glass-border: rgba(255,255,255,0.55);
-  --shadow: 0 24px 60px rgba(15,23,42,0.18);
+  --glass: rgba(255,255,255,0.68);
+  --glass-border: rgba(255,255,255,0.75);
+  --shadow: 0 32px 72px rgba(15,23,42,0.22);
   --icon-radius: 28%;
   --nav-hide-ms: 320ms;
-  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --phone-w: 390px;
-  --phone-h: 844px;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Segoe UI", sans-serif;
+  --phone-w: 378px;
+  --phone-h: 616px;
 }
 ```
 
@@ -71,6 +71,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ## Detailed implementation reference (English)
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
+
 
 ### Scroll-aware toolbar design
 
@@ -90,12 +91,13 @@ The profile circle remains interactive while the contracted pill's other buttons
 
 #### Appearance
 
-- Light theme: pale gray page, white stage, translucent white glass.
-- Dark theme: near-black page and stage, translucent dark glass.
+- Light theme: studio platinum backdrop (`#e2e6ee`), crisp white stage (`#ffffff`), frosted liquid-glass dock (`rgba(255,255,255,0.68)`).
+- Dark theme: deep titanium backdrop (`#080a0f`), obsidian OLED stage (`#10131a`), translucent dark liquid glass (`rgba(24,27,36,0.76)`).
+- Anodized titanium device bezel wrapper (`.device-chassis`) with subtle side buttons, Dynamic Island with optical camera glint, glossy glass screen sheen, and 12 multi-layered inline SVG app icons — while `.phone` keeps `background-color: var(--stage)` so explicit color overrides remain directly observable.
 - Explicit color parameters override the selected theme's defaults.
-- The pill uses 22px backdrop blur, a highlighted border, an inset cyan glow, and a soft shadow. Without backdrop-filter support its translucent background remains usable.
+- The pill uses 26px backdrop blur, a luminous top refraction highlight, subtle cyan underside bounce, and soft layered elevation. Without backdrop-filter support its translucent background remains usable.
 - Contracting animates the pill from 160px to 56px over 320ms by default. The plus button fades and shifts down while the profile circle stays fixed.
-- Active buttons use the accent color with a lightly tinted surface. Focus gets a visible accent outline.
+- Active buttons use the accent color with a lightly tinted ring surface. Focus gets a visible accent outline.
 
 #### Integration boundaries
 

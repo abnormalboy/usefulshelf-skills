@@ -45,12 +45,14 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ```css
 :root {
   --accent: #315c48;
-  --ink: #20251f;
-  --paper: #f7f6f1;
-  --line: #dedfd5;
+  --ink: #171a16;
+  --paper: #f5f2ea;
+  --paper-elevated: #fcfaf5;
+  --line: #dad4c6;
+  --muted: #4c5347;
 }
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 ```
 
@@ -69,13 +71,14 @@ body {
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### Composition and interaction
 
 The orbit uses native button elements. Focus stops animation so targets do not move while navigating with a keyboard. Project dialogs use native dialog focus containment and Escape dismissal. On narrow screens, the orbit becomes two bands above and below the headline. The work list opens below the hero. Edit project names, descriptions, and SVG art in the template together.
 
 #### Visual system
 
-Warm paper, muted borders, a small monospaced label system, and large editorial typography establish hierarchy. Artwork is drawn directly in SVG or Canvas with a constrained earthy palette. No external assets are requested. Preserve generous central whitespace and clear separation between controls and art.
+Warm archival ivory rag paper (`#f5f2ea`), subtle inline SVG paper-grain texture, soft studio radial warmth, precision elliptical astrolabe tracks with cardinal registration pips, and serif editorial display typography establish hierarchy. Sculpted ceramic-bevel emblem medallions carry directional 3D-lit inline SVG artworks with rich studio gradients and specular rim highlights. Elevated obsidian pill CTAs and frosted ivory controls preserve clear contrast without requesting external assets.
 
 #### Motion lifecycle
 

@@ -45,9 +45,14 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ```css
 :root {
   --accent: #e57950;
-  font-family: ui-sans-serif, system-ui, sans-serif;
-  color: #ece7df;
-  background: #111211;
+  --cyan: #4ab6ff;
+  --obsidian: #090b10;
+  --surface: #0f1219;
+  --ink: #f1f4f9;
+  --muted: #9aa6b8;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", ui-sans-serif, system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--obsidian);
   color-scheme: dark;
 }
 ```
@@ -75,25 +80,16 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
-### Two modes, two explicit state models
 
-The initial route editor restores a dark dotted canvas, a warm upper capsule and a cool lower capsule. Three inputs and three outputs sit on each capsule perimeter. The warm stroke uses the generator accent; the destination remains cool blue. User-space SVG gradients keep even perfectly vertical wires visible. On narrow screens the preset sidebar moves above the canvas while the capsules retain their long, rounded proportions.
+### Two modes, one obsidian dark-glass node engine
 
-Presets produce one direct connection, three warm outputs converging into one cool input, or two forward connections plus a large left-side return loop. These are editable route objects, not hardcoded screenshots. Arbitrary cross-node output-to-input connections can be made by two clicks, keyboard activation or dragging. Multiple incoming wires are valid in this mode; duplicate pairs and same-node connections are rejected. Return loops are visual only and never execute a data cycle.
+Core tokens: `--accent: #e57950`, `--cyan: #4ab6ff`, `--obsidian: #090b10`, `--surface: #0f1219`, `--ink: #f1f4f9`, `--muted: #9aa6b8`. The initial routing editor presents a dual-scale architectural micro-grid canvas with sculpted smoked-glass warm source and cool destination capsules, top specular rim highlights, glowing emblem medallions, and machined hardware port sockets.
 
-Each wire has a broad transparent hit area and a native delete button at its geometric midpoint. Hovering the wire or focusing its button reveals the red delete handle; clicking the line itself does not silently delete it. Always-visible route chips provide an equivalent touch/keyboard action. Deletion restores focus to Undo change. A bounded copied-state history supports presets, clear, individual deletion and manual connections. Switching modes preserves route state and the independent text pipeline.
+#### Glowing bezier energy cables & presets
+Each route draws layered SVG paths inside `.route-group`: a soft wide luminous bloom (`.route-glow`), a crisp amber-copper to electric-cyan gradient core (`.route-line`), an animated traveling energy pulse (`.route-pulse`, disabled under `prefers-reduced-motion`), a wide transparent hit path, and a midpoint delete button (`.route-delete`). Presets configure `direct` (1), `merge` (3 converging to `cool-tc`), `loop` (2 forward + 1 left return loop `cool-bl` → `warm-tl`), and `empty` (0), all backed by bounded copy-on-write undo history and touch-friendly route chips. Return loops are visual only and never execute a cycle.
 
-Validate direct=1, merge=3 and loop=3 wires; clear=0 and undo restores the prior set. Verify multiple outputs really share an input, a cool output can return to a warm input, and removal via the line handle updates the route list. Make sure Escape cancels the temporary wire without deleting completed routes.
-
-### A small, real dataflow
-
-The dotted canvas contains three kinds of nodes: a text source, a transform and a poster output. A port click starts a connection; another compatible port click completes it. Pointer dragging provides the same operation. Keyboard users can activate the native port buttons, and Escape cancels a pending wire. Bezier endpoints come from the live port bounds, so a ResizeObserver redraws the routes when the layout changes. On narrow screens ports move to the top and bottom and the curve direction changes to vertical.
-
-The permitted graph is acyclic: source → transform, transform → poster, or source → poster. Every input accepts one upstream connection. Replacing an incoming wire is a single undoable change. The poster displays nothing computed until a complete path reaches it. Direct wiring preserves the original text; transformed wiring applies the selected uppercase, Unicode-code-point reverse, echo or spacing operation. This is a text experiment, not a general workflow execution engine.
-
-Keep edge state separate from painted paths. Removal through the visible route chips gives keyboard users the same action as clicking a wire. A bounded undo stack stores copies of edge lists. Suppress redundant input clicks after pointer-up completion so the successful connection message is not overwritten. With reduced motion, the optional traveling-dash pulse disappears; the actual graph still works.
-
-SVG export uses the actual current output and XML-escapes its text. Long text wraps using the actual 34 px sans-serif text measurement into 490 px lines (with a conservative character-width fallback when canvas measurement is unavailable) and increases the exported page height rather than truncating content. The saved file contains only vector shapes and text. Export requires allow-downloads in a sandboxed iframe. Validate both full and bypass routes, changing operations after connecting, removal, undo, empty input, Unicode and XML special characters.
+#### Unified text pipeline mode
+Switching to `#pipeline` keeps route state intact and renders three matching dark-glass cards (`Text seed`, `Word workshop`, `Pocket poster`) with acyclic routing (`source → transform → poster` or direct `source → poster`), deterministic uppercase/reverse/echo/spaced transformations, live resize-observed SVG bezier wires, and self-contained dark-card SVG poster export with canvas-measured text wrapping and XML escaping.
 
 ## 可选完整包工作流 / Optional package workflow
 

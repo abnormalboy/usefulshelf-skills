@@ -45,9 +45,14 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ```css
 :root {
   --accent: #ff7948;
-  font-family: Arial, "PingFang SC", sans-serif;
-  color: #f5eee7;
-  background: #11100f;
+  --bg: #0c0c0b;
+  --chassis: #151412;
+  --recess: #060605;
+  --ink: #f5efe7;
+  --muted: #b5a999;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  color: var(--ink);
+  background: var(--bg);
   color-scheme: dark;
 }
 ```
@@ -68,13 +73,22 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### Rendering and interaction
 
-The matrix remains fixed in position: only each rounded cell's scale and color change. Three analytic fields use angle plus Chebyshev radius (square spiral), Chebyshev rings, and crossing waves. A saturated red–accent–yellow band follows the field's shoulder while the larger cells stay cool white. Preserve enough dark negative space to read the topology; adding a uniform glow to every cell obscures it. The same `cells()` geometry drives Canvas and SVG, so an exported frame matches the displayed frame. Export numeric geometry and validated colors only.
+The matrix remains fixed in position: only each rounded cell's scale and color change. Three analytic fields use angle plus Chebyshev radius (square spiral), Chebyshev rings, and crossing waves. A saturated red–accent–yellow phosphor band follows the field's shoulder while the larger cells stay cool white. Preserve enough dark negative space inside the recessed LED bay (`#060605`) to read the topology; apply restrained additive radial bloom only to high-energy shoulder cells rather than a uniform blur over every cell, and frame the matrix with hairline coordinate ruler ticks inside an anodized matte obsidian chassis (`#0c0c0b` / `#151412`). The same `cells()` geometry drives Canvas and SVG, so an exported frame matches the displayed frame with exact numeric geometry and validated colors only.
 
 The range input is the source of manual phase changes. Canvas clicks advance the phase; left/right arrows provide one-percent steps. Playback is user initiated, runs one eight-second cycle, and stops by default. The explicit Repeat loop checkbox permits continued playback until paused; changing that preference stops existing playback. Three-form cycle blends spiral → rings → waves → spiral with smoothstep interpolation over phase thirds; wave fields are periodic so phase zero and one agree. Independent presets remain available. Changing phase stops playback. Hidden-page and reduced-motion changes cancel animation; reduced-motion playback takes a static step. Matrix count equals grid squared, and every control remains operable when no frames are running.
 
-The canvas pixel density is capped at 2. At the maximum grid size it draws 1,681 simple rounded rectangles without per-cell blur. Narrow screens place the square art before the controls. Never shrink the art into a tiny preview just to keep controls on one row.
+The canvas pixel density is capped at 2. At the maximum grid size it draws 1,681 rounded LED cells without per-cell blur filters. Narrow screens place the square art before the controls. Never shrink the art into a tiny preview just to keep controls on one row.
+
+#### Visual tokens
+
+- Anodized obsidian backdrop: `#0c0c0b` (`--bg`)
+- Machined control deck: `#151412` (`--chassis`)
+- Recessed LED matrix bay: `#060605` (`--recess`)
+- Primary text: `#f5efe7` (`--ink`)
+- Default accent: `#ff7948` (`--accent`)
 
 ## 可选完整包工作流 / Optional package workflow
 

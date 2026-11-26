@@ -13,7 +13,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 ## 核心实现规范
 
-用原生按钮承载六次点击；每次将固定圆形加入 SVG mask，真实切掉胶囊的一角。第六次完成一轮并切换为重新烘焙；换口味与重置清空咬痕、碎屑和进度，但保留完成轮数。碎屑在 850ms 后移除，减少动态效果时不生成碎屑。
+用原生按钮承载六次点击；每次将一组交叠咬痕圆加入 SVG `#cookie-mask`，真实切掉饼干边缘并由外层 `feDropShadow` 沿缺口实时投射立体阴影。第六次完成一轮并切换为重新烘焙；换口味与重置清空咬痕、碎屑和进度，但保留完成轮数。碎屑与回弹动效在 820ms 后清理，减少动态效果时不生成碎屑。
 
 ## 参数与内容边界
 
@@ -46,11 +46,17 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 :root {
   --accent: #ac492e;
   --bg: #f4f1e9;
-  --icing: #ead2a9;
-  --ink: #352c24;
+  --icing: #f3ddb0;
+  --icing-hi: #fff6df;
+  --icing-edge: #d8b574;
+  --speck: #6e4522;
+  --crust: #c8894b;
+  --crust-deep: #8c5323;
+  --ink: #2c2118;
+  --muted: #5a4b3d;
 }
 body {
-  font: 15px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", sans-serif;
 }
 ```
 
@@ -69,14 +75,17 @@ The following specification is included in full so this document works without a
 
 ### Component design notes
 
+#### Visual direction and material craft
+Designed as an artisanal Tokyo patisserie showcase on warm bakery linen (`--bg: #f4f1e9`, fine crosshatch weave, sunlit counter radial falloff). The cookie rests on a glazed stoneware porcelain plate with a double gilt-hairline rim and soft ambient foot shadow. The cookie itself combines a multi-stop toasted golden-brown sablé crust (`#dea15d` → `#9e5e29`), a glossy flavor ganache glaze (`--icing`, `--icing-hi`, `--icing-edge`), specular top icing reflection, piped dotted `--accent` frame, and flavor-matched vanilla bean / berry / matcha micro-speckles. An SVG `feDropShadow` wraps the masked cookie group so the real-time drop shadow hugs every freshly bitten scallop edge.
+
 #### State and feedback
-A round contains six deliberate clicks. Black circles in the SVG mask remove real areas from the capsule; the final click removes the remaining cookie, increments the round counter and changes the same button to a bake-again action. Explicit reset or flavor change clears bites but keeps the count of completed cookies. Reset also removes pending crumbs so a fresh cookie looks fresh.
+A round contains six deliberate clicks. Overlapping scalloped circles added to `#holes` inside `#cookie-mask` remove real areas from the cookie; the final click removes the remaining cookie, increments the round counter, reveals `One more?`, and changes `#bite` to a bake-again action. Explicit reset or flavor change clears bites, resets the mask and crumbs, and keeps the count of completed cookies.
 
 #### Adapting the interaction
-Change `positions` to alter bite locations; keep the progress dots and six-bite logic aligned if changing the count. The SVG is decorative and the outer native button owns keyboard focus and an accurate dynamic accessible name. Do not place interactive elements in the SVG or rely on hover for biting.
+Change `positions` to alter bite locations; keep the six progress pips and six-bite logic aligned if changing the count. The SVG is decorative (`aria-hidden="true"`) while the outer native `#bite` button owns keyboard focus and dynamic accessible name (`Take a bite` → `Bake another cookie`). Flavor pills update `--icing`, `--icing-hi`, `--icing-edge`, and `--speck` together with `aria-pressed`.
 
 #### Motion and offline behavior
-Crumbs animate only after a click, remove themselves after 850 ms and are suppressed under reduced motion. There is no autoplay, sound permission, tracking, network request or persistent storage. Flavor colors are fixed internal tokens; `accent` controls outline, crumb and focus colors.
+Each bite triggers a brief spring nibble recoil and scatters irregular rotated crust + glaze crumbs that self-remove after 820 ms. Under `prefers-reduced-motion: reduce`, recoil and crumbs are suppressed while six-bite masking and state updates remain fully functional. Zero external fonts, images, or network requests are used.
 
 ## 可选完整包工作流 / Optional package workflow
 

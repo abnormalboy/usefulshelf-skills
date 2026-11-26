@@ -46,10 +46,11 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 :root {
   --accent: #557966;
   --bg: #f3f0e9;
-  --ink: #2d382f;
+  --ink: #1b2620;
+  --muted: #425148;
 }
 body {
-  font: 14px system-ui;
+  font: 14px/1.5 -apple-system, BlinkMacSystemFont, "PingFang SC", system-ui, sans-serif;
 }
 ```
 
@@ -75,22 +76,16 @@ body {
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
-### Visual and analytical model
 
-The default view is a narrow centered warm-white card over four soft color fields, with a large serif heading. Its inset application contains a right-aligned dark question bubble, a short answer and five channel rows below a proportional bar. Keep this object and hierarchy primary; the inbox desk is a separate optional view.
+### Luminous frosted-glass productivity console & inbox desk
 
-Questions select received, resolved or outstanding counts. The 7-day and 30-day periods use separate fixed fictional datasets. Outstanding counts are received minus resolved, and both bar widths and one-decimal percentages derive from the same selected array. Selecting a legend row isolates its visual share and reports its actual count; select it again to return to all channels. Each row rebuild restores focus to that same row. Do not imply that these sample reports analyze the five independent demonstration messages or contact a remote model. All computation is local.
+Core tokens: `--accent: #557966`, `--bg: #f3f0e9`, `--ink: #1b2620`, `--muted: #425148`. The default view centers a hyper-crisp translucent frosted-glass window (`backdrop-filter: blur(28px) saturate(148%)`, specular hairline white rim, concentric `28px`/`16px` radii) floating over a silky multi-stop pastel aurora mesh backdrop.
 
-The view switch keeps question, period, selected channel and inbox edits in memory. Both views share exactly one live status region. There is no automatic motion; reduced-motion disables bar transitions. On narrow screens controls wrap and the card remains within the viewport.
+#### Channel insights analytical model
+Inside the frosted application card, macOS-style jewel window controls frame a right-aligned dark pill question bubble, concise plain-language summary, a `12px` jewel-toned segmented channel bar (`#e8a528`, `#2aa374`, `#3892d4`, `#6b6fd6`, `#d65683`), interactive `tabular-nums` legend rows, and elevated pill `<select>` query controls for topic (`volume`, `resolved`, `attention`) and period (`week`, `month`). Outstanding counts are `volume - resolved`; clicking any channel isolates its share and restores keyboard focus to the same row. All datasets are explicitly fictional and computed locally.
 
-#### State model
-Messages use stable IDs and hold channel, pin, archive, edited draft and saved draft state. Filters and search derive the visible list without changing source order. A pinned sort is stable, and selecting a new filter chooses the first matching message when the previous selection is outside the filter. Empty lists hide the reader rather than showing an unrelated conversation. Channel bars are computed from actual unarchived sample messages.
-
-#### Draft and archive semantics
-Typing updates only that message's in-page edit buffer. Save copies the edit into its saved snapshot. Restore saved draft deliberately replaces subsequent unsaved edits. No messages are sent and no account or backend is connected. All state is lost on reload; do not imply persistent storage. Archive pushes an ID to an undo stack; Undo restores the most recent item and resets filters/search so it is visible again.
-
-#### Adaptation
-Replace the `messages` data with your own sample content. Render message text with textContent; do not interpolate user replies as markup. Inputs have descriptive labels in both languages. The list becomes a bounded scroll region on mobile and the reader follows below. The interface has no automatic movement.
+#### Inbox desk view & draft/archive semantics
+Switching to `#desk-view` expands the frosted glass container into a two-column split inbox preserving insight state in memory. Filters, search, pinning, local-only draft saving/restoring, and undoable archiving operate on stable message IDs with one shared live status region (`#status`). Empty filter results hide `#reader`. Zero external resources, WCAG AA `>= 4.5:1` contrast throughout, and clean mobile reflow down to `390px`.
 
 ## 可选完整包工作流 / Optional package workflow
 

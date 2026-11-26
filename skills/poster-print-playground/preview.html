@@ -8,210 +8,403 @@
       :root {
         --accent: #c24124;
         --bg: #f3f0e9;
-        --ink: #282d27;
+        --ink: #1e231f;
+        --muted: #4b524a;
+        --rule: rgba(30, 35, 31, 0.16);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       * {
         box-sizing: border-box;
       }
       body {
         margin: 0;
-        background: var(--bg);
+        min-height: 100vh;
+        background-color: var(--bg);
+        background-image:
+          radial-gradient(ellipse 70% 60% at 80% 15%, rgba(255, 252, 244, 0.72), transparent 72%),
+          radial-gradient(ellipse 60% 50% at 15% 90%, rgba(196, 179, 152, 0.18), transparent 70%),
+          url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIj48ZmlsdGVyIGlkPSJuIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iMC44MiIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWx0ZXI9InVybCgjbikiIG9wYWNpdHk9IjAuMDM2Ii8+PC9zdmc+");
         color: var(--ink);
         font:
-          14px system-ui,
+          14px/1.55 -apple-system,
+          BlinkMacSystemFont,
+          "PingFang SC",
+          "Hiragino Sans GB",
+          "Noto Sans CJK SC",
+          system-ui,
           sans-serif;
       }
       main {
         width: 100%;
-        max-width: 1050px;
-        margin: auto;
-        padding: 25px 28px;
-        min-height: 720px;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 18px 32px 20px;
       }
       .mast {
         display: flex;
         justify-content: space-between;
-        border-bottom: 1px solid #282d2733;
-        padding-bottom: 15px;
+        align-items: center;
+        gap: 12px;
+        border-bottom: 1.5px solid rgba(30, 35, 31, 0.2);
+        padding-bottom: 11px;
         font:
-          10px ui-monospace,
+          600 11px/1.2 ui-monospace,
+          "SFMono-Regular",
+          Menlo,
           monospace;
         letter-spacing: 0.13em;
+        color: var(--muted);
       }
       .layout {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-        gap: 60px;
-        margin-top: 28px;
+        grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
+        gap: 44px;
+        margin-top: 18px;
         align-items: start;
       }
-      h1 {
-        font:
-          clamp(35px, 4.4vw, 51px)/1.2 Georgia,
-          serif;
-        letter-spacing: -0.045em;
-        margin: 10px 0 15px;
-        overflow-wrap: anywhere;
-        text-wrap: balance;
-      }
-      .sub {
-        font-size: 13px;
-        line-height: 1.7;
-        color: #52554b;
-        max-width: 360px;
-      }
       .kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         font:
-          10px ui-monospace,
+          600 11px/1.2 ui-monospace,
+          "SFMono-Regular",
+          Menlo,
           monospace;
         color: var(--accent);
         letter-spacing: 0.13em;
       }
+      .kicker::before {
+        content: "";
+        width: 16px;
+        height: 1.5px;
+        background: var(--accent);
+      }
+      h1 {
+        font:
+          600 clamp(32px, 3.8vw, 48px)/1.12 "Iowan Old Style",
+          "Palatino Linotype",
+          Georgia,
+          "Songti SC",
+          "Noto Serif CJK SC",
+          serif;
+        letter-spacing: -0.03em;
+        margin: 10px 0 10px;
+        overflow-wrap: anywhere;
+        text-wrap: balance;
+        color: #171b18;
+      }
+      :lang(zh) h1 {
+        font-size: clamp(30px, 3.4vw, 44px);
+        line-height: 1.18;
+        letter-spacing: -0.015em;
+        word-break: keep-all;
+      }
+      .sub {
+        font-size: 13.5px;
+        line-height: 1.62;
+        color: var(--muted);
+        max-width: 400px;
+        margin: 0;
+        text-wrap: pretty;
+      }
+      .controls-card {
+        margin-top: 18px;
+        padding: 18px 20px 18px;
+        background: linear-gradient(180deg, rgba(255, 253, 248, 0.9), rgba(248, 245, 236, 0.85));
+        border: 1px solid rgba(30, 35, 31, 0.14);
+        border-radius: 14px;
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.88) inset,
+          0 14px 28px rgba(34, 38, 30, 0.06);
+      }
       .field {
         display: block;
-        margin: 21px 0 9px;
-        font-size: 12px;
-        color: #4d5448;
+        margin: 15px 0 8px;
+        font:
+          600 11.5px/1.2 ui-monospace,
+          "SFMono-Regular",
+          Menlo,
+          monospace;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+      .field:first-child {
+        margin-top: 0;
       }
       input[type="text"] {
         width: 100%;
         border: 0;
-        border-bottom: 1px solid #8a8f7b;
-        background: none;
-        padding: 11px 0;
+        border-bottom: 1.5px solid rgba(30, 35, 31, 0.28);
+        background: rgba(255, 255, 255, 0.55);
+        padding: 9px 10px;
+        border-radius: 6px 6px 0 0;
         font:
-          19px Georgia,
+          600 18px/1.3 "Iowan Old Style",
+          Georgia,
+          "Songti SC",
           serif;
         color: var(--ink);
+        transition:
+          border-color 0.18s ease,
+          background-color 0.18s ease;
+      }
+      input[type="text"]:focus {
+        border-bottom-color: var(--accent);
+        background: #ffffff;
       }
       .choice {
         display: flex;
-        gap: 7px;
+        gap: 8px;
         flex-wrap: wrap;
       }
       .choice button {
-        padding: 9px 12px;
-        background: none;
-        border: 1px solid #87917866;
-        border-radius: 20px;
-        font: 11px system-ui;
-        color: inherit;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 13px;
+        background: rgba(255, 254, 250, 0.8);
+        border: 1px solid rgba(30, 35, 31, 0.2);
+        border-radius: 999px;
+        font:
+          600 12px/1.2 -apple-system,
+          BlinkMacSystemFont,
+          system-ui,
+          sans-serif;
+        color: var(--ink);
         cursor: pointer;
+        box-shadow: 0 1px 2px rgba(24, 30, 22, 0.05);
+        transition:
+          transform 0.15s ease,
+          background-color 0.15s ease,
+          border-color 0.15s ease,
+          color 0.15s ease;
+        -webkit-tap-highlight-color: transparent;
+      }
+      @media (hover: hover) {
+        .choice button:hover {
+          transform: translateY(-1px);
+          border-color: rgba(30, 35, 31, 0.45);
+          background: #ffffff;
+        }
       }
       .choice button[aria-pressed="true"] {
-        background: var(--ink);
-        color: #fff;
+        background: #1e231f;
+        border-color: #1e231f;
+        color: #ffffff;
+        box-shadow: 0 4px 12px rgba(24, 30, 22, 0.18);
       }
       .swatch {
-        width: 10px;
-        height: 10px;
+        width: 12px;
+        height: 12px;
         border-radius: 50%;
         display: inline-block;
-        margin-right: 6px;
         background: var(--c);
+        box-shadow:
+          inset 0 1.5px 2px rgba(255, 255, 255, 0.45),
+          0 0 0 1px rgba(0, 0, 0, 0.2);
+      }
+      .choice button[aria-pressed="true"] .swatch {
+        box-shadow:
+          inset 0 1.5px 2px rgba(255, 255, 255, 0.45),
+          0 0 0 1.5px rgba(255, 255, 255, 0.85);
       }
       button:focus-visible,
       input:focus-visible {
-        outline: 3px solid var(--accent);
-        outline-offset: 4px;
+        outline: 2.5px solid var(--accent);
+        outline-offset: 3px;
       }
       .download {
-        margin-top: 24px;
+        margin-top: 18px;
         width: 100%;
-        padding: 14px 20px;
-        border: 0;
-        background: var(--accent);
-        color: #fff;
-        border-radius: 4px;
-        font: 13px system-ui;
+        padding: 13px 20px;
+        border: 1px solid color-mix(in srgb, var(--accent) 85%, #000 15%);
+        background-color: var(--accent);
+        background-image: linear-gradient(
+          180deg,
+          color-mix(in srgb, var(--accent) 92%, #fff 8%),
+          var(--accent)
+        );
+        color: #ffffff;
+        border-radius: 9px;
+        font:
+          600 13.5px/1.2 -apple-system,
+          BlinkMacSystemFont,
+          system-ui,
+          sans-serif;
+        letter-spacing: 0.01em;
         cursor: pointer;
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.24) inset,
+          0 8px 18px color-mix(in srgb, var(--accent) 26%, transparent);
+        transition:
+          transform 0.16s ease,
+          box-shadow 0.16s ease,
+          filter 0.16s ease;
+        -webkit-tap-highlight-color: transparent;
+      }
+      @media (hover: hover) {
+        .download:hover {
+          transform: translateY(-1px);
+          filter: brightness(1.04);
+          box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.3) inset,
+            0 12px 22px color-mix(in srgb, var(--accent) 32%, transparent);
+        }
       }
       .poster-frame {
-        background: #e3e3d9;
-        padding: 24px 28px;
+        position: relative;
+        background:
+          radial-gradient(ellipse 80% 55% at 50% 15%, rgba(255, 254, 249, 0.65), transparent 72%),
+          linear-gradient(165deg, #e5e1d6 0%, #d8d3c5 100%);
+        border: 1px solid rgba(30, 35, 31, 0.15);
+        border-radius: 14px;
+        padding: 20px 26px;
         display: grid;
         place-items: center;
         min-width: 0;
+        box-shadow:
+          inset 0 2px 10px rgba(32, 36, 28, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.72),
+          0 18px 34px rgba(32, 36, 28, 0.07);
+      }
+      .poster-frame::before,
+      .poster-frame::after {
+        content: "+";
+        position: absolute;
+        font:
+          500 11px/1 ui-monospace,
+          monospace;
+        color: rgba(45, 50, 42, 0.35);
+        pointer-events: none;
+      }
+      .poster-frame::before {
+        top: 8px;
+        left: 11px;
+      }
+      .poster-frame::after {
+        bottom: 8px;
+        right: 11px;
       }
       .poster-frame svg {
         width: 100%;
         height: auto;
-        max-width: 324px;
+        max-width: 318px;
         display: block;
-        box-shadow: 0 15px 24px #333a2924;
+        border-radius: 2px;
+        box-shadow:
+          0 22px 38px rgba(24, 28, 22, 0.2),
+          0 4px 10px rgba(24, 28, 22, 0.12),
+          0 0 0 1px rgba(0, 0, 0, 0.08);
       }
       .thumbs {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 10px;
-        margin-top: 15px;
+        margin-top: 12px;
       }
       .thumbs button {
-        padding: 5px;
-        background: transparent;
-        border: 1px solid transparent;
+        padding: 6px 6px 7px;
+        background: rgba(255, 253, 248, 0.65);
+        border: 1.5px solid rgba(30, 35, 31, 0.12);
+        border-radius: 8px;
         cursor: pointer;
         min-width: 0;
+        transition:
+          transform 0.15s ease,
+          border-color 0.15s ease,
+          background-color 0.15s ease,
+          box-shadow 0.15s ease;
+        -webkit-tap-highlight-color: transparent;
+      }
+      @media (hover: hover) {
+        .thumbs button:hover {
+          transform: translateY(-2px);
+          background: #ffffff;
+          border-color: rgba(30, 35, 31, 0.34);
+        }
       }
       .thumbs button[aria-pressed="true"] {
         border-color: var(--accent);
-        background: #fff9;
+        background: #ffffff;
+        box-shadow:
+          0 6px 14px color-mix(in srgb, var(--accent) 18%, transparent),
+          0 0 0 1px var(--accent);
       }
       .thumbs svg {
         width: 100%;
         height: auto;
         display: block;
+        border-radius: 2px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
       }
       .thumbs span {
         font:
-          9px ui-monospace,
+          600 10.5px/1.2 ui-monospace,
+          "SFMono-Regular",
+          Menlo,
           monospace;
+        font-variant-numeric: tabular-nums;
         display: block;
         margin-top: 6px;
-        color: var(--ink);
+        color: var(--muted);
+      }
+      .thumbs button[aria-pressed="true"] span {
+        color: var(--accent);
       }
       #status {
-        min-height: 30px;
+        min-height: 22px;
         line-height: 1.5;
-        font-size: 12px;
-        color: #4b5444;
-        margin-top: 15px;
+        font:
+          500 12px/1.5 ui-monospace,
+          "SFMono-Regular",
+          Menlo,
+          monospace;
+        color: var(--muted);
+        margin: 12px 0 0;
       }
       .foot {
-        margin-top: 22px;
-        padding-top: 13px;
-        border-top: 1px solid #282d2722;
+        margin-top: 16px;
+        padding-top: 11px;
+        border-top: 1px solid var(--rule);
         font:
-          10px ui-monospace,
+          600 10.5px/1.4 ui-monospace,
+          "SFMono-Regular",
+          Menlo,
           monospace;
-        letter-spacing: 0.12em;
-        color: #52564a;
+        letter-spacing: 0.11em;
+        color: var(--muted);
       }
-      @media (max-width: 660px) {
+      @media (max-width: 760px) {
         main {
-          padding: 22px 18px;
+          padding: 18px 18px 22px;
         }
         .layout {
           grid-template-columns: 1fr;
-          gap: 24px;
+          gap: 22px;
         }
         .poster-frame {
-          padding: 22px;
+          padding: 18px;
         }
         .poster-frame svg {
-          max-width: 310px;
+          max-width: 300px;
         }
         h1 {
-          max-width: 450px;
+          max-width: 460px;
         }
         .sub {
           max-width: 100%;
         }
         .mast {
-          font-size: 8px;
+          font-size: 9.5px;
+          letter-spacing: 0.08em;
+        }
+        input[type="text"] {
+          font-size: 16px;
         }
         .thumbs {
-          gap: 5px;
+          gap: 7px;
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -237,53 +430,55 @@
           <p class="sub" id="subtitle">
             四种画面，三套油墨。改一行文字，印一份属于你的灵感。
           </p>
-          <label
-            class="field"
-            for="headline"
-            data-zh="海报上的一句话"
-            data-en="YOUR POSTER HEADLINE"
-          >
-            海报上的一句话
-          </label>
-          <input
-            id="headline"
-            type="text"
-            maxlength="48"
-            value="慢一点，也很好"
-            aria-label="海报文字"
-          />
-          <span class="field" data-zh="挑选油墨" data-en="CHOOSE YOUR INK">挑选油墨</span>
-          <div class="choice" id="palettes">
-            <button data-palette="0" aria-pressed="true">
-              <i class="swatch" style="--c: #c24124"></i>
-              <span data-zh="赤陶" data-en="Terracotta">赤陶</span>
-            </button>
-            <button data-palette="1" aria-pressed="false">
-              <i class="swatch" style="--c: #4163a8"></i>
-              <span data-zh="蓝调" data-en="Blue hour">蓝调</span>
-            </button>
-            <button data-palette="2" aria-pressed="false">
-              <i class="swatch" style="--c: #517057"></i>
-              <span data-zh="苔绿" data-en="Moss">苔绿</span>
+          <div class="controls-card">
+            <label
+              class="field"
+              for="headline"
+              data-zh="海报上的一句话"
+              data-en="YOUR POSTER HEADLINE"
+            >
+              海报上的一句话
+            </label>
+            <input
+              id="headline"
+              type="text"
+              maxlength="48"
+              value="慢一点，也很好"
+              aria-label="海报文字"
+            />
+            <span class="field" data-zh="挑选油墨" data-en="CHOOSE YOUR INK">挑选油墨</span>
+            <div class="choice" id="palettes">
+              <button data-palette="0" aria-pressed="true">
+                <i class="swatch" style="--c: #c24124"></i>
+                <span data-zh="赤陶" data-en="Terracotta">赤陶</span>
+              </button>
+              <button data-palette="1" aria-pressed="false">
+                <i class="swatch" style="--c: #365ca8"></i>
+                <span data-zh="蓝调" data-en="Blue hour">蓝调</span>
+              </button>
+              <button data-palette="2" aria-pressed="false">
+                <i class="swatch" style="--c: #3f6a4b"></i>
+                <span data-zh="苔绿" data-en="Moss">苔绿</span>
+              </button>
+            </div>
+            <span class="field" data-zh="排版方式" data-en="COMPOSITION">排版方式</span>
+            <div class="choice" id="layouts">
+              <button data-layout="0" aria-pressed="true" data-zh="留白版" data-en="Airy">
+                留白版
+              </button>
+              <button data-layout="1" aria-pressed="false" data-zh="大字版" data-en="Bold type">
+                大字版
+              </button>
+            </div>
+            <button
+              class="download"
+              id="download"
+              data-zh="下载这张 SVG 海报 ↓"
+              data-en="Download SVG poster ↓"
+            >
+              下载这张 SVG 海报 ↓
             </button>
           </div>
-          <span class="field" data-zh="排版方式" data-en="COMPOSITION">排版方式</span>
-          <div class="choice" id="layouts">
-            <button data-layout="0" aria-pressed="true" data-zh="留白版" data-en="Airy">
-              留白版
-            </button>
-            <button data-layout="1" aria-pressed="false" data-zh="大字版" data-en="Bold type">
-              大字版
-            </button>
-          </div>
-          <button
-            class="download"
-            id="download"
-            data-zh="下载这张 SVG 海报 ↓"
-            data-en="Download SVG poster ↓"
-          >
-            下载这张 SVG 海报 ↓
-          </button>
           <p
             id="status"
             role="status"
@@ -399,6 +594,10 @@
             .replace(
               /Files stay on this device\. Maximum (\d+) MB\./g,
               "文件留在此设备，最大 $1 MB。",
+            )
+            .replace(
+              /Packed ([\d,]+) bytes\. CRC32 ([0-9a-f]+)\. Download contains the complete file, ready to decode\./gi,
+              "已打包 $1 字节。CRC32 $2。下载文件包含完整内容，可直接解码。",
             )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
@@ -608,13 +807,16 @@
         document
           .querySelector("#thumbs")
           .setAttribute("aria-label", L("选择海报", "Choose a poster"));
+
         let selected = 0,
           palette = 0,
           layout = 0;
+
+        // Each palette: [primaryInk, warmPaperTint, secondaryDeepInk, risoAccentWash]
         const colors = [
-            [config.accent, "#f1e4cc", "#332d27"],
-            ["#4163a8", "#e8e5db", "#202f52"],
-            ["#517057", "#e9ebd4", "#293e2d"],
+            [config.accent, "#f7eedb", "#26211d", "#e9b949"],
+            ["#365ca8", "#edf0f4", "#182542", "#e88a68"],
+            ["#3f6a4b", "#eef1e4", "#1d3123", "#d89f43"],
           ],
           names = [
             ["透视实体卡", "Perspective card"],
@@ -627,6 +829,7 @@
               /[&<>"']/g,
               (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[c],
             );
+
         const metricCanvas = document.createElement("canvas"),
           metrics = metricCanvas.getContext("2d");
         const graphemes = (text) =>
@@ -635,6 +838,7 @@
                 (x) => x.segment,
               )
             : Array.from(text);
+
         function fitHeadline(text, width, height, maxSize) {
           const units = graphemes(text);
           let result;
@@ -670,58 +874,245 @@
           }
           return result;
         }
+
         function titleBlock(text, box, fill, maxSize) {
           const fit = fitHeadline(text, box.w, box.h, maxSize);
-          return `<text data-headline="true" x="${box.x}" y="${box.y + fit.size}" fill="${fill}" font-family="Arial, sans-serif" font-size="${fit.size}" font-weight="700">${fit.lines.map((line, j) => `<tspan x="${box.x}" dy="${j ? fit.lineHeight : 0}">${esc(line)}</tspan>`).join("")}</text>`;
+          return `<text data-headline="true" x="${box.x}" y="${box.y + fit.size}" fill="${fill}" font-family="Arial, sans-serif" font-size="${fit.size}" font-weight="700" letter-spacing="-0.3">${fit.lines.map((line, j) => `<tspan x="${box.x}" dy="${j ? fit.lineHeight : 0}">${esc(line)}</tspan>`).join("")}</text>`;
         }
-        function posterScene(i, a, id) {
-          const defs = `<defs><linearGradient id="${id}card" x2=".2" y2="1"><stop stop-color="#fff"/><stop offset=".55" stop-color="#f6f7f5"/><stop offset="1" stop-color="#cfd3d0"/></linearGradient><linearGradient id="${id}metal"><stop stop-color="#737e80"/><stop offset=".25" stop-color="#eef4f2"/><stop offset=".5" stop-color="#a3afac"/><stop offset=".76" stop-color="#f3f6f2"/><stop offset="1" stop-color="#788581"/></linearGradient><linearGradient id="${id}mist" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ccd8dd"/><stop offset=".7" stop-color="#f2f5f5"/><stop offset="1" stop-color="#fff"/></linearGradient><linearGradient id="${id}skin" x1="0" y1="0" x2="1" y2=".4"><stop stop-color="#d3d0c7"/><stop offset=".45" stop-color="#a7a59d"/><stop offset="1" stop-color="#686d67"/></linearGradient><linearGradient id="${id}fabric" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a7aca4"/><stop offset="1" stop-color="#303a35"/></linearGradient><linearGradient id="${id}glass"><stop stop-color="#fff" stop-opacity=".95"/><stop offset=".2" stop-color="#c1d7d0" stop-opacity=".65"/><stop offset=".7" stop-color="#f4fffb" stop-opacity=".92"/><stop offset="1" stop-color="#8aa49c" stop-opacity=".65"/></linearGradient><filter id="${id}shadow" x="-.5" y="-.5" width="2" height="2"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#263c35" flood-opacity=".16"/></filter><pattern id="${id}ribs" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 0H5" stroke="#8a9891" opacity=".2"/></pattern></defs>`;
-          if (i === 0)
+
+        function posterScene(i, pal, id) {
+          const [a, paper, deep, wash] = pal;
+          const defs = `<defs>
+            <linearGradient id="${id}paper" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#fdfbf4"/>
+              <stop offset="1" stop-color="${paper}"/>
+            </linearGradient>
+            <linearGradient id="${id}card" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ffffff"/>
+              <stop offset=".42" stop-color="#f2f4f0"/>
+              <stop offset=".78" stop-color="#dfe4de"/>
+              <stop offset="1" stop-color="#c3cbc6"/>
+            </linearGradient>
+            <linearGradient id="${id}metal" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#6b7470"/>
+              <stop offset=".25" stop-color="#eef3ef"/>
+              <stop offset=".52" stop-color="#9aa6a0"/>
+              <stop offset=".78" stop-color="#f7faf7"/>
+              <stop offset="1" stop-color="#67736e"/>
+            </linearGradient>
+            <linearGradient id="${id}gold" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#c79e54"/>
+              <stop offset=".35" stop-color="#f6e3aa"/>
+              <stop offset=".68" stop-color="#b48a42"/>
+              <stop offset="1" stop-color="#ecd493"/>
+            </linearGradient>
+            <linearGradient id="${id}night" x1="0" y1="0" x2="0.8" y2="1">
+              <stop offset="0" stop-color="#111916"/>
+              <stop offset=".55" stop-color="#0b110f"/>
+              <stop offset="1" stop-color="#15201b"/>
+            </linearGradient>
+            <linearGradient id="${id}mist" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#d4e0e2"/>
+              <stop offset=".55" stop-color="#eef3f1"/>
+              <stop offset="1" stop-color="#fbfcf9"/>
+            </linearGradient>
+            <linearGradient id="${id}portraitBg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#8b968a"/>
+              <stop offset=".55" stop-color="#a8b1a4"/>
+              <stop offset="1" stop-color="#768176"/>
+            </linearGradient>
+            <linearGradient id="${id}skin" x1="0" y1="0" x2="1" y2=".5">
+              <stop offset="0" stop-color="#e3ded2"/>
+              <stop offset=".48" stop-color="#bdb9ad"/>
+              <stop offset="1" stop-color="#6e736a"/>
+            </linearGradient>
+            <linearGradient id="${id}fabric" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#6e786e"/>
+              <stop offset="1" stop-color="#222a25"/>
+            </linearGradient>
+            <linearGradient id="${id}glass" x1="0" y1="0" x2="1" y2="0.4">
+              <stop offset="0" stop-color="#ffffff" stop-opacity=".95"/>
+              <stop offset=".24" stop-color="#bfd7ce" stop-opacity=".68"/>
+              <stop offset=".66" stop-color="#f6fffb" stop-opacity=".92"/>
+              <stop offset="1" stop-color="#7d9c92" stop-opacity=".75"/>
+            </linearGradient>
+            <linearGradient id="${id}amber" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="${wash}" stop-opacity=".55"/>
+              <stop offset="1" stop-color="${a}" stop-opacity=".78"/>
+            </linearGradient>
+            <pattern id="${id}dots" width="8" height="8" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1.05" fill="${a}" opacity=".17"/>
+            </pattern>
+            <pattern id="${id}halftone" width="6" height="6" patternUnits="userSpaceOnUse">
+              <circle cx="3" cy="3" r="0.9" fill="#ffffff" opacity=".16"/>
+            </pattern>
+            <pattern id="${id}ribs" width="6" height="6" patternUnits="userSpaceOnUse">
+              <path d="M0 0H6" stroke="#7d8c84" stroke-width="0.6" opacity=".2"/>
+            </pattern>
+            <filter id="${id}shadow" x="-.3" y="-.3" width="1.6" height="1.6">
+              <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#1c2a24" flood-opacity=".2"/>
+            </filter>
+          </defs>`;
+
+          if (i === 0) {
             return (
               defs +
-              `<rect width="400" height="520" fill="#fcfcf8"/><text x="24" y="33" font-family="monospace" font-size="8" fill="${a}" letter-spacing="1.5">FORM / EVERYDAY EDITION</text><text x="376" y="33" text-anchor="end" font-family="monospace" font-size="7" fill="${a}">01—04</text><g transform="translate(31 219) rotate(-26) skewX(12)"><rect x="3" y="7" width="368" height="194" rx="14" fill="#c0c7c2" opacity=".32"/><rect x="0" y="0" width="368" height="194" rx="14" fill="url(#${id}card)" stroke="#c9d1cb"/><rect x="5" y="5" width="358" height="184" rx="10" fill="url(#${id}ribs)" stroke="#fff"/><text x="27" y="57" font-family="Arial,sans-serif" font-size="25" fill="${a}" letter-spacing="2">MOMENT</text><text x="29" y="78" font-family="monospace" font-size="6" fill="#89948d" letter-spacing="2">MEMBERSHIP / 0001</text><rect x="29" y="115" width="52" height="38" rx="7" fill="url(#${id}metal)" stroke="#a7b2ad"/><path d="M46 115V153M63 115V153M29 128H81M29 141H81" stroke="#f9fcf9" stroke-width=".7"/><circle cx="311" cy="149" r="14" fill="none" stroke="${a}"/><circle cx="329" cy="149" r="14" fill="none" stroke="${a}"/></g><text x="25" y="493" font-family="monospace" font-size="7" fill="${a}" letter-spacing="1.3">A SMALL PASS TO BIG POSSIBILITIES</text>`
+              `<rect width="400" height="520" fill="url(#${id}paper)"/>
+              <circle cx="322" cy="128" r="118" fill="${wash}" opacity=".28"/>
+              <rect x="24" y="48" width="352" height="304" fill="url(#${id}dots)" opacity=".65"/>
+              <path d="M24 48H376M24 352H376M200 48V352" stroke="${deep}" stroke-width=".6" opacity=".16"/>
+              <path d="M24 44V52M20 48H28M376 44V52M372 48H380" stroke="${a}" stroke-width="1"/>
+              <text x="24" y="34" font-family="monospace" font-size="8.5" font-weight="700" fill="${deep}" letter-spacing="1.8">FORM / EVERYDAY EDITION</text>
+              <text x="376" y="34" text-anchor="end" font-family="monospace" font-size="8.5" font-weight="700" fill="${a}">01 — 04</text>
+              <g filter="url(#${id}shadow)" transform="translate(24 224) rotate(-23) skewX(11)">
+                <rect x="0" y="0" width="346" height="190" rx="16" fill="url(#${id}card)" stroke="#aeb9b1" stroke-width="1.2"/>
+                <rect x="6" y="6" width="334" height="178" rx="11" fill="url(#${id}ribs)" stroke="#ffffff" stroke-width="1"/>
+                <path d="M18 148Q120 112 224 148T330 132" fill="none" stroke="${a}" stroke-width=".9" opacity=".32"/>
+                <path d="M18 158Q120 122 224 158T330 142" fill="none" stroke="${a}" stroke-width=".7" opacity=".2"/>
+                <text x="26" y="54" font-family="Arial,sans-serif" font-weight="700" font-size="25" fill="${deep}" letter-spacing="2.8">MOMENT</text>
+                <text x="28" y="74" font-family="monospace" font-size="7.5" fill="#5e6b63" letter-spacing="2.2">SMALL PRESS PASS / NO. 0001</text>
+                <rect x="28" y="108" width="54" height="40" rx="7" fill="url(#${id}gold)" stroke="#9a7a3e" stroke-width=".9"/>
+                <path d="M46 108V148M64 108V148M28 122H82M28 134H82" stroke="#fff8e0" stroke-width=".85"/>
+                <circle cx="286" cy="140" r="17" fill="${a}" opacity=".86"/>
+                <circle cx="305" cy="140" r="17" fill="${wash}" opacity=".78"/>
+                <circle cx="286" cy="140" r="17" fill="none" stroke="#ffffff" stroke-width=".9" opacity=".7"/>
+              </g>
+              <rect x="24" y="362" width="34" height="4" fill="${a}"/>
+              <text x="24" y="498" font-family="monospace" font-size="7.5" fill="${deep}" opacity=".72" letter-spacing="1.4">RISOGRAPH EDITION · A SMALL PASS TO BIG POSSIBILITIES</text>
+              <circle cx="370" cy="494" r="5" fill="${a}"/>`
             );
-          if (i === 1)
+          }
+
+          if (i === 1) {
+            const nodes = [
+              [42, 188, "Observation"],
+              [100, 240, "Conversation"],
+              [154, 286, "Experiment"],
+              [206, 332, "Understanding"],
+            ];
             return (
               defs +
-              `<rect width="400" height="520" fill="#101512"/><path d="M23 46H377M23 46V493M377 46V493" fill="none" stroke="#68776c" stroke-dasharray="2 4" opacity=".4"/><text x="24" y="31" fill="#a7b4a9" font-family="monospace" font-size="7" letter-spacing="2">INPUT / PATTERNS / OUTCOME</text><g font-family="Arial,sans-serif" font-size="10" fill="#d9e2d9">${[
-                [30, 171, "Observation"],
-                [84, 226, "Conversation"],
-                [134, 274, "Experiment"],
-                [182, 320, "Understanding"],
-              ]
+              `<rect width="400" height="520" fill="url(#${id}night)"/>
+              <circle cx="364" cy="352" r="185" fill="none" stroke="${a}" stroke-width=".8" opacity=".2"/>
+              <circle cx="364" cy="352" r="126" fill="none" stroke="#a6c2b0" stroke-width=".7" stroke-dasharray="3 5" opacity=".24"/>
+              <circle cx="364" cy="352" r="68" fill="none" stroke="#a6c2b0" stroke-width=".7" opacity=".28"/>
+              <path d="M24 44H376M24 156H376M24 44V496M376 44V496" fill="none" stroke="#7d9685" stroke-dasharray="2 5" opacity=".32"/>
+              <text x="24" y="32" fill="#a9beaf" font-family="monospace" font-size="8" font-weight="700" letter-spacing="2">INPUT / PATTERNS / OUTCOME</text>
+              <text x="376" y="32" text-anchor="end" fill="${a}" font-family="monospace" font-size="8" font-weight="700">SYS.02</text>
+              <g font-family="Arial,sans-serif" font-size="10.5" fill="#e6efe8">${nodes
                 .map(
                   ([x, y, label], n) =>
-                    `<path d="M${x} ${y}V${385 + n * 27}L253 475L374 369" fill="none" stroke="#809083" stroke-dasharray="2 4" opacity=".45"/><circle cx="${x}" cy="${y}" r="5" fill="${a}" opacity=".25"/><circle cx="${x}" cy="${y}" r="2" fill="#eef9ef"/><text x="${x + 9}" y="${y + 3}">${label}</text><path d="M${x} ${385 + n * 27}L253 475L${x} 520Z" fill="#c6d5c9" opacity="${0.12 + n * 0.07}"/>`,
+                    `<path d="M${x} ${y}V${392 + n * 24}L246 476L376 346" fill="none" stroke="#97b29e" stroke-dasharray="2 4" opacity=".52"/>
+                    <path d="M${x} ${392 + n * 24}L246 476L${x} 520Z" fill="${n % 2 === 0 ? a : "#9fc2ad"}" opacity="${0.14 + n * 0.065}"/>
+                    <circle cx="${x}" cy="${y}" r="8" fill="${a}" opacity=".26"/>
+                    <circle cx="${x}" cy="${y}" r="3" fill="#ffffff"/>
+                    <text x="${x + 12}" y="${y + 4}" font-weight="600">${label}</text>`,
                 )
-                .join(
-                  "",
-                )}</g><path d="M206 520L377 348V520Z" fill="#ebf2e9"/><path d="M226 499L377 348" stroke="${a}" stroke-width="2"/><circle cx="377" cy="348" r="3.5" fill="#fff"/><text x="360" y="475" text-anchor="end" fill="#667b69" font-family="monospace" font-size="8" letter-spacing="2">A CLEARER WAY</text>`
+                .join("")}</g>
+              <path d="M196 520L376 340V520Z" fill="#f3f5ec"/>
+              <path d="M196 520L376 340V520Z" fill="url(#${id}dots)" opacity=".45"/>
+              <path d="M214 502L376 340" stroke="${a}" stroke-width="3"/>
+              <circle cx="376" cy="340" r="8" fill="${a}" opacity=".35"/>
+              <circle cx="376" cy="340" r="3.8" fill="#ffffff"/>
+              <text x="360" y="486" text-anchor="end" fill="${deep}" font-family="monospace" font-size="8.5" font-weight="700" letter-spacing="1.8">A CLEARER WAY</text>`
             );
-          if (i === 2)
+          }
+
+          if (i === 2) {
             return (
               defs +
-              `<rect width="400" height="520" fill="#fafbf7"/><rect x="9" y="9" width="382" height="369" fill="#a4aaa1"/><path d="M105 378Q130 329 217 314L284 301Q361 299 391 332V378Z" fill="url(#${id}fabric)"/><path d="M231 305L239 236L308 239L319 314Q275 347 231 305Z" fill="url(#${id}skin)"/><path d="M221 101Q234 47 296 63Q358 77 350 155L338 234Q324 277 285 282Q248 279 226 244L210 196Q195 186 203 164L215 146Z" fill="url(#${id}skin)"/><path d="M204 158Q174 107 208 64Q246 17 304 38Q367 36 377 97Q385 140 349 183L351 122Q308 136 277 94Q244 137 214 139Z" fill="#313a34"/><path d="M216 87Q251 38 308 60M235 73Q274 52 323 79M321 65Q355 82 353 116" fill="none" stroke="#708073" stroke-width="2" opacity=".55"/><path d="M237 162Q251 152 266 160M299 158Q312 151 325 161" fill="none" stroke="#4c554c" stroke-width="3"/><path d="M245 166Q253 161 261 165M303 165Q310 160 319 165" fill="none" stroke="#313d35" stroke-width="2"/><path d="M280 163L268 202Q278 207 290 201" fill="none" stroke="#777f71" stroke-width="2"/><path d="M259 229Q279 239 305 222" fill="none" stroke="#565f53" stroke-width="3"/><path d="M267 247Q285 252 301 241" fill="none" stroke="#bbc0b0" stroke-width="3" opacity=".6"/><g><rect x="23" y="130" width="191" height="76" rx="9" fill="#f3f7ef" opacity=".38" stroke="#f7fff2" stroke-opacity=".25"/><text x="36" y="152" fill="#fff" font-family="Arial,sans-serif" font-size="9">${L("让下一步，变得简单一点。", "Make the next step feel simpler.")}</text><circle cx="40" cy="185" r="7" fill="#fff" opacity=".18"/><path d="M36 185H44M40 181V189" stroke="#fafff2"/><circle cx="66" cy="185" r="6" fill="none" stroke="#fafff2"/><path d="M60 185H72M66 179V191" stroke="#fafff2" stroke-width=".7"/></g><text x="24" y="359" font-size="7" font-family="monospace" fill="#f1f5e9" letter-spacing="1.5">BETTER QUESTIONS / HUMAN ANSWERS</text><rect x="24" y="395" width="18" height="3" fill="${a}"/>`
+              `<rect width="400" height="520" fill="url(#${id}paper)"/>
+              <rect x="14" y="14" width="372" height="362" rx="4" fill="url(#${id}portraitBg)"/>
+              <rect x="14" y="14" width="372" height="362" rx="4" fill="url(#${id}halftone)"/>
+              <circle cx="152" cy="112" r="96" fill="${wash}" opacity=".28"/>
+              <path d="M14 246L386 106V376H14Z" fill="#1b241e" opacity=".16"/>
+              <path d="M98 376Q128 322 216 308L292 296Q364 296 386 326V376Z" fill="url(#${id}fabric)"/>
+              <path d="M168 376L218 308L252 376Z" fill="#f6f3ea" opacity=".18"/>
+              <path d="M232 302L242 232L310 236L320 310Q276 342 232 302Z" fill="url(#${id}skin)"/>
+              <path d="M220 98Q234 46 298 60Q358 76 348 156L336 234Q322 278 284 282Q248 278 226 242L212 194Q196 184 205 162L217 144Z" fill="url(#${id}skin)"/>
+              <path d="M206 156Q176 104 210 60Q248 14 306 36Q368 36 376 98Q384 142 346 184L350 120Q308 134 276 92Q244 134 214 138Z" fill="#232b26"/>
+              <path d="M218 84Q254 38 308 58M236 70Q276 52 324 78" fill="none" stroke="#809184" stroke-width="1.8" opacity=".55"/>
+              <path d="M238 160Q252 151 268 158M298 156Q312 149 325 159" fill="none" stroke="#3c443d" stroke-width="2.6" stroke-linecap="round"/>
+              <path d="M246 165Q254 161 262 164M304 164Q311 160 319 164" fill="none" stroke="#222c25" stroke-width="2" stroke-linecap="round"/>
+              <path d="M280 162L270 201Q280 207 291 200" fill="none" stroke="#6f7769" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M259 228Q279 239 305 221" fill="none" stroke="#485146" stroke-width="2.8" stroke-linecap="round"/>
+              <g filter="url(#${id}shadow)">
+                <rect x="26" y="122" width="194" height="84" rx="12" fill="#fcfaf2" fill-opacity=".9" stroke="#ffffff" stroke-width="1.2"/>
+                <rect x="38" y="136" width="22" height="3" rx="1.5" fill="${a}"/>
+                <text x="38" y="156" fill="${deep}" font-family="Arial,sans-serif" font-weight="600" font-size="9.5">${L("让下一步，变得简单一点。", "Make the next step feel simpler.")}</text>
+                <circle cx="44" cy="184" r="8" fill="${a}" opacity=".16"/>
+                <path d="M40 184H48M44 180V188" stroke="${a}" stroke-width="1.4" stroke-linecap="round"/>
+                <circle cx="70" cy="184" r="7" fill="none" stroke="${deep}" stroke-opacity=".5"/>
+                <path d="M65 184H75M70 179V189" stroke="${deep}" stroke-opacity=".5" stroke-width=".9"/>
+              </g>
+              <text x="26" y="360" font-size="7.5" font-family="monospace" font-weight="700" fill="#f7f9f2" letter-spacing="1.6">BETTER QUESTIONS / HUMAN ANSWERS</text>
+              <rect x="24" y="392" width="28" height="4" fill="${a}"/>
+              <text x="376" y="397" text-anchor="end" font-family="monospace" font-size="7.5" fill="${deep}" opacity=".65">ISSUE 03</text>`
             );
+          }
+
           return (
             defs +
-            `<rect width="400" height="520" fill="url(#${id}mist)"/><text x="24" y="32" fill="#66797d" font-family="monospace" font-size="7" letter-spacing="2">STILL / OBJECT STUDY 004</text><g filter="url(#${id}shadow)"><path d="M116 180L225 126L337 174L222 236Z" fill="#f7faf8"/><path d="M116 180L222 236V266L116 209Z" fill="#cbd7d5"/><path d="M222 236L337 174V205L222 266Z" fill="#e0e7e5"/><path d="M136 179L225 139L314 174L222 220Z" fill="none" stroke="#e5ebe9"/><text x="175" y="161" transform="rotate(23 175 161)" font-family="Arial,sans-serif" font-size="12" fill="#758f86" letter-spacing="3">STILL</text></g><g filter="url(#${id}shadow)"><path d="M92 394L220 329L340 387L214 461Z" fill="#f7faf8"/><path d="M92 394L214 461V494L92 426Z" fill="#c8d5d1"/><path d="M214 461L340 387V420L214 494Z" fill="#e3ebe7"/><path d="M115 393L219 344L315 388L212 446Z" fill="#bccfc7"/><path d="M131 391L219 353L294 389L212 431Z" fill="#dce9e1"/></g><g transform="translate(188 250) rotate(-8)"><rect x="2" y="30" width="65" height="111" rx="15" fill="url(#${id}glass)" stroke="#8ca59b"/><ellipse cx="34" cy="141" rx="27" ry="6" fill="#a7bfb4" opacity=".6"/><rect x="10" y="14" width="49" height="28" rx="4" fill="url(#${id}metal)" stroke="#9aaba3"/><ellipse cx="34" cy="15" rx="24" ry="5" fill="#e7edeb"/><rect x="7" y="62" width="55" height="51" rx="2" fill="#f8fbf4" opacity=".95"/><text x="13" y="79" font-family="Arial,sans-serif" font-size="13" fill="${a}">STILL</text><text x="13" y="93" font-family="monospace" font-size="5" fill="#748c7c">BOTANICAL SCENT</text><text x="13" y="104" font-family="monospace" font-size="5" fill="#748c7c">30 mL / EDITION 01</text><path d="M13 44V57M13 119V131" stroke="#fff" stroke-width="4" opacity=".8"/></g><g stroke="#fff" fill="none" opacity=".8"><path d="M23 215H127M23 306H175M23 410H101"/></g><g fill="#8b9e9b" font-family="monospace" font-size="6"><text x="24" y="208">01 / OPEN</text><text x="24" y="299">02 / PAUSE</text><text x="24" y="403">03 / KEEP</text></g>`
+            `<rect width="400" height="520" fill="url(#${id}mist)"/>
+            <rect x="24" y="132" width="352" height="360" fill="url(#${id}dots)" opacity=".45"/>
+            <text x="24" y="32" fill="${deep}" font-family="monospace" font-size="8" font-weight="700" letter-spacing="2">STILL / OBJECT STUDY 004</text>
+            <text x="376" y="32" text-anchor="end" fill="${a}" font-family="monospace" font-size="8" font-weight="700">30 mL</text>
+            <g filter="url(#${id}shadow)">
+              <path d="M116 184L225 130L338 178L222 240Z" fill="#fbfcf9"/>
+              <path d="M116 184L222 240V268L116 212Z" fill="#c5d3d0"/>
+              <path d="M222 240L338 178V208L222 268Z" fill="#dce5e2"/>
+              <path d="M136 183L225 142L314 178L222 224Z" fill="none" stroke="${a}" stroke-opacity=".45" stroke-width=".9"/>
+              <text x="178" y="166" transform="rotate(23 178 166)" font-family="Arial,sans-serif" font-weight="700" font-size="11.5" fill="${deep}" letter-spacing="3.2">STILL</text>
+            </g>
+            <g filter="url(#${id}shadow)">
+              <path d="M92 396L220 330L342 388L214 464Z" fill="#fbfcf9"/>
+              <path d="M92 396L214 464V496L92 428Z" fill="#c2d0cc"/>
+              <path d="M214 464L342 388V422L214 496Z" fill="#dde6e2"/>
+              <path d="M116 394L219 346L316 390L212 448Z" fill="#b4c8c0"/>
+              <path d="M132 392L219 355L294 391L212 433Z" fill="#d7e6de"/>
+            </g>
+            <g filter="url(#${id}shadow)" transform="translate(186 248) rotate(-7)">
+              <rect x="2" y="34" width="68" height="114" rx="16" fill="url(#${id}glass)" stroke="#7c988e" stroke-width="1.2"/>
+              <rect x="6" y="76" width="60" height="68" rx="12" fill="url(#${id}amber)"/>
+              <ellipse cx="36" cy="76" rx="30" ry="5" fill="#fff6df" opacity=".55"/>
+              <ellipse cx="36" cy="144" rx="28" ry="6" fill="#5e796e" opacity=".45"/>
+              <rect x="12" y="14" width="48" height="28" rx="5" fill="url(#${id}metal)" stroke="#889b92"/>
+              <path d="M18 18V38M24 18V38M30 18V38M36 18V38M42 18V38M48 18V38M54 18V38" stroke="#ffffff" stroke-opacity=".35" stroke-width="1"/>
+              <ellipse cx="36" cy="15" rx="24" ry="4.5" fill="#eef3f1"/>
+              <rect x="8" y="64" width="56" height="54" rx="3" fill="#fcfaf2" stroke="#d8ded4" stroke-width=".7"/>
+              <text x="14" y="82" font-family="Arial,sans-serif" font-weight="700" font-size="13" fill="${a}" letter-spacing="1.2">STILL</text>
+              <text x="14" y="96" font-family="monospace" font-size="5.4" fill="#4f6356">BOTANICAL SCENT</text>
+              <text x="14" y="107" font-family="monospace" font-size="5.4" fill="#4f6356">30 mL / EDITION 01</text>
+              <path d="M13 46V60M13 122V135" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity=".82"/>
+            </g>
+            <g stroke="${deep}" stroke-opacity=".42" fill="none" stroke-dasharray="2 3">
+              <path d="M24 218H126M24 308H176M24 412H100"/>
+            </g>
+            <g fill="${deep}" font-family="monospace" font-size="7" font-weight="700">
+              <text x="24" y="211">01 / OPEN</text>
+              <text x="24" y="301">02 / PAUSE</text>
+              <text x="24" y="405">03 / KEEP</text>
+            </g>`
           );
         }
+
         function svg(i, thumb = false) {
-          const a = colors[palette][0],
+          const pal = colors[palette],
+            a = pal[0],
+            deep = pal[2],
             id = "print" + i + (thumb ? "thumb" : "main"),
             text = input.value.trim() || L("留一点想象", "LEAVE ROOM FOR POSSIBILITY");
           const boxes = [
-              { x: 24, y: 376, w: 352, h: 99 },
-              { x: 29, y: 61, w: 340, h: 84 },
-              { x: 24, y: 411, w: 352, h: 74 },
-              { x: 24, y: 52, w: 352, h: 73 },
+              { x: 24, y: 374, w: 352, h: 100 },
+              { x: 29, y: 58, w: 340, h: 86 },
+              { x: 24, y: 408, w: 352, h: 78 },
+              { x: 24, y: 50, w: 352, h: 74 },
             ],
-            inks = [a, "#eef3ec", "#38473d", "#536b62"],
-            max = [layout ? 54 : 43, layout ? 40 : 30, layout ? 37 : 27, layout ? 37 : 27];
-          return `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="520" viewBox="0 0 400 520" role="img" aria-label="${esc(names[i][en ? 1 : 0])}" data-system="${["perspective-card", "data-nodes", "human-dialogue", "layered-product"][i]}">${posterScene(i, a, id)}${titleBlock(text, boxes[i], inks[i], max[i])}</svg>`;
+            inks = [a, "#f2f6ef", deep, deep],
+            max = [layout ? 52 : 42, layout ? 40 : 30, layout ? 37 : 27, layout ? 36 : 27];
+          return `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="520" viewBox="0 0 400 520" role="img" aria-label="${esc(names[i][en ? 1 : 0])}" data-system="${["perspective-card", "data-nodes", "human-dialogue", "layered-product"][i]}">${posterScene(i, pal, id)}${titleBlock(text, boxes[i], inks[i], max[i])}</svg>`;
         }
+
         function render() {
           document.querySelector("#poster").innerHTML = svg(selected);
           document.querySelectorAll("#thumbs button").forEach((b, i) => {
@@ -729,6 +1120,7 @@
             b.setAttribute("aria-pressed", String(i === selected));
           });
         }
+
         names.forEach((n, i) => {
           const b = document.createElement("button");
           b.setAttribute("aria-label", n[en ? 1 : 0]);
@@ -740,6 +1132,7 @@
           });
           document.querySelector("#thumbs").append(b);
         });
+
         input.addEventListener("input", render);
         document.querySelectorAll("[data-palette]").forEach((b) =>
           b.addEventListener("click", () => {

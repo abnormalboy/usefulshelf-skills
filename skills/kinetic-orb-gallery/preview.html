@@ -7,18 +7,38 @@
     <style>
       :root {
         --accent: #b64828;
-        --paper: #eeeae2;
-        --ink: #302e28;
-        --muted: #57544c;
+        --paper: #f1ede4;
+        --plinth: #faf7f0;
+        --ink: #22201b;
+        --muted: #595449;
+        --rule: #d6d0c3;
+        --rule-strong: #bdb5a5;
+        color-scheme: light;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       * {
         box-sizing: border-box;
       }
       body {
         margin: 0;
-        background: var(--paper);
+        background-color: var(--paper);
+        background-image:
+          radial-gradient(ellipse 68% 60% at 32% 48%, rgba(255, 252, 245, 0.72), transparent 68%),
+          radial-gradient(rgba(34, 32, 27, 0.045) 0.6px, transparent 0.6px);
+        background-size:
+          100% 100%,
+          24px 24px;
         color: var(--ink);
-        font-family: Arial, Helvetica, sans-serif;
+        font-family:
+          "SF Pro Display",
+          "Helvetica Neue",
+          -apple-system,
+          BlinkMacSystemFont,
+          "PingFang SC",
+          "Hiragino Sans GB",
+          "Noto Sans SC",
+          sans-serif;
       }
       button,
       input {
@@ -27,47 +47,78 @@
       button {
         cursor: pointer;
         color: inherit;
+        -webkit-tap-highlight-color: transparent;
       }
       button:focus-visible,
       input:focus-visible,
       #stage:focus-visible {
-        outline: 3px solid var(--accent);
-        outline-offset: 5px;
+        outline: 2px solid var(--accent);
+        outline-offset: 4px;
       }
       .shell {
-        max-width: 1200px;
+        max-width: 1220px;
         margin: auto;
-        padding: 28px 36px;
+        padding: 18px 36px 20px;
       }
       header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 20px;
-        padding-bottom: 25px;
-        border-bottom: 1px solid #d4d0c5;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--rule);
       }
       .brand {
-        font-size: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 0.78rem;
         font-weight: 700;
-        letter-spacing: 2px;
+        letter-spacing: 0.16em;
+        color: var(--ink);
+      }
+      .brand::before {
+        content: "";
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--accent);
       }
       .edition {
-        font: 10px monospace;
+        font:
+          500 0.7rem/1 ui-monospace,
+          "SF Mono",
+          Menlo,
+          monospace;
+        letter-spacing: 0.1em;
         color: var(--muted);
       }
       .layout {
         display: grid;
-        grid-template-columns: 1fr 350px;
-        gap: 36px;
+        grid-template-columns: minmax(0, 1fr) 372px;
+        gap: 34px;
         align-items: center;
+        padding: 16px 0 18px;
       }
       .stage {
-        height: 620px;
+        height: 556px;
         position: relative;
         touch-action: pan-y;
         cursor: grab;
         overflow: hidden;
+        border-radius: 22px;
+        background:
+          radial-gradient(
+            ellipse 62% 58% at 50% 50%,
+            rgba(255, 253, 248, 0.88),
+            rgba(235, 229, 217, 0.45) 72%
+          ),
+          var(--plinth);
+        border: 1px solid var(--rule);
+        box-shadow:
+          0 20px 44px rgba(48, 42, 32, 0.07),
+          inset 0 1px 0 rgba(255, 255, 255, 0.85);
+        user-select: none;
       }
       .stage:active {
         cursor: grabbing;
@@ -83,199 +134,254 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        font: 10px/1.8 monospace;
-        letter-spacing: 2px;
+        font:
+          600 0.68rem/1.75 ui-monospace,
+          "SF Mono",
+          Menlo,
+          monospace;
+        letter-spacing: 0.22em;
         text-align: center;
         pointer-events: none;
-        color: #5b574e;
+        color: #5d574c;
+      }
+      aside {
+        min-width: 0;
       }
       .kicker {
-        font: 10px monospace;
-        letter-spacing: 2px;
+        font:
+          600 0.7rem/1.2 ui-monospace,
+          "SF Mono",
+          Menlo,
+          monospace;
+        letter-spacing: 0.14em;
         color: #9c391d;
         color: color-mix(in srgb, var(--accent) 82%, #1a0a04);
       }
       h1 {
-        font-size: 53px;
-        font-weight: 400;
+        font-size: clamp(2.2rem, 3.6vw, 3.1rem);
+        font-weight: 500;
         line-height: 1.06;
-        letter-spacing: -2.5px;
-        margin: 22px 0;
+        letter-spacing: -0.04em;
+        margin: 10px 0 10px;
+        color: var(--ink);
         text-wrap: balance;
       }
-      aside > p {
-        font-size: 14px;
+      .intro p {
+        font-size: 0.875rem;
         color: var(--muted);
-        line-height: 1.7;
-        max-width: 320px;
+        line-height: 1.62;
+        max-width: 36ch;
+        margin: 0;
         text-wrap: pretty;
       }
       :lang(zh) h1 {
-        font-size: clamp(32px, 3.3vw, 42px);
-        line-height: 1.18;
+        font-size: clamp(1.65rem, 2.35vw, 1.9rem);
+        line-height: 1.24;
         letter-spacing: -0.02em;
-        max-width: 7.4em;
-        text-wrap: initial;
-      }
-      :lang(zh) aside > p {
-        max-width: 340px;
+        max-width: none;
         text-wrap: pretty;
       }
+      :lang(zh) .intro p {
+        max-width: 340px;
+      }
       .selected {
-        margin-top: 40px;
-        padding-top: 22px;
-        border-top: 1px solid #d4d0c5;
+        margin-top: 18px;
+        padding: 16px 18px;
+        background: var(--plinth);
+        border: 1px solid var(--rule);
+        border-radius: 16px;
+        box-shadow:
+          0 10px 26px rgba(48, 42, 32, 0.06),
+          inset 0 1px 0 rgba(255, 255, 255, 0.85);
       }
       .selected small {
-        font: 10px monospace;
-        color: var(--muted);
+        font:
+          600 0.72rem/1 ui-monospace,
+          "SF Mono",
+          Menlo,
+          monospace;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.1em;
+        color: color-mix(in srgb, var(--accent) 82%, #1a0a04);
       }
       h2 {
-        font-size: 24px;
-        font-weight: 400;
-        margin: 10px 0;
+        font:
+          500 1.4rem/1.2 Georgia,
+          "Songti SC",
+          serif;
+        letter-spacing: -0.02em;
+        margin: 8px 0 6px;
+        color: var(--ink);
       }
       .selected p {
-        font-size: 12px;
-        line-height: 1.65;
+        font-size: 0.8125rem;
+        line-height: 1.58;
         color: var(--muted);
-        min-height: 42px;
-      }
-      .controls {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        margin: 20px 0;
-      }
-      .btn {
-        border: 1px solid #bcb6a8;
-        border-radius: 30px;
-        background: transparent;
-        padding: 11px 16px;
-        min-width: 44px;
-        min-height: 44px;
-        font-size: 12px;
-      }
-      .btn:hover {
-        background: #e1dcd1;
-      }
-      .btn.filled {
-        background: var(--ink);
-        color: var(--paper);
-        border-color: var(--ink);
-      }
-      label {
-        display: flex;
-        justify-content: space-between;
-        font: 11px monospace;
-        color: var(--muted);
-        margin-bottom: 12px;
-      }
-      input {
-        width: 100%;
-        accent-color: var(--accent);
-        height: 28px;
-      }
-      footer {
-        display: flex;
-        justify-content: space-between;
-        gap: 18px;
-        font: 10px/1.7 monospace;
-        color: var(--muted);
-        padding: 22px 0;
-        border-top: 1px solid #d4d0c5;
+        min-height: 40px;
+        margin: 0;
+        text-wrap: pretty;
       }
       .object-list {
         display: flex;
         gap: 8px;
         flex-wrap: wrap;
-        margin-top: 22px;
+        margin-top: 14px;
       }
       .swatch {
-        width: 29px;
-        height: 29px;
-        min-width: 29px;
-        border: 3px solid var(--paper);
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        border: 3px solid var(--plinth);
         border-radius: 50%;
         padding: 0;
-        box-shadow: 0 0 0 1px transparent;
+        box-shadow:
+          0 0 0 1px rgba(34, 32, 27, 0.2),
+          inset 0 2px 3px rgba(255, 255, 255, 0.35);
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
       }
       .swatch[aria-pressed="true"] {
-        box-shadow: 0 0 0 1px var(--ink);
+        box-shadow:
+          0 0 0 2px var(--ink),
+          0 4px 10px rgba(34, 32, 27, 0.18);
+        transform: scale(1.08);
       }
       .swatch:focus-visible {
         outline-offset: 2px;
       }
-      @media (max-width: 800px) {
+      .adjustments {
+        margin-top: 16px;
+      }
+      .controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin: 0 0 14px;
+      }
+      .btn {
+        border: 1px solid var(--rule-strong);
+        border-radius: 999px;
+        background: var(--plinth);
+        padding: 9px 16px;
+        min-width: 42px;
+        min-height: 40px;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--ink);
+        transition:
+          background-color 0.18s ease,
+          border-color 0.18s ease,
+          transform 0.15s ease;
+      }
+      @media (hover: hover) {
+        .btn:hover:not(.filled):not(:disabled) {
+          background: #e9e3d7;
+          border-color: #9e9686;
+        }
+        .btn.filled:hover:not(:disabled) {
+          background: #36332b;
+        }
+      }
+      .btn.filled {
+        background: var(--ink);
+        color: var(--plinth);
+        border-color: var(--ink);
+        padding: 9px 22px;
+        font-weight: 600;
+      }
+      .btn:disabled {
+        opacity: 0.45;
+        cursor: default;
+      }
+      label {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        font:
+          500 0.75rem/1 ui-monospace,
+          "SF Mono",
+          Menlo,
+          monospace;
+        font-variant-numeric: tabular-nums;
+        color: var(--muted);
+        margin-bottom: 8px;
+      }
+      label output {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 6px;
+        border-radius: 999px;
+        background: #dad4c7;
+        accent-color: var(--accent);
+        cursor: pointer;
+        margin: 6px 0;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--plinth);
+        border: 3px solid var(--accent);
+        box-shadow: 0 2px 8px rgba(34, 32, 27, 0.22);
+      }
+      input[type="range"]::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--plinth);
+        border: 3px solid var(--accent);
+        box-shadow: 0 2px 8px rgba(34, 32, 27, 0.22);
+      }
+      footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+        font:
+          500 0.7rem/1.6 ui-monospace,
+          "SF Mono",
+          Menlo,
+          monospace;
+        color: var(--muted);
+        padding-top: 14px;
+        border-top: 1px solid var(--rule);
+      }
+      @media (max-width: 860px) {
         .shell {
-          padding: 22px;
+          padding: 18px 18px 20px;
         }
         .layout {
           grid-template-columns: 1fr;
-          gap: 0;
+          gap: 18px;
+          padding: 14px 0 16px;
         }
         .stage {
-          height: 400px;
-        }
-        aside {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 0 30px;
-          padding: 0 0 30px;
+          height: 350px;
+          border-radius: 18px;
         }
         h1 {
-          font-size: 40px;
-          margin: 13px 0;
-        }
-        .intro {
-          grid-column: 1/-1;
-        }
-        .intro p {
-          max-width: 360px;
-          font-size: 13px;
-          line-height: 1.6;
-          color: var(--muted);
-        }
-        .selected {
-          margin-top: 20px;
-        }
-        .adjustments {
-          padding-top: 20px;
-        }
-        .center-label {
-          font-size: 9px;
-        }
-        .edition {
-          font-size: 9px;
-        }
-        footer {
-          font-size: 9px;
-        }
-      }
-      @media (max-width: 420px) {
-        .shell {
-          padding: 18px;
-        }
-        .stage {
-          height: 340px;
-        }
-        aside {
-          display: block;
-        }
-        .selected {
-          margin-top: 22px;
+          font-size: 2.15rem;
+          margin: 8px 0;
         }
         .selected p {
           min-height: 0;
         }
-        .controls {
-          margin: 16px 0;
+        .edition {
+          font-size: 0.64rem;
         }
-        h1 {
-          font-size: 39px;
-        }
-        .adjustments {
-          padding-top: 0;
+        footer {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 6px;
+          font-size: 0.66rem;
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -489,6 +595,10 @@
               /Files stay on this device\. Maximum (\d+) MB\./g,
               "文件留在此设备，最大 $1 MB。",
             )
+            .replace(
+              /Packed ([\d,]+) bytes\. CRC32 ([0-9a-f]+)\. Download contains the complete file, ready to decode\./gi,
+              "已打包 $1 字节。CRC32 $2。下载文件包含完整内容，可直接解码。",
+            )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
 
@@ -678,13 +788,13 @@
           spread = document.querySelector("#spread");
         const palette = [
           "#b74729",
-          "#326454",
-          "#cab740",
-          "#454469",
-          "#c98772",
-          "#386373",
-          "#303b35",
-          "#866847",
+          "#2d5e4e",
+          "#c7ae3a",
+          "#36385c",
+          "#c47c66",
+          "#2e596b",
+          "#28362f",
+          "#826242",
         ];
         const names = [
           window.__usefulshelfText("Ribbon study"),
@@ -731,48 +841,150 @@
           poses = [];
         const speed = Number(document.body.dataset.speed),
           buttons = [];
+
+        // Eight distinct Bauhaus/Constructivist ceramic medallion patterns
         const textures = palette.map((color, i) => {
+          const S = 320;
           const c = document.createElement("canvas");
-          c.width = c.height = 240;
+          c.width = c.height = S;
           const x = c.getContext("2d");
           x.fillStyle = color;
-          x.fillRect(0, 0, 240, 240);
-          x.strokeStyle = "#ece5d1";
-          x.fillStyle = "#ece5d1";
-          x.lineWidth = 10;
-          if (i % 4 === 0) {
-            for (let n = -1; n < 7; n++) {
+          x.fillRect(0, 0, S, S);
+          // Subtle matte enamel gradient depth
+          const enamel = x.createRadialGradient(
+            S * 0.34,
+            S * 0.28,
+            S * 0.05,
+            S * 0.5,
+            S * 0.5,
+            S * 0.62,
+          );
+          enamel.addColorStop(0, "rgba(255,250,240,0.16)");
+          enamel.addColorStop(0.6, "rgba(0,0,0,0)");
+          enamel.addColorStop(1, "rgba(18,14,10,0.28)");
+          x.fillStyle = enamel;
+          x.fillRect(0, 0, S, S);
+
+          x.strokeStyle = "#f2ebdc";
+          x.fillStyle = "#f2ebdc";
+          x.lineCap = "round";
+
+          if (i === 0) {
+            // Ribbon study: flowing doubled S-ribbons
+            x.lineWidth = 13;
+            for (let n = -1; n < 6; n++) {
               x.beginPath();
-              x.moveTo(n * 46, -20);
-              x.bezierCurveTo(n * 46 + 110, 60, n * 46 - 110, 180, n * 46, 260);
+              x.moveTo(n * 62, -24);
+              x.bezierCurveTo(n * 62 + 128, 86, n * 62 - 128, 234, n * 62, S + 24);
               x.stroke();
             }
-          } else if (i % 4 === 1) {
-            x.lineWidth = 3;
-            for (let r = 10; r < 230; r += 14) {
+          } else if (i === 1) {
+            // Green frequency: offset concentric resonant arcs
+            x.lineWidth = 4.5;
+            for (let r = 14; r < 290; r += 18) {
               x.beginPath();
-              x.arc(145, 120, r, 0, Math.PI * 2);
+              x.arc(198, 152, r, 0, Math.PI * 2);
               x.stroke();
             }
-          } else if (i % 4 === 2) {
-            for (let y = 0; y < 4; y++)
-              for (let k = 0; k < 4; k++) {
-                x.beginPath();
-                x.arc(k * 66 + 18, y * 66 + 18, 28, 0, Math.PI * 2);
-                x.fill();
-              }
-          } else {
+          } else if (i === 2) {
+            // Solar assembly: Bauhaus overlapping sun discs & crescent rings
+            x.globalAlpha = 0.92;
             x.beginPath();
-            x.moveTo(25, 195);
-            x.lineTo(95, 35);
-            x.lineTo(124, 132);
-            x.lineTo(205, 22);
-            x.lineTo(210, 195);
+            x.arc(128, 128, 84, 0, Math.PI * 2);
+            x.fill();
+            x.fillStyle = "#2b2517";
+            x.beginPath();
+            x.arc(204, 198, 66, 0, Math.PI * 2);
+            x.fill();
+            x.strokeStyle = "#f2ebdc";
+            x.lineWidth = 8;
+            x.beginPath();
+            x.arc(166, 162, 108, -0.4, 2.2);
+            x.stroke();
+            x.globalAlpha = 1;
+          } else if (i === 3) {
+            // Midnight fold: sharp architectural origami chevron silhouette
+            x.beginPath();
+            x.moveTo(28, 258);
+            x.lineTo(120, 48);
+            x.lineTo(164, 174);
+            x.lineTo(272, 34);
+            x.lineTo(286, 258);
             x.closePath();
             x.fill();
+            x.fillStyle = "rgba(54, 56, 92, 0.35)";
+            x.beginPath();
+            x.moveTo(120, 48);
+            x.lineTo(164, 174);
+            x.lineTo(120, 258);
+            x.closePath();
+            x.fill();
+          } else if (i === 4) {
+            // Soft symmetry: mirrored warm terracotta arches
+            x.lineWidth = 14;
+            for (let k = 0; k < 4; k++) {
+              const r = 34 + k * 34;
+              x.beginPath();
+              x.arc(160, 56, r, 0.1 * Math.PI, 0.9 * Math.PI);
+              x.stroke();
+              x.beginPath();
+              x.arc(160, 264, r, 1.1 * Math.PI, 1.9 * Math.PI);
+              x.stroke();
+            }
+          } else if (i === 5) {
+            // Tidal rhythm: undulating horizontal water bands
+            x.lineWidth = 9;
+            for (let row = 0; row < 8; row++) {
+              const y0 = 32 + row * 38;
+              x.beginPath();
+              for (let px = -10; px <= S + 10; px += 12) {
+                const py = y0 + Math.sin(px * 0.035 + row * 0.65) * 12;
+                px === -10 ? x.moveTo(px, py) : x.lineTo(px, py);
+              }
+              x.stroke();
+            }
+          } else if (i === 6) {
+            // Forest module: rotated grid of geometric tiles with one breakaway
+            for (let row = 0; row < 5; row++)
+              for (let col = 0; col < 5; col++) {
+                const bx = 42 + col * 58,
+                  by = 42 + row * 58;
+                x.save();
+                x.translate(bx, by);
+                x.rotate(row === 2 && col === 2 ? Math.PI / 4 : 0);
+                x.fillStyle = row === 2 && col === 2 ? "#d6a756" : "#f2ebdc";
+                x.beginPath();
+                x.roundRect(-17, -17, 34, 34, 7);
+                x.fill();
+                x.restore();
+              }
+          } else {
+            // Earth signal: architectural monolith steps & sun dot
+            x.fillRect(36, 210, 248, 34);
+            x.fillRect(68, 162, 184, 34);
+            x.fillRect(104, 114, 112, 34);
+            x.beginPath();
+            x.arc(160, 74, 24, 0, Math.PI * 2);
+            x.fill();
           }
+
+          // Subtle ceramic glaze specular arc & rim shading baked cleanly
+          const rim = x.createRadialGradient(
+            S * 0.5,
+            S * 0.5,
+            S * 0.36,
+            S * 0.5,
+            S * 0.5,
+            S * 0.51,
+          );
+          rim.addColorStop(0, "rgba(0,0,0,0)");
+          rim.addColorStop(0.84, "rgba(24,20,16,0.08)");
+          rim.addColorStop(1, "rgba(24,20,16,0.28)");
+          x.fillStyle = rim;
+          x.fillRect(0, 0, S, S);
           return c;
         });
+
         function select(i) {
           selected = (i + 8) % 8;
           document.querySelector("#number").textContent =
@@ -797,49 +1009,104 @@
           ctx.clearRect(0, 0, W, H);
           const cx = W / 2,
             cy = H / 2,
-            rx = Math.max(45, W * (0.23 + spacing * 0.13)),
-            ry = H * (0.25 + spacing * 0.11);
+            rx = Math.max(55, W * (0.24 + spacing * 0.135)),
+            ry = H * (0.24 + spacing * 0.115);
+
+          // Architectural museum guide crosshairs & dual orbital tracks
+          ctx.save();
+          ctx.strokeStyle = "rgba(89, 84, 73, 0.14)";
           ctx.lineWidth = 1;
-          ctx.strokeStyle = "#d5d0c3";
+          ctx.beginPath();
+          ctx.moveTo(cx - rx - 26, cy);
+          ctx.lineTo(cx + rx + 26, cy);
+          ctx.moveTo(cx, cy - ry - 26);
+          ctx.lineTo(cx, cy + ry + 26);
+          ctx.stroke();
+
+          ctx.strokeStyle = "rgba(89, 84, 73, 0.24)";
           ctx.beginPath();
           ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
           ctx.stroke();
+
+          ctx.setLineDash([2, 6]);
+          ctx.strokeStyle = "rgba(89, 84, 73, 0.18)";
+          ctx.beginPath();
+          ctx.ellipse(cx, cy, rx * 0.56, ry * 0.56, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.restore();
+
           poses = palette.map((color, i) => {
             const a = (i / 8) * Math.PI * 2 + rotation,
               z = (Math.sin(a) + 1) / 2,
-              r = Math.min(W, H) * (0.065 + z * 0.023);
+              r = Math.min(W, H) * (0.068 + z * 0.028);
             return { i, x: cx + Math.cos(a) * rx, y: cy + Math.sin(a) * ry, r, z };
           });
+
           poses
             .slice()
             .sort((a, b) => a.z - b.z)
             .forEach((p) => {
+              const isSelected = p.i === selected;
+              // Layered museum drop shadow proportional to orbital depth
               ctx.save();
-              ctx.shadowBlur = 15;
-              ctx.shadowOffsetY = 7;
-              ctx.shadowColor = "#302e2818";
+              ctx.shadowBlur = 14 + p.z * 16;
+              ctx.shadowOffsetY = 6 + p.z * 8;
+              ctx.shadowColor = `rgba(34, 30, 22, ${(0.14 + p.z * 0.14).toFixed(2)})`;
               ctx.fillStyle = palette[p.i];
               ctx.beginPath();
               ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
               ctx.fill();
               ctx.restore();
+
+              // Clipped high-res geometric medallion artwork
               ctx.save();
               ctx.beginPath();
               ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
               ctx.clip();
               ctx.drawImage(textures[p.i], p.x - p.r, p.y - p.r, p.r * 2, p.r * 2);
+              // Ceramic top-left rim sheen
+              const sheen = ctx.createRadialGradient(
+                p.x - p.r * 0.35,
+                p.y - p.r * 0.42,
+                1,
+                p.x - p.r * 0.2,
+                p.y - p.r * 0.25,
+                p.r * 0.9,
+              );
+              sheen.addColorStop(0, "rgba(255,255,255,0.28)");
+              sheen.addColorStop(0.45, "rgba(255,255,255,0.04)");
+              sheen.addColorStop(1, "rgba(255,255,255,0)");
+              ctx.fillStyle = sheen;
+              ctx.fillRect(p.x - p.r, p.y - p.r, p.r * 2, p.r * 2);
               ctx.restore();
-              if (p.i === selected) {
-                ctx.strokeStyle = "#302e28";
-                ctx.lineWidth = 1;
+
+              // Fine white enamel edge ring
+              ctx.strokeStyle = "rgba(255, 252, 245, 0.55)";
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.arc(p.x, p.y, p.r - 0.5, 0, Math.PI * 2);
+              ctx.stroke();
+
+              // Precision curator callout ring around selected sculpture
+              if (isSelected) {
+                ctx.strokeStyle = "#22201b";
+                ctx.lineWidth = 1.5;
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, p.r + 6, 0, Math.PI * 2);
+                ctx.arc(p.x, p.y, p.r + 7, 0, Math.PI * 2);
                 ctx.stroke();
+
+                ctx.fillStyle = "#22201b";
+                ctx.beginPath();
+                ctx.arc(p.x, p.y - p.r - 7, 2.8, 0, Math.PI * 2);
+                ctx.fill();
               }
-              ctx.fillStyle = "#746e61";
-              ctx.font = "9px monospace";
+
+              // Crisp catalog index number beneath disc
+              ctx.fillStyle = isSelected ? "#22201b" : "#6c665a";
+              ctx.font = `${isSelected ? 700 : 500} 10px ui-monospace, Menlo, monospace`;
               ctx.textAlign = "center";
-              ctx.fillText(String(p.i + 1).padStart(2, "0"), p.x, p.y + p.r + 21);
+              ctx.fillText(String(p.i + 1).padStart(2, "0"), p.x, p.y + p.r + 22);
             });
         }
         function tick(t) {

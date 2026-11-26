@@ -46,10 +46,12 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 :root {
   --accent: #c24124;
   --bg: #f3f0e9;
-  --ink: #282d27;
+  --ink: #1e231f;
+  --muted: #4b524a;
+  --rule: rgba(30, 35, 31, 0.16);
 }
 body {
-  font: 14px system-ui, sans-serif;
+  font: 14px/1.55 -apple-system, BlinkMacSystemFont, "PingFang SC", system-ui, sans-serif;
 }
 ```
 
@@ -66,18 +68,23 @@ body {
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### Component design notes
 
-#### Four visual systems
-The workshop contains four original 400 × 520 SVG compositions: a perspective physical card with large typography, a dark network of data nodes, an illustrated person with a conversation prompt, and an exploded product package with a glass bottle. Keep these distinct materials, depth cues and text placements when adapting the themes. The person is a grayscale vector illustration, not a photograph.
+#### Four risograph & Swiss museum visual systems
+The print room contains four original `400 × 520` SVG exhibition compositions mounted inside a bevelled archival stone mat (`#e5e1d6` → `#d8d3c5`) with corner registration crop marks:
+1. `perspective-card`: Swiss grid & risograph halftone field with a sculpted brushed-titanium 3D perspective card, guilloché waves, gold-palladium chip, and overlapping overprint ink circles.
+2. `data-nodes`: Deep obsidian-forest telemetry observatory (`#111916` → `#0b110f`) with concentric radar rings, translucent signal prisms, diagonal optical beam, and luminous ivory geometric wedge.
+3. `human-dialogue`: Modernist editorial duotone portrait framed over a halftone window with an elevated translucent speech-card prompt and bold risograph accent rule.
+4. `layered-product`: Exploded industrial-design lithograph on cool architectural mist paper showing isometric archival box parts, dashed callout markers, and a glass botanical flacon with amber liquid meniscus and knurled aluminum cap.
 
-The editor shares one headline, three ink palettes and two type scales across all four compositions. Selecting a composition preserves those choices. Each inline SVG uses height:auto; thumbnail dimensions must not inherit the main artwork height. Gradient and filter IDs are unique per composition and main/thumbnail instance.
+Core tokens: `--bg: #f3f0e9`, `--ink: #1e231f`, `--muted: #4b524a`, `--accent: #c24124`. The editor shares one headline, three tactile ink-well palettes (`Terracotta`, `Blue hour`, `Moss`) and two type scales (`Airy`, `Bold type`) across all four compositions. Gradient, pattern and filter IDs are unique per composition and main/thumbnail instance.
 
 #### Multilingual typography
-The headline input has a maximum length of 48. Segment by Unicode grapheme where supported, measure candidate lines with Canvas measureText using the exact SVG font, prefer word boundaries where available, then reduce the font size until both measured width and line height fit the composition’s headline box. Never use the UI language to guess the text language or slice a fixed count per line. XML-escape every line. Keep every character, including mixed Chinese, Latin, punctuation and emoji; line wrapping can replace whitespace between words.
+The headline input has a maximum length of 48. Segment by Unicode grapheme where supported, measure candidate lines with Canvas `measureText` using the exact SVG font, prefer word boundaries where available, then reduce the font size until both measured width and line height fit the composition’s headline box (`x >= 20`, `right <= 380`, `bottom <= 500`). XML-escape every line and preserve mixed Chinese, Latin, punctuation and emoji.
 
 #### Download and accessibility
-One SVG builder supplies the main artwork, thumbnails and exported file, so measured typography and artwork remain consistent. Build a Blob from the selected composition and trigger a download only on an explicit button click, then revoke its object URL. A sandboxed host must allow downloads. Palette one derives its primary ink from the generator accent; other inks are intentional alternatives. Native buttons retain keyboard focus and announce selected state; changes are confirmed in the live status region. The page is offline and respects reduced motion.
+One SVG builder supplies the main artwork, thumbnails and exported file, so measured typography and artwork remain consistent. Build a Blob from the selected composition and trigger a download only on an explicit button click, then revoke its object URL. Palette one derives its primary ink from the generator accent; other inks are intentional alternatives. All controls maintain WCAG AA contrast (`>= 4.5:1`), visible focus rings, and reduced-motion safety offline.
 
 ## 可选完整包工作流 / Optional package workflow
 

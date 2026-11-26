@@ -13,7 +13,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 ## 核心实现规范
 
-邀请码固定在底层，覆盖纸从右边缘向左揭开，拖动与点击共享 revealed 状态。折痕、纸背和移动阴影传达翻纸，不能把整个邀请码随纸拖走。未揭开时复制按钮 hidden/inert；Escape 重新盖上并还焦。每次复制使用 requestId，重新覆盖使旧回调失效，超时则选中可见代码供手动复制；不模拟注册或验证。
+邀请码固定在底层压凹信笺卡托中，带烫金纹章与香槟金属箔背面的覆盖纸从右边缘向左揭开，拖动与点击共享 revealed 状态。折痕、金属箔纸背和移动阴影传达翻纸质感，不能把整个邀请码随纸拖走。未揭开时复制按钮 hidden/inert；Escape 重新盖上并还焦。每次复制使用 requestId，重新覆盖使旧回调失效，超时则选中可见代码供手动复制；不模拟注册或验证。
 
 ## 参数与内容边界
 
@@ -46,12 +46,13 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 :root {
   --bg: #f1f3ee;
   --accent: #2f7d4a;
-  --ink: #272c29;
-  --muted: #525e55;
-  --ease: cubic-bezier(0.25, 0.85, 0.25, 1);
+  --ink: #1e2721;
+  --muted: #4b584f;
+  --foil-gold: #c7a96c;
+  --ease: cubic-bezier(0.22, 0.9, 0.25, 1);
 }
 body {
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Segoe UI", sans-serif;
 }
 ```
 
@@ -66,15 +67,16 @@ body {
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### Design and behavior
 
-A paper sheet covers an invitation code that stays fixed underneath. Clicking the covering paper or dragging it to the left peels the paper from its right edge. The revealed area grows as the folded edge travels left; a fold, paper underside, and moving shadow convey the lifted sheet. The code must not move with the cover. This is a paper-peel interaction, not a capsule expanding into a second layout.
+A luxury embossed stationery experience on warm archival cotton paper (`--bg: #f1f3ee` with fine fiber texture and sunlit gallery falloff). A sculpted stationery tray frames an engraved letterpress invitation ticket whose code stays stationary underneath. Clicking the embossed cover sheet or dragging it to the left peels it away from its right edge: a metallic champagne-foil curled underside (`#paperBack`), satin sheen gradient, blind-debossed double frame, foil monogram seal, crease highlight, and moving drop shadow convey real lifted paper. The underlying `.code-text` never shifts or translates.
 
-Once revealed, the code can be copied. The copy control reports success or selects the code with a manual-copy instruction. Covering the code again restores the paper and clears feedback. No verification dialog, simulated registration, or automatic invitation exists.
+Once revealed, the magnetic high-contrast `--accent` copy control reports success or selects the code with a manual-copy instruction. Covering the code again restores the embossed sheet and clears feedback. No verification dialog, simulated registration, or automatic invitation exists.
 
 #### State and accessibility
 
-The paper control exposes the reveal state through `aria-expanded`. Keep covered actions unavailable to keyboard and pointer input. Provide a button-based reveal and re-cover path so dragging is optional. Closing with Escape restores the cover and returns focus. Feedback is announced through a polite live region. Reduced motion removes animated transitions while preserving reveal, copy, and re-cover states; there is no automatic demo timer.
+The paper control exposes the reveal state through `aria-expanded`. Keep covered actions unavailable to keyboard and pointer input via `inert` and `aria-hidden`. Provide a button-based reveal and re-cover path so dragging is optional. Closing with Escape restores the cover and returns focus. Feedback is announced through a polite live region. Reduced motion removes animated transitions while preserving reveal, copy, and re-cover states; there is no automatic demo timer.
 
 Dragging left advances the same reveal state as clicking. Keep the underlying code geometry stable throughout the gesture, and settle interrupted or completed gestures into a usable covered or revealed state. Re-covering restores both paper position and interaction state so the effect can be repeated.
 
@@ -98,13 +100,11 @@ The host performs the copy and returns to the requesting iframe:
 
 The child accepts only messages from `window.parent` with the pending request ID and a boolean `ok`. A negative result or no response within two seconds selects the code and explains manual copying. It never reports success merely because a message was sent. Late or cancelled results are ignored.
 
-For a host implementation, validate the message source against the mounted preview iframe, limit the text to the intended copy use case, and return `ok: true` only after the host confirms copying. Some embedded webviews resolve the Clipboard API promise without updating the system clipboard; a host with this behavior should also attempt its synchronous legacy copy path while activation is available and verify its integration against the actual clipboard. Sandboxed frames can have an opaque origin, so the request uses `postMessage` with `'*'`; the source window and request ID determine the expected response. This bridge communicates a visible code only, not credentials or authentication results.
-
 #### Integration boundaries
 
 Provide the user's actual authorized invitation code through the host application's own data flow. This generated demo embeds a public sample code and only displays or copies it. Validity, expiration, membership permissions, registration, and message delivery belong to the product's backend and surrounding application.
 
-All assets are inline. Text is escaped, JSON protects script boundaries, CSS colors are hex-only, and unknown configuration keys are rejected. `?lang=zh` is the default language; `?lang=en` translates all built-in visible text and accessible labels. Explicitly provided title and subtitle text are preserved.
+All assets are inline. Text is escaped, JSON protects script boundaries, CSS colors are hex-only, and unknown configuration keys are rejected. `?lang=zh` and `?lang=en` switch all built-in visible text and accessible labels. Explicitly provided title and subtitle text are preserved.
 
 ## 可选完整包工作流 / Optional package workflow
 

@@ -45,9 +45,14 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ```css
 :root {
   --accent: #e9ff68;
-  font-family: Arial, "PingFang SC", sans-serif;
-  color: #f3f3e9;
-  background: #181a17;
+  --bg: #0f110e;
+  --poster-bg: #060705;
+  --deck: #161914;
+  --ink: #f4f4ec;
+  --muted: #aab29e;
+  font-family: "SF Pro Display", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  color: var(--ink);
+  background: var(--bg);
   color-scheme: dark;
 }
 ```
@@ -74,7 +79,7 @@ The editable poster is drawn into an offscreen canvas, then sampled from actual 
 
 #### Visual tokens and layout
 
-Pair a matte charcoal shell (`#181a17`) with a deep obsidian poster frame (`#0c0d0b`) and a single high-contrast accent (`#e9ff68` default) driving the top hairline rule, input ink, active button fill, and canvas glyph pixels. Maintain two balanced columns (`0.9fr / 1.1fr`) above 700px and stack into a single centered column on mobile with zero horizontal overflow. Keep the poster aspect ratio close to `0.85` and sample canvas dimensions at up to `2x` devicePixelRatio via ResizeObserver so strokes stay razor-sharp on retina screens.
+Pair a deep architectural gallery shell (`#0f110e`) and matte control deck (`#161914`) with a museum-framed obsidian poster stock (`#060705`) featuring micro-dot registration grain, hairline exhibition borders, and a high-contrast luminous accent (`#e9ff68` default) driving the top accent rule, editable ink, primary CTA, and luminous kinetic typography. Maintain two balanced columns (`0.92fr / 1.08fr`) above 820px and stack cleanly on mobile with zero horizontal overflow. Keep the poster aspect ratio close to `0.85` and sample canvas dimensions at up to `2x` devicePixelRatio via ResizeObserver so both CJK and Latin strokes stay razor-sharp on retina screens.
 
 #### State machine, accessibility, and lifecycle
 

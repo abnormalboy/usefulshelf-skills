@@ -44,12 +44,13 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 ```css
 :root {
-  --accent: #cf6948;
-  --bg: #171917;
-  --ink: #eeece6;
+  --accent: #d9724e;
+  --bg: #131513;
+  --ink: #f2efe7;
+  --muted: #aab1a5;
 }
 body {
-  font: 13px system-ui;
+  font: 13.5px/1.5 -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", sans-serif;
 }
 ```
 
@@ -67,10 +68,11 @@ body {
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### Component design notes
 
 #### Image field
-A quiet studio header frames six original grayscale SVG studies. The portrait artworks use gradients, cast shadows, room light and vignette to create depth. They are illustrations, not photographs. Keep the heading small relative to the gallery and preserve each project’s visual identity. SVG gradient and filter IDs differ between gallery and detail instances.
+A museum-grade dark architectural header (`#131513` obsidian canvas with subtle overhead gallery skylight) frames six sculpted warm-stone and chiaroscuro 3D-lit SVG architectural studies inside dark gallery-framed plates with specular top rims and frosted glass caption strips. The portrait artworks use multi-stop material gradients (travertine, brushed brass, matte stoneware, oak, archival linen), cast shadows, and vignette light to create tactile depth without external images. Keep the serif heading calm relative to the gallery and preserve unique SVG gradient and filter IDs between gallery and detail instances.
 
 #### Three layouts and filters
 Filters determine visible project IDs. Scatter, Grid and Orbit position the same native buttons. Scatter uses explicit X/Y/Z positions, overlapping cards and restrained rotations. Pointer movement subtly adjusts the field perspective only in Scatter and when reduced motion is off. Orbit projects positions into X/Z space with stronger side turns and angle-based stacking; Previous/Next changes the centered project, and keyboard focus brings that project forward. There is no continuous autoplay. Grid offers a conventional accessible comparison layout. Keep filtered projects hidden from both rendering and keyboard flow.

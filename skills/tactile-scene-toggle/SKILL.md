@@ -13,7 +13,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 ## 核心实现规范
 
-两个原生按钮共享白色滑块，左右/Home/End 同步选择与焦点；按钮宽度和默认 124px 滑块位移一致。一个日夜状态同时控制天空、山丘、树、日月和窗灯；白天完全隐藏月牙遮罩。云最多加五朵，夜晚暂隐藏并保留，许愿增加本次访问的固定星点且封顶。流星 1.3 秒后清理；减少动态效果取消过渡与流星但仍添加静态星点。
+两个原生按钮共享带 `--accent` 描边与高光斜面的立体滑块，左右/Home/End 同步选择与焦点；按钮宽度和默认 124px 滑块位移一致。拱形立体绘本微缩窗景以同一日夜状态联动金色时刻渐变天空与极光靛蓝夜空、层叠山丘、松柏、日月、袅袅炊烟与四格暖光窗灯；白天完全隐藏月牙遮罩。云最多加五朵，夜晚暂隐藏并保留，许愿增加本次访问的固定星点且封顶。流星 1.3 秒后清理；减少动态效果取消过渡与流星但仍添加静态星点。
 
 ## 参数与内容边界
 
@@ -46,10 +46,11 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 :root {
   --accent: #bd743e;
   --bg: #f4f1e9;
-  --ink: #373d39;
+  --ink: #272e28;
+  --muted: #4b544b;
 }
 body {
-  font: 15px system-ui, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Segoe UI", sans-serif;
 }
 ```
 
@@ -69,14 +70,17 @@ The following specification is included in full so this document works without a
 
 ### Component design notes
 
+#### Storybook diorama atmosphere
+Framed in a beveled arched gallery shadow-box on warm matboard (`--bg: #f4f1e9`), the scene transitions smoothly between a multi-stop golden-hour sky (`#7aaec4` → `#f0d49c` → `#f6be82`) and a twilight indigo aurora sky (`#0c162b` → `#244064` with soft teal-indigo aurora veil). The architectural storybook cottage features layered plaster shading, a pitched slate-terracotta roof, brick chimney with gentle rising smoke wisps, an arched oak door with brass knob, and a 4-mullion paned window that radiates warm amber light across the night meadow.
+
 #### Segmented control
-Two native buttons share one sliding white thumb. `aria-pressed` reflects the current option, while left/right and Home/End switch and focus the chosen side. Icons expand inside the active segment. Keep button widths and the thumb's 124 px offset aligned when resizing the control.
+Two native buttons share one sculptural elevated sliding thumb with a crisp 2 px `--accent` rim, subtle `--accent` surface tint, top specular bevel, and luminous `--accent` active icon. `aria-pressed` reflects the current option, while left/right and Home/End switch and focus the chosen side. Keep button widths (`120px`) and the thumb's `124px` offset aligned when resizing.
 
 #### Scene behavior
-The same state class changes the sky, hills, tree, sun/moon and window illumination. Hide the lunar cutout entirely in daylight. The scene's accessible description follows the selected state. Clouds are retained when switching into the night but hidden until daylight returns. Up to five extra clouds are displayed. Each nighttime wish adds a permanent star for the current visit; decorative additions are capped to keep the DOM bounded.
+The same `.night` state class crossfades the sky, aurora, hills, cypress trees, sun/crescent moon, chimney smoke, and glowing cottage window. The lunar cutout is completely hidden in daylight. The scene's accessible description follows the selected state. Up to five extra clouds are retained when switching into night and reappear in daylight. Each nighttime wish launches a 1.2 s shooting star and adds a stationary star (capped at 60).
 
 #### Motion
-No animation runs before user input. The shooting star lives for 1.3 seconds, then removes itself. Reduced motion disables the transition and shooting-star decoration but still adds the requested stationary star. All art uses local CSS geometry, requiring no images, fonts, weather service or network.
+Under `prefers-reduced-motion: reduce`, transitions, chimney smoke motion, and shooting-star animations are disabled while stationary wish stars and cloud additions remain fully functional. Zero external images, fonts, or network calls are required.
 
 ## 可选完整包工作流 / Optional package workflow
 

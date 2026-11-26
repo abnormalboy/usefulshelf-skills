@@ -13,7 +13,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 ## 核心实现规范
 
-54px 原生悬浮按钮展开三个带短暂错峰的操作，装饰背景模糊但文字与图标清晰。打开后聚焦首项，方向键/Home/End 移动，Tab 在操作与触发器间循环；Escape、遮罩与再次点击关闭并还焦。收起项 inert。接收/发送/兑换只打开演示地址或金额表单，绝不执行转账；完成提示明确为本地预览。
+54px 原生悬浮按钮位于磨砂底部导航栏上方并保留充足间距，展开三个带短暂错峰的浮层胶囊操作，装饰背景模糊但文字与图标清晰。打开后聚焦首项，方向键/Home/End 移动，Tab 在操作与触发器间循环；Escape、遮罩与再次点击关闭并还焦。收起项 inert。接收/发送/兑换只打开演示地址或金额表单，绝不执行转账；完成提示明确为本地预览。
 
 ## 参数与内容边界
 
@@ -46,12 +46,14 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 :root {
   --accent: #202428;
   --bg: #e9ecee;
-  --ink: #181a1b;
-  --muted: #535a61;
-  --ease: cubic-bezier(0.2, 0.85, 0.25, 1.15);
+  --ink: #14181f;
+  --muted: #4b5563;
+  --surface: #ffffff;
+  --screen-bg: #f4f6fa;
+  --ease: cubic-bezier(0.22, 1.15, 0.32, 1);
 }
 body {
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Segoe UI", sans-serif;
 }
 ```
 
@@ -69,22 +71,22 @@ The following specification is included in full so this document works without a
 
 ### Design and behavior
 
-A pale gray canvas holds a compact wallet and large introductory type. The black 54 px floating trigger anchors three colored actions. Action labels and icons animate upward with a short stagger; the background blurs while the menu is open. The trigger rotates into a close glyph without disappearing.
+A cool studio porcelain backdrop (`--bg: #e9ecee`) with soft radial studio lighting frames an editorial intro alongside a machined titanium smartphone chassis (outer chamfered titanium bezel, concentric screen radius, Dynamic Island pill, and hardware side keys). Inside the wallet screen, a satin-white hero wealth card displays tabular balance typography, a positive weekly growth pill, and a luminous emerald area-gradient sparkline chart, followed by three jewel-toned dimensional SVG coin medallions (Bitcoin amber-gold, Ethereum indigo-sapphire, USD Coin cobalt-cyan). The 54 px sculptural `--accent` floating trigger sits with generous clearance above the frosted bottom dock and fans out three glossy floating pill actions over a blurred scrim while rotating into a close glyph.
 
 #### Interaction contract
 
 - Clicking the trigger opens the menu and focuses its first action. Escape, the backdrop, or the trigger closes it and restores focus.
 - Arrow keys cycle menu items; Home and End jump to the first and last. Tab loops through the three actions and trigger while expanded.
 - Hidden actions use `inert`, so they cannot receive keyboard focus.
-- Receive opens a sample address dialog with clipboard support and a visible fallback. Send and exchange open amount forms with native minimum, maximum, and step validation. Completion announces a preview; no transaction is sent.
+- Receive opens a sample address dialog with clipboard support and a visible fallback. Send and exchange open amount forms with native minimum, maximum, and step validation (`16px` mobile-safe inputs). Completion announces a preview; no transaction is sent.
 - Native dialogs provide modal focus management and Escape support. Closing returns focus to the trigger.
-- Reduced motion removes transitions. The layout stacks on small screens and keeps the wallet inside the viewport width.
+- Reduced motion removes transitions. The layout stacks cleanly on mobile viewports (`390px`) with zero horizontal overflow.
 
 #### Customization
 
 Colors accept only hexadecimal CSS values. Text is escaped in HTML and serialized safely in inline JavaScript. Configuration rejects unknown keys, empty labels, and invalid counts.
 
-The template is standalone HTML/CSS/JavaScript with system fonts and inline SVG. CSS easing approximates an elastic reveal; there is no physics engine. The sample wallet, address, balances, and exchange behavior are UI demonstrations. Clipboard availability depends on browser permissions and secure context; when unavailable the address stays visible in the notification.
+The template is standalone HTML/CSS/JavaScript with system fonts and inline SVG. CSS easing approximates a spring reveal; there is no physics engine. The sample wallet, address, balances, and exchange behavior are UI demonstrations. Clipboard availability depends on browser permissions and secure context; when unavailable the address stays visible in the notification.
 
 ## 可选完整包工作流 / Optional package workflow
 

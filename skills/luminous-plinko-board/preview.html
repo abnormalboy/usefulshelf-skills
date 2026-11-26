@@ -7,16 +7,38 @@
     <style>
       :root {
         --accent: #b5d8ff;
-        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-        background: #0b1019;
-        color: #e8edf6;
+        --bg: #070b14;
+        --chassis: rgba(14, 22, 38, 0.88);
+        --ink: #eef4fc;
+        --muted: #9eb0cb;
+        --line: rgba(164, 198, 245, 0.14);
+        --line-strong: rgba(164, 198, 245, 0.26);
+        font-family:
+          "SF Pro Display",
+          Inter,
+          -apple-system,
+          BlinkMacSystemFont,
+          "PingFang SC",
+          "Hiragino Sans GB",
+          "Noto Sans SC",
+          system-ui,
+          sans-serif;
+        background: var(--bg);
+        color: var(--ink);
         color-scheme: dark;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       * {
         box-sizing: border-box;
       }
       body {
         margin: 0;
+        background-color: var(--bg);
+        background-image:
+          radial-gradient(ellipse 66% 52% at 38% 36%, rgba(62, 122, 212, 0.16), transparent 68%),
+          radial-gradient(ellipse 46% 42% at 86% 82%, rgba(181, 216, 255, 0.08), transparent 72%);
+        color: var(--ink);
       }
       button,
       input {
@@ -24,168 +46,287 @@
       }
       button {
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
       }
       button:focus-visible,
       input:focus-visible,
       canvas:focus-visible {
         outline: 2px solid var(--accent);
-        outline-offset: 4px;
+        outline-offset: 3px;
       }
       main {
         max-width: 1120px;
         margin: auto;
-        padding: 18px 32px;
+        padding: 12px 28px 14px;
       }
       .eyebrow {
         display: flex;
         justify-content: space-between;
         gap: 16px;
         font:
-          10px ui-monospace,
+          500 0.7rem/1 ui-monospace,
+          "SF Mono",
+          Menlo,
           monospace;
-        letter-spacing: 0.13em;
-        color: #8a9db8;
+        letter-spacing: 0.12em;
+        color: #9db2cf;
+        padding-bottom: 9px;
+        border-bottom: 1px solid var(--line);
+      }
+      .hero-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 24px;
+        margin: 10px 0 12px;
       }
       h1 {
-        font-size: clamp(28px, 3.6vw, 44px);
-        font-weight: 450;
-        letter-spacing: -0.05em;
-        line-height: 1.1;
-        margin: 12px 0 6px;
+        font-size: clamp(1.75rem, 3vw, 2.45rem);
+        font-weight: 600;
+        letter-spacing: -0.04em;
+        line-height: 1.08;
+        margin: 0;
         overflow-wrap: anywhere;
+        color: #f6faff;
+        text-wrap: balance;
+      }
+      :lang(zh) h1 {
+        letter-spacing: -0.02em;
+        line-height: 1.15;
       }
       .intro {
-        font-size: 13px;
-        color: #9aa7bd;
-        line-height: 1.55;
-        max-width: 570px;
-        margin: 0 0 16px;
+        font-size: 0.85rem;
+        color: var(--muted);
+        line-height: 1.5;
+        max-width: 44ch;
+        margin: 0;
+        text-wrap: pretty;
       }
       .lab {
         display: grid;
-        grid-template-columns: minmax(0, 700px) 265px;
+        grid-template-columns: minmax(0, 710px) 288px;
         justify-content: center;
-        gap: 24px;
-        align-items: start;
+        gap: 18px;
+        align-items: stretch;
       }
       .board-wrap {
         min-width: 0;
-        border: 1px solid #283247;
-        border-radius: 12px;
+        border: 1px solid var(--line-strong);
+        border-radius: 18px;
         overflow: hidden;
-        background: #050a13;
+        background: #040812;
+        box-shadow:
+          0 26px 56px rgba(0, 0, 0, 0.58),
+          inset 0 1px 0 rgba(210, 232, 255, 0.14);
+        display: flex;
+        flex-direction: column;
       }
       .board-head {
         display: flex;
         justify-content: space-between;
-        padding: 10px 14px;
+        align-items: center;
+        padding: 10px 16px;
         font:
-          9px ui-monospace,
+          500 0.7rem/1 ui-monospace,
+          "SF Mono",
+          Menlo,
           monospace;
-        letter-spacing: 0.08em;
-        color: #8a9db8;
-        border-bottom: 1px solid #1c283d;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.1em;
+        color: #a4b8d4;
+        background: rgba(12, 21, 36, 0.9);
+        border-bottom: 1px solid var(--line);
+      }
+      #mode {
+        color: var(--accent);
       }
       canvas {
         width: 100%;
         display: block;
-        aspect-ratio: 640/460;
+        aspect-ratio: 640 / 460;
         touch-action: pan-y;
         cursor: crosshair;
+        user-select: none;
       }
       .board-foot {
-        padding: 9px 14px;
+        padding: 10px 16px;
         font:
-          10px ui-monospace,
+          500 0.7rem/1 ui-monospace,
+          "SF Mono",
+          Menlo,
           monospace;
-        color: #8fa0b8;
-        border-top: 1px solid #1c283d;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.08em;
+        color: #9eb3cf;
+        background: rgba(10, 18, 31, 0.9);
+        border-top: 1px solid var(--line);
         display: flex;
         justify-content: space-between;
         gap: 10px;
       }
+      #last {
+        color: #dce9fc;
+      }
       .controls {
-        padding-top: 2px;
+        background: var(--chassis);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 16px;
         min-width: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow:
+          0 18px 40px rgba(0, 0, 0, 0.42),
+          inset 0 1px 0 rgba(210, 232, 255, 0.09);
       }
       .section-title {
         font:
-          10px ui-monospace,
+          600 0.68rem/1.2 ui-monospace,
+          "SF Mono",
+          Menlo,
           monospace;
-        letter-spacing: 0.13em;
-        color: #8f9db5;
-        margin: 0 0 11px;
+        letter-spacing: 0.12em;
+        color: #9eb4d2;
+        margin: 0 0 10px;
       }
       .range-label {
         display: flex;
         justify-content: space-between;
-        font-size: 12px;
-        color: #b4c0d2;
-        margin: 0 0 8px;
-        gap: 15px;
+        align-items: baseline;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #cedbf0;
+        margin: 0 0 6px;
+        gap: 12px;
+      }
+      .range-label output {
+        font:
+          600 0.78rem/1 ui-monospace,
+          "SF Mono",
+          Menlo,
+          monospace;
+        font-variant-numeric: tabular-nums;
+        color: var(--accent);
       }
       input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
         width: 100%;
+        height: 6px;
+        border-radius: 999px;
+        background: rgba(164, 198, 245, 0.16);
         accent-color: var(--accent);
-        margin: 0 0 14px;
+        margin: 4px 0 12px;
+        cursor: pointer;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #f5faff;
+        border: 3px solid var(--accent);
+        box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 65%, transparent);
+      }
+      input[type="range"]::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #f5faff;
+        border: 3px solid var(--accent);
+        box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 65%, transparent);
       }
       .buttons {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 8px;
+        gap: 7px;
       }
       button {
-        border: 1px solid #34435d;
-        background: #151f30;
-        color: #cbd8ee;
-        border-radius: 7px;
-        padding: 11px 9px;
-        font-size: 11px;
+        border: 1px solid rgba(164, 198, 245, 0.22);
+        background: rgba(25, 38, 60, 0.85);
+        color: #dce8fa;
+        border-radius: 10px;
+        padding: 8px 9px;
+        min-height: 36px;
+        font-size: 0.78rem;
+        font-weight: 500;
+        transition:
+          background-color 0.18s ease,
+          border-color 0.18s ease,
+          box-shadow 0.18s ease;
       }
-      button:hover {
-        background: #21334c;
+      @media (hover: hover) {
+        button:hover:not(.primary):not(:disabled) {
+          background: rgba(41, 61, 94, 0.95);
+          border-color: rgba(181, 216, 255, 0.45);
+          color: #ffffff;
+        }
       }
       .primary {
         background: var(--accent);
-        color: #101c2e;
-        border-color: transparent;
+        color: #081526;
+        border-color: var(--accent);
+        font-weight: 600;
+        min-height: 40px;
+        box-shadow:
+          0 0 22px color-mix(in srgb, var(--accent) 42%, transparent),
+          inset 0 1px 0 rgba(255, 255, 255, 0.55);
       }
-      .primary:hover {
-        filter: brightness(1.08);
-        background: var(--accent);
+      @media (hover: hover) {
+        .primary:hover {
+          filter: brightness(1.07);
+        }
       }
       .wide {
-        grid-column: 1/-1;
+        grid-column: 1 / -1;
+        width: 100%;
       }
       .separator {
         border: 0;
-        border-top: 1px solid #27334a;
-        margin: 14px 0;
+        border-top: 1px solid var(--line);
+        margin: 12px 0;
       }
       .metrics {
-        display: flex;
-        gap: 24px;
-        margin: 0 0 12px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin: 0 0 10px;
+      }
+      .metric {
+        padding: 9px 11px;
+        border-radius: 10px;
+        background: rgba(6, 12, 22, 0.65);
+        border: 1px solid rgba(164, 198, 245, 0.12);
       }
       .metric strong {
-        font-size: 26px;
-        font-weight: 450;
-        color: #e1eaf8;
+        font-size: 1.45rem;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+        color: #f4f9ff;
+        line-height: 1.1;
       }
       .metric span {
         display: block;
-        margin-top: 4px;
+        margin-top: 3px;
         font:
-          9px ui-monospace,
+          500 0.65rem/1 ui-monospace,
+          "SF Mono",
+          Menlo,
           monospace;
-        color: #8a9db8;
-        letter-spacing: 0.06em;
+        color: #9cb2cf;
+        letter-spacing: 0.08em;
       }
       .histogram {
-        height: 76px;
+        height: 82px;
+        padding: 8px 6px 6px;
+        border-radius: 10px;
+        background: rgba(5, 10, 19, 0.72);
+        border: 1px solid rgba(164, 198, 245, 0.12);
         display: grid;
         grid-template-columns: repeat(9, 1fr);
-        gap: 5px;
+        gap: 4px;
         align-items: end;
       }
       .bin {
@@ -194,101 +335,92 @@
         align-items: center;
         justify-content: flex-end;
         flex-direction: column;
-        gap: 4px;
+        gap: 3px;
         font:
-          8px ui-monospace,
+          500 0.64rem/1 ui-monospace,
+          "SF Mono",
+          Menlo,
           monospace;
-        color: #93a4bd;
+        font-variant-numeric: tabular-nums;
+        color: #9eb3cf;
       }
       .bar {
         width: 100%;
         height: 2px;
         min-height: 2px;
-        background: var(--accent);
-        opacity: 0.6;
-        border-radius: 2px 2px 0 0;
+        background: linear-gradient(
+          180deg,
+          #ffffff 0%,
+          var(--accent) 45%,
+          rgba(62, 122, 212, 0.85) 100%
+        );
+        opacity: 0.88;
+        border-radius: 3px 3px 0 0;
+        box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 45%, transparent);
       }
       .bin em {
         font-style: normal;
-        color: #becce0;
-        font-size: 9px;
+        color: #d6e4f7;
+        font-size: 0.66rem;
       }
       .small-note {
-        font-size: 10px;
-        line-height: 1.55;
-        color: #8a9db8;
-        margin: 10px 0;
+        font-size: 0.72rem;
+        line-height: 1.45;
+        color: #9bb0cb;
+        margin: 8px 0 9px;
       }
       .status {
-        font-size: 11px;
-        line-height: 1.6;
-        color: #a1b3ce;
-        min-height: 32px;
+        font-size: 0.76rem;
+        line-height: 1.5;
+        color: #c2d5ef;
+        min-height: 30px;
         margin: 10px 0 0;
       }
       footer {
-        margin-top: 14px;
+        margin-top: 12px;
+        padding-top: 10px;
+        border-top: 1px solid var(--line);
         display: flex;
         justify-content: space-between;
         gap: 12px;
         font:
-          9px/1.7 ui-monospace,
+          400 0.68rem/1.5 ui-monospace,
+          "SF Mono",
+          Menlo,
           monospace;
-        color: #8a9db8;
+        color: #9ab0cc;
       }
       button:disabled {
-        opacity: 0.35;
+        opacity: 0.38;
         cursor: default;
       }
-      @media (max-width: 740px) {
+      @media (max-width: 860px) {
         main {
-          padding: 24px 20px;
+          padding: 18px 18px 20px;
+        }
+        .hero-head {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
         }
         .lab {
           grid-template-columns: 1fr;
-          gap: 25px;
+          gap: 16px;
         }
         .controls {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 20px;
-        }
-        .separator {
-          display: none;
-        }
-        .status {
-          grid-column: 1/-1;
-          margin: 0;
-        }
-        .metrics {
-          gap: 25px;
-        }
-        .eyebrow {
-          font-size: 8px;
+          gap: 14px;
         }
         .eyebrow span:last-child {
           display: none;
         }
-        h1 {
-          margin-top: 30px;
-        }
         .board-head,
         .board-foot {
-          font-size: 8px;
-          padding: 12px;
-        }
-        .small-note {
-          font-size: 9px;
+          font-size: 0.64rem;
+          padding: 9px 12px;
         }
         footer {
           flex-direction: column;
-        }
-        .buttons {
-          gap: 6px;
-        }
-        button {
-          font-size: 10px;
-          padding: 11px 5px;
+          gap: 4px;
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -304,8 +436,10 @@
         <span>PHYSICS OF PLAY / EXPERIMENT 03</span>
         <span>LIGHT HAS A PLAYFUL SIDE</span>
       </div>
-      <h1>Let curiosity fall.</h1>
-      <p class="intro">One small nudge. A different journey. Explore light, chance and collisions.</p>
+      <div class="hero-head">
+        <h1>Let curiosity fall.</h1>
+        <p class="intro">One small nudge. A different journey. Explore light, chance and collisions.</p>
+      </div>
       <div class="lab">
         <section class="board-wrap" aria-label="Luminous pegboard">
           <div class="board-head">
@@ -389,6 +523,7 @@
           "A clean board. Your next experiment starts here.": "画布已清空，下一次实验从这里开始。",
           "A glowing ball simulation. Use the Release ball button and read the landing distribution below.":
             "发光弹珠模拟。点击放下球按钮，并在下方查看落点分布。",
+          Add: "添加",
           "Advance 1s": "前进一秒",
           "Advanced one second. Step again to inspect the next part of the journey.":
             "已前进一秒，再走一步看看接下来的路线。",
@@ -543,6 +678,10 @@
             .replace(
               /Files stay on this device\. Maximum (\d+) MB\./g,
               "文件留在此设备，最大 $1 MB。",
+            )
+            .replace(
+              /Packed ([\d,]+) bytes\. CRC32 ([0-9a-f]+)\. Download contains the complete file, ready to decode\./gi,
+              "已打包 $1 字节。CRC32 $2。下载文件包含完整内容，可直接解码。",
             )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
@@ -736,11 +875,12 @@
       for (let row = 0; row < 6; row++)
         for (let col = 0; col < 10; col++) {
           const x = 32 + col * 64 + (row % 2 ? 32 : 0);
-          if (x < 620) pegs.push({ x, y: 88 + row * 48 });
+          if (x < 620) pegs.push({ x, y: 88 + row * 48, hit: 0 });
         }
       const motionPreference = matchMedia("(prefers-reduced-motion: reduce)");
       let balls = [],
         bins = Array(9).fill(0),
+        binFlash = Array(9).fill(0),
         collisions = 0,
         lastPath = [],
         showPath = true,
@@ -777,7 +917,7 @@
             count.textContent = n;
             const bar = document.createElement("span");
             bar.className = "bar";
-            bar.style.height = Math.max(2, (n / max) * 55) + "px";
+            bar.style.height = Math.max(3, (n / max) * 44) + "px";
             const label = document.createElement("span");
             label.textContent = i + 1;
             d.append(count, bar, label);
@@ -824,6 +964,9 @@
       }
       function tick(dt) {
         let changed = false;
+        for (const p of pegs) if (p.hit > 0) p.hit = Math.max(0, p.hit - dt * 2.6);
+        for (let i = 0; i < 9; i++)
+          if (binFlash[i] > 0) binFlash[i] = Math.max(0, binFlash[i] - dt * 1.8);
         for (const b of balls) {
           b.vy += config.gravity * dt;
           b.vx *= 0.999;
@@ -853,20 +996,22 @@
                 b.vx -= (1 + e) * impact * nx;
                 b.vy -= (1 + e) * impact * ny;
                 if (Math.abs(b.vx) < 8) b.vx += (b.x < W / 2 ? -1 : 1) * 12;
+                p.hit = 1;
                 collisions++;
                 changed = true;
               }
             }
           }
-          if (b.ticks % 3 === 0) {
+          if (b.ticks % 2 === 0) {
             b.path.push([b.x, b.y]);
             if (b.path.length > 1200) b.path.shift();
             b.trail.push([b.x, b.y]);
-            if (b.trail.length > 9) b.trail.shift();
+            if (b.trail.length > 14) b.trail.shift();
           }
           if (b.y > 414) {
             const index = Math.min(8, Math.max(0, Math.floor((b.x / W) * 9)));
             bins[index]++;
+            binFlash[index] = 1;
             lastPath = b.path.slice();
             $("last").textContent = window.__usefulshelfText("LAST LANDING ") + (index + 1);
             b.finished = true;
@@ -883,88 +1028,228 @@
       }
       function draw() {
         ctx.clearRect(0, 0, W, H);
-        ctx.fillStyle = "#050a13";
+
+        // Deep midnight glass chassis backdrop
+        const bg = ctx.createRadialGradient(W * 0.5, H * 0.35, 30, W * 0.5, H * 0.5, W * 0.72);
+        bg.addColorStop(0, "#0b1628");
+        bg.addColorStop(0.65, "#050b16");
+        bg.addColorStop(1, "#03060d");
+        ctx.fillStyle = bg;
         ctx.fillRect(0, 0, W, H);
-        for (let i = 0; i < 9; i++) {
-          ctx.fillStyle = i % 2 ? "#0d1726" : "#111d2e";
-          ctx.fillRect((i * W) / 9, 420, W / 9 - 1, 40);
-          ctx.fillStyle = "#637792";
-          ctx.font = "10px monospace";
-          ctx.textAlign = "center";
-          ctx.fillText(String(i + 1), ((i + 0.5) * W) / 9, 445);
+
+        // Finely etched calibration grid & side ticks
+        ctx.strokeStyle = "rgba(140, 178, 224, 0.055)";
+        ctx.lineWidth = 1;
+        for (let x = 32; x < W; x += 64) {
+          ctx.beginPath();
+          ctx.moveTo(x, 26);
+          ctx.lineTo(x, 412);
+          ctx.stroke();
         }
-        if (showPath && lastPath.length) {
+        for (let y = 88; y <= 376; y += 48) {
+          ctx.beginPath();
+          ctx.moveTo(14, y);
+          ctx.lineTo(W - 14, y);
+          ctx.stroke();
+        }
+        // Top etched launch rail calibration scale
+        ctx.strokeStyle = "rgba(165, 205, 250, 0.22)";
+        ctx.beginPath();
+        ctx.moveTo(16, 16);
+        ctx.lineTo(W - 16, 16);
+        ctx.stroke();
+        for (let pct = 10; pct <= 90; pct += 10) {
+          const tx = (pct / 100) * W;
+          ctx.beginPath();
+          ctx.moveTo(tx, 12);
+          ctx.lineTo(tx, pct === 50 ? 22 : 19);
+          ctx.stroke();
+        }
+
+        // Launch laser sightline
+        const lx = (+$("launch").value / 100) * W;
+        const sight = ctx.createLinearGradient(lx, 16, lx, 84);
+        sight.addColorStop(0, tint(0.55));
+        sight.addColorStop(1, tint(0));
+        ctx.strokeStyle = sight;
+        ctx.lineWidth = 1;
+        ctx.setLineDash([2, 4]);
+        ctx.beginPath();
+        ctx.moveTo(lx, 18);
+        ctx.lineTo(lx, 84);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Bottom 9 illuminated collector slots
+        const maxBin = Math.max(1, ...bins);
+        for (let i = 0; i < 9; i++) {
+          const bx = (i * W) / 9,
+            bw = W / 9;
+          ctx.fillStyle = i % 2 ? "#0a1322" : "#0d182b";
+          ctx.fillRect(bx + 1, 416, bw - 2, 44);
+          const fillRatio = bins[i] / maxBin;
+          if (bins[i] > 0 || binFlash[i] > 0) {
+            const glowH = Math.max(4, fillRatio * 34);
+            const g = ctx.createLinearGradient(0, 460 - glowH, 0, 460);
+            g.addColorStop(0, tint(0.22 + binFlash[i] * 0.45));
+            g.addColorStop(1, tint(0.06 + binFlash[i] * 0.15));
+            ctx.fillStyle = g;
+            ctx.fillRect(bx + 2, 460 - glowH, bw - 4, glowH);
+          }
+          ctx.strokeStyle = "rgba(165, 205, 250, 0.2)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(bx, 414);
+          ctx.lineTo(bx, 460);
+          ctx.stroke();
+
+          ctx.fillStyle = binFlash[i] > 0.1 ? "#ffffff" : "#89a0c0";
+          ctx.font = "600 10px ui-monospace, monospace";
+          ctx.textAlign = "center";
+          ctx.fillText(String(i + 1), bx + bw / 2, 443);
+        }
+        ctx.strokeStyle = "rgba(165, 205, 250, 0.25)";
+        ctx.beginPath();
+        ctx.moveTo(0, 416);
+        ctx.lineTo(W, 416);
+        ctx.stroke();
+
+        // Last completed path trace
+        if (showPath && lastPath.length > 1) {
           ctx.beginPath();
           lastPath.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
-          ctx.strokeStyle = tint(0.28);
-          ctx.lineWidth = 1;
-          ctx.setLineDash([3, 4]);
+          ctx.strokeStyle = tint(0.4);
+          ctx.lineWidth = 1.25;
+          ctx.setLineDash([4, 4]);
           ctx.stroke();
           ctx.setLineDash([]);
         }
+
+        // Additive volumetric light blooms around active balls
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
         for (const b of balls) {
-          const glow = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, 150);
-          glow.addColorStop(0, tint(0.5));
-          glow.addColorStop(0.2, tint(0.16));
+          const glow = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, 165);
+          glow.addColorStop(0, tint(0.55));
+          glow.addColorStop(0.24, tint(0.18));
+          glow.addColorStop(0.6, tint(0.05));
           glow.addColorStop(1, tint(0));
           ctx.fillStyle = glow;
-          ctx.fillRect(b.x - 150, b.y - 150, 300, 300);
+          ctx.fillRect(b.x - 165, b.y - 165, 330, 330);
         }
+        ctx.restore();
+
+        // Real-time directional shadows cast by pegs from active balls
         for (const p of pegs) {
+          let nearestDist = 999,
+            lightNx = -0.5,
+            lightNy = -0.85;
           for (const b of balls) {
             const dx = p.x - b.x,
               dy = p.y - b.y,
               d = Math.hypot(dx, dy);
-            if (d > 150 || d < 10) continue;
+            if (d < nearestDist) {
+              nearestDist = d;
+              if (d > 1) {
+                lightNx = -dx / d;
+                lightNy = -dy / d;
+              }
+            }
+            if (d > 165 || d < 9) continue;
             const nx = dx / d,
               ny = dy / d,
               tx = -ny * pegR,
               ty = nx * pegR,
-              length = 90 * (1 - d / 160);
+              length = 104 * (1 - d / 172);
             ctx.beginPath();
             ctx.moveTo(p.x + tx, p.y + ty);
             ctx.lineTo(p.x - tx, p.y - ty);
-            ctx.lineTo(p.x - tx + nx * length, p.y - ty + ny * length);
-            ctx.lineTo(p.x + tx + nx * length, p.y + ty + ny * length);
+            ctx.lineTo(p.x - tx * 1.15 + nx * length, p.y - ty * 1.15 + ny * length);
+            ctx.lineTo(p.x + tx * 1.15 + nx * length, p.y + ty * 1.15 + ny * length);
             ctx.closePath();
-            ctx.fillStyle = `rgba(2,6,13,${0.8 * (1 - d / 160)})`;
+            ctx.fillStyle = `rgba(1, 4, 11, ${(0.82 * (1 - d / 172)).toFixed(3)})`;
             ctx.fill();
           }
+
+          // Expanding luminous ripple ring on peg impact
+          if (p.hit > 0.01) {
+            const rippleR = pegR + (1 - p.hit) * 24;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, rippleR, 0, Math.PI * 2);
+            ctx.strokeStyle = tint((p.hit * 0.85).toFixed(3));
+            ctx.lineWidth = 1.6 * p.hit + 0.5;
+            ctx.stroke();
+          }
+
+          // Machined optical glass peg body with dynamic rim highlight
+          const proximity = Math.max(0, 1 - nearestDist / 160),
+            lit = Math.min(1, proximity * 0.85 + p.hit);
+          const pegGrad = ctx.createRadialGradient(
+            p.x + lightNx * 2.6,
+            p.y + lightNy * 2.6,
+            0.5,
+            p.x,
+            p.y,
+            pegR,
+          );
+          pegGrad.addColorStop(0, lit > 0.3 ? tint(0.55 + lit * 0.4) : "#334766");
+          pegGrad.addColorStop(0.55, "#15233a");
+          pegGrad.addColorStop(1, "#09111f");
           ctx.beginPath();
           ctx.arc(p.x, p.y, pegR, 0, Math.PI * 2);
-          ctx.fillStyle = "#101a2a";
+          ctx.fillStyle = pegGrad;
           ctx.fill();
-          ctx.strokeStyle = "#2c3c53";
-          ctx.lineWidth = 0.8;
+
+          ctx.strokeStyle = lit > 0.2 ? tint(0.45 + lit * 0.55) : "rgba(110, 142, 184, 0.36)";
+          ctx.lineWidth = lit > 0.2 ? 1.2 : 0.85;
           ctx.stroke();
+
           ctx.beginPath();
-          ctx.arc(p.x - 1.5, p.y - 2, 1.3, 0, Math.PI * 2);
-          ctx.fillStyle = "#4c5c73";
+          ctx.arc(p.x + lightNx * 2.1, p.y + lightNy * 2.1, 1.35, 0, Math.PI * 2);
+          ctx.fillStyle = lit > 0.3 ? "#ffffff" : "rgba(180, 210, 245, 0.52)";
           ctx.fill();
         }
+
+        // Comet-tail glowing physics balls
         for (const b of balls) {
-          b.trail.forEach(([x, y], i) => {
-            ctx.beginPath();
-            ctx.arc(x, y, 2 + i / 4, 0, Math.PI * 2);
-            ctx.fillStyle = tint((i / b.trail.length) * 0.28);
-            ctx.fill();
-          });
+          if (b.trail.length > 1) {
+            for (let i = 1; i < b.trail.length; i++) {
+              const frac = i / b.trail.length;
+              ctx.beginPath();
+              ctx.moveTo(b.trail[i - 1][0], b.trail[i - 1][1]);
+              ctx.lineTo(b.trail[i][0], b.trail[i][1]);
+              ctx.strokeStyle = tint((frac * 0.65).toFixed(3));
+              ctx.lineWidth = 1.2 + frac * 6.5;
+              ctx.lineCap = "round";
+              ctx.stroke();
+            }
+          }
           ctx.save();
-          ctx.shadowBlur = 18;
+          ctx.shadowBlur = 22;
           ctx.shadowColor = color;
-          ctx.fillStyle = "#f4f9ff";
+          const ballGrad = ctx.createRadialGradient(b.x - 1.8, b.y - 1.8, 0.6, b.x, b.y, R);
+          ballGrad.addColorStop(0, "#ffffff");
+          ballGrad.addColorStop(0.65, color);
+          ballGrad.addColorStop(1, tint(0.8));
+          ctx.fillStyle = ballGrad;
           ctx.beginPath();
           ctx.arc(b.x, b.y, R, 0, Math.PI * 2);
           ctx.fill();
           ctx.restore();
         }
-        const x = (+$("launch").value / 100) * W;
-        ctx.fillStyle = tint(0.7);
+
+        // Glowing launch emitter chevron
+        ctx.save();
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = color;
+        ctx.fillStyle = color;
         ctx.beginPath();
-        ctx.moveTo(x - 5, 5);
-        ctx.lineTo(x + 5, 5);
-        ctx.lineTo(x, 12);
+        ctx.moveTo(lx - 6, 5);
+        ctx.lineTo(lx + 6, 5);
+        ctx.lineTo(lx, 14);
+        ctx.closePath();
         ctx.fill();
+        ctx.restore();
       }
       function stop() {
         if (frameId) cancelAnimationFrame(frameId);
@@ -1024,6 +1309,8 @@
         stop();
         balls = [];
         bins.fill(0);
+        binFlash.fill(0);
+        pegs.forEach((p) => (p.hit = 0));
         collisions = 0;
         lastPath = [];
         sequence = 0;
@@ -1075,10 +1362,51 @@
         }
       });
       balls = [
-        { x: 193, y: 124, vx: 27, vy: 60, trail: [], path: [], ticks: 0 },
-        { x: 377, y: 213, vx: -42, vy: 85, trail: [], path: [], ticks: 0 },
-        { x: 467, y: 304, vx: 21, vy: 65, trail: [], path: [], ticks: 0 },
+        {
+          x: 193,
+          y: 124,
+          vx: 27,
+          vy: 60,
+          trail: [
+            [186, 102],
+            [189, 111],
+            [191, 118],
+            [193, 124],
+          ],
+          path: [],
+          ticks: 0,
+        },
+        {
+          x: 377,
+          y: 213,
+          vx: -42,
+          vy: 85,
+          trail: [
+            [392, 182],
+            [387, 193],
+            [382, 203],
+            [377, 213],
+          ],
+          path: [],
+          ticks: 0,
+        },
+        {
+          x: 467,
+          y: 304,
+          vx: 21,
+          vy: 65,
+          trail: [
+            [458, 276],
+            [461, 286],
+            [464, 295],
+            [467, 304],
+          ],
+          path: [],
+          ticks: 0,
+        },
       ];
+      pegs[14].hit = 0.65;
+      pegs[31].hit = 0.45;
       sync();
       draw();
       if (paused)

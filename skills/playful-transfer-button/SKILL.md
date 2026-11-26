@@ -13,7 +13,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 ## 核心实现规范
 
-原生文件输入和内凹胶囊描述 ready→reading→complete，可取消或失败后重试。沿归一化 SVG 圆角路径绘制短亮边，完成闭合为勾。进度必须取实际 49152 字节读取块，不许定时器虚增；此块大小可被三整除，使 Base64 可拼接。导出 JSON 保存名称、MIME、完整 Base64 和 CRC32，后者只是校验和不是签名。取消令牌在每个 await 后检查，空文件 CRC32 为 00000000，预先限制体积并回收 Blob URL。
+深灰阳极氧化精密硬件面板搭载可按压倒角机械主按钮、分段发光 LED 进度条与实时 CRC32 校验回执区，原生文件输入驱动 ready→reading→complete，可取消或失败后重试。沿归一化 SVG 圆角路径绘制短亮边，完成闭合为勾。进度必须取实际 49152 字节读取块，不许定时器虚增；此块大小可被三整除，使 Base64 可拼接。导出 JSON 保存名称、MIME、完整 Base64 和 CRC32，后者只是校验和不是签名。取消令牌在每个 await 后检查，空文件 CRC32 为 00000000，预先限制体积并回收 Blob URL。
 
 ## 参数与内容边界
 
@@ -45,10 +45,15 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ```css
 :root {
   --accent: #a6b7ff;
+  --bg: #14161b;
+  --chassis: #1b1e25;
+  --bay: #111318;
+  --ink: #f3f5fa;
+  --muted: #a2aab9;
   color-scheme: dark;
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  background: #17191e;
-  color: #f2f3f9;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Segoe UI", sans-serif;
 }
 ```
 
@@ -69,13 +74,13 @@ The following specification is included in full so this document works without a
 
 ### Perimeter light and truthful progress
 
-The main control is an inset capsule. A rounded SVG path with a normalized path length carries a short moving highlight while work is active. The completed state closes the perimeter and replaces the arrow with a check. Reduced-motion preferences stop the traveling highlight without changing processing.
+Styled as a precision-machined Teenage Engineering / Dieter Rams anodized dark hardware studio (`--bg: #14161b`, chassis `#1b1e25`, recessed instrument bays `#111318`, corner fasteners, calibrated millimeter index scale, and glowing LED status indicators). The main actuator `#transfer` is a sculpted beveled mechanical push-button with physical press travel; a normalized rounded SVG path (`pathLength="100"`) carries a short traveling `--accent` LED highlight while work is active and closes its perimeter with a checkmark on completion. Reduced-motion preferences stop the traveling highlight without changing processing.
 
-The state model is ready → reading → complete, with cancellation and read errors returning to a repeatable state. Never set progress from a timer: each percentage reflects a completed 49,152-byte chunk. That chunk size is divisible by three, so concatenated Base64 chunks decode exactly. CRC32 is a file-integrity checksum, not a cryptographic signature. The JSON parcel preserves name, MIME type, size and the full encoded content; decode `contents` using Base64 to recover the original bytes.
+The right OLED telemetry bay pairs a recessed segmented luminous LED progress meter (`role="progressbar"`) with tabular byte readouts, tactile hardware keycaps, and a live CRC32 checksum receipt bay. The state model is `ready → reading → complete`, with cancellation and read errors returning to a repeatable state. Never set progress from a timer: each percentage reflects a completed 49,152-byte chunk (divisible by three, so concatenated Base64 chunks decode accurately). CRC32 is a file-integrity checksum, not a cryptographic signature.
 
-Cancellation invalidates an operation token. Check that token after every awaited read and animation frame so a cancelled run cannot replace a newer result. Revoke object URLs on reset. Empty files should complete with CRC32 00000000. Cap file size before reading to bound memory use; JSON and Base64 require more memory than the original file. No upload endpoint is involved.
+Cancellation invalidates an operation token checked after every awaited read and animation frame so a cancelled run cannot replace a newer result. Object URLs are revoked on reset. Empty files complete with CRC32 `00000000`. Cap file size (`max_mb`, 1–64) before reading to bound memory use. No upload endpoint is involved.
 
-Keep the native file picker, focus outlines, byte progress bar and status region when embedding. In a sandboxed iframe, downloads require `allow-downloads`. Validate a sample by decoding the downloaded JSON, comparing bytes and recalculating its checksum; cancel midway and ensure no stale download appears.
+Keep the native file picker, focus outlines, byte progress bar, and status region when embedding. In a sandboxed iframe, downloads require `allow-downloads`.
 
 ## 可选完整包工作流 / Optional package workflow
 

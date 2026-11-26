@@ -6,19 +6,20 @@
     <title>Scroll-aware toolbar</title>
     <style>
       :root {
-        --bg: #e8eaef;
+        --bg: #e2e6ee;
         --stage: #ffffff;
-        --text: #111111;
+        --text: #0f172a;
         --muted: #475569;
         --accent: #2f7dff;
-        --glass: rgba(255,255,255,0.62);
-        --glass-border: rgba(255,255,255,0.55);
-        --shadow: 0 24px 60px rgba(15,23,42,0.18);
+        --glass: rgba(255,255,255,0.68);
+        --glass-border: rgba(255,255,255,0.75);
+        --shadow: 0 32px 72px rgba(15,23,42,0.22);
         --icon-radius: 28%;
         --nav-hide-ms: 320ms;
-        --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-        --phone-w: 390px;
-        --phone-h: 844px;
+        --font:
+          -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Segoe UI", sans-serif;
+        --phone-w: 378px;
+        --phone-h: 616px;
       }
       * {
         box-sizing: border-box;
@@ -27,20 +28,38 @@
       body {
         margin: 0;
         height: 100%;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       body {
         font-family: var(--font);
-        background: var(--bg);
+        background-color: var(--bg);
+        background-image:
+          radial-gradient(ellipse 68% 58% at 50% 24%, rgba(255, 255, 255, 0.72), transparent 68%),
+          radial-gradient(
+            circle at 22% 82%,
+            color-mix(in srgb, var(--accent) 9%, transparent),
+            transparent 46%
+          );
         color: var(--text);
         display: grid;
         place-items: center;
         min-height: 100%;
-        padding: 24px 16px;
+        padding: 18px 16px 24px;
+      }
+      body.theme-dark {
+        background-image:
+          radial-gradient(ellipse 64% 52% at 50% 22%, rgba(255, 255, 255, 0.065), transparent 64%),
+          radial-gradient(
+            circle at 50% 78%,
+            color-mix(in srgb, var(--accent) 12%, transparent),
+            transparent 52%
+          );
       }
       .wrap {
         width: min(100%, 920px);
         display: grid;
-        gap: 18px;
+        gap: 16px;
         justify-items: center;
       }
       .meta {
@@ -50,70 +69,166 @@
       }
       .meta h1 {
         margin: 0 0 6px;
-        font-size: 1.35rem;
-        font-weight: 650;
-        letter-spacing: -0.02em;
+        font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+        font-weight: 680;
+        letter-spacing: -0.03em;
+        line-height: 1.18;
       }
       .meta p {
         margin: 0;
         color: var(--muted);
         font-size: 0.92rem;
-        line-height: 1.45;
+        line-height: 1.48;
       }
       .hint {
-        font-size: 0.8rem;
+        margin-top: 6px !important;
+        font-size: 0.8rem !important;
         color: var(--muted);
       }
-      .phone {
-        width: min(100%, var(--phone-w));
-        height: min(76vh, var(--phone-h));
-        background: var(--stage);
-        border-radius: 42px;
-        border: 3px solid #111;
+      .device-chassis {
+        position: relative;
+        width: min(100%, calc(var(--phone-w) + 22px));
+        padding: 11px;
+        border-radius: 54px;
+        background: linear-gradient(
+          145deg,
+          #e3e6ec 0%,
+          #9ca2ae 24%,
+          #d2d6de 48%,
+          #757b86 76%,
+          #c4c9d2 100%
+        );
         box-shadow:
           var(--shadow),
-          inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+          0 4px 12px rgba(15, 23, 42, 0.14),
+          inset 0 1.5px 1px rgba(255, 255, 255, 0.9),
+          inset 0 -1.5px 2px rgba(15, 23, 42, 0.32);
+      }
+      body.theme-dark .device-chassis {
+        background: linear-gradient(
+          145deg,
+          #5c616d 0%,
+          #2a2d35 28%,
+          #4b505c 54%,
+          #1f2228 80%,
+          #464b56 100%
+        );
+      }
+      .device-chassis::before {
+        content: "";
+        position: absolute;
+        left: -3px;
+        top: 132px;
+        width: 3px;
+        height: 46px;
+        border-radius: 3px 0 0 3px;
+        background: linear-gradient(180deg, #b8bec8, #707682);
+        box-shadow: 0 58px 0 #8a909b;
+        pointer-events: none;
+      }
+      .device-chassis::after {
+        content: "";
+        position: absolute;
+        right: -3px;
+        top: 162px;
+        width: 3px;
+        height: 68px;
+        border-radius: 0 3px 3px 0;
+        background: linear-gradient(180deg, #b8bec8, #707682);
+        pointer-events: none;
+      }
+      .phone {
+        width: 100%;
+        height: min(74vh, var(--phone-h));
+        background-color: var(--stage);
+        border-radius: 43px;
+        border: 4px solid #0e1014;
+        box-shadow:
+          inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+          0 0 0 1px rgba(0, 0, 0, 0.35);
         position: relative;
         overflow: hidden;
+      }
+      .phone::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.24) 0%,
+          rgba(255, 255, 255, 0.04) 22%,
+          transparent 44%
+        );
+        pointer-events: none;
+        z-index: 12;
       }
       .status {
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        height: 48px;
+        height: 54px;
         display: flex;
-        align-items: flex-end;
+        align-items: center;
         justify-content: space-between;
-        padding: 0 28px 8px;
-        font-size: 14px;
-        font-weight: 600;
-        z-index: 5;
+        padding: 10px 24px 0;
+        font-size: 13.5px;
+        font-weight: 650;
+        font-variant-numeric: tabular-nums;
+        z-index: 9;
         pointer-events: none;
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.85), transparent);
+        background: linear-gradient(
+          to bottom,
+          color-mix(in srgb, var(--stage) 92%, transparent) 55%,
+          transparent
+        );
       }
-      body.theme-dark .status {
-        background: linear-gradient(to bottom, rgba(17, 19, 24, 0.9), transparent);
+      .island {
+        position: absolute;
+        left: 50%;
+        top: 11px;
+        transform: translateX(-50%);
+        width: 106px;
+        height: 28px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #111318 0%, #050608 100%);
+        box-shadow:
+          0 2px 8px rgba(0, 0, 0, 0.24),
+          inset 0 1px 0 rgba(255, 255, 255, 0.14);
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 10px;
+      }
+      .island-lens {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 38% 36%, #3f6ec9 0%, #142244 45%, #05080f 85%);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
       }
       .status .pills {
         display: flex;
-        gap: 5px;
+        gap: 6px;
         align-items: center;
       }
-      .status .bar {
-        width: 17px;
-        height: 10px;
-        border: 1.5px solid currentColor;
-        border-radius: 2px;
-        position: relative;
-        opacity: 0.85;
+      .status svg {
+        display: block;
+        height: 12px;
+        width: auto;
       }
-      .status .bar::after {
-        content: "";
+      .home-bar {
         position: absolute;
-        inset: 2px 5px 2px 2px;
-        background: currentColor;
-        border-radius: 1px;
+        left: 50%;
+        bottom: 8px;
+        transform: translateX(-50%);
+        width: 120px;
+        height: 4.5px;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--text) 28%, transparent);
+        z-index: 10;
+        pointer-events: none;
       }
       .scroller {
         position: absolute;
@@ -122,7 +237,7 @@
         overscroll-behavior-y: contain;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
-        padding: 56px 28px 140px;
+        padding: 66px 26px 136px;
         scrollbar-width: none;
       }
       .scroller::-webkit-scrollbar {
@@ -131,14 +246,14 @@
       .grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 28px 22px;
+        gap: 24px 22px;
       }
       .app {
         display: flex;
         flex-direction: column;
         min-width: 0;
         align-items: center;
-        gap: 10px;
+        gap: 9px;
         text-decoration: none;
         color: inherit;
         cursor: default;
@@ -149,89 +264,84 @@
         aspect-ratio: 1;
         border-radius: var(--icon-radius);
         box-shadow:
-          0 9px 18px rgba(0, 0, 0, 0.12),
-          inset 0 1px 1px rgba(255, 255, 255, 0.7),
-          inset 0 -2px 3px rgba(0, 0, 0, 0.08);
+          0 12px 24px rgba(15, 23, 42, 0.14),
+          0 3px 6px rgba(15, 23, 42, 0.08),
+          inset 0 1.5px 1.5px rgba(255, 255, 255, 0.78),
+          inset 0 -2px 4px rgba(15, 23, 42, 0.12);
         display: grid;
         place-items: center;
         position: relative;
         overflow: hidden;
+      }
+      .icon::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(
+          150deg,
+          rgba(255, 255, 255, 0.28) 0%,
+          rgba(255, 255, 255, 0.04) 38%,
+          transparent 54%
+        );
+        pointer-events: none;
       }
       .label {
         font-size: 13px;
         text-align: center;
         overflow-wrap: anywhere;
         max-width: 100%;
-        font-weight: 500;
+        font-weight: 540;
         letter-spacing: -0.01em;
         color: var(--text);
       }
-      /* Icon skins */
+      /* Sculpted multi-layered iOS app icon skins */
       .i-camera {
-        background: linear-gradient(160deg, #e8e9ec, #c9ccd3);
+        background: linear-gradient(160deg, #f0f2f5 0%, #c8cdd6 65%, #aeb5c2 100%);
       }
       .i-maps {
-        background:
-          linear-gradient(45deg, #f7b6c8 0 28%, transparent 28%),
-          linear-gradient(135deg, #b8e986 0 34%, transparent 34%),
-          linear-gradient(225deg, #ffe28a 0 30%, transparent 30%),
-          linear-gradient(315deg, #9ad7ff 0 36%, transparent 36%), #eef1f4;
+        background: linear-gradient(145deg, #f1f5f9, #e2e8f0);
       }
       .i-weather {
-        background: linear-gradient(180deg, #5eb6ff, #1e78e8);
+        background: linear-gradient(180deg, #3c98ff 0%, #1d64d8 64%, #1549ab 100%);
       }
       .i-share {
-        background: linear-gradient(180deg, #4aa3ff, #1f6fe0);
+        background: linear-gradient(180deg, #43a4ff 0%, #1762d4 100%);
       }
       .i-translate {
-        background: linear-gradient(180deg, #8fe0ef, #4ec4d9);
+        background: linear-gradient(165deg, #273242 0%, #111827 100%);
       }
       .i-wallet {
-        background: linear-gradient(180deg, #2a2c31, #111214);
+        background: linear-gradient(180deg, #292c34 0%, #12141a 100%);
       }
       .i-mail {
-        background: linear-gradient(180deg, #8fd4ff, #4aaef0);
+        background: linear-gradient(180deg, #4ab3ff 0%, #1e6de2 100%);
       }
       .i-passwords {
-        background: linear-gradient(180deg, #2c2e34, #15161a);
+        background: linear-gradient(165deg, #282c36 0%, #12141b 100%);
       }
       .i-music {
-        background: linear-gradient(160deg, #ff6ab0, #e11d74);
+        background: linear-gradient(155deg, #ff5f8d 0%, #f42c5c 52%, #cf1552 100%);
       }
       .i-settings {
-        background: linear-gradient(180deg, #d5d7dc, #a8adb8);
+        background: linear-gradient(180deg, #d7dce4 0%, #99a1b0 100%);
       }
       .i-photos {
-        background: linear-gradient(135deg, #ffd76a, #ff7eb3 45%, #7aa2ff);
+        background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
       }
       .i-notes {
-        background: linear-gradient(180deg, #fff7a8, #f3e36a);
+        background: linear-gradient(180deg, #ffffff 0%, #f7f4e9 100%);
       }
       .glyph {
-        width: 58%;
-        height: 58%;
-        display: block;
-      }
-      .i-camera .glyph,
-      .i-maps .glyph,
-      .i-weather .glyph,
-      .i-share .glyph {
         width: 100%;
         height: 100%;
-      }
-      .i-wallet .glyph,
-      .i-mail .glyph,
-      .i-passwords .glyph,
-      .i-music .glyph,
-      .i-settings .glyph {
-        width: 78%;
-        height: 78%;
+        display: block;
       }
       .nav {
         position: absolute;
-        left: 22px;
-        right: 22px;
-        bottom: max(28px, env(safe-area-inset-bottom));
+        left: 20px;
+        right: 20px;
+        bottom: max(26px, env(safe-area-inset-bottom));
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -242,23 +352,44 @@
         height: 56px;
         border-radius: 999px;
         background:
-          linear-gradient(145deg, rgba(255, 255, 255, 0.42), transparent 58%), var(--glass);
+          linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.56) 0%,
+            rgba(255, 255, 255, 0.14) 52%,
+            rgba(180, 232, 255, 0.18) 100%
+          ),
+          var(--glass);
         border: 1px solid var(--glass-border);
-        backdrop-filter: blur(22px) saturate(1.65);
-        -webkit-backdrop-filter: blur(22px) saturate(1.65);
+        backdrop-filter: blur(26px) saturate(1.85);
+        -webkit-backdrop-filter: blur(26px) saturate(1.85);
         box-shadow:
-          0 12px 30px rgba(0, 0, 0, 0.12),
-          inset 0 1px 1px rgba(255, 255, 255, 0.8),
-          inset 0 -10px 15px rgba(93, 226, 226, 0.24);
+          0 16px 36px rgba(15, 23, 42, 0.16),
+          0 2px 8px rgba(15, 23, 42, 0.08),
+          inset 0 1.5px 1px rgba(255, 255, 255, 0.92),
+          inset 0 -8px 16px rgba(96, 205, 235, 0.2);
         display: flex;
         align-items: center;
         gap: 7px;
         padding: 0 6px;
         overflow: hidden;
         transition:
-          width var(--nav-hide-ms) cubic-bezier(0.22, 0.61, 0.36, 1),
+          width var(--nav-hide-ms) cubic-bezier(0.22, 1, 0.36, 1),
           background var(--nav-hide-ms) ease;
         will-change: width;
+      }
+      body.theme-dark .pill {
+        background:
+          linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.14) 0%,
+            rgba(255, 255, 255, 0.02) 55%,
+            rgba(96, 165, 250, 0.12) 100%
+          ),
+          var(--glass);
+        box-shadow:
+          0 18px 36px rgba(0, 0, 0, 0.52),
+          inset 0 1px 0 rgba(255, 255, 255, 0.24),
+          inset 0 -8px 14px rgba(56, 189, 248, 0.12);
       }
       .nav.is-hidden .pill {
         width: 56px;
@@ -275,59 +406,76 @@
         place-items: center;
         cursor: pointer;
         color: var(--text);
+        -webkit-tap-highlight-color: transparent;
         transition:
           background 160ms ease,
           transform 120ms ease,
           opacity var(--nav-hide-ms) ease;
       }
       .pill button[data-tab="profile"] {
-        background: linear-gradient(155deg, #fbfdff, #c9f6f6 75%);
-        border: 1px solid rgba(255, 255, 255, 0.9);
-        box-shadow: 0 3px 10px rgba(53, 132, 159, 0.22);
+        background: linear-gradient(155deg, #ffffff 0%, #c6f0fb 78%);
+        border: 1px solid rgba(255, 255, 255, 0.94);
+        box-shadow:
+          0 4px 12px rgba(37, 99, 235, 0.22),
+          inset 0 1px 1px #ffffff;
         overflow: hidden;
       }
       .pill button[data-tab="profile"] svg {
-        width: 32px;
-        height: 32px;
+        width: 34px;
+        height: 34px;
       }
       .nav.is-hidden .pill button:not([data-tab="profile"]) {
         opacity: 0;
         pointer-events: none;
       }
-      .pill button:hover {
-        background: rgba(0, 0, 0, 0.06);
-      }
-      .pill button[data-tab="profile"]:hover {
-        background: linear-gradient(155deg, #fff, #a9eeee);
+      @media (hover: hover) {
+        .pill button:hover {
+          background: rgba(15, 23, 42, 0.07);
+        }
+        .pill button[data-tab="profile"]:hover {
+          background: linear-gradient(155deg, #ffffff, #ace6f8);
+        }
       }
       .pill button:active {
-        transform: scale(0.94);
+        transform: scale(0.93);
       }
       .pill button.active:not([data-tab="profile"]) {
-        background: color-mix(in srgb, var(--accent) 18%, transparent);
+        background: color-mix(in srgb, var(--accent) 16%, transparent);
         color: var(--accent);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 24%, transparent);
       }
       .fab {
         width: 56px;
         height: 56px;
         border-radius: 50%;
         border: 1px solid var(--glass-border);
-        background: var(--glass);
-        backdrop-filter: blur(22px) saturate(1.65);
-        -webkit-backdrop-filter: blur(22px) saturate(1.65);
+        background:
+          linear-gradient(145deg, rgba(255, 255, 255, 0.56), transparent 62%), var(--glass);
+        backdrop-filter: blur(26px) saturate(1.85);
+        -webkit-backdrop-filter: blur(26px) saturate(1.85);
         box-shadow:
-          0 12px 28px rgba(0, 0, 0, 0.16),
-          inset 0 1px 1px rgba(255, 255, 255, 0.8);
+          0 16px 34px rgba(15, 23, 42, 0.16),
+          0 2px 8px rgba(15, 23, 42, 0.08),
+          inset 0 1.5px 1px rgba(255, 255, 255, 0.92);
         display: grid;
         place-items: center;
         cursor: pointer;
         color: var(--text);
-        font-size: 28px;
+        font-size: 27px;
+        font-weight: 400;
         line-height: 1;
+        -webkit-tap-highlight-color: transparent;
         transition:
-          transform var(--nav-hide-ms) cubic-bezier(0.22, 0.61, 0.36, 1),
+          transform var(--nav-hide-ms) cubic-bezier(0.22, 1, 0.36, 1),
           opacity var(--nav-hide-ms) ease,
           background 160ms ease;
+      }
+      body.theme-dark .fab {
+        background:
+          linear-gradient(145deg, rgba(255, 255, 255, 0.14), transparent 60%), var(--glass);
+        box-shadow:
+          0 18px 34px rgba(0, 0, 0, 0.52),
+          inset 0 1px 0 rgba(255, 255, 255, 0.24);
       }
       .nav.is-hidden .fab {
         opacity: 0;
@@ -335,10 +483,13 @@
         pointer-events: none;
       }
       .fab:active {
-        transform: scale(0.94);
+        transform: scale(0.93);
       }
-      .fab:hover {
-        background: color-mix(in srgb, var(--accent) 14%, var(--glass));
+      @media (hover: hover) {
+        .fab:hover {
+          background: color-mix(in srgb, var(--accent) 14%, var(--glass));
+          color: var(--accent);
+        }
       }
       button:focus-visible,
       .scroller:focus-visible {
@@ -349,6 +500,21 @@
         body {
           padding: 0;
         }
+        .wrap {
+          width: 100%;
+          gap: 0;
+        }
+        .device-chassis {
+          width: 100%;
+          padding: 0;
+          border-radius: 0;
+          background: none;
+          box-shadow: none;
+        }
+        .device-chassis::before,
+        .device-chassis::after {
+          display: none;
+        }
         .phone {
           width: 100%;
           height: 100vh;
@@ -356,6 +522,9 @@
           border-radius: 0;
           border: 0;
           box-shadow: none;
+        }
+        .phone::after {
+          display: none;
         }
         .meta,
         .hint {
@@ -384,108 +553,142 @@
           Scroll the phone screen — the capsule contracts on down-scroll and expands on up-scroll.
         </p>
       </div>
-      <div class="phone" id="phone" aria-label="Hide-on-scroll navbar demo">
-        <div class="status" aria-hidden="true">
-          <span>9:41</span>
-          <span class="pills"><span class="bar"></span></span>
-        </div>
-        <div
-          class="scroller"
-          id="scroller"
-          tabindex="0"
-          role="region"
-          aria-label="Scrollable app grid"
-        >
-          <div class="grid" id="app-grid"></div>
-        </div>
-        <nav class="nav" id="floating-nav" aria-label="Floating toolbar">
-          <div class="pill" role="toolbar" aria-label="Demo views">
-            <button
-              type="button"
-              data-tab="profile"
-              aria-pressed="false"
-              tabindex="-1"
-              aria-label="Profile"
-              title="Profile"
-            >
-              <svg viewBox="0 0 40 40" aria-hidden="true">
-                <path d="M8 37c1-8 6-11 12-11s11 3 12 11" fill="#87b5c4" />
-                <ellipse cx="20" cy="20" rx="10" ry="12" fill="#f3d8c5" />
-                <path
-                  d="M10 18c-2-9 4-15 12-14 5-3 11 2 9 10-3-1-4-4-6-5-2 3-7 5-15 4z"
-                  fill="#263140"
-                />
-                <path d="M10 15l-4 3 6 1m17-7 5 5-5 1" fill="#263140" />
-                <path
-                  d="M11 20c3-3 6-2 9 0 3-2 6-3 9 0m-9 0v2"
-                  fill="none"
-                  stroke="#263140"
-                  stroke-width="1.6"
-                />
-                <circle cx="15" cy="21" r="1.2" fill="#263140" />
-                <circle cx="25" cy="21" r="1.2" fill="#263140" />
-                <path
-                  d="M17 27q3 2 6 0"
-                  fill="none"
-                  stroke="#aa6f64"
+      <div class="device-chassis">
+        <div class="phone" id="phone" aria-label="Hide-on-scroll navbar demo">
+          <div class="status" aria-hidden="true">
+            <span>9:41</span>
+            <div class="island"><span class="island-lens"></span></div>
+            <span class="pills">
+              <svg viewBox="0 0 18 12" fill="currentColor">
+                <rect x="0" y="7" width="3" height="5" rx="1" />
+                <rect x="4.5" y="5" width="3" height="7" rx="1" />
+                <rect x="9" y="2.5" width="3" height="9.5" rx="1" />
+                <rect x="13.5" y="0" width="3" height="12" rx="1" />
+              </svg>
+              <svg viewBox="0 0 26 12" fill="none">
+                <rect
+                  x="1"
+                  y="1"
+                  width="21"
+                  height="10"
+                  rx="3"
+                  stroke="currentColor"
                   stroke-width="1.4"
+                  opacity="0.82"
+                />
+                <rect x="3" y="3" width="15" height="6" rx="1.4" fill="currentColor" />
+                <path
+                  d="M23.5 4.2v3.6"
+                  stroke="currentColor"
+                  stroke-width="1.6"
                   stroke-linecap="round"
+                  opacity="0.6"
                 />
               </svg>
-            </button>
-            <button
-              type="button"
-              data-tab="charts"
-              aria-pressed="false"
-              tabindex="-1"
-              aria-label="Charts"
-              title="Charts"
-            >
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.7"
-              >
-                <path d="M4 16l4-4 3 3 6-7" />
-                <path d="M4 20h16" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              data-tab="list"
-              class="active"
-              aria-label="List"
-              title="List"
-              aria-pressed="true"
-            >
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.7"
-              >
-                <path d="M8 7h11M8 12h11M8 17h11" />
-                <circle cx="5" cy="7" r="1" fill="currentColor" stroke="none" />
-                <circle cx="5" cy="12" r="1" fill="currentColor" stroke="none" />
-                <circle cx="5" cy="17" r="1" fill="currentColor" stroke="none" />
-              </svg>
-            </button>
+            </span>
           </div>
-          <button
-            type="button"
-            class="fab"
-            id="fab"
-            aria-label="Add a sample icon"
-            title="Add a sample icon"
+          <div
+            class="scroller"
+            id="scroller"
+            tabindex="0"
+            role="region"
+            aria-label="Scrollable app grid"
           >
-            +
-          </button>
-        </nav>
+            <div class="grid" id="app-grid"></div>
+          </div>
+          <nav class="nav" id="floating-nav" aria-label="Floating toolbar">
+            <div class="pill" role="toolbar" aria-label="Demo views">
+              <button
+                type="button"
+                data-tab="profile"
+                aria-pressed="false"
+                tabindex="-1"
+                aria-label="Profile"
+                title="Profile"
+              >
+                <svg viewBox="0 0 40 40" aria-hidden="true">
+                  <path d="M8 37c1-8 6-11 12-11s11 3 12 11" fill="#689bb2" />
+                  <ellipse cx="20" cy="20" rx="10" ry="12" fill="#f5dbc8" />
+                  <path
+                    d="M10 18c-2-9 4-15 12-14 5-3 11 2 9 10-3-1-4-4-6-5-2 3-7 5-15 4z"
+                    fill="#1e293b"
+                  />
+                  <path d="M10 15l-4 3 6 1m17-7 5 5-5 1" fill="#1e293b" />
+                  <path
+                    d="M11 20c3-3 6-2 9 0 3-2 6-3 9 0m-9 0v2"
+                    fill="none"
+                    stroke="#1e293b"
+                    stroke-width="1.6"
+                  />
+                  <circle cx="15" cy="21" r="1.2" fill="#1e293b" />
+                  <circle cx="25" cy="21" r="1.2" fill="#1e293b" />
+                  <path
+                    d="M17 27q3 2 6 0"
+                    fill="none"
+                    stroke="#a4695d"
+                    stroke-width="1.4"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </button>
+              <button
+                type="button"
+                data-tab="charts"
+                aria-pressed="false"
+                tabindex="-1"
+                aria-label="Charts"
+                title="Charts"
+              >
+                <svg
+                  width="21"
+                  height="21"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M4 16l4-4 3 3 6-7" />
+                  <path d="M4 20h16" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                data-tab="list"
+                class="active"
+                aria-label="List"
+                title="List"
+                aria-pressed="true"
+              >
+                <svg
+                  width="21"
+                  height="21"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                >
+                  <path d="M8 7h11M8 12h11M8 17h11" />
+                  <circle cx="4.8" cy="7" r="1.15" fill="currentColor" stroke="none" />
+                  <circle cx="4.8" cy="12" r="1.15" fill="currentColor" stroke="none" />
+                  <circle cx="4.8" cy="17" r="1.15" fill="currentColor" stroke="none" />
+                </svg>
+              </button>
+            </div>
+            <button
+              type="button"
+              class="fab"
+              id="fab"
+              aria-label="Add a sample icon"
+              title="Add a sample icon"
+            >
+              +
+            </button>
+          </nav>
+          <div class="home-bar" aria-hidden="true"></div>
+        </div>
       </div>
     </div>
     <!-- usefulshelf-runtime:start -->
@@ -523,7 +726,6 @@
           Translate: "翻译",
           Wallet: "钱包",
           Weather: "天气",
-          cloud: "云朵",
           name: "名称",
         };
         const normalize = (value) => value.replace(/\s+/g, " ").trim();
@@ -619,6 +821,10 @@
             .replace(
               /Files stay on this device\. Maximum (\d+) MB\./g,
               "文件留在此设备，最大 $1 MB。",
+            )
+            .replace(
+              /Packed ([\d,]+) bytes\. CRC32 ([0-9a-f]+)\. Download contains the complete file, ready to decode\./gi,
+              "已打包 $1 字节。CRC32 $2。下载文件包含完整内容，可直接解码。",
             )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
@@ -806,30 +1012,33 @@
         const nav = document.getElementById("floating-nav");
         const threshold = Number(document.body.dataset.hideThreshold || 8);
 
-        const glyphs = {
-          camera:
-            '<svg class="glyph" viewBox="0 0 100 100"><defs><linearGradient id="camera-rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#252930"/><stop offset=".5" stop-color="#6e747d"/><stop offset="1" stop-color="#1b1d22"/></linearGradient><radialGradient id="camera-lens" cx="35%" cy="32%"><stop stop-color="#bfd5f2"/><stop offset=".12" stop-color="#4a6d9b"/><stop offset=".35" stop-color="#172849"/><stop offset=".7" stop-color="#12161e"/><stop offset="1" stop-color="#030406"/></radialGradient></defs><circle cx="50" cy="50" r="38" fill="url(#camera-rim)" stroke="#959aa3" stroke-width="1.5"/><circle cx="50" cy="50" r="31" fill="#101114" stroke="#252830" stroke-width="3"/><circle cx="50" cy="50" r="25" fill="url(#camera-lens)" stroke="#505561" stroke-width="1.5"/><path d="M37 36c9-9 20-8 26-4" fill="none" stroke="#dfefff" stroke-opacity=".56" stroke-width="4" stroke-linecap="round"/><path d="M46 66q15 5 22-8" fill="none" stroke="#79b9ec" stroke-opacity=".7" stroke-width="3" stroke-linecap="round"/><circle cx="42" cy="41" r="5" fill="#d8ecff" opacity=".82"/></svg>',
-          maps: '<svg class="glyph" viewBox="0 0 100 100"><path d="M0 28 44 54 0 76" fill="#f17eb4"/><path d="M48 0v100" stroke="#f9fafc" stroke-width="8"/><path d="M3 5 94 96" stroke="#f7f8fb" stroke-width="10"/><path d="M0 98 99 21" stroke="#f7f8fb" stroke-width="8"/><circle cx="50" cy="50" r="26" fill="#fff"/><circle cx="50" cy="50" r="21" fill="#1683e8"/><path d="M50 31 61 67 50 59 39 67z" fill="#fff"/></svg>',
-          weather:
-            '<svg class="glyph" viewBox="0 0 100 100"><defs><linearGradient id="cloud" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#bfd8f7"/></linearGradient></defs><circle cx="66" cy="39" r="23" fill="#ffda54" stroke="#fff0a3" stroke-width="2"/><path d="M21 69c-6-16 6-28 20-27 7-17 29-20 38-4 13 0 20 11 15 22 1 15-11 24-24 23H38c-9 0-15-5-17-14z" fill="url(#cloud)" stroke="#fff" stroke-width="2"/><path d="M31 68q29 5 48-8" fill="none" stroke="#fff" stroke-opacity=".76" stroke-width="3"/></svg>',
-          share:
-            '<svg class="glyph" viewBox="0 0 100 100"><defs><linearGradient id="airwave" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d9f4ff"/><stop offset="1" stop-color="#92cfff"/></linearGradient></defs><circle cx="50" cy="51" r="37" fill="none" stroke="url(#airwave)" stroke-opacity=".55" stroke-width="9"/><path d="M18 69a45 45 0 0 1 64 0M31 61a27 27 0 0 1 38 0" fill="none" stroke="url(#airwave)" stroke-width="8" stroke-linecap="round"/><circle cx="50" cy="54" r="11" fill="#e5f7ff" stroke="#fff" stroke-width="3"/></svg>',
-          translate:
-            '<svg class="glyph" viewBox="0 0 100 100"><rect x="28" y="28" width="40" height="34" rx="10" fill="#fff"/><text x="40" y="52" font-size="22" font-family="system-ui" fill="#555">A</text><rect x="40" y="40" width="40" height="34" rx="10" fill="#2c2e34"/><text x="50" y="64" font-size="20" font-family="system-ui" fill="#fff">文</text></svg>',
-          wallet:
-            '<svg class="glyph" viewBox="0 0 100 100"><rect x="22" y="30" width="56" height="44" rx="8" fill="#8b909a"/><rect x="28" y="24" width="44" height="10" rx="3" fill="#f5c542"/><rect x="30" y="20" width="40" height="8" rx="3" fill="#f08a2a"/><rect x="32" y="16" width="36" height="8" rx="3" fill="#e24b4b"/><rect x="34" y="12" width="32" height="8" rx="3" fill="#4d8dff"/></svg>',
-          mail: '<svg class="glyph" viewBox="0 0 100 100"><rect x="18" y="30" width="64" height="44" rx="8" fill="rgba(255,255,255,.92)"/><path d="M22 34l28 22 28-22" fill="none" stroke="#7aa" stroke-width="3"/></svg>',
-          passwords:
-            '<svg class="glyph" viewBox="0 0 100 100"><g transform="translate(18,22)"><rect x="8" y="8" width="14" height="52" rx="7" fill="#f5d24a"/><circle cx="15" cy="15" r="10" fill="#f5d24a"/><rect x="28" y="8" width="14" height="52" rx="7" fill="#5ee0c4"/><circle cx="35" cy="15" r="10" fill="#5ee0c4"/><rect x="48" y="8" width="14" height="52" rx="7" fill="#5aa8ff"/><circle cx="55" cy="15" r="10" fill="#5aa8ff"/></g></svg>',
-          music:
-            '<svg class="glyph" viewBox="0 0 100 100"><path d="M38 70V30l34-8v40" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round"/><circle cx="38" cy="72" r="12" fill="#fff"/><circle cx="72" cy="62" r="12" fill="#fff"/></svg>',
-          settings:
-            '<svg class="glyph" viewBox="0 0 100 100"><g fill="#f5f6f8" stroke="#c5c8d0" stroke-width="2"><circle cx="50" cy="50" r="14"/><path d="M50 18l4 10 10-2 2 10 10 4-2 10 10 4-10 4-4 10-10-2-4 10-10-4-2-10-10-4 2-10-10-4 10-4 4-10z" opacity=".9"/></g></svg>',
-          photos:
-            '<svg class="glyph" viewBox="0 0 100 100"><circle cx="34" cy="36" r="10" fill="#fff" opacity=".9"/><path d="M16 72l22-24 14 16 10-12 22 20z" fill="#fff" opacity=".85"/></svg>',
-          notes:
-            '<svg class="glyph" viewBox="0 0 100 100"><rect x="24" y="18" width="52" height="64" rx="6" fill="#fff"/><path d="M34 34h32M34 46h32M34 58h22" stroke="#c9b84a" stroke-width="4" stroke-linecap="round"/></svg>',
-        };
+        let glyphUid = 0;
+        function buildGlyph(name) {
+          const u = "g" + ++glyphUid;
+          if (name === "camera")
+            return `<svg class="glyph" viewBox="0 0 100 100"><defs><linearGradient id="${u}b" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3a404c"/><stop offset=".5" stop-color="#8b929f"/><stop offset="1" stop-color="#191c22"/></linearGradient><radialGradient id="${u}l" cx="35%" cy="32%" r="68%"><stop stop-color="#d8eeff"/><stop offset=".16" stop-color="#4e7ec2"/><stop offset=".42" stop-color="#13254b"/><stop offset=".75" stop-color="#0d111a"/><stop offset="1" stop-color="#040507"/></radialGradient></defs><rect x="12" y="25" width="76" height="54" rx="14" fill="#232730"/><path d="M34 25l5-8h22l5 8z" fill="#2c313c"/><circle cx="75" cy="34" r="3.4" fill="#f59e0b"/><circle cx="50" cy="52" r="24" fill="url(#${u}b)" stroke="#c8ced9" stroke-width="1.5"/><circle cx="50" cy="52" r="19" fill="#0d0f14" stroke="#2f3542" stroke-width="2.2"/><circle cx="50" cy="52" r="14.5" fill="url(#${u}l)"/><path d="M41 44c6-5 13-5 17-2" fill="none" stroke="#e4f3ff" stroke-opacity=".75" stroke-width="2.6" stroke-linecap="round"/><path d="M47 62q9 3 13-5" fill="none" stroke="#60a5fa" stroke-opacity=".75" stroke-width="2" stroke-linecap="round"/><circle cx="44" cy="46" r="2.8" fill="#ffffff" opacity=".88"/></svg>`;
+          if (name === "maps")
+            return `<svg class="glyph" viewBox="0 0 100 100"><rect width="100" height="100" fill="#eef2f6"/><path d="M0 0h52v46H0z" fill="#b7eb94"/><path d="M52 0h48v44H52z" fill="#fde597"/><path d="M0 46h46v54H0z" fill="#a8d8ff"/><path d="M46 44h54v56H46z" fill="#f9cbd9"/><path d="M52 0v100" stroke="#ffffff" stroke-width="9"/><path d="M0 46h100" stroke="#ffffff" stroke-width="9"/><path d="M0 95L96 8" stroke="#fef3c7" stroke-width="8"/><path d="M0 95L96 8" stroke="#ffffff" stroke-width="4"/><circle cx="52" cy="52" r="24" fill="#ffffff"/><circle cx="52" cy="52" r="19" fill="#1d7af3"/><path d="M52 37l10 27-10-6.5L42 64z" fill="#ffffff"/></svg>`;
+          if (name === "weather")
+            return `<svg class="glyph" viewBox="0 0 100 100"><defs><radialGradient id="${u}s" cx="42%" cy="38%"><stop stop-color="#fff4ad"/><stop offset=".6" stop-color="#ffca3a"/><stop offset="1" stop-color="#f59e0b"/></radialGradient><linearGradient id="${u}c" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#cfe4fc"/></linearGradient></defs><circle cx="64" cy="36" r="27" fill="#ffdf6e" opacity=".32"/><circle cx="64" cy="36" r="18" fill="url(#${u}s)"/><ellipse cx="48" cy="76" rx="30" ry="6" fill="#0f3478" opacity=".26"/><path d="M23 73c-9 0-14-7-12-15 2-8 10-12 17-10 4-12 19-16 29-7 5-3 13-1 16 4 9 0 15 8 13 17-2 7-8 11-16 11z" fill="url(#${u}c)"/><path d="M26 67q24 4 46-6" fill="none" stroke="#ffffff" stroke-opacity=".85" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+          if (name === "share")
+            return `<svg class="glyph" viewBox="0 0 100 100"><defs><radialGradient id="${u}o" cx="40%" cy="34%"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#93c5fd"/></radialGradient></defs><path d="M21 67a34 34 0 1 1 58 0" fill="none" stroke="#e0f2fe" stroke-opacity=".42" stroke-width="6" stroke-linecap="round"/><path d="M29 63a24 24 0 1 1 42 0" fill="none" stroke="#e0f2fe" stroke-opacity=".74" stroke-width="6" stroke-linecap="round"/><path d="M38 59a13.5 13.5 0 1 1 24 0" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/><circle cx="50" cy="63" r="8.5" fill="url(#${u}o)"/><path d="M44 76h12" stroke="#bae6fd" stroke-opacity=".7" stroke-width="4" stroke-linecap="round"/></svg>`;
+          if (name === "translate")
+            return `<svg class="glyph" viewBox="0 0 100 100"><rect x="17" y="20" width="44" height="39" rx="11" fill="#ffffff"/><text x="39" y="47" text-anchor="middle" font-size="25" font-weight="700" font-family="system-ui" fill="#1e293b">A</text><rect x="39" y="41" width="44" height="39" rx="11" fill="#38bdf8"/><text x="61" y="68" text-anchor="middle" font-size="22" font-weight="700" font-family="system-ui" fill="#082f49">文</text></svg>`;
+          if (name === "wallet")
+            return `<svg class="glyph" viewBox="0 0 100 100"><rect x="18" y="22" width="64" height="14" rx="5" fill="#38bdf8"/><rect x="18" y="29" width="64" height="14" rx="5" fill="#fbbf24"/><rect x="18" y="36" width="64" height="14" rx="5" fill="#34d399"/><rect x="18" y="43" width="64" height="14" rx="5" fill="#f87171"/><path d="M16 48h21a13 13 0 0 0 26 0h21v28a9 9 0 0 1-9 9H25a9 9 0 0 1-9-9z" fill="#e2e8f0"/></svg>`;
+          if (name === "mail")
+            return `<svg class="glyph" viewBox="0 0 100 100"><rect x="16" y="26" width="68" height="48" rx="10" fill="#ffffff"/><path d="M20 31l30 24 30-24" fill="none" stroke="#3b82f6" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 69l20-17M80 69L60 52" fill="none" stroke="#bfdbfe" stroke-width="3.2" stroke-linecap="round"/></svg>`;
+          if (name === "passwords")
+            return `<svg class="glyph" viewBox="0 0 100 100"><g transform="translate(15,20)"><circle cx="15" cy="18" r="10.5" fill="none" stroke="#fbbf24" stroke-width="5"/><path d="M15 28.5v26M15 44h6M15 51h5" stroke="#fbbf24" stroke-width="5" stroke-linecap="round"/><circle cx="35" cy="18" r="10.5" fill="none" stroke="#34d399" stroke-width="5"/><path d="M35 28.5v26M35 44h6M35 51h5" stroke="#34d399" stroke-width="5" stroke-linecap="round"/><circle cx="55" cy="18" r="10.5" fill="none" stroke="#60a5fa" stroke-width="5"/><path d="M55 28.5v26M55 44h6M55 51h5" stroke="#60a5fa" stroke-width="5" stroke-linecap="round"/></g></svg>`;
+          if (name === "music")
+            return `<svg class="glyph" viewBox="0 0 100 100"><path d="M39 67V29l34-8v38" fill="none" stroke="#ffffff" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M39 39l34-8" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/><ellipse cx="32" cy="69" rx="11" ry="8.5" transform="rotate(-14 32 69)" fill="#ffffff"/><ellipse cx="66" cy="60" rx="11" ry="8.5" transform="rotate(-14 66 60)" fill="#ffffff"/></svg>`;
+          if (name === "settings")
+            return `<svg class="glyph" viewBox="0 0 100 100"><circle cx="50" cy="50" r="31" fill="none" stroke="#334155" stroke-width="9" stroke-dasharray="9 7.2"/><circle cx="50" cy="50" r="22" fill="#e2e8f0" stroke="#475569" stroke-width="4.5"/><circle cx="50" cy="50" r="9.5" fill="#475569"/></svg>`;
+          if (name === "photos")
+            return `<svg class="glyph" viewBox="0 0 100 100"><g opacity=".88"><ellipse cx="50" cy="27" rx="11" ry="18" fill="#fb923c"/><ellipse cx="66" cy="34" rx="11" ry="18" transform="rotate(45 66 34)" fill="#facc15"/><ellipse cx="73" cy="50" rx="11" ry="18" transform="rotate(90 73 50)" fill="#4ade80"/><ellipse cx="66" cy="66" rx="11" ry="18" transform="rotate(135 66 66)" fill="#2dd4bf"/><ellipse cx="50" cy="73" rx="11" ry="18" fill="#38bdf8"/><ellipse cx="34" cy="66" rx="11" ry="18" transform="rotate(45 34 66)" fill="#60a5fa"/><ellipse cx="27" cy="50" rx="11" ry="18" transform="rotate(90 27 50)" fill="#c084fc"/><ellipse cx="34" cy="34" rx="11" ry="18" transform="rotate(135 34 34)" fill="#fb7185"/></g><circle cx="50" cy="50" r="9" fill="#ffffff"/></svg>`;
+          return `<svg class="glyph" viewBox="0 0 100 100"><rect width="100" height="27" fill="#fbbf24"/><line x1="0" y1="27" x2="100" y2="27" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4 3"/><line x1="18" y1="45" x2="82" y2="45" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round"/><line x1="18" y1="60" x2="82" y2="60" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round"/><line x1="18" y1="75" x2="62" y2="75" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+        }
 
         function appendApp(app) {
           const item = document.createElement("div");
@@ -838,7 +1047,7 @@
           icon.className = "icon i-" + app.glyph;
           icon.setAttribute("aria-hidden", "true");
           // Only bundled, validated glyphs supply SVG markup.
-          icon.innerHTML = glyphs[app.glyph];
+          icon.innerHTML = buildGlyph(app.glyph);
           const label = document.createElement("div");
           label.className = "label";
           label.textContent = app.label;

@@ -45,15 +45,16 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ```css
 :root {
   --accent: #d6ef82;
-  --ink: #f4f2eb;
-  --muted: #92948c;
-  --bg: #161916;
-  --line: #343a32;
-  --cw: 260px;
-  --ch: 360px;
+  --ink: #f5f2ea;
+  --muted: #a1a89d;
+  --bg: #101311;
+  --surface: #181c19;
+  --line: rgba(255, 255, 255, 0.1);
+  --cw: 256px;
+  --ch: 350px;
 }
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 ```
 
@@ -72,9 +73,10 @@ body {
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### Perspective composition
 
-Seven cards are drawn in an isolated perspective stage. Each card has a native button wrapper, a locally constructed SVG poster, and a solid dark caption strip. This keeps text legible independently of the poster colors. The center card is largest and brightest; adjacent cards turn into the arc and recede. Dark olive surfaces and small lime accents define the surrounding interface.
+Seven collector-edition cards are drawn in an isolated 3D perspective gallery stage (`#101311`). Each card has a native button wrapper, a multi-layered art-directed inline SVG poster with diagonal glass sheen and specular edge rim lighting, and a frosted dark glass caption strip for guaranteed legibility. The center card is largest and illuminated by an overhead gallery spotlight and a dynamic color-matched ambient floor glow (`--stage-glow`); adjacent cards turn smoothly into the arc and recede. Tactile hardware pill controls and an expanding pill-dot indicator sit cleanly below the stage.
 
 #### Geometry
 

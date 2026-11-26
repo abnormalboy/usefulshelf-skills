@@ -45,9 +45,12 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ```css
 :root {
   --accent: #f06c45;
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  color: #293631;
-  background: #f3f2ed;
+  --ink: #1e2a24;
+  --muted: #46554b;
+  --rule: rgba(30, 42, 36, 0.14);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", Inter, ui-sans-serif, system-ui, sans-serif;
+  color: var(--ink);
+  background: #eceae2;
 }
 ```
 
@@ -69,15 +72,16 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
-### Sidebar as a creative tool
 
-The sidebar expands from an icon rail into labeled collections. Hover or keyboard focus reveals a small set of real vector thumbnails, while selecting a collection changes the available stickers. This preserves the relationship between navigation and the canvas; a selected collection never destroys the existing composition.
+### Sidebar as a creative vinyl sticker studio
 
-The composition stores independent shape, color, position and rotation for each sticker. Shape markup is a closed local vocabulary, not user-provided HTML. A maximum of twelve stickers keeps pointer and keyboard manipulation manageable. Adding, rotating, recoloring, mixing and deleting all update that same state. Arrow keys move the focused sticker; Delete removes it. Keep keyboard focus on the selected sticker after rendering and restore focus to the tray if none remain.
+The collapsible sidebar (`224px` expanded / `68px` collapsed) transitions cleanly from an icon rail into labeled collections with elevated floating vector flyout sheets. Selecting a collection updates the active ink and tray stickers without clearing existing canvas stickers.
 
-Use SVG coordinates for manipulation. Account for both scale and the letterbox offset introduced by preserveAspectRatio when converting pointer coordinates. Pointer capture keeps dragging stable outside the object bounds. The same SVG is cloned for export, with selection indicators and editor attributes removed. Give labels explicit presentation attributes when they must survive outside the page's CSS. Exports contain editable vectors and no external resources.
+#### Die-cut vinyl stickers & cutting mat
+Core tokens: `--accent: #f06c45`, `--ink: #1e2a24`, `--muted: #46554b`, desk `#eceae2`, cutting mat `#cad7c7` → `#bdccb9` with subtle metric grid rules framing the cream micro-dot sticker sheet (`#fffdf7`). Each of the nine illustrated stickers (`smile`, `flower`, `star`, `planet`, `cloud`, `bolt`, `leaf`, `heart`, `spark`) renders with a thick glossy white die-cut kiss-cut border, subtle hairline edge contour, crisp ink details, and a lifted `#vinyl-peel` drop shadow.
 
-On narrow screens the sidebar starts collapsed and all controls remain reachable. Reduced motion disables expansion and tray transitions. In an iframe, export needs allow-downloads. Validate that adding from another collection retains old stickers, exported SVG opens independently, keyboard nudges preserve focus, and pointer positioning remains correct after resizing.
+#### Manipulation & export
+Up to twelve stickers each store shape, color, position and rotation. Quick vinyl color swatches supplement the native `#ink` color picker. Arrow keys nudge the focused sticker, Delete removes it, and focus is restored cleanly after re-rendering. Pointer dragging uses SVG coordinate math accounting for `preserveAspectRatio` letterboxing and pointer capture. Exporting clones `#board`, strips `.selection` and editor attributes (`tabindex`, `role`, `aria-*`, `data-id`), and produces a self-contained `1120 × 680` editable SVG.
 
 ## 可选完整包工作流 / Optional package workflow
 

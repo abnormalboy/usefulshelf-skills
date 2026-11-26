@@ -45,12 +45,13 @@ Canvas2D 在椭圆轨道上呈现八种程序几何球体，伸展滑杆改变�
 ```css
 :root {
   --accent: #b64828;
-  --paper: #eeeae2;
-  --ink: #302e28;
-  --muted: #57544c;
+  --paper: #f1ede4;
+  --plinth: #faf7f0;
+  --ink: #22201b;
+  --muted: #595449;
 }
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
 }
 ```
 
@@ -72,11 +73,11 @@ The following specification is included in full so this document works without a
 
 ### Composition and interaction
 
-Canvas is a decorative view of an accessible object selection interface. Swatches and arrow buttons expose every item without requiring precise dragging. Horizontal gestures rotate; vertical touch gestures remain available for page scrolling. The spread slider changes the ellipse radii. The display uses Canvas 2D, not WebGL. Textures are original generated geometry, not photographs.
+Canvas is a decorative view of an accessible object selection interface. Swatches and arrow buttons expose every item without requiring precise dragging. Horizontal gestures rotate; vertical touch gestures remain available for page scrolling. The spread slider changes the ellipse radii. The display uses Canvas 2D, not WebGL. Textures are eight distinct original Bauhaus/Constructivist geometric medallions drawn procedurally, not photographs.
 
 #### Visual system
 
-Warm paper, muted borders, a small monospaced label system, and large editorial typography establish hierarchy. Artwork is drawn directly in SVG or Canvas with a constrained earthy palette. No external assets are requested. Preserve generous central whitespace and clear separation between controls and art.
+Warm architectural travertine linen (`#f1ede4`), elevated museum plinth surfaces (`#faf7f0`), hairline architectural orbit tracks and crosshairs, editorial typography, and eight richly patterned ceramic-glazed discs with rim highlights and depth-proportional drop shadows establish gallery-grade hierarchy. No external assets are requested. Preserve generous central whitespace and clear separation between controls and art.
 
 #### Motion lifecycle
 

@@ -7,16 +7,34 @@
     <style>
       :root {
         --accent: #454bc5;
-        font-family: Arial, "PingFang SC", sans-serif;
-        color: #282727;
-        background: #faf9f6;
+        --bg: #f8f6f0;
+        --surface: #ffffff;
+        --ink: #1e1d1a;
+        --muted: #58534a;
+        --rule: #dcd7cc;
+        --rule-strong: #c5bfb2;
+        font-family:
+          "SF Pro Display",
+          "Helvetica Neue",
+          -apple-system,
+          BlinkMacSystemFont,
+          "PingFang SC",
+          "Hiragino Sans GB",
+          "Noto Sans SC",
+          sans-serif;
+        color: var(--ink);
+        background: var(--bg);
         color-scheme: light;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       * {
         box-sizing: border-box;
       }
       body {
         margin: 0;
+        background-color: var(--bg);
+        color: var(--ink);
       }
       button,
       input {
@@ -24,77 +42,136 @@
       }
       button {
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
       }
       button:focus-visible,
       input:focus-visible {
         outline: 2px solid var(--accent);
-        outline-offset: 5px;
+        outline-offset: 3px;
       }
       .shell {
-        max-width: 1200px;
-        padding: 27px 5%;
+        max-width: 1180px;
+        padding: 18px 4.5% 20px;
         margin: auto;
-        min-height: 730px;
       }
       header {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         gap: 15px;
-        font: 10px monospace;
-        color: #5c5850;
+        font:
+          500 0.72rem/1 ui-monospace,
+          "SF Mono",
+          Menlo,
+          monospace;
+        color: var(--muted);
         letter-spacing: 0.12em;
-        border-bottom: 1px solid #dedbd5;
-        padding-bottom: 18px;
+        border-bottom: 1px solid var(--rule);
+        padding-bottom: 13px;
       }
       .brand {
-        color: #3a3834;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--ink);
+        font-weight: 700;
+      }
+      .brand::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        background: var(--accent);
+        transform: rotate(45deg);
+      }
+      .heading-block {
+        text-align: center;
+        margin: 16px auto 14px;
       }
       h1 {
         text-align: center;
-        font-size: clamp(28px, 3.5vw, 44px);
-        font-weight: 500;
-        letter-spacing: -0.045em;
-        margin: 29px 0 10px;
+        font-size: clamp(1.9rem, 3.3vw, 2.75rem);
+        font-weight: 600;
+        letter-spacing: -0.04em;
+        line-height: 1.1;
+        margin: 0 0 8px;
         white-space: pre-line;
         overflow-wrap: anywhere;
+        color: var(--ink);
+        text-wrap: balance;
+      }
+      :lang(zh) h1 {
+        letter-spacing: -0.02em;
+        line-height: 1.18;
       }
       .intro {
-        font-size: 12px;
-        line-height: 1.8;
-        color: #5c5850;
+        font-size: 0.875rem;
+        line-height: 1.6;
+        color: var(--muted);
         text-align: center;
         margin: 0 auto;
-        max-width: 680px;
+        max-width: 62ch;
+        text-wrap: pretty;
+      }
+      /* Outer frame holds the border so #arena keeps border: 0 (border-box === padding-box for exact hotspot alignment!) */
+      .arena-frame {
+        border: 1px solid var(--rule);
+        border-radius: 18px;
+        overflow: hidden;
+        background: var(--surface);
+        box-shadow:
+          0 18px 42px rgba(38, 34, 26, 0.07),
+          inset 0 1px 0 rgba(255, 255, 255, 0.9);
       }
       .arena {
-        height: 270px;
+        height: 278px;
         position: relative;
-        margin-top: 15px;
-        border-radius: 8px;
-        background-image: radial-gradient(#d9d6ce 0.6px, transparent 0.6px);
-        background-size: 18px 18px;
+        background-color: var(--surface);
+        background-image:
+          linear-gradient(to right, rgba(30, 29, 26, 0.045) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(30, 29, 26, 0.045) 1px, transparent 1px),
+          radial-gradient(rgba(30, 29, 26, 0.14) 0.75px, transparent 0.75px);
+        background-size:
+          100px 100px,
+          100px 100px,
+          20px 20px;
+        background-position:
+          center center,
+          center center,
+          center center;
         overflow: hidden;
+      }
+      .arena::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 220px;
+        height: 220px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        border: 1px dashed rgba(30, 29, 26, 0.12);
+        pointer-events: none;
       }
       .arena::after {
         content: "";
         position: absolute;
         inset: 0;
-        box-shadow: inset 0 0 50px 35px #faf9f6;
+        box-shadow: inset 0 0 42px 18px rgba(255, 255, 255, 0.72);
         pointer-events: none;
       }
       .cursor {
         position: absolute;
         left: 50%;
         top: 50%;
-        width: 170px;
-        height: 170px;
+        width: 150px;
+        height: 150px;
         transform: translate(-50%, -50%);
-        filter: drop-shadow(7px 12px 9px #38373126);
+        filter: drop-shadow(6px 12px 12px rgba(30, 29, 26, 0.16));
         pointer-events: none;
         z-index: 3;
         transition:
-          width 0.2s,
-          height 0.2s;
+          width 0.2s ease,
+          height 0.2s ease;
       }
       .cursor svg {
         width: 100%;
@@ -109,67 +186,107 @@
       }
       .arena-note {
         position: absolute;
-        left: 20px;
-        top: 18px;
-        font: 9px monospace;
-        color: #625d54;
+        left: 18px;
+        top: 14px;
+        font:
+          500 0.68rem/1 ui-monospace,
+          "SF Mono",
+          Menlo,
+          monospace;
+        letter-spacing: 0.1em;
+        color: var(--muted);
         z-index: 4;
         pointer-events: none;
+        background: rgba(255, 255, 255, 0.85);
+        padding: 4px 8px;
+        border-radius: 4px;
+        border: 1px solid rgba(30, 29, 26, 0.08);
       }
       .specimen {
         position: absolute;
-        bottom: 20px;
-        right: 22px;
-        font: 9px monospace;
-        color: #625d54;
+        bottom: 14px;
+        right: 18px;
+        font:
+          600 0.7rem/1 ui-monospace,
+          "SF Mono",
+          Menlo,
+          monospace;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.1em;
+        color: var(--ink);
         z-index: 4;
         pointer-events: none;
+        background: rgba(255, 255, 255, 0.88);
+        padding: 5px 9px;
+        border-radius: 4px;
+        border: 1px solid rgba(30, 29, 26, 0.1);
       }
       .target {
         position: absolute;
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
-        border: 1px dashed var(--accent);
+        border: 1.5px dashed var(--accent);
         color: var(--accent);
-        background: #faf9f6;
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow:
+          0 0 0 5px color-mix(in srgb, var(--accent) 12%, transparent),
+          0 4px 12px rgba(30, 29, 26, 0.1);
         z-index: 2;
         transform: translate(-50%, -50%);
-        font: 13px monospace;
+        font:
+          700 0.85rem/1 ui-monospace,
+          "SF Mono",
+          Menlo,
+          monospace;
         cursor: none;
+        padding: 0;
+        display: grid;
+        place-items: center;
       }
       .target:disabled {
         background: var(--accent);
-        color: white;
+        color: #ffffff;
         border-style: solid;
-        opacity: 0.5;
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent);
+        opacity: 0.78;
       }
       .target[hidden] {
         display: none;
       }
       .epoch {
-        text-align: center;
-        margin-top: 3px;
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 14px;
+        margin-top: 14px;
       }
       .year {
         font:
-          33px Georgia,
+          600 2.05rem/1 Georgia,
+          "Songti SC",
           serif;
-        letter-spacing: -0.04em;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.03em;
+        color: var(--ink);
       }
       .era-name {
-        font-size: 11px;
-        color: #5e5951;
-        margin-top: 6px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--muted);
+        padding: 4px 11px;
+        border-radius: 999px;
+        background: var(--surface);
+        border: 1px solid var(--rule);
       }
       .timeline {
-        max-width: 760px;
-        margin: 24px auto 0;
+        max-width: 780px;
+        margin: 12px auto 0;
         position: relative;
-        padding-top: 4px;
+        padding: 6px 0 0;
       }
       .bars {
-        height: 45px;
+        height: 44px;
         display: flex;
         gap: 4px;
         align-items: flex-end;
@@ -178,12 +295,16 @@
       .bars i {
         flex: 1;
         min-width: 0;
-        background: #ddd9d1;
+        background: #d8d3c8;
         display: block;
-        border-radius: 1px;
+        border-radius: 2px 2px 0 0;
+        transition:
+          height 0.18s ease,
+          background-color 0.18s ease;
       }
       .bars i.active {
         background: var(--accent);
+        box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 42%, transparent);
       }
       #era {
         position: absolute;
@@ -195,62 +316,124 @@
         cursor: ew-resize;
       }
       #era:focus-visible {
-        outline-offset: 7px;
+        outline-offset: 6px;
       }
       .ends {
         display: flex;
         justify-content: space-between;
-        color: #615c53;
-        font: 10px monospace;
-        margin-top: 10px;
+        color: var(--muted);
+        font:
+          500 0.7rem/1 ui-monospace,
+          "SF Mono",
+          Menlo,
+          monospace;
+        font-variant-numeric: tabular-nums;
+        margin-top: 8px;
+      }
+      .ends span.active {
+        color: var(--accent);
+        font-weight: 700;
       }
       .controls {
-        border-top: 1px solid #dedbd5;
+        background: var(--surface);
+        border: 1px solid var(--rule);
+        border-radius: 16px;
         display: grid;
-        grid-template-columns: 1fr 1fr auto;
-        gap: 30px;
+        grid-template-columns: minmax(180px, 1fr) auto auto;
+        gap: 28px;
         align-items: center;
-        padding-top: 21px;
-        margin-top: 25px;
+        padding: 14px 20px;
+        margin-top: 16px;
+        box-shadow: 0 10px 26px rgba(38, 34, 26, 0.05);
       }
       .row {
         display: flex;
         justify-content: space-between;
+        align-items: baseline;
         gap: 12px;
-        font-size: 10px;
-        color: #5a534a;
-        margin-bottom: 10px;
+        font-size: 0.78rem;
+        font-weight: 500;
+        color: var(--muted);
+        margin-bottom: 8px;
+      }
+      .row output {
+        font:
+          600 0.78rem/1 ui-monospace,
+          "SF Mono",
+          Menlo,
+          monospace;
+        font-variant-numeric: tabular-nums;
+        color: var(--ink);
       }
       input[type="range"] {
-        accent-color: var(--accent);
+        -webkit-appearance: none;
+        appearance: none;
         width: 100%;
+        height: 6px;
+        border-radius: 999px;
+        background: #e1dcd1;
+        accent-color: var(--accent);
         cursor: pointer;
+        margin: 6px 0;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 3px solid var(--accent);
+        box-shadow: 0 2px 8px rgba(30, 29, 26, 0.22);
+      }
+      input[type="range"]::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 3px solid var(--accent);
+        box-shadow: 0 2px 8px rgba(30, 29, 26, 0.22);
       }
       .colors {
         display: flex;
-        gap: 8px;
+        gap: 10px;
+        align-items: center;
       }
       .colors button {
-        height: 29px;
-        width: 29px;
+        height: 34px;
+        width: 34px;
+        min-height: 34px;
         border-radius: 50%;
         padding: 0;
-        border: 4px solid #faf9f6;
-        outline: 1px solid #d0c9bb;
+        border: 3px solid var(--surface);
+        box-shadow: 0 0 0 1px #bfb8aa;
       }
       .colors button[aria-pressed="true"] {
-        outline: 2px solid var(--accent);
+        box-shadow:
+          0 0 0 2px var(--accent),
+          0 3px 10px rgba(30, 29, 26, 0.16);
       }
       button {
-        border: 1px solid #cbc5b9;
-        border-radius: 22px;
-        padding: 11px 16px;
+        border: 1px solid var(--rule-strong);
+        border-radius: 999px;
+        padding: 10px 18px;
+        min-height: 40px;
         background: transparent;
-        color: #4f483e;
-        font-size: 11px;
+        color: var(--ink);
+        font-size: 0.82rem;
+        font-weight: 500;
+        transition:
+          background-color 0.18s ease,
+          border-color 0.18s ease;
       }
-      button:hover {
-        filter: brightness(0.9);
+      @media (hover: hover) {
+        button:hover:not(.primary):not(.target):not([data-color]) {
+          background: #f2eee6;
+          border-color: #9e9688;
+        }
+        .actions .primary:hover {
+          background: #33312b;
+        }
       }
       .actions {
         display: flex;
@@ -259,20 +442,26 @@
         justify-content: flex-end;
       }
       .actions .primary {
-        background: #282727;
-        color: #fff;
-        border-color: #282727;
+        background: var(--ink);
+        color: #ffffff;
+        border-color: var(--ink);
+        font-weight: 600;
       }
       footer {
-        margin-top: 22px;
+        margin-top: 14px;
         display: flex;
         justify-content: space-between;
-        gap: 22px;
-        font: 9px/1.8 monospace;
-        color: #5f5a51;
+        align-items: center;
+        gap: 18px;
+        font:
+          500 0.7rem/1.6 ui-monospace,
+          "SF Mono",
+          Menlo,
+          monospace;
+        color: var(--muted);
       }
       #status {
-        color: #54483a;
+        color: #3e3a32;
       }
       .sr {
         position: absolute;
@@ -281,53 +470,54 @@
         overflow: hidden;
         clip-path: inset(50%);
       }
-      @media (max-width: 700px) {
+      @media (max-width: 820px) {
         .shell {
-          padding: 22px;
+          padding: 16px 18px 20px;
         }
         header {
-          font-size: 8px;
+          font-size: 0.66rem;
         }
         h1 {
-          font-size: 32px;
-          margin-top: 27px;
+          font-size: 1.95rem;
         }
         .intro {
-          font-size: 11px;
+          font-size: 0.82rem;
         }
         .arena {
-          height: 260px;
+          height: 246px;
         }
         .controls {
-          grid-template-columns: 1fr 1fr;
-          gap: 20px;
+          grid-template-columns: 1fr;
+          gap: 16px;
+          padding: 14px 16px;
         }
         .actions {
-          grid-column: 1/-1;
           justify-content: stretch;
         }
         .actions button {
           flex: 1;
-          padding: 12px;
         }
         .bars {
           gap: 3px;
         }
         .cursor {
-          width: 150px;
-          height: 150px;
+          width: 138px;
+          height: 138px;
         }
         footer {
           flex-direction: column;
-          gap: 6px;
+          align-items: flex-start;
+          gap: 5px;
         }
         .arena-note {
-          left: 12px;
-          font-size: 8px;
+          left: 10px;
+          top: 10px;
+          font-size: 0.62rem;
         }
         .specimen {
-          right: 12px;
-          font-size: 8px;
+          right: 10px;
+          bottom: 10px;
+          font-size: 0.62rem;
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -343,17 +533,21 @@
         <span class="brand">POINT / OF VIEW</span>
         <span data-i="header">03 — 指针形态档案</span>
       </header>
-      <h1>A tiny arrow. A lot of character.</h1>
-      <p class="intro" data-i="intro">
-        从像素阶梯到柔和曲线，一支箭头，换了许多种性格。拖动时间轴，再亲自试用你喜欢的那一款。
-      </p>
-      <div class="arena" id="arena">
-        <span class="arena-note" data-i="arenaNote">一支箭头，无数次出发。</span>
-        <div class="cursor" id="cursor" role="img" aria-label="当前指针形态"></div>
-        <button class="target" data-point="0" hidden aria-label="捕捉目标 1">1</button>
-        <button class="target" data-point="1" hidden aria-label="捕捉目标 2">2</button>
-        <button class="target" data-point="2" hidden aria-label="捕捉目标 3">3</button>
-        <span class="specimen" id="score" data-i="specimen">POINTER SPECIMEN / 04</span>
+      <div class="heading-block">
+        <h1>A tiny arrow. A lot of character.</h1>
+        <p class="intro" data-i="intro">
+          从像素阶梯到柔和曲线，一支箭头，换了许多种性格。拖动时间轴，再亲自试用你喜欢的那一款。
+        </p>
+      </div>
+      <div class="arena-frame">
+        <div class="arena" id="arena">
+          <span class="arena-note" data-i="arenaNote">一支箭头，无数次出发。</span>
+          <div class="cursor" id="cursor" role="img" aria-label="当前指针形态"></div>
+          <button class="target" data-point="0" hidden aria-label="捕捉目标 1">1</button>
+          <button class="target" data-point="1" hidden aria-label="捕捉目标 2">2</button>
+          <button class="target" data-point="2" hidden aria-label="捕捉目标 3">3</button>
+          <span class="specimen" id="score" data-i="specimen">POINTER SPECIMEN / 04</span>
+        </div>
       </div>
       <div class="epoch">
         <div class="year" id="year">2012</div>
@@ -365,6 +559,10 @@
         <input type="range" min="0" max="5" value="3" id="era" />
         <div class="ends">
           <span>1968</span>
+          <span>1984</span>
+          <span>1995</span>
+          <span>2012</span>
+          <span>2020</span>
           <span data-i="today">当下</span>
         </div>
       </div>
@@ -380,7 +578,7 @@
           <div class="row" data-i="ink">指针墨色</div>
           <div class="colors" role="group" aria-label="指针墨色">
             <button
-              style="background: #27272a"
+              style="background: #232326"
               data-color="dark"
               aria-label="石墨黑"
               aria-pressed="true"
@@ -392,7 +590,7 @@
               aria-pressed="false"
             ></button>
             <button
-              style="background: #fff"
+              style="background: #ffffff"
               data-color="light"
               aria-label="纸白色"
               aria-pressed="false"
@@ -508,6 +706,10 @@
             .replace(
               /Files stay on this device\. Maximum (\d+) MB\./g,
               "文件留在此设备，最大 $1 MB。",
+            )
+            .replace(
+              /Packed ([\d,]+) bytes\. CRC32 ([0-9a-f]+)\. Download contains the complete file, ready to decode\./gi,
+              "已打包 $1 字节。CRC32 $2。下载文件包含完整内容，可直接解码。",
             )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
@@ -787,10 +989,35 @@
       }
       function shape() {
         const e = eras[era],
-          fill = color === "dark" ? "#27272a" : color === "accent" ? config.accent : "#ffffff",
-          stroke = color === "light" ? "#27272a" : e.type === "line" ? fill : "#ffffff",
-          actualFill = e.type === "line" ? "none" : fill;
-        return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="${e.d}" fill="${actualFill}" stroke="${stroke}" stroke-width="${e.type === "line" ? 2.4 : 2}" stroke-linejoin="${e.type === "pixel" ? "miter" : "round"}"/>${e.type === "expressive" ? '<circle cx="36" cy="35" r="3.2" fill="' + (color === "light" ? "#27272a" : "#ffffff") + '"/>' : ""}</svg>`;
+          fill = color === "dark" ? "#232327" : color === "accent" ? config.accent : "#ffffff",
+          stroke = color === "light" ? "#232327" : e.type === "line" ? fill : "#ffffff",
+          actualFill = e.type === "line" ? "none" : fill,
+          highlightStroke = color === "light" ? "rgba(35,35,39,0.14)" : "rgba(255,255,255,0.28)",
+          sheenOverlay =
+            e.type === "line"
+              ? `<circle cx="${e.hotspot[0]}" cy="${e.hotspot[1]}" r="2.2" fill="${config.accent}"/>`
+              : `<path d="${e.d}" fill="url(#cursorSheen)" opacity="${color === "light" ? ".22" : ".42"}"/>`;
+        const extraDetail =
+          e.type === "expressive"
+            ? `<circle cx="36" cy="35" r="3.4" fill="${color === "light" ? "#232327" : "#ffffff"}"/>`
+            : e.type === "outline"
+              ? `<path d="M26 17L26 70L41 55" fill="none" stroke="${highlightStroke}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>`
+              : e.type === "soft"
+                ? `<path d="M27 17L71 53" fill="none" stroke="${highlightStroke}" stroke-width="1.8" stroke-linecap="round"/>`
+                : "";
+        const outerRim =
+          e.type === "line"
+            ? ""
+            : `<path d="${e.d}" fill="none" stroke="${color === "light" ? "rgba(35,35,39,0.25)" : "rgba(255,255,255,0.92)"}" stroke-width="${e.type === "outline" ? 4.4 : 3.2}" stroke-linejoin="${e.type === "pixel" ? "miter" : "round"}"/>`;
+        return (
+          `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">` +
+          `<defs><linearGradient id="cursorSheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".65"/><stop offset=".48" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity=".24"/></linearGradient></defs>` +
+          outerRim +
+          `<path d="${e.d}" fill="${actualFill}" stroke="${stroke}" stroke-width="${e.type === "line" ? 2.5 : 1.8}" stroke-linejoin="${e.type === "pixel" ? "miter" : "round"}"/>` +
+          sheenOverlay +
+          extraDetail +
+          `</svg>`
+        );
       }
       function place(x, y) {
         position = { x, y };
@@ -820,6 +1047,9 @@
           b.style.height = 10 + 30 * Math.exp((-distance * distance) / 85) + "px";
           b.classList.toggle("active", distance < 4.5);
         });
+        document
+          .querySelectorAll(".ends span")
+          .forEach((s, i) => s.classList.toggle("active", i === era));
         if (!playing)
           document.querySelector("#score").textContent = "POINTER SPECIMEN / 0" + (era + 1);
       }

@@ -35,9 +35,10 @@ description: 创建可调纵深和轮廓光强度的视差镭射卡片，用于�
 - 静止的外部容器设置 `perspective: 1100px`，卡片及轮廓容器设置 `transform-style: preserve-3d`。
 - 背板、表面反光、12 层轮廓、文字、外边缘各自独立。不要在保留 3D 的祖先上设置 `overflow: hidden`、整体 `opacity < 1` 或 `filter`，它们可能使层叠平面化；裁切或滤镜放在不承载子层的装饰节点上。
 - 轮廓序号 i 从 0 到 11，内缩 `6*i px`（上下）和 `4*i px`（左右），圆角 `43% 57% 60% 40% / 44% 34% 66% 56%`。变换为 `translateZ(depth * i / 11) rotate(i * -7deg)`。depth 为零时所有轮廓处于同一平面。
-- 轮廓伪元素用约 1.5 px padding 和 `conic-gradient`：薄荷青、冰蓝、淡紫、粉色、浅金、薄荷青。通过内容盒与边框盒的 mask 相减，仅保留彩色边缘，同时提供 WebKit mask-composite 兼容写法。
-- 第二个伪元素加宽至约 4 px 并模糊 5 px 形成辉光，两层 opacity 都取 `glow / 100`。模糊只作用于辉光装饰，不作用于卡片本体。
-- 文字位于 `translateZ(depth + 8px)`，独立于辉光，不能因为强光失去对比度。装饰层不拦截指针。
+- 轮廓伪元素用约 1.6 px padding 和随层序号偏移角度的 `conic-gradient`（`from calc(var(--hue) + var(--i) * 14deg)`）：薄荷青、冰蓝、淡紫、粉色、浅金、薄荷青。通过内容盒与边框盒的 mask 相减，仅保留彩色边缘，同时提供 WebKit mask-composite 兼容写法。
+- 第二个伪元素加宽至约 4.5 px 并模糊 5.5 px 形成辉光，两层 opacity 都取 `glow / 100`。模糊只作用于辉光装饰，不作用于卡片本体。
+- 卡片内嵌精绘微雕坐标线与四角对位十字（`translateZ(3px)`），并配动态菲涅尔反光扫描层（`--glint`）。
+- 文字位于 `translateZ(depth + 10px)`，独立于辉光，不能因为强光失去对比度。装饰层不拦截指针。
 
 ## 指针与动画
 

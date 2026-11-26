@@ -8,38 +8,67 @@
       :root {
         --bg: #f1f3ee;
         --accent: #2f7d4a;
-        --ink: #272c29;
-        --muted: #525e55;
-        --ease: cubic-bezier(0.25, 0.85, 0.25, 1);
+        --ink: #1e2721;
+        --muted: #4b584f;
+        --paper-border: #d0d7c7;
+        --foil-gold: #c7a96c;
+        --ease: cubic-bezier(0.22, 0.9, 0.25, 1);
       }
       * {
         box-sizing: border-box;
+      }
+      html {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       body {
         margin: 0;
         background: var(--bg);
         font-family:
-          Inter,
-          -apple-system,
-          BlinkMacSystemFont,
-          "Segoe UI",
-          sans-serif;
+          -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Segoe UI", sans-serif;
         color: var(--ink);
+        position: relative;
+        overflow-x: clip;
+      }
+      /* Warm archival gallery cotton paper surface */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background-image:
+          radial-gradient(
+            ellipse 80% 60% at 50% 18%,
+            rgba(255, 254, 249, 0.78) 0%,
+            rgba(255, 253, 245, 0.22) 55%,
+            rgba(68, 82, 66, 0.08) 100%
+          ),
+          repeating-linear-gradient(
+            45deg,
+            rgba(62, 74, 58, 0.016) 0px,
+            rgba(62, 74, 58, 0.016) 1px,
+            transparent 1px,
+            transparent 6px
+          );
       }
       button {
         font: inherit;
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
       }
       button:focus-visible,
       [tabindex]:focus-visible {
-        outline: 3px solid #397653;
-        outline-offset: 5px;
+        outline: 3px solid var(--accent);
+        outline-offset: 4px;
       }
       .page {
-        max-width: 1200px;
+        position: relative;
+        z-index: 1;
+        max-width: 1120px;
         min-height: 100svh;
-        margin: auto;
-        padding: 40px 56px;
+        margin: 0 auto;
+        padding: 26px 44px 24px;
         display: flex;
         flex-direction: column;
       }
@@ -47,14 +76,29 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 11px;
+        gap: 16px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid rgba(30, 39, 33, 0.1);
+        font-size: 0.76rem;
         color: var(--muted);
       }
       .brand {
-        font-weight: 650;
-        letter-spacing: -0.02em;
-        color: #414a42;
-        font-size: 15px;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        font-weight: 620;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+        font-size: 0.92rem;
+      }
+      .brand::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+        transform: rotate(45deg);
+        background: linear-gradient(135deg, var(--accent) 0%, #1d4d2f 100%);
+        box-shadow: 0 2px 6px color-mix(in srgb, var(--accent) 35%, transparent);
       }
       .center {
         flex: 1;
@@ -62,71 +106,107 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 64px 0;
+        padding: 26px 0 18px;
         text-align: center;
       }
       .eyebrow {
-        font-size: 11px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.72rem;
         letter-spacing: 0.12em;
-        color: #525e55;
+        text-transform: uppercase;
+        color: var(--muted);
       }
       h1 {
-        font-size: clamp(32px, 4.5vw, 54px);
+        font-family: Georgia, "Songti SC", "STSong", "Noto Serif SC", serif;
+        font-size: clamp(2rem, 4vw, 3.2rem);
         font-weight: 500;
-        letter-spacing: -0.04em;
-        margin: 22px 0 18px;
-        line-height: 1.18;
-        max-width: 20ch;
+        letter-spacing: -0.03em;
+        margin: 14px 0 12px;
+        line-height: 1.15;
+        max-width: 22ch;
+        color: var(--ink);
+        text-wrap: balance;
+      }
+      :lang(zh) h1 {
+        letter-spacing: -0.01em;
       }
       .description {
-        font-size: 14px;
+        font-size: 0.92rem;
         color: var(--muted);
-        line-height: 1.85;
-        max-width: 43ch;
+        line-height: 1.7;
+        max-width: 46ch;
         margin: 0;
+        text-wrap: pretty;
       }
       .steps {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
         flex-wrap: wrap;
-        gap: 12px;
-        font-size: 11px;
-        color: #525e55;
-        margin: 29px 0 0;
+        gap: 10px;
+        font-size: 0.76rem;
+        font-weight: 550;
+        color: #3b493f;
+        margin: 20px 0 0;
+        padding: 7px 16px;
+        border-radius: 999px;
+        background: rgba(255, 254, 249, 0.74);
+        border: 1px solid rgba(48, 64, 52, 0.12);
+        box-shadow: 0 2px 10px rgba(34, 48, 36, 0.04);
       }
       .steps b {
         font-weight: 400;
-        color: #5f6b62;
+        color: #849386;
       }
       .interaction {
-        --ticket-height: 160px;
-        width: min(400px, 100%);
-        margin: 46px 0 0;
-        min-height: 280px;
+        --ticket-height: 164px;
+        width: min(420px, 100%);
+        margin: 30px 0 0;
+        min-height: 252px;
         position: relative;
+      }
+      /* Sculpted recessed letterpress stationery folio */
+      .ticket-tray {
+        padding: 8px;
+        border-radius: 16px;
+        background: linear-gradient(
+          160deg,
+          rgba(255, 255, 255, 0.85) 0%,
+          rgba(226, 231, 220, 0.72) 100%
+        );
+        border: 1px solid rgba(52, 68, 56, 0.14);
+        box-shadow:
+          0 26px 52px -18px rgba(33, 47, 35, 0.22),
+          0 8px 18px -6px rgba(33, 47, 35, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.95);
       }
       .ticket {
         position: relative;
         height: var(--ticket-height);
-        border: 1px solid #d4dbcc;
-        border-radius: 5px;
-        background: #fffef8;
-        box-shadow: 0 12px 30px #2937240c;
+        border: 1px solid #d5dccb;
+        border-radius: 10px;
+        background: linear-gradient(180deg, #fffefb 0%, #f9f6ec 100%);
+        box-shadow:
+          inset 0 2px 8px rgba(52, 64, 48, 0.06),
+          inset 0 0 0 6px #fffef9,
+          inset 0 0 0 7px rgba(188, 162, 108, 0.28);
         text-align: left;
       }
       .expanded {
         height: 100%;
-        padding: 22px;
+        padding: 22px 24px;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        gap: 18px;
+        gap: 14px;
       }
       .code-label {
-        font-size: 10px;
-        letter-spacing: 0.12em;
-        color: #525f4d;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #4a5a4d;
       }
       .code-row {
         display: flex;
@@ -136,29 +216,57 @@
       .code-text {
         min-width: 0;
         flex: 1;
-        color: #354536;
-        font:
-          600 clamp(15px, 3vw, 21px) ui-monospace,
-          SFMono-Regular,
-          Consolas,
-          monospace;
+        color: #182b1e;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-weight: 700;
+        font-size: clamp(1rem, 2.8vw, 1.38rem);
+        letter-spacing: 0.06em;
+        font-variant-numeric: tabular-nums;
         user-select: all;
         cursor: text;
         overflow-wrap: anywhere;
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: rgba(47, 125, 74, 0.06);
+        border: 1px dashed rgba(47, 125, 74, 0.34);
       }
       .copy {
         flex: none;
         background: var(--accent);
-        color: white;
-        border: 0;
-        border-radius: 6px;
-        padding: 13px 15px;
-        font-size: 12px;
-        font-weight: 600;
-        min-width: 76px;
+        background-image: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.18) 0%,
+          rgba(0, 0, 0, 0.1) 100%
+        );
+        color: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        min-height: 44px;
+        padding: 11px 16px;
+        font-size: 0.82rem;
+        font-weight: 620;
+        min-width: 88px;
+        box-shadow:
+          0 8px 18px -6px color-mix(in srgb, var(--accent) 55%, rgba(20, 42, 28, 0.4)),
+          inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        transition:
+          transform 150ms ease,
+          background-color 180ms ease,
+          box-shadow 180ms ease;
+      }
+      @media (hover: hover) {
+        .copy:hover:not(:disabled) {
+          transform: translateY(-1px);
+          box-shadow:
+            0 12px 22px -6px color-mix(in srgb, var(--accent) 62%, rgba(20, 42, 28, 0.48)),
+            inset 0 1px 0 rgba(255, 255, 255, 0.36);
+        }
+      }
+      .copy:active:not(:disabled) {
+        transform: translateY(1px);
       }
       .copy.copied {
-        background: #253d2d;
+        background: #1c3d28;
       }
       .copy:disabled {
         cursor: wait;
@@ -190,127 +298,138 @@
         pointer-events: none;
       }
       .paper-label {
-        font-size: 18px;
-        fill: #43533c;
-        font-weight: 550;
-        letter-spacing: 1px;
+        font-family: Georgia, "Songti SC", serif;
+        font-size: 20px;
+        fill: #243326;
+        font-weight: 500;
+        letter-spacing: 0.3px;
       }
       .paper-hint {
-        font-size: 11px;
-        fill: #505b4c;
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+        font-size: 11.5px;
+        font-weight: 500;
+        fill: #47584a;
       }
       .paper-number {
-        font-size: 9px;
-        fill: #576251;
-        letter-spacing: 2px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 9.5px;
+        font-weight: 600;
+        fill: #646b57;
+        letter-spacing: 2.2px;
       }
       .open .reveal {
         pointer-events: none;
       }
       .collapse {
         position: absolute;
-        top: var(--ticket-height);
+        top: calc(var(--ticket-height) + 18px);
         left: 0;
         right: 0;
         width: max-content;
-        margin: 20px auto 0;
+        margin: 14px auto 0;
         display: inline-flex;
         align-items: center;
-        border: 0;
-        border-bottom: 1px solid #9ba893;
-        min-height: 32px;
-        padding: 6px 4px;
-        background: transparent;
-        color: #4a5942;
-        font-size: 12px;
+        border: 1px solid rgba(47, 74, 55, 0.24);
+        border-radius: 999px;
+        min-height: 36px;
+        padding: 6px 16px;
+        background: rgba(255, 254, 249, 0.85);
+        color: #2f4334;
+        font-size: 0.8rem;
+        font-weight: 550;
         visibility: hidden;
+        box-shadow: 0 2px 8px rgba(34, 48, 36, 0.06);
+        transition:
+          background-color 150ms ease,
+          border-color 150ms ease;
+      }
+      @media (hover: hover) {
+        .collapse:hover {
+          background: #ffffff;
+          border-color: var(--accent);
+        }
       }
       .open .collapse {
         visibility: visible;
       }
       .instruction {
         position: absolute;
-        top: var(--ticket-height);
+        top: calc(var(--ticket-height) + 18px);
         left: 0;
         right: 0;
-        margin: 23px 0 0;
-        font-size: 12px;
-        color: #525e51;
+        margin: 18px 0 0;
+        font-size: 0.82rem;
+        color: #465549;
       }
       .open .instruction {
         display: none;
       }
       .status {
-        font-size: 12px;
-        color: #3f5c47;
-        margin: 75px 0 0;
-        min-height: 40px;
-        line-height: 1.65;
-      }
-      .usage {
-        font-size: 11px;
-        color: #525e55;
-        line-height: 1.7;
-        margin: 5px 0;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: #265034;
+        margin: 66px 0 0;
+        min-height: 30px;
+        line-height: 1.55;
       }
       .bottom {
         display: flex;
         justify-content: space-between;
-        gap: 20px;
+        gap: 16px;
         align-items: center;
-        border-top: 1px solid #dce1da;
-        padding-top: 19px;
-        font-size: 10px;
-        color: #525e55;
+        border-top: 1px solid rgba(30, 39, 33, 0.1);
+        padding-top: 14px;
+        font-size: 0.74rem;
+        color: var(--muted);
       }
       .hint {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         gap: 7px;
       }
       .dot {
-        height: 5px;
-        width: 5px;
+        height: 6px;
+        width: 6px;
         background: var(--accent);
         border-radius: 50%;
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
       }
-      @media (max-width: 550px) {
+      @media (max-width: 560px) {
         .page {
-          padding: 26px 22px;
+          padding: 20px 18px 22px;
         }
         .center {
-          padding: 58px 0 35px;
+          padding: 26px 0 18px;
         }
         .top {
-          font-size: 10px;
-          gap: 12px;
+          font-size: 0.72rem;
+          gap: 10px;
         }
         h1 {
-          font-size: 32px;
+          font-size: 1.9rem;
         }
         .description {
-          font-size: 13px;
+          font-size: 0.86rem;
         }
         .interaction {
-          margin-top: 30px;
+          margin-top: 22px;
+          --ticket-height: 150px;
         }
         .expanded {
-          padding: 18px;
-        }
-        .interaction {
-          --ticket-height: 145px;
+          padding: 16px 18px;
         }
         .code-text {
-          font-size: 15px;
+          font-size: 0.96rem;
+          padding: 9px 10px;
         }
         .copy {
-          padding: 15px;
-          min-width: 74px;
+          padding: 10px 13px;
+          min-width: 78px;
         }
         .bottom {
           align-items: flex-start;
           flex-direction: column;
-          gap: 12px;
+          gap: 8px;
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -339,85 +458,144 @@
           <span data-copy="step3">3 · Share</span>
         </div>
         <div class="interaction">
-          <div class="ticket">
-            <div class="expanded" id="expanded" inert aria-hidden="true">
-              <span class="code-label" data-copy="codeLabel">Your invitation code</span>
-              <div class="code-row">
-                <span class="code-text" tabindex="0"></span>
-                <button class="copy" type="button">Copy code</button>
+          <div class="ticket-tray">
+            <div class="ticket">
+              <div class="expanded" id="expanded" inert aria-hidden="true">
+                <span class="code-label" data-copy="codeLabel">Your invitation code</span>
+                <div class="code-row">
+                  <span class="code-text" tabindex="0"></span>
+                  <button class="copy" type="button">Copy code</button>
+                </div>
               </div>
-            </div>
-            <button
-              class="reveal"
-              type="button"
-              aria-expanded="false"
-              aria-controls="expanded"
-              aria-label="Peel back the paper"
-            >
-              <svg
-                class="paper"
-                viewBox="0 0 400 160"
-                preserveAspectRatio="none"
-                aria-hidden="true"
+              <button
+                class="reveal"
+                type="button"
+                aria-expanded="false"
+                aria-controls="expanded"
+                aria-label="Peel back the paper"
               >
-                <defs>
-                  <linearGradient id="paperFace" x2="0" y2="1">
-                    <stop stop-color="#fdfcf5" />
-                    <stop offset="1" stop-color="#eeeee3" />
-                  </linearGradient>
-                  <linearGradient id="paperBack">
-                    <stop stop-color="#b5b9a8" />
-                    <stop offset=".18" stop-color="#e6e8d9" />
-                    <stop offset=".65" stop-color="#fffff6" />
-                    <stop offset="1" stop-color="#d8ddc9" />
-                  </linearGradient>
-                  <pattern id="grain" width="5" height="5" patternUnits="userSpaceOnUse">
-                    <path d="M0 1h1m2 2h1" stroke="#7d8064" stroke-opacity=".1" stroke-width=".5" />
-                  </pattern>
-                  <filter id="foldShadow" x="-80%" y="-40%" width="260%" height="190%">
-                    <feDropShadow
-                      dx="8"
-                      dy="9"
-                      stdDeviation="7"
-                      flood-color="#334126"
-                      flood-opacity=".2"
+                <svg
+                  class="paper"
+                  viewBox="0 0 400 160"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <defs>
+                    <linearGradient id="paperFace" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="#fffef9" />
+                      <stop offset="56%" stop-color="#f6f2e5" />
+                      <stop offset="100%" stop-color="#eae3cf" />
+                    </linearGradient>
+                    <linearGradient id="foilSheen" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55" />
+                      <stop offset="38%" stop-color="#e9d8b0" stop-opacity="0.1" />
+                      <stop offset="68%" stop-color="#ffffff" stop-opacity="0.32" />
+                      <stop offset="100%" stop-color="#bfa266" stop-opacity="0.16" />
+                    </linearGradient>
+                    <linearGradient id="paperBack" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stop-color="#9e9882" />
+                      <stop offset="22%" stop-color="#e8dfc6" />
+                      <stop offset="58%" stop-color="#fffdf3" />
+                      <stop offset="86%" stop-color="#dfd3b1" />
+                      <stop offset="100%" stop-color="#bba97d" />
+                    </linearGradient>
+                    <linearGradient id="sealGold" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="#e5cd94" />
+                      <stop offset="50%" stop-color="#c3a15b" />
+                      <stop offset="100%" stop-color="#9a7838" />
+                    </linearGradient>
+                    <pattern id="grain" width="6" height="6" patternUnits="userSpaceOnUse">
+                      <path
+                        d="M0 1.5h1.5m2.5 2.5h1.5"
+                        stroke="#7a7156"
+                        stroke-opacity=".11"
+                        stroke-width=".5"
+                      />
+                    </pattern>
+                    <filter id="foldShadow" x="-80%" y="-40%" width="260%" height="190%">
+                      <feDropShadow
+                        dx="8"
+                        dy="9"
+                        stdDeviation="7"
+                        flood-color="#263322"
+                        flood-opacity=".26"
+                      />
+                    </filter>
+                    <clipPath id="paperClip"><path class="paper-clip" /></clipPath>
+                  </defs>
+                  <g clip-path="url(#paperClip)">
+                    <rect width="400" height="160" rx="9" fill="url(#paperFace)" />
+                    <rect width="400" height="160" rx="9" fill="url(#foilSheen)" />
+                    <rect width="400" height="160" rx="9" fill="url(#grain)" />
+                    <!-- Blind-debossed double stationery frame -->
+                    <rect
+                      x="14"
+                      y="14"
+                      width="372"
+                      height="132"
+                      rx="5"
+                      fill="none"
+                      stroke="#cbb88c"
+                      stroke-opacity="0.58"
+                      stroke-width="1"
                     />
-                  </filter>
-                  <clipPath id="paperClip"><path class="paper-clip" /></clipPath>
-                </defs>
-                <g clip-path="url(#paperClip)">
-                  <rect width="400" height="160" rx="4" fill="url(#paperFace)" />
-                  <rect width="400" height="160" fill="url(#grain)" />
+                    <rect
+                      x="19"
+                      y="19"
+                      width="362"
+                      height="122"
+                      rx="3"
+                      fill="none"
+                      stroke="#d5cfb8"
+                      stroke-dasharray="2 4"
+                      stroke-width="0.9"
+                    />
+                    <!-- Subtle metallic foil monogram seal -->
+                    <g transform="translate(318 80)" opacity="0.88">
+                      <circle
+                        r="24"
+                        fill="url(#sealGold)"
+                        fill-opacity="0.16"
+                        stroke="url(#sealGold)"
+                        stroke-width="1.1"
+                      />
+                      <circle
+                        r="18.5"
+                        fill="none"
+                        stroke="url(#sealGold)"
+                        stroke-dasharray="1.8 2.8"
+                        stroke-width="0.9"
+                      />
+                      <path
+                        d="M0 -9 L2.6 -2.6 L9 0 L2.6 2.6 L0 9 L-2.6 2.6 L-9 0 L-2.6 -2.6 Z"
+                        fill="url(#sealGold)"
+                      />
+                    </g>
+                    <text x="34" y="42" class="paper-number">FOR YOU · 001</text>
+                    <text x="34" y="84" class="paper-label" data-copy="paperTitle">
+                      An invitation for you
+                    </text>
+                    <text x="34" y="114" class="paper-hint" data-copy="paperHint">
+                      Peel from the right edge ←
+                    </text>
+                  </g>
                   <path
-                    d="M20 20h360v120H20z"
-                    fill="none"
-                    stroke="#d9ddca"
-                    stroke-dasharray="2 4"
+                    class="paper-fold"
+                    fill="url(#paperBack)"
+                    stroke="#c2b48f"
+                    stroke-width=".75"
+                    filter="url(#foldShadow)"
                   />
-                  <text x="36" y="41" class="paper-number">FOR YOU · 001</text>
-                  <text x="36" y="83" class="paper-label" data-copy="paperTitle">
-                    An invitation for you
-                  </text>
-                  <text x="36" y="111" class="paper-hint" data-copy="paperHint">
-                    Peel from the right edge ←
-                  </text>
-                </g>
-                <path
-                  class="paper-fold"
-                  fill="url(#paperBack)"
-                  stroke="#cdd2bf"
-                  stroke-width=".6"
-                  filter="url(#foldShadow)"
-                />
-                <path
-                  class="paper-crease"
-                  fill="none"
-                  stroke="#fffef5"
-                  stroke-opacity=".8"
-                  stroke-width="1"
-                />
-              </svg>
-            </button>
+                  <path
+                    class="paper-crease"
+                    fill="none"
+                    stroke="#fffef7"
+                    stroke-opacity=".9"
+                    stroke-width="1.2"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
           <p class="instruction" data-copy="instruction">
             Click the paper, or drag it to the left.
@@ -533,6 +711,10 @@
             .replace(
               /Files stay on this device\. Maximum (\d+) MB\./g,
               "文件留在此设备，最大 $1 MB。",
+            )
+            .replace(
+              /Packed ([\d,]+) bytes\. CRC32 ([0-9a-f]+)\. Download contains the complete file, ready to decode\./gi,
+              "已打包 $1 字节。CRC32 $2。下载文件包含完整内容，可直接解码。",
             )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
@@ -942,7 +1124,6 @@
         }
         return ok;
       }
-      // An embedded page delegates clipboard access to the host's user-visible bridge.
       window.addEventListener("message", (event) => {
         if (event.source !== window.parent || !pending) return;
         const result = event.data;
@@ -983,7 +1164,6 @@
           );
           return;
         }
-        // Begin modern copying first, then attempt the legacy fallback before this click's activation expires.
         let modern;
         try {
           modern = navigator.clipboard?.writeText(config.code);
@@ -1016,7 +1196,6 @@
       });
     </script>
     <script>
-      // Optional host sizing keeps embedded controls in the page's normal scroll flow.
       if (window.parent !== window) {
         let previousHeight = 0;
         const reportHeight = () => {

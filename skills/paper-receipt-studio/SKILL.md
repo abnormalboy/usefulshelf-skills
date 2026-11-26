@@ -46,10 +46,12 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 :root {
   --accent: #47765d;
   --bg: #f4f1e9;
-  --ink: #303b32;
+  --ink: #222c25;
+  --muted: #4b584d;
+  --rule: rgba(34, 44, 37, 0.16);
 }
 body {
-  font: 14px system-ui, sans-serif;
+  font: 14px/1.55 -apple-system, BlinkMacSystemFont, "PingFang SC", system-ui, sans-serif;
 }
 ```
 
@@ -69,16 +71,17 @@ body {
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### Component design notes
 
-#### Real paper and real output
-An offscreen Canvas draws the current receipt. The visible Canvas maps that texture onto a 12 × 18 triangle grid with a local sinusoidal fold. This is an artistic mesh approximation, not a cloth simulation. Pointer capture keeps drags continuous; release or cancellation starts a bounded decay back to flat. Keyboard users have equivalent Scrunch and Smooth buttons. Reduced motion suppresses continuous drag warping and instantly smooths on release; the explicit Scrunch action remains a static state change.
+#### Kyoto letterpress stationery & real paper output
+An offscreen high-resolution Canvas (`480 × 708`) renders the flat receipt on warm fine-cotton rag paper (`#fffef8` → `#f6f0e1`) with deterministic cotton fibers, top and bottom serrated tear teeth, a Kyoto letterpress crest, double rules, dotted ledger leaders, and an embossed accent ink stamp. The visible Canvas (`720 × 918`) floats over an arched celadon-velvet display mat (`#cfdacc` → `#b1c1ad`) and maps that texture onto a 14 × 20 triangle grid with directional upper-left ridge highlights, warm valley shadows, and a deformed ground drop shadow when scrunched. Pointer capture keeps drags continuous; release or cancellation starts a bounded decay back to flat. Keyboard users have equivalent Scrunch and Smooth buttons. Reduced motion suppresses continuous drag warping and instantly smooths on release; the explicit Scrunch action remains a static state change.
 
-#### Editable receipt
-Keep 1–5 lines, 32 characters per name and prices from 0 to 9999.99. Parse monetary values as integer cents rather than floating-point addition. Invalid edits disable export and retain the last valid receipt; show the correction message. Native text inputs use decimal input mode without accepting scientific notation or negative prices. Never interpret user-entered names as HTML.
+#### Editable receipt & tokens
+Core tokens: `--bg: #f4f1e9`, `--ink: #222c25`, `--muted: #4b584d`, `--accent: #47765d`. Keep 1–5 lines, 32 characters per name and prices from 0 to 9999.99. Parse monetary values as integer cents rather than floating-point addition and format numbers with `tabular-nums`. Invalid edits disable export and retain the last valid receipt; show the correction message. Native text inputs use decimal input mode without accepting scientific notation or negative prices. Never interpret user-entered names as HTML.
 
 #### Export and accessibility
-PNG export uses the offscreen flat paper texture, so the saved receipt remains readable even when the on-screen paper is folded. The download happens only on the explicit button click. A containing sandbox must allow downloads. Canvas has an updated text alternative listing the items and total; the same information is also available in the editable fields. The receipt is a decorative souvenir and does not claim a real financial transaction or official payment status.
+PNG export uses the offscreen flat paper texture, so the saved receipt remains crisp and readable even when the on-screen paper is folded. The download happens only on the explicit button click. A containing sandbox must allow downloads. Canvas has an updated text alternative listing the items and total; the same information is also available in the editable fields. The receipt is a decorative souvenir and does not claim a real financial transaction or official payment status.
 
 ## 可选完整包工作流 / Optional package workflow
 

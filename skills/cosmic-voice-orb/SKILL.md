@@ -45,9 +45,13 @@ Canvas2D 用圆形裁切、径向底色、65 条程序丝带、星点和边缘�
 ```css
 :root {
   --accent: #bda8ff;
-  font-family: Arial, "PingFang SC", sans-serif;
-  background: #0c0b13;
-  color: #f1eefa;
+  --bg: #07060d;
+  --surface: rgba(18, 16, 32, 0.78);
+  --ink: #f5f2ff;
+  --muted: #b6aed0;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
   color-scheme: dark;
 }
 ```
@@ -65,9 +69,18 @@ Canvas2D 用圆形裁切、径向底色、65 条程序丝带、星点和边缘�
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### Interaction and rendering notes
 
-The glass orb is a Canvas2D approximation built from clipped procedural ribbons, a radial interior, rim highlights, and deterministic stars. It is not a physical shader. Idle, listening, and speaking each change the ribbon frequency and amplitude. Manual energy and the explicitly labeled synthetic waveform control the envelope; never imply live microphone activity. The demo runs for at most 12 seconds. A pointer or keyboard pulse runs for 1.8 seconds, then becomes static. Respect reduced motion by rendering only a static state and explaining why the demo does not move. Pause on hidden tabs. Preserve semantic mode buttons, palette controls, slider labels, status feedback, and visible focus. The rendering resolution is capped at devicePixelRatio 2.
+The glass orb is a Canvas2D approximation built from volumetric ambient nebula bloom, clipped additive (`lighter`) procedural ribbons, concentric acoustic calibration rings, Fresnel chromatic rim light, glass specular highlights, and deterministic starlight motes. It is not a physical shader. Idle, listening, and speaking each change the ribbon frequency, amplitude, and reactive equalizer spectrum strip. Manual energy and the explicitly labeled synthetic waveform control the envelope; never imply live microphone activity. The demo runs for at most 12 seconds. A pointer or keyboard pulse runs for 1.8 seconds, then becomes static. Respect reduced motion by rendering only a static state and explaining why the demo does not move. Pause on hidden tabs. Preserve semantic mode buttons, luminous palette orb controls, slider labels, status feedback, and visible focus. The rendering resolution is capped at devicePixelRatio 2.
+
+#### Visual tokens
+
+- Cosmic backdrop: `#07060d` (`--bg`)
+- Frosted deck surface: `rgba(18, 16, 32, 0.78)` (`--surface`)
+- Primary text: `#f5f2ff` (`--ink`)
+- Secondary text: `#b6aed0` (`--muted`)
+- Default accent: `#bda8ff` (`--accent`)
 
 ## 可选完整包工作流 / Optional package workflow
 

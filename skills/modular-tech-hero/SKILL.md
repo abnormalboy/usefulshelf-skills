@@ -44,15 +44,17 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 ```css
 :root {
-  --bg: #11140f;
-  --surface: #171c15;
-  --line: #323a2b;
-  --ink: #f0f2e9;
-  --muted: #a1ac95;
+  --bg: #0a0d0d;
+  --surface: #111616;
+  --surface-elevated: #151c1b;
+  --line: #232c28;
+  --line-strong: #313d37;
+  --ink: #f2f5f0;
+  --muted: #98a69a;
   --accent: #b6ec85;
 }
 body {
-  font: 15px/1.6 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font: 15px/1.58 -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 ```
 
@@ -73,9 +75,10 @@ body {
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### System notes
 
-Near-black canvas, green accent, hairline borders, and compact monospace annotations produce a calm technical interface. Use the accent for progress and active items. Keep body copy light gray and headings near white; avoid using the adjustable accent as the only cue for state.
+Deep architectural carbon (`#0a0d0d`), layered graphite surfaces (`#111616` / `#151c1b`), subtle dot-grid backdrop, emerald ambient bloom behind the workbench, and crisp hairline borders (`#232c28`) produce a precision developer flagship interface. Use the phosphor-emerald accent (`#b6ec85`) for active execution pills, focus rings, and primary actions (paired with `#081009` ink for high contrast). Syntax highlighting renders through safe DOM text spans so `textContent` remains exact raw code. Keep body copy legible cool-sage (`#98a69a`) and headings crisp white; avoid using the adjustable accent as the only cue for state.
 
 A two-column hero pairs a short headline with a functional code terminal. A continuous three-cell metrics strip creates structure before the capability section. The lower area pairs a semantic accordion with a ruled document inspector. At 800 px these become one column and the navigation becomes a disclosure menu.
 

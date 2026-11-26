@@ -46,10 +46,12 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 :root {
   --accent: #6f4b99;
   --bg: #f3f0e9;
-  --ink: #342d3f;
+  --ink: #261e33;
+  --muted: #504561;
+  --rule: rgba(54, 40, 74, 0.14);
 }
 body {
-  font: 14px system-ui;
+  font: 14px/1.55 -apple-system, BlinkMacSystemFont, "PingFang SC", system-ui, sans-serif;
 }
 ```
 
@@ -69,16 +71,17 @@ body {
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### Component design notes
 
-#### Rendering
-The six original SVG icons combine a colored spherical body, radial shading, a dimensional symbol, a specular ellipse and a soft ground shadow. Use a unique gradient/filter prefix for each thumbnail and the large preview to avoid ID collisions. All SVGs have explicit viewBox and CSS height:auto, preserving aspect ratio when resized.
+#### Jelly-glass optical rendering
+The six original `200 × 216` SVG candy-glass icons sit on a pearl-silk studio canvas (`--bg: #f3f0e9`, `--ink: #261e33`, `--muted: #504561`, `--accent: #6f4b99`). Each icon layers a tinted caustic ground bounce shadow, soft contact shadow, colored translucent spherical body, upper-left volume highlight, bottom subsurface refraction glow, crisp gradient specular rim, dimensional multi-detail enamel/glass symbol, and curved Apple Aqua dome sheen controlled live by the gloss slider. Every thumbnail and the inspector preview use a unique gradient/filter prefix to prevent SVG ID collisions.
 
-#### Per-icon edits
-Each icon stores its own color, gloss from 0–100 and tilt from −20–20 degrees. Selecting an icon restores its own controls. Reset affects only that icon. The generator accent styles controls and focus; individual icon colors are intentionally editable within the page. Native range controls and color inputs have visible labels, and all selection buttons expose aria-pressed.
+#### Frosted inspector & per-icon edits
+The right-hand frosted glass studio inspector displays a spotlight pedestal preview alongside native color swatch, gloss (`0–100%`) and tilt (`-20°` to `20°`) controls with `tabular-nums` badges. Each icon stores its own color, gloss and tilt independently; selecting an icon restores its own values, and Reset affects only that icon.
 
-#### Export and motion
-Download generates a self-contained SVG of the selected icon including its edited color, light and angle. It does not export the whole editor or use external resources. Revoke Blob URLs after triggering the user-requested download. Hover lift is decorative and disabled under reduced motion; no animation runs unattended.
+#### Export and accessibility
+Download generates a self-contained offline SVG of the selected icon preserving its edited color, gloss optics and tilt transform, then revokes the Blob URL. All buttons, labels and status messages satisfy WCAG AA contrast (`>= 4.5:1`), hover elevation is gated behind `@media (hover: hover)`, and reduced motion disables transitions.
 
 ## 可选完整包工作流 / Optional package workflow
 

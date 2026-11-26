@@ -7,18 +7,51 @@
     <style>
       :root {
         --accent: #315c48;
-        --ink: #20251f;
-        --paper: #f7f6f1;
-        --line: #dedfd5;
+        --ink: #171a16;
+        --paper: #f5f2ea;
+        --paper-elevated: #fcfaf5;
+        --line: #dad4c6;
+        --muted: #4c5347;
+        --subtle: #5a6254;
       }
       * {
         box-sizing: border-box;
       }
+      html {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
       body {
         margin: 0;
-        background: var(--paper);
+        min-height: 100vh;
+        background-color: var(--paper);
+        background-image:
+          radial-gradient(
+            ellipse 74% 62% at 50% 44%,
+            rgba(255, 253, 248, 0.88) 0%,
+            rgba(245, 242, 234, 0) 68%
+          ),
+          radial-gradient(
+            circle at 14% 12%,
+            color-mix(in srgb, var(--accent) 6%, transparent),
+            transparent 46%
+          ),
+          radial-gradient(circle at 86% 84%, rgba(196, 152, 102, 0.08), transparent 44%);
         color: var(--ink);
-        font-family: Arial, Helvetica, sans-serif;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Segoe UI",
+          "Helvetica Neue", Arial, sans-serif;
+        position: relative;
+        overflow-x: clip;
+      }
+      .paper-grain {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        opacity: 0.035;
+        z-index: 40;
       }
       button,
       a,
@@ -28,223 +61,447 @@
       button {
         color: inherit;
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
       }
       button:focus-visible,
       a:focus-visible {
-        outline: 3px solid var(--accent);
-        outline-offset: 5px;
+        outline: 2.5px solid var(--accent);
+        outline-offset: 4px;
       }
       header,
       footer {
+        position: relative;
+        z-index: 5;
+        max-width: 1360px;
+        margin: 0 auto;
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 16px;
-        padding: 25px 32px;
+        padding: 18px 36px;
+      }
+      header {
+        border-bottom: 1px solid color-mix(in srgb, var(--line) 75%, transparent);
       }
       .brand {
-        font-weight: 800;
-        font-size: 21px;
-        letter-spacing: -1px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Songti SC", serif;
+        font-weight: 700;
+        font-size: 20px;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+      }
+      .brand::before {
+        content: "";
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle at 35% 35%,
+          color-mix(in srgb, var(--accent) 65%, #ffffff),
+          var(--accent)
+        );
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
+        flex-shrink: 0;
       }
       .top-controls {
         display: flex;
+        align-items: center;
         gap: 10px;
       }
       .control {
-        border: 1px solid var(--line);
-        border-radius: 30px;
-        padding: 11px 18px;
-        background: transparent;
-        min-height: 44px;
-        font-size: 12px;
+        border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+        border-radius: 999px;
+        padding: 9px 18px;
+        background: color-mix(in srgb, var(--paper-elevated) 82%, transparent);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow:
+          0 1px 2px rgba(23, 26, 22, 0.04),
+          inset 0 1px 0 rgba(255, 255, 255, 0.85);
+        min-height: 40px;
+        font-size: 12.5px;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        color: var(--ink);
+        white-space: nowrap;
+        transition:
+          background-color 180ms ease,
+          border-color 180ms ease,
+          transform 160ms ease,
+          box-shadow 180ms ease;
       }
-      .control:hover {
-        background: #e8e9df;
+      @media (hover: hover) {
+        .control:hover:not(:disabled) {
+          background: #ffffff;
+          border-color: color-mix(in srgb, var(--ink) 28%, transparent);
+          box-shadow:
+            0 4px 12px rgba(23, 26, 22, 0.08),
+            inset 0 1px 0 #ffffff;
+          transform: translateY(-1px);
+        }
+      }
+      .control[aria-pressed="true"] {
+        border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+        background: color-mix(in srgb, var(--accent) 9%, var(--paper-elevated));
+        color: var(--accent);
+      }
+      .control:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
       }
       main {
         position: relative;
-        height: 620px;
-        min-height: 560px;
+        max-width: 1360px;
+        margin: 0 auto;
+        height: 604px;
+        min-height: 550px;
         overflow: hidden;
+      }
+      main::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: min(640px, 76vw);
+        height: 410px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: radial-gradient(
+          ellipse at center,
+          rgba(255, 254, 250, 0.92) 0%,
+          rgba(255, 253, 246, 0.55) 42%,
+          rgba(245, 242, 234, 0) 74%
+        );
+        pointer-events: none;
+        z-index: 1;
+      }
+      .astrolabe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
       }
       .orbital {
         position: absolute;
         inset: 0;
+        z-index: 3;
       }
       .track {
         position: absolute;
         left: 50%;
         top: 50%;
-        width: min(84vw, 950px);
-        height: 440px;
-        border: 1px solid var(--line);
+        width: min(82vw, 940px);
+        height: 424px;
+        border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
         border-radius: 50%;
-        transform: translate(-50%, -50%) rotate(-12deg);
+        transform: translate(-50%, -50%) rotate(-10deg);
         pointer-events: none;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.48);
+        z-index: 1;
       }
       .track.inner {
-        width: min(64vw, 680px);
-        height: 540px;
-        transform: translate(-50%, -50%) rotate(28deg);
+        width: min(64vw, 710px);
+        height: 516px;
+        border-style: dashed;
+        border-color: color-mix(in srgb, var(--ink) 14%, transparent);
+        transform: translate(-50%, -50%) rotate(22deg);
+        box-shadow: none;
       }
       .piece {
         position: absolute;
         left: 50%;
         top: 50%;
-        width: 82px;
-        height: 82px;
-        padding: 0;
-        border: 5px solid var(--paper);
+        width: 86px;
+        height: 86px;
+        padding: 5px;
+        border: 1px solid rgba(23, 26, 22, 0.14);
         border-radius: 50%;
-        background: var(--paper);
-        box-shadow: 0 4px 14px #20251f12;
+        background: linear-gradient(145deg, #ffffff 0%, #ede8dc 58%, #dcd5c5 100%);
+        box-shadow:
+          0 14px 28px rgba(23, 26, 22, 0.15),
+          0 3px 8px rgba(23, 26, 22, 0.08),
+          inset 0 1.5px 1px rgba(255, 255, 255, 0.96),
+          inset 0 -2px 4px rgba(23, 26, 22, 0.08);
         will-change: transform;
-        transition: box-shadow 0.2s;
+        transition:
+          box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+          border-color 220ms ease;
       }
-      .piece:hover,
+      @media (hover: hover) {
+        .piece:hover {
+          border-color: var(--accent);
+          box-shadow:
+            0 18px 34px rgba(23, 26, 22, 0.22),
+            0 0 0 3px color-mix(in srgb, var(--accent) 26%, transparent),
+            inset 0 1.5px 1px #ffffff;
+          z-index: 8;
+        }
+      }
       .piece:focus-visible {
-        box-shadow: 0 0 0 2px var(--accent);
+        border-color: var(--accent);
+        box-shadow:
+          0 16px 32px rgba(23, 26, 22, 0.2),
+          0 0 0 3px var(--accent);
+        z-index: 8;
       }
       .piece svg {
         display: block;
         width: 100%;
         height: 100%;
         border-radius: 50%;
+        box-shadow: inset 0 0 0 1px rgba(23, 26, 22, 0.12);
       }
       .copy {
         position: absolute;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        width: min(510px, 55%);
+        width: min(500px, 52%);
         text-align: center;
         pointer-events: none;
+        z-index: 4;
       }
       .eyebrow {
-        font: 11px/1.4 monospace;
-        letter-spacing: 2px;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+        background: color-mix(in srgb, var(--paper-elevated) 86%, transparent);
+        font:
+          500 11px/1.3 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: #4f574b;
+        color: var(--muted);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+      }
+      .eyebrow::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--accent);
       }
       .copy h1 {
-        margin: 19px 0 18px;
-        font-size: clamp(32px, 5vw, 62px);
+        margin: 18px 0 14px;
+        font-family:
+          "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Songti SC", "STSong", serif;
+        font-size: clamp(36px, 4.7vw, 60px);
         font-weight: 500;
-        line-height: 1.04;
-        letter-spacing: -2.5px;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        color: var(--ink);
         text-wrap: balance;
       }
       :lang(zh) .copy {
-        width: min(560px, 60%);
+        width: min(540px, 58%);
       }
       :lang(zh) .copy h1 {
-        font-size: clamp(30px, 4.1vw, 50px);
-        line-height: 1.18;
-        letter-spacing: -0.02em;
+        font-family: "Songti SC", "STSong", "Noto Serif CJK SC", "Iowan Old Style", Georgia, serif;
+        font-size: clamp(30px, 3.8vw, 48px);
+        font-weight: 600;
+        line-height: 1.2;
+        letter-spacing: -0.015em;
         word-break: keep-all;
       }
       .copy p {
-        font-size: 14px;
-        line-height: 1.6;
-        color: #525a4c;
-        max-width: 310px;
+        font-size: 15px;
+        line-height: 1.62;
+        color: var(--muted);
+        max-width: 340px;
         margin: 0 auto;
+        text-wrap: pretty;
       }
       .primary {
         display: inline-flex;
-        gap: 22px;
+        gap: 16px;
         align-items: center;
-        margin-top: 26px;
-        border: 0;
-        border-radius: 30px;
-        background: var(--ink);
-        color: white;
-        padding: 15px 23px;
+        margin-top: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 999px;
+        background: linear-gradient(180deg, #272c25 0%, #161915 100%);
+        color: #faf8f2;
+        padding: 13px 24px 13px 26px;
         pointer-events: auto;
         min-height: 48px;
-        font-size: 13px;
+        font-size: 13.5px;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        box-shadow:
+          0 12px 26px rgba(23, 26, 22, 0.22),
+          0 2px 6px rgba(23, 26, 22, 0.14),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        transition:
+          background 200ms ease,
+          transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
+          box-shadow 200ms ease;
       }
-      .primary:hover {
-        background: var(--accent);
+      .primary span {
+        display: inline-grid;
+        place-items: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.14);
+        font-size: 13px;
+        transition: transform 180ms ease;
+      }
+      @media (hover: hover) {
+        .primary:hover {
+          background: linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--accent) 88%, #ffffff),
+            var(--accent)
+          );
+          transform: translateY(-1.5px);
+          box-shadow:
+            0 16px 32px color-mix(in srgb, var(--accent) 30%, rgba(23, 26, 22, 0.2)),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        .primary:hover span {
+          transform: translate(1.5px, -1.5px);
+        }
       }
       footer {
-        border-top: 1px solid var(--line);
-        font-size: 11px;
-        color: #67705f;
-        padding-top: 20px;
-        padding-bottom: 20px;
+        border-top: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+        font-size: 12px;
+        color: var(--subtle);
+        padding-top: 16px;
+        padding-bottom: 18px;
+      }
+      footer > span:first-child {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        color: var(--ink);
       }
       footer .dot {
         display: inline-block;
-        width: 6px;
-        height: 6px;
+        width: 7px;
+        height: 7px;
         background: var(--accent);
         border-radius: 50%;
-        margin-right: 7px;
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
       }
       .catalog {
-        max-width: 1000px;
+        max-width: 1120px;
         margin: 0 auto;
-        padding: 60px 32px;
+        padding: 56px 36px 72px;
       }
       .catalog[hidden] {
         display: none;
       }
       .catalog h2 {
-        font-size: 30px;
+        margin: 18px 0 32px;
+        font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Songti SC", serif;
+        font-size: clamp(28px, 3.2vw, 40px);
         font-weight: 500;
-        letter-spacing: -1px;
+        line-height: 1.15;
+        letter-spacing: -0.025em;
       }
       .catalog-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 18px;
       }
       .work {
-        padding: 20px;
-        border-top: 1px solid var(--line);
-        background: transparent;
+        padding: 22px 22px 20px;
+        border: 1px solid color-mix(in srgb, var(--ink) 11%, transparent);
+        border-radius: 16px;
+        background: linear-gradient(180deg, #ffffff 0%, var(--paper-elevated) 100%);
         text-align: left;
-        min-height: 80px;
+        min-height: 102px;
+        font-family: "Iowan Old Style", "Palatino Linotype", Georgia, "Songti SC", serif;
+        font-size: 19px;
+        font-weight: 500;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow:
+          0 4px 14px rgba(23, 26, 22, 0.04),
+          inset 0 1px 0 #ffffff;
+        transition:
+          transform 180ms ease,
+          border-color 180ms ease,
+          box-shadow 180ms ease;
+      }
+      @media (hover: hover) {
+        .work:hover {
+          transform: translateY(-3px);
+          border-color: color-mix(in srgb, var(--accent) 42%, transparent);
+          box-shadow:
+            0 14px 28px rgba(23, 26, 22, 0.09),
+            inset 0 1px 0 #ffffff;
+        }
       }
       .work span {
         display: block;
-        font-size: 11px;
-        color: #67705f;
-        margin-top: 7px;
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--subtle);
+        margin-top: 12px;
       }
       dialog {
-        border: 1px solid var(--line);
-        border-radius: 18px;
-        background: var(--paper);
-        padding: 30px;
-        width: min(90vw, 430px);
+        border: 1px solid rgba(23, 26, 22, 0.14);
+        border-radius: 22px;
+        background: linear-gradient(180deg, #fdfcf8 0%, var(--paper) 100%);
+        padding: 28px;
+        width: min(92vw, 448px);
         color: var(--ink);
+        box-shadow:
+          0 32px 72px rgba(17, 21, 16, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.9);
       }
       dialog::backdrop {
-        background: #18231565;
-        backdrop-filter: blur(5px);
+        background: rgba(18, 22, 17, 0.56);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
       }
       .dialog-art {
-        height: 190px;
-        margin: 20px 0;
+        height: 210px;
+        margin: 18px 0 22px;
+        padding: 8px;
+        border-radius: 16px;
+        background: linear-gradient(145deg, #ffffff, #e6e0d2);
+        border: 1px solid rgba(23, 26, 22, 0.08);
+        box-shadow: inset 0 1px 0 #ffffff;
       }
       .dialog-art svg {
         width: 100%;
         height: 100%;
-        border-radius: 9px;
+        border-radius: 10px;
+        display: block;
       }
       dialog h2 {
+        font-family: "Iowan Old Style", "Palatino Linotype", Georgia, "Songti SC", serif;
         font-weight: 500;
         font-size: 30px;
-        letter-spacing: -1px;
-        margin-bottom: 10px;
+        letter-spacing: -0.02em;
+        margin: 0 0 10px;
       }
       dialog p {
         font-size: 14px;
-        line-height: 1.7;
-        color: #596251;
+        line-height: 1.68;
+        color: var(--muted);
+        margin: 0 0 10px;
+      }
+      dialog p:last-child {
+        margin-bottom: 0;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+        font-size: 12.5px;
+        color: var(--subtle);
       }
       .dialog-top {
         display: flex;
@@ -252,88 +509,102 @@
         align-items: center;
       }
       .dialog-top span {
-        font: 10px monospace;
-        color: #67705f;
+        font:
+          500 11px/1.4 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
       }
       .close {
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
         border: 1px solid var(--line);
         border-radius: 50%;
-        background: transparent;
+        background: var(--paper-elevated);
+        font-size: 20px;
+        line-height: 1;
+        display: grid;
+        place-items: center;
       }
-      .hint {
-        text-align: center;
-        font: 10px monospace;
-        letter-spacing: 1px;
-        position: absolute;
-        bottom: 13px;
-        width: 100%;
-        color: #67705f;
-      }
-      @media (max-width: 600px) {
+      @media (max-width: 640px) {
         header,
         footer {
-          padding: 20px;
+          padding: 16px 18px;
         }
         .brand {
-          font-size: 18px;
+          font-size: 17px;
+        }
+        .top-controls {
+          gap: 7px;
         }
         .control {
-          padding: 10px 13px;
+          padding: 8px 12px;
+          min-height: 38px;
+          font-size: 12px;
         }
         main {
-          height: 610px;
-          min-height: 550px;
+          height: 616px;
+          min-height: 560px;
         }
         .copy {
           width: 84%;
           top: 50%;
         }
         :lang(zh) .copy {
-          width: 86%;
+          width: 88%;
+        }
+        .eyebrow {
+          font-size: 10px;
+          padding: 5px 11px;
         }
         .copy h1 {
-          font-size: clamp(34px, 9.5vw, 42px);
-          letter-spacing: -1.5px;
+          margin: 14px 0 12px;
+          font-size: clamp(32px, 9.2vw, 40px);
+          letter-spacing: -0.025em;
         }
         :lang(zh) .copy h1 {
-          font-size: clamp(28px, 7.6vw, 34px);
-          letter-spacing: -0.02em;
+          font-size: clamp(26px, 7.2vw, 33px);
+          line-height: 1.22;
         }
         .copy p {
-          max-width: 240px;
+          max-width: 245px;
+          font-size: 13px;
+        }
+        .primary {
+          margin-top: 18px;
+          padding: 11px 18px 11px 20px;
+          min-height: 44px;
           font-size: 13px;
         }
         .piece {
-          width: clamp(40px, 11.5vw, 46px);
-          height: clamp(40px, 11.5vw, 46px);
-          border-width: 3px;
+          width: 46px;
+          height: 46px;
+          padding: 3px;
         }
         .track {
-          width: 85%;
-          height: 430px;
+          width: 88%;
+          height: 456px;
           transform: translate(-50%, -50%);
         }
         .track.inner {
-          width: 61%;
-          height: 500px;
+          width: 64%;
+          height: 516px;
           transform: translate(-50%, -50%);
         }
         .catalog-grid {
           grid-template-columns: 1fr;
         }
         .catalog {
-          padding: 30px 20px;
+          padding: 34px 18px 48px;
         }
         footer {
           align-items: flex-start;
-          line-height: 1.7;
-          font-size: 10px;
-        }
-        footer span:last-child {
-          max-width: 125px;
-          text-align: right;
+          flex-direction: column;
+          gap: 6px;
+          font-size: 11px;
         }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -345,6 +616,17 @@
     </style>
   </head>
   <body data-speed="0.45">
+    <svg class="paper-grain" aria-hidden="true">
+      <filter id="orbit-grain">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.85"
+          numOctaves="3"
+          stitchTiles="stitch"
+        />
+      </filter>
+      <rect width="100%" height="100%" filter="url(#orbit-grain)" />
+    </svg>
     <header>
       <div class="brand">FORMA®</div>
       <div class="top-controls">
@@ -361,6 +643,42 @@
       </div>
     </header>
     <main id="stage" aria-label="Orbiting project collection">
+      <svg
+        class="astrolabe"
+        viewBox="0 0 1200 600"
+        preserveAspectRatio="xMidYMid slice"
+        aria-hidden="true"
+      >
+        <g stroke="#171a16" stroke-opacity="0.09" fill="none">
+          <ellipse
+            cx="600"
+            cy="300"
+            rx="512"
+            ry="236"
+            stroke-dasharray="2 10"
+            stroke-width="1.2"
+            transform="rotate(-10 600 300)"
+          />
+          <ellipse
+            cx="600"
+            cy="300"
+            rx="342"
+            ry="242"
+            stroke-width="0.8"
+            transform="rotate(22 600 300)"
+          />
+          <line x1="600" y1="22" x2="600" y2="52" stroke-width="1" />
+          <line x1="600" y1="548" x2="600" y2="578" stroke-width="1" />
+          <line x1="56" y1="300" x2="88" y2="300" stroke-width="1" />
+          <line x1="1112" y1="300" x2="1144" y2="300" stroke-width="1" />
+        </g>
+        <g fill="#171a16" fill-opacity="0.22">
+          <circle cx="600" cy="58" r="2.2" />
+          <circle cx="600" cy="542" r="2.2" />
+          <circle cx="96" cy="300" r="2.2" />
+          <circle cx="1104" cy="300" r="2.2" />
+        </g>
+      </svg>
       <div class="track"></div>
       <div class="track inner"></div>
       <div class="orbital" id="orbital"></div>
@@ -550,6 +868,10 @@
               /Files stay on this device\. Maximum (\d+) MB\./g,
               "文件留在此设备，最大 $1 MB。",
             )
+            .replace(
+              /Packed ([\d,]+) bytes\. CRC32 ([0-9a-f]+)\. Download contains the complete file, ready to decode\./gi,
+              "已打包 $1 字节。CRC32 $2。下载文件包含完整内容，可直接解码。",
+            )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
 
@@ -733,12 +1055,12 @@
         "use strict";
         const config = window.__usefulshelfConfigure({"accent": "#315c48", "speed": 0.45, "projects": null});
         const palette = [
-          ["#ed693f", "#f4d9b8"],
-          ["#234e40", "#d9e0bd"],
-          ["#baabd2", "#302942"],
-          ["#d7e24b", "#303625"],
-          ["#b66c4e", "#efe0ca"],
-          ["#334c83", "#c4d6ef"],
+          ["#c95534", "#f8e4c8"],
+          ["#1c4438", "#dfe7c8"],
+          ["#2b2842", "#e2d4f4"],
+          ["#273121", "#d9e87a"],
+          ["#8e4b34", "#f4e5cf"],
+          ["#213863", "#d4e4f7"],
         ];
         const defaultProjects = [
           {
@@ -808,16 +1130,21 @@
             /[&<>"']/g,
             (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[c],
           );
+        let artSeq = 0;
         function art(i) {
           const item = projects[i % projects.length];
           const [a, b] = item.colors || palette[i % palette.length];
+          const uid = "orb" + ++artSeq;
           let shapes = "";
           if (item.mark) {
-            const fs = item.mark.length <= 2 ? 74 : item.mark.length === 3 ? 52 : 40;
+            const fs = item.mark.length <= 2 ? 64 : item.mark.length === 3 ? 46 : 36;
             shapes =
-              '<text x="65" y="70" text-anchor="middle" dominant-baseline="central" fill="' +
+              '<circle cx="65" cy="65" r="46" fill="none" stroke="' +
               b +
-              '" font-family="Arial, sans-serif" font-weight="700" font-size="' +
+              '" stroke-opacity="0.26" stroke-width="1.2"/>' +
+              '<text x="65" y="69" text-anchor="middle" dominant-baseline="central" fill="' +
+              b +
+              '" font-family="Georgia, serif" font-weight="600" font-size="' +
               fs +
               '">' +
               escXml(item.mark) +
@@ -826,51 +1153,110 @@
             const shapeIdx = i % 6;
             if (shapeIdx === 0)
               shapes =
-                '<path d="M20 90 65 15 65 100 105 20 105 110" fill="none" stroke="' +
+                '<path d="M-8 106L46 22L74 72L98 30L138 106V138H-8Z" fill="#000" fill-opacity="0.18"/>' +
+                '<path d="M18 98L56 24L65 98L102 28L114 98" fill="none" stroke="' +
                 b +
-                '" stroke-width="18"/>';
-            if (shapeIdx === 1)
-              for (let r = 12; r < 85; r += 9)
+                '" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>' +
+                '<path d="M56 24L65 98L102 28" fill="none" stroke="#fff" stroke-opacity="0.45" stroke-width="2.5"/>' +
+                '<circle cx="96" cy="24" r="7" fill="#fde9b4"/>';
+            if (shapeIdx === 1) {
+              shapes =
+                '<circle cx="68" cy="66" r="48" fill="#000" fill-opacity="0.16"/>' +
+                '<circle cx="65" cy="65" r="8" fill="' +
+                b +
+                '"/>';
+              for (let r = 16; r <= 56; r += 8)
                 shapes +=
-                  '<circle cx="70" cy="67" r="' +
+                  '<circle cx="65" cy="65" r="' +
                   r +
                   '" fill="none" stroke="' +
                   b +
-                  '" stroke-width="2"/>';
+                  '" stroke-opacity="' +
+                  (1 - r / 78).toFixed(2) +
+                  '" stroke-width="' +
+                  (r % 16 === 0 ? "2.4" : "1.2") +
+                  '" stroke-dasharray="' +
+                  (r === 40 ? "6 4" : "none") +
+                  '"/>';
+            }
             if (shapeIdx === 2)
               shapes =
-                '<path d="M-10 140V75L42 22 75 57 95 38 150 100V140Z" fill="' +
+                '<circle cx="92" cy="34" r="18" fill="#f7da84"/>' +
+                '<circle cx="92" cy="34" r="26" fill="#f7da84" fill-opacity="0.22"/>' +
+                '<path d="M-6 134V74L40 34L72 68L98 46L136 92V134Z" fill="' +
                 b +
-                '"/><circle cx="99" cy="26" r="12" fill="#f4de79"/>';
-            if (shapeIdx === 3)
+                '" fill-opacity="0.88"/>' +
+                '<path d="M-6 134V96L48 64L84 92L136 74V134Z" fill="#171426" fill-opacity="0.52"/>';
+            if (shapeIdx === 3) {
+              shapes =
+                '<rect x="16" y="16" width="98" height="98" rx="18" fill="#000" fill-opacity="0.16"/>';
               for (let y = 0; y < 3; y++)
-                for (let x = 0; x < 3; x++)
+                for (let x = 0; x < 3; x++) {
+                  const isRound = (x + y) % 2 === 1;
                   shapes +=
                     '<rect x="' +
-                    (x * 43 + 4) +
+                    (22 + x * 30) +
                     '" y="' +
-                    (y * 43 + 4) +
-                    '" width="39" height="39" rx="' +
-                    ((x + y) % 2 ? 20 : 0) +
+                    (22 + y * 30) +
+                    '" width="24" height="24" rx="' +
+                    (isRound ? 12 : 5) +
                     '" fill="' +
                     b +
+                    '" fill-opacity="' +
+                    (isRound ? "0.94" : "0.62") +
                     '"/>';
+                }
+            }
             if (shapeIdx === 4)
               shapes =
-                '<path d="M65 8C-15 15 25 62 65 65C-15 75 25 127 65 122C145 125 105 74 65 65C145 60 105 8 65 8Z" fill="' +
+                '<path d="M65 14C20 18 30 62 65 65C20 70 30 116 65 116C110 116 100 70 65 65C110 62 100 18 65 14Z" fill="' +
                 b +
-                '"/>';
+                '" fill-opacity="0.92"/>' +
+                '<circle cx="65" cy="65" r="11" fill="' +
+                a +
+                '"/>' +
+                '<circle cx="65" cy="65" r="5" fill="#fff" fill-opacity="0.7"/>';
             if (shapeIdx === 5)
               shapes =
-                '<text x="12" y="104" fill="' +
+                '<line x1="16" y1="30" x2="114" y2="30" stroke="' +
                 b +
-                '" font-family="Arial" font-weight="bold" font-size="108">a.</text>';
+                '" stroke-opacity="0.32" stroke-width="1"/>' +
+                '<line x1="16" y1="100" x2="114" y2="100" stroke="' +
+                b +
+                '" stroke-opacity="0.32" stroke-width="1"/>' +
+                '<text x="65" y="92" text-anchor="middle" fill="' +
+                b +
+                '" font-family="Georgia, serif" font-style="italic" font-size="88">a.</text>';
           }
           return (
-            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 130"><rect width="130" height="130" fill="' +
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 130">' +
+            "<defs>" +
+            '<linearGradient id="' +
+            uid +
+            'bg" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0%" stop-color="' +
             a +
             '"/>' +
+            '<stop offset="100%" stop-color="' +
+            a +
+            '" stop-opacity="0.82"/>' +
+            "</linearGradient>" +
+            '<radialGradient id="' +
+            uid +
+            'gl" cx="28%" cy="22%" r="76%">' +
+            '<stop offset="0%" stop-color="#ffffff" stop-opacity="0.34"/>' +
+            '<stop offset="48%" stop-color="#ffffff" stop-opacity="0"/>' +
+            '<stop offset="100%" stop-color="#000000" stop-opacity="0.28"/>' +
+            "</radialGradient>" +
+            "</defs>" +
+            '<rect width="130" height="130" fill="#141714"/>' +
+            '<rect width="130" height="130" fill="url(#' +
+            uid +
+            'bg)"/>' +
             shapes +
+            '<rect width="130" height="130" fill="url(#' +
+            uid +
+            'gl)"/>' +
             "</svg>"
           );
         }
@@ -963,7 +1349,7 @@
           else catalog.scrollIntoView({ behavior: media.matches ? "instant" : "smooth" });
         };
         function draw() {
-          const mobile = width < 600;
+          const mobile = width < 640;
           const half = Math.ceil(pieces.length / 2);
           pieces.forEach((b, i) => {
             const band = i % 2,
@@ -973,14 +1359,15 @@
               const top = i < half;
               const n = top ? i : i - half;
               const rowCount = top ? half : pieces.length - half;
-              const theta = rowCount > 1 ? (n / (rowCount - 1)) * Math.PI : Math.PI / 2;
-              const rx = Math.min(width * 0.41, 168);
-              const ry = 86;
+              const theta =
+                rowCount > 1 ? 0.12 * Math.PI + (n / (rowCount - 1)) * 0.76 * Math.PI : Math.PI / 2;
+              const rx = Math.min(width * 0.42, 162);
+              const ry = 56;
               x = Math.cos(theta) * rx + Math.sin(angle + i) * 2;
-              y = (top ? -1 : 1) * (170 + Math.sin(theta) * ry);
+              y = (top ? -1 : 1) * (196 + Math.sin(theta) * ry);
             } else {
-              x = Math.cos(a) * (Math.min(width * 0.42, 465) - (band ? 80 : 0));
-              y = Math.sin(a) * (band ? 265 : 205);
+              x = Math.cos(a) * (Math.min(width * 0.41, 456) - (band ? 82 : 0));
+              y = Math.sin(a) * (band ? 242 : 196);
             }
             b.style.transform = "translate(-50%,-50%) translate(" + x + "px," + y + "px)";
           });

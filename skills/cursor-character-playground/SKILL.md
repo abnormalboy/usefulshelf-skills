@@ -45,9 +45,13 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ```css
 :root {
   --accent: #454bc5;
-  font-family: Arial, "PingFang SC", sans-serif;
-  color: #282727;
-  background: #faf9f6;
+  --bg: #f8f6f0;
+  --surface: #ffffff;
+  --ink: #1e1d1a;
+  --muted: #58534a;
+  font-family: "SF Pro Display", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  color: var(--ink);
+  background: var(--bg);
   color-scheme: light;
 }
 ```
@@ -67,15 +71,24 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 The following specification is included in full so this document works without accompanying files. Preserve its state machine, geometry, numeric bounds and integration boundaries when adapting it.
 
+
 ### Rendering and interaction
 
-Six independently drawn cursor silhouettes form an illustrative shape timeline: line outline, pixel staircase, sharp fill, precise contour, soft corner, and expressive arrow. The years act as narrative markers, not claims that these drawings are exact historical system assets. Do not add product logos or system-specific icon files. Shape names are generic and switch with the language query.
+Six independently drawn cursor silhouettes form an illustrative shape timeline (1968–Today): line outline, pixel staircase, sharp fill, precise contour, soft corner, and expressive arrow. Each specimen renders inside a museum drafting-plate arena (`#ffffff` plinth on archival warm paper `#f8f6f0`) with crisp layered vector shading, subtle specular gradient sheen, and clean double-contour edges. The years act as narrative markers, not claims that these drawings are exact historical system assets. Do not add product logos or system-specific icon files. Shape names are generic and switch with the language query.
 
-The histogram is decorative; a native range input carries pointer, touch, and keyboard semantics. Its accessible value includes both the year and shape name. All SVG paths are fixed internal data, while size is bounded and ink is drawn from validated palette values. SVG export uses the same shape builder as the specimen and includes explicit dimensions.
+The vernier bar ruler is decorative; a native range input carries pointer, touch, and keyboard semantics. Its accessible value includes both the year and shape name. All SVG paths are fixed internal data, while size is bounded and ink is drawn from validated palette values. SVG export uses the same shape builder as the specimen and includes explicit dimensions.
 
 Trial mode reveals three semantic target buttons. Each target can be captured once; changing eras cancels the trial, resets its count, and hides targets. Pointer motion moves the specimen only during a trial. Tab and Enter provide equivalent target capture, with focus moving to the next available target or replay control. Replaying clears all captured state. There are no animation loops; reduced motion disables size transitions. Preserve conventional system pointer behavior outside the trial arena.
 
-During pointer trials, align each silhouette’s semantic tip to the event coordinates using its viewBox hotspot; only the noninteractive specimen is centered. Rounded tips use the topmost point of their quadratic contour. Do not inset or clamp the pointer position away from the actual event. Resizing must preserve this alignment. Mouse clicks keep the cursor at the click location; keyboard capture may move it to the focused target. Validate tip alignment across all six forms at minimum and maximum size, including near arena edges.
+During pointer trials, align each silhouette’s semantic tip to the event coordinates using its viewBox hotspot; only the noninteractive specimen is centered. Rounded tips use the topmost point of their quadratic contour. Keep `#arena` free of CSS border-width (place outer borders on `.arena-frame`) so `getBoundingClientRect()` aligns 1:1 with the positioning padding box. Do not inset or clamp the pointer position away from the actual event. Resizing must preserve this alignment. Mouse clicks keep the cursor at the click location; keyboard capture may move it to the focused target. Validate tip alignment across all six forms at minimum and maximum size, including near arena edges.
+
+#### Visual tokens
+
+- Archival warm paper backdrop: `#f8f6f0` (`--bg`)
+- Exhibition drafting plate: `#ffffff` (`--surface`)
+- Primary archival ink: `#1e1d1a` (`--ink`)
+- Secondary label ink: `#58534a` (`--muted`)
+- Default accent: `#454bc5` (`--accent`)
 
 ## 可选完整包工作流 / Optional package workflow
 
