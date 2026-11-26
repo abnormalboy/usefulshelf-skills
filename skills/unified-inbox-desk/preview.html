@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -90,9 +90,9 @@
         justify-content: space-between;
         align-items: center;
         font:
-          10px ui-monospace,
+          12px ui-monospace,
           monospace;
-        color: #75836a;
+        color: #44513f;
       }
       .dots {
         display: flex;
@@ -101,7 +101,7 @@
       .dots i {
         width: 7px;
         height: 7px;
-        background: #bec7b5;
+        background: #a4b09a;
         border-radius: 50%;
       }
       .toolbar {
@@ -109,7 +109,7 @@
         gap: 18px;
         align-items: center;
         justify-content: space-between;
-        padding: 18px 20px;
+        padding: 16px 20px;
         border-bottom: 1px solid #d9dfd2;
       }
       .filters {
@@ -122,8 +122,8 @@
         background: none;
         padding: 8px 12px;
         border-radius: 20px;
-        font: 11px system-ui;
-        color: #849178;
+        font: 12px system-ui;
+        color: #465341;
         cursor: pointer;
       }
       .filters button[aria-pressed="true"] {
@@ -177,24 +177,24 @@
           serif;
       }
       .message strong {
-        font-size: 11px;
+        font-size: 12px;
         display: block;
         font-weight: 600;
       }
       .message small {
-        font-size: 10px;
+        font-size: 12px;
         display: block;
-        color: #87907d;
-        margin-top: 5px;
+        color: #4b5548;
+        margin-top: 4px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
       }
       .message em {
         font:
-          9px ui-monospace,
+          11px ui-monospace,
           monospace;
-        color: #929988;
+        color: #50594b;
         font-style: normal;
       }
       .reader {
@@ -203,10 +203,10 @@
       }
       #channel {
         font:
-          9px ui-monospace,
+          11px ui-monospace,
           monospace;
         color: var(--accent);
-        letter-spacing: 0.12em;
+        letter-spacing: 0.1em;
       }
       h2 {
         font:
@@ -216,14 +216,14 @@
         overflow-wrap: anywhere;
       }
       #sender {
-        font: 10px system-ui;
-        color: #9aa18d;
+        font: 12px system-ui;
+        color: #4e5948;
       }
       #body {
-        font: 12px/1.8 system-ui;
-        color: #6e7b65;
+        font: 13px/1.75 system-ui;
+        color: #3f4b3c;
         min-height: 61px;
-        margin: 20px 0;
+        margin: 18px 0;
       }
       .reader-actions {
         display: flex;
@@ -234,13 +234,13 @@
         padding: 0;
         border: 0;
         background: none;
-        font: 11px system-ui;
+        font: 12px system-ui;
         color: var(--accent);
         cursor: pointer;
       }
       .draft-label {
-        font: 10px system-ui;
-        color: #7a8670;
+        font: 12px system-ui;
+        color: #495446;
         display: block;
         margin-bottom: 8px;
       }
@@ -251,10 +251,10 @@
         max-height: 180px;
         padding: 10px 12px;
         background: #f5f7f0;
-        border: 1px solid #e0e6d7;
+        border: 1px solid #d2dac8;
         border-radius: 7px;
         color: var(--ink);
-        font: 12px/1.5 system-ui;
+        font: 13px/1.5 system-ui;
       }
       .save {
         display: flex;
@@ -264,8 +264,8 @@
         margin-top: 9px;
       }
       .save small {
-        font: 9px system-ui;
-        color: #909a84;
+        font: 11px system-ui;
+        color: #4f594b;
       }
       .save button {
         border: 0;
@@ -273,7 +273,7 @@
         color: white;
         border-radius: 18px;
         padding: 8px 13px;
-        font: 10px system-ui;
+        font: 12px system-ui;
         cursor: pointer;
       }
       .bottom {
@@ -281,7 +281,7 @@
         justify-content: space-between;
         align-items: center;
         gap: 18px;
-        margin-top: 20px;
+        margin-top: 14px;
       }
       .mix {
         display: flex;
@@ -296,14 +296,14 @@
       }
       .mix-label {
         font:
-          9px ui-monospace,
+          11px ui-monospace,
           monospace;
-        color: #87917e;
+        color: #4d574a;
         margin-top: 7px;
       }
       #status {
-        font: 11px/1.6 system-ui;
-        color: #728366;
+        font: 12px/1.6 system-ui;
+        color: #4a5446;
         min-height: 20px;
       }
       .undo {
@@ -311,7 +311,7 @@
         border-bottom: 1px solid currentColor;
         background: none;
         color: var(--accent);
-        font: 11px system-ui;
+        font: 12px system-ui;
         cursor: pointer;
         padding: 0 0 2px;
       }
@@ -327,7 +327,7 @@
       }
       .empty {
         font: 12px system-ui;
-        color: #929c85;
+        color: #4f594a;
         padding: 35px 20px;
         line-height: 1.8;
       }
@@ -397,17 +397,17 @@
       main {
         max-width: 590px;
         min-height: 0;
-        margin: 64px auto;
-        padding: 27px 28px 20px;
+        margin: 18px auto;
+        padding: 20px 24px 16px;
         background: #f6f3ec;
-        border-radius: 29px;
+        border-radius: 26px;
         box-shadow: 0 30px 90px #555c4327;
       }
       .mast {
-        letter-spacing: 0.03em;
+        letter-spacing: 0.02em;
         border: 0;
         padding-bottom: 0;
-        font: 11px system-ui;
+        font: 12px system-ui;
         align-items: center;
       }
       .mast .mark {
@@ -421,19 +421,20 @@
         margin-right: 8px;
       }
       .hero {
-        margin: 25px 0 22px;
+        margin: 14px 0 14px;
         display: block;
       }
       h1 {
-        font-size: clamp(35px, 4.5vw, 47px);
-        line-height: 1.07;
+        font-size: clamp(30px, 3.8vw, 40px);
+        line-height: 1.1;
         letter-spacing: -0.04em;
+        margin: 0 0 6px;
         white-space: pre-line;
       }
       .sub {
         font-size: 13px;
-        color: #59615c;
-        line-height: 1.65;
+        color: #4b544f;
+        line-height: 1.6;
       }
       .count {
         display: none;
@@ -443,65 +444,66 @@
         gap: 4px;
       }
       .view-switch button {
-        font: 10px system-ui;
+        font: 12px system-ui;
         border: 0;
         background: transparent;
-        padding: 6px 9px;
+        padding: 6px 10px;
         border-radius: 15px;
-        color: #767e74;
+        color: #475249;
         cursor: pointer;
       }
       .view-switch button[aria-pressed="true"] {
-        background: #e6e9df;
-        color: #25382c;
+        background: #e4e8dc;
+        color: #1f3026;
+        font-weight: 500;
       }
       .insight-app {
         background: #fff;
-        border: 1px solid #ecebe7;
+        border: 1px solid #e6e5e0;
         border-radius: 14px;
         overflow: hidden;
-        box-shadow: 0 16px 27px #3f493314;
+        box-shadow: 0 14px 24px #3f493314;
       }
       .insight-chrome {
-        padding: 11px 14px;
+        padding: 9px 14px;
         background: #f1f2f1;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 10px;
-        color: #849087;
+        font-size: 12px;
+        color: #4d5750;
       }
       .analysis-body {
-        padding: 17px 18px 16px;
+        padding: 13px 16px 12px;
       }
       .question {
-        margin: 0 0 20px auto;
+        margin: 0 0 12px auto;
         max-width: 84%;
         background: #181b19;
         color: #fff;
-        padding: 11px 14px;
+        padding: 9px 13px;
         border-radius: 15px 15px 3px 15px;
-        font: 12px/1.5 system-ui;
+        font: 12px/1.45 system-ui;
       }
       .analysis-kicker {
-        font: 10px system-ui;
-        color: #919a95;
-        margin: 0 0 9px;
+        font: 12px system-ui;
+        color: #4f5954;
+        margin: 0 0 6px;
         display: flex;
         justify-content: space-between;
       }
       #analysis-answer {
-        font: 12px/1.65 system-ui;
-        margin: 0 0 18px;
-        color: #36443d;
+        font: 12px/1.6 system-ui;
+        margin: 0 0 12px;
+        color: #2f3b35;
       }
       .chart-heading {
         display: flex;
         justify-content: space-between;
         gap: 10px;
-        font-size: 10px;
-        color: #87928b;
-        margin-bottom: 9px;
+        font-size: 12px;
+        color: #4f5953;
+        margin-bottom: 7px;
       }
       .analysis-bar {
         height: 10px;
@@ -517,8 +519,8 @@
       }
       .analysis-legend {
         display: grid;
-        gap: 2px;
-        margin-top: 12px;
+        gap: 1px;
+        margin-top: 8px;
       }
       .legend-row {
         display: grid;
@@ -528,11 +530,11 @@
         border: 0;
         border-radius: 6px;
         background: transparent;
-        padding: 6px 0;
+        padding: 4px 0;
         width: 100%;
         text-align: left;
-        font: 11px system-ui;
-        color: #39463f;
+        font: 12px system-ui;
+        color: #2f3b35;
         cursor: pointer;
       }
       .legend-row[aria-pressed="true"] {
@@ -546,19 +548,19 @@
         border-radius: 50%;
       }
       .legend-row strong {
-        font-size: 11px;
+        font-size: 12px;
       }
       .legend-row small {
-        font-size: 10px;
-        color: #939b96;
-        min-width: 46px;
+        font-size: 12px;
+        color: #525c56;
+        min-width: 48px;
         text-align: right;
       }
       .analysis-options {
         display: flex;
-        gap: 10px;
+        gap: 12px;
         flex-wrap: wrap;
-        padding: 12px 18px;
+        padding: 10px 16px;
         border-top: 1px solid #eeefea;
         background: #fcfcfa;
       }
@@ -566,36 +568,36 @@
         display: flex;
         align-items: center;
         gap: 6px;
-        font: 10px system-ui;
-        color: #778379;
+        font: 12px system-ui;
+        color: #475249;
       }
       .analysis-options select {
         max-width: 100%;
-        border: 1px solid #dfe4da;
+        border: 1px solid #cfd6c9;
         background: #fff;
         border-radius: 5px;
-        padding: 6px;
-        color: #3e5143;
-        font: 10px system-ui;
+        padding: 5px 8px;
+        color: #26342a;
+        font: 12px system-ui;
       }
       .analysis-note {
-        font: 10px/1.6 system-ui;
-        color: #87927e;
-        margin: 15px 0 0;
+        font: 12px/1.55 system-ui;
+        color: #4e574a;
+        margin: 10px 0 0;
       }
       #analysis-focus {
         min-height: 16px;
-        margin: 9px 0 0;
-        font: 10px/1.5 system-ui;
+        margin: 7px 0 0;
+        font: 12px/1.45 system-ui;
         color: var(--accent);
       }
       .bottom {
-        margin-top: 14px;
+        margin-top: 8px;
         gap: 7px;
       }
       #status {
-        font-size: 10px;
-        color: #7d8876;
+        font-size: 12px;
+        color: #4a5446;
       }
       .work-open {
         max-width: 1060px;
@@ -676,7 +678,9 @@
       <div class="hero">
         <div>
           <h1>把一天，理清楚。</h1>
-          <p class="sub" id="subtitle">问一个小问题，让每段对话都有清晰的去处。</p>
+          <p class="sub" id="subtitle">
+            问一个小问题，让每段对话都有清晰的去处。
+          </p>
         </div>
         <div class="count">
           <b id="count">5</b>
@@ -840,57 +844,206 @@
       (() => {
         "use strict";
         const dictionary = {};
-        const lang =
-          new URLSearchParams(location.search).get("lang") ||
-          document.documentElement.dataset.skillLang ||
-          "zh";
-        const chinese = lang !== "en";
-        document.documentElement.lang = chinese ? "zh-CN" : "en";
         const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        const normalizeLang = (value) => {
+          if (!value) return "";
+          const lower = String(value).trim().toLowerCase();
+          if (lower === "zh" || lower.startsWith("zh-")) return "zh";
+          if (lower === "en" || lower.startsWith("en-")) return "en";
+          return "";
+        };
+        const readQueryLang = () => {
+          try {
+            return normalizeLang(new URLSearchParams(location.search).get("lang"));
+          } catch {
+            return "";
+          }
+        };
+        const resolveLang = () =>
+          readQueryLang() ||
+          normalizeLang(document.documentElement.dataset.skillLang) ||
+          (normalizeLang(document.documentElement.lang) === "zh" ? "zh" : "en");
+
+        let currentLang = resolveLang();
+        let chinese = currentLang === "zh";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+
+        const actionZh = { receive: "收款", send: "发送", swap: "兑换" };
+        const flavorZh = {
+          vanilla: "香草",
+          berry: "莓果",
+          matcha: "抹茶",
+          cocoa: "可可",
+          citrus: "柑橘",
+          peach: "蜜桃",
+        };
+        const localizedAttrs = ["aria-label", "placeholder", "title", "data-hint"];
+        const skipSelector =
+          "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]";
+        const originalTextNodes = new WeakMap();
+        const originalAttrs = new WeakMap();
+        let originalDocumentTitle = null;
+
         window.__usefulshelfConfigure = (config) => {
           const accent = document.documentElement.dataset.skillAccent;
-          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+          return /^#(?:[\da-f]{3}|[\da-f]{6})$/i.test(accent || "")
+            ? { ...config, accent }
+            : config;
         };
+
         window.__usefulshelfText = (value) => {
           if (!chinese || typeof value !== "string") return value;
-          const exact = dictionary[normalize(value)];
+          const normalized = normalize(value);
+          if (!normalized) return value;
+          const exact = dictionary[normalized];
           if (exact !== undefined) return exact;
           return value
             .replace(/What is ([^?]+)\?/g, "什么是 $1？")
             .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
-            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
-            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/PLAYING\s+(\d+)\s*\/\s*(\d+)/g, "正在播放 $1 / $2")
+            .replace(
+              /^(Vanilla|Berry|Matcha|Cocoa|Citrus|Peach)\s*·\s*(\d+)\s+bites?\s+to happiness$/i,
+              (_, flavor, count) =>
+                `${flavorZh[flavor.toLowerCase()] || flavor} · 还有 ${count} 口小快乐`,
+            )
+            .replace(/(\d+)\s+bites?\s+to happiness/g, "还有 $1 口小快乐")
+            .replace(/All gone!\s*(\d+)\s+cookies?\s+enjoyed\./g, "吃完啦！已享用 $1 枚饼干。")
+            .replace(
+              /\bPreview\s+(Receive|Send|Swap)\b/gi,
+              (_, action) => `预览${actionZh[action.toLowerCase()] || action}`,
+            )
+            .replace(
+              /^(Receive|Send|Swap)\s+preview:\s*(\$[\d.,]+)\s*·\s*no transaction sent$/i,
+              (_, action, amount) =>
+                `${actionZh[action.toLowerCase()] || action}预览：${amount} · 未发送真实交易`,
+            )
+            .replace(/(\d+)\s*\/\s*12\s+STICKERS/g, "$1 / 12 张贴纸")
+            .replace(/(\d+)\s+stickers? on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(
+              /Landed in column (\d+)\.\s*Try a different launch position\./g,
+              "落在第 $1 列。换个发射位置试试。",
+            )
             .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Try a different launch position\./g, "换个发射位置试试。")
+            .replace(/Selected sticker rotated to\s*(-?\d+)\s*degrees\./g, "所选贴纸旋转至 $1 度。")
             .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
             .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
             .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/(\d+)\s+wish(?:es)?\s+added to your sky\./g, "$1 个愿望已加入夜空。")
             .replace(/added to your sky\./g, "已加入夜空。")
-            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/(\d+)\s+little clouds?\s+drifting by\./g, "$1 朵小云正轻轻飘过。")
+            .replace(/(\d+)\s+little clouds?/g, "$1 朵小云")
             .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(
+              /Files stay on this device\. Maximum (\d+) MB\./g,
+              "文件留在此设备，最大 $1 MB。",
+            )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
-        function boot() {
-          if (chinese) {
-            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-            let node;
-            while ((node = walker.nextNode())) {
-              if (
-                node.parentElement?.closest(
-                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
-                )
-              )
-                continue;
-              const next = window.__usefulshelfText(node.textContent);
-              if (next !== node.textContent) node.textContent = next;
+
+        function isCustomDocumentTitle(sourceTitle) {
+          const titleEl = document.querySelector("title");
+          if (titleEl?.hasAttribute("data-skill-custom-text")) return true;
+          const normalizedTitle = normalize(sourceTitle || "");
+          if (!normalizedTitle) return false;
+          for (const element of document.querySelectorAll("[data-skill-custom-text]")) {
+            if (normalize(element.textContent || "") === normalizedTitle) return true;
+          }
+          return false;
+        }
+
+        function applyLanguage(nextLang) {
+          const resolved = normalizeLang(nextLang) || "en";
+          currentLang = resolved;
+          chinese = resolved === "zh";
+          document.documentElement.lang = chinese ? "zh-CN" : "en";
+          if (!document.body) return;
+          if (originalDocumentTitle === null) originalDocumentTitle = document.title;
+
+          const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+          let node;
+          while ((node = walker.nextNode())) {
+            if (node.parentElement?.closest(skipSelector)) continue;
+            if (chinese) {
+              const source = originalTextNodes.has(node)
+                ? originalTextNodes.get(node)
+                : node.textContent;
+              const next = window.__usefulshelfText(source);
+              if (next !== source) {
+                if (!originalTextNodes.has(node)) originalTextNodes.set(node, source);
+                if (node.textContent !== next) node.textContent = next;
+              }
+            } else if (originalTextNodes.has(node)) {
+              const source = originalTextNodes.get(node);
+              if (node.textContent !== source) node.textContent = source;
             }
-            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
-              for (const name of ["aria-label", "placeholder", "title"]) {
-                if (element.hasAttribute(name))
-                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+          }
+
+          for (const element of document.querySelectorAll(
+            "[aria-label],[placeholder],[title],[data-hint]",
+          )) {
+            if (element.closest("[data-skill-custom-text]")) continue;
+            let saved = originalAttrs.get(element);
+            for (const name of localizedAttrs) {
+              if (!element.hasAttribute(name)) continue;
+              if (chinese) {
+                const source =
+                  saved && Object.prototype.hasOwnProperty.call(saved, name)
+                    ? saved[name]
+                    : element.getAttribute(name);
+                const next = window.__usefulshelfText(source);
+                if (next !== source) {
+                  if (!saved) {
+                    saved = {};
+                    originalAttrs.set(element, saved);
+                  }
+                  if (!Object.prototype.hasOwnProperty.call(saved, name)) {
+                    saved[name] = source;
+                  }
+                  if (element.getAttribute(name) !== next) element.setAttribute(name, next);
+                }
+              } else if (saved && Object.prototype.hasOwnProperty.call(saved, name)) {
+                if (element.getAttribute(name) !== saved[name]) {
+                  element.setAttribute(name, saved[name]);
+                }
               }
             }
-            document.title = window.__usefulshelfText(document.title);
           }
+
+          if (!isCustomDocumentTitle(originalDocumentTitle)) {
+            const targetTitle = chinese
+              ? window.__usefulshelfText(originalDocumentTitle)
+              : originalDocumentTitle;
+            if (document.title !== targetTitle) document.title = targetTitle;
+          }
+        }
+
+        window.__usefulshelfSetLang = (lang) => {
+          const resolved = normalizeLang(lang) || "en";
+          if (document.documentElement.dataset.skillLang !== resolved) {
+            document.documentElement.dataset.skillLang = resolved;
+          }
+          applyLanguage(resolved);
+        };
+
+        function boot() {
+          if (originalDocumentTitle === null) originalDocumentTitle = document.title;
+          if (chinese) applyLanguage("zh");
+
+          let langObserver;
+          if (typeof MutationObserver === "function") {
+            langObserver = new MutationObserver(() => {
+              const next =
+                normalizeLang(document.documentElement.dataset.skillLang) || resolveLang();
+              if (next !== currentLang) applyLanguage(next);
+            });
+            langObserver.observe(document.documentElement, {
+              attributes: true,
+              attributeFilter: ["data-skill-lang"],
+            });
+            window.addEventListener("pagehide", () => langObserver.disconnect(), { once: true });
+          }
+
           if (parent === window) return;
           // Freeze viewport-based demo heights before measuring, avoiding vh feedback
           // when the parent grows the iframe. Intentional inner demo scrollers remain.
@@ -967,16 +1120,20 @@
       (() => {
         "use strict";
         const config = window.__usefulshelfConfigure({"title": "\u628a\u4e00\u5929\uff0c\u7406\u6e05\u695a\u3002", "subtitle": "\u95ee\u4e00\u4e2a\u5c0f\u95ee\u9898\uff0c\u8ba9\u6bcf\u6bb5\u5bf9\u8bdd\u90fd\u6709\u6e05\u6670\u7684\u53bb\u5904\u3002", "accent": "#557966", "bg": "#f3f0e9", "customTitle": false, "customSubtitle": false}),
-          en =
-            (new URLSearchParams(location.search).get("lang") ||
-              document.documentElement.dataset.skillLang) === "en",
+          resolvedLang =
+            new URLSearchParams(location.search).get("lang") ||
+            document.documentElement.dataset.skillLang ||
+            (document.documentElement.lang?.toLowerCase().startsWith("zh") ? "zh" : "en"),
+          en = resolvedLang !== "zh",
           L = (a, b) => (en ? b : a);
         document.documentElement.lang = en ? "en" : "zh-CN";
         document
           .querySelectorAll("[data-en]")
           .forEach((e) => (e.textContent = e.dataset[en ? "en" : "zh"]));
-        if (en && !config.customTitle)
+        if (en && !config.customTitle) {
           document.querySelector("h1").textContent = "A little room for clarity.";
+          document.title = "A little room for clarity.";
+        }
         if (en && !config.customSubtitle)
           document.querySelector("#subtitle").textContent =
             "One thoughtful question. A clearer view of every conversation.";

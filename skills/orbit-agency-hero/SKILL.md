@@ -1,6 +1,6 @@
 ---
 name: orbit-agency-hero
-description: 轨道作品集首屏。暖纸色首屏以大字为中心、原创 SVG 项目围绕旋转。 Use for this interaction and adapt it to the existing framework.
+description: 轨道作品集首屏（Orbiting agency portfolio hero & interactive project dialog）。暖纸色首屏以大字为中心、原创 SVG 圆形项目沿双椭圆轨道旋转并支持展开目录与弹窗详情，适用于设计工作室、创意机构与品牌作品集官网首屏。
 ---
 
 # 轨道作品集首屏
@@ -18,7 +18,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ## 参数与内容边界
 
 - 将标题、副标题、强调色与场景数据作为可配置输入；未指定时采用下面的设计参考，而不强制迁移用户的技术栈。
-- 完整包的可选 CLI 参数：`--speed`。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
+- 完整包的可选 CLI 参数：`--brand`（1–180 字符）、`--title`（1–180 字符）、`--subtitle`（1–180 字符）、`--accent`（3/6 位 HEX）、`--speed`（0–2 浮点数）、`--lang`（`en` / `zh`）、`-p` / `--params`（JSON 配置文件，额外支持自定义 `projects` 数组：2–12 项，每项含 `name`、`category`、`description` 及可选 `colors: [bgHex, fgHex]`、`mark`）。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
 - 文案用纯文本节点/框架插值，颜色只接受合法 HEX，数字按参考约束限制。内联 JSON 必须转义 `<`，不能把用户文字送进 innerHTML、eval、事件属性或选择器。
 - 中英文文案使用明确字典，界面语言与用户输入内容分离；不得翻译或覆盖用户填写的名称、便笺或文件内容。
 - 演示里的本地数据不代表实际账号、付款、远程 AI 或业务后台；要接入真实服务时遵守用户授权和服务端准入，不向访客公开凭据、运营额度或其他人的任务。
@@ -87,4 +87,4 @@ The default artwork is abstract geometry. Detail and object text are sample cont
 
 ## 可选完整包工作流 / Optional package workflow
 
-已获得完整 ZIP 时，可以参考 templates/index.template.html，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。
+已获得完整 ZIP 时，可以参考 [references/design.md](references/design.md) 与 `templates/index.template.html`，并执行 `python3 scripts/generate.py -o index.html`（可加 `--lang zh` 或 `-p params.json`）。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。

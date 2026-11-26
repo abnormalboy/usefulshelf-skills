@@ -1,6 +1,6 @@
 ---
 name: expanding-fab
-description: 展开式快捷操作。54px 原生悬浮按钮展开三个带短暂错峰的操作，装饰背景模糊但文字与图标清晰。 Use for this interaction and adapt it to the existing framework.
+description: 展开式快捷操作按钮（移动端钱包悬浮 FAB 菜单）。54px 原生悬浮触发器展开三项错峰动作与模糊遮罩，内置键盘循环焦点与本地演示弹窗。Trigger when building floating action button (FAB) speed dials, mobile quick-action menus, wallet shortcut sheets, or accessible expandable action buttons.
 ---
 
 # 展开式快捷操作
@@ -18,7 +18,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ## 参数与内容边界
 
 - 将标题、副标题、强调色与场景数据作为可配置输入；未指定时采用下面的设计参考，而不强制迁移用户的技术栈。
-- 完整包的可选 CLI 参数：`--title`, `--subtitle`, `--accent`, `--bg`。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
+- 完整包的可选 CLI 参数：`-p/--params`（JSON 配置，支持 `actions` 三项字符串数组）、`--lang`（`en` 或 `zh`）、`--title`（1–180 字符）、`--subtitle`（1–180 字符）、`--accent`（3/6 位 HEX）、`--bg`（3/6 位 HEX）、`--actions`（三个操作标签，逗号分隔或 JSON 数组，每项 1–24 字符，默认 `Receive,Send,Swap`）。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
 - 文案用纯文本节点/框架插值，颜色只接受合法 HEX，数字按参考约束限制。内联 JSON 必须转义 `<`，不能把用户文字送进 innerHTML、eval、事件属性或选择器。
 - 中英文文案使用明确字典，界面语言与用户输入内容分离；不得翻译或覆盖用户填写的名称、便笺或文件内容。
 - 演示里的本地数据不代表实际账号、付款、远程 AI 或业务后台；要接入真实服务时遵守用户授权和服务端准入，不向访客公开凭据、运营额度或其他人的任务。
@@ -47,11 +47,11 @@ If only this SKILL.md is supplied, implement the specification directly in the t
   --accent: #202428;
   --bg: #e9ecee;
   --ink: #181a1b;
-  --muted: #71787f;
+  --muted: #535a61;
   --ease: cubic-bezier(0.2, 0.85, 0.25, 1.15);
 }
 body {
-  font-family:
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 ```
 
@@ -88,4 +88,4 @@ The template is standalone HTML/CSS/JavaScript with system fonts and inline SVG.
 
 ## 可选完整包工作流 / Optional package workflow
 
-已获得完整 ZIP 时，可以参考 templates/index.template.html，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。
+已获得完整 ZIP 时，可以参考 [references/design.md](references/design.md) 与 `templates/index.template.html`，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。

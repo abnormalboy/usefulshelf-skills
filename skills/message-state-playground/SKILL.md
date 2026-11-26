@@ -1,6 +1,6 @@
 ---
 name: message-state-playground
-description: 消息状态游乐场。消息以稳定 ID 管理 draft/sending/delivered/failed/offline；重试原消息不能创建重复项。 Use for this interaction and adapt it to the existing framework.
+description: 消息状态游乐场（聊天消息五态状态机与失败重试实验室）。用稳定消息 ID 呈现待机/输入/发送/送达/失败及离线重试流程，配合事件轨迹、合成音频便条与本地附件。Trigger when building chat delivery state machines, optimistic UI retry/offline demos, messaging protocol sandboxes, or inspectable event-trace widgets.
 ---
 
 # 消息状态游乐场
@@ -18,7 +18,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ## 参数与内容边界
 
 - 将标题、副标题、强调色与场景数据作为可配置输入；未指定时采用下面的设计参考，而不强制迁移用户的技术栈。
-- 完整包的可选 CLI 参数：`--title`, `--accent`, `--contact`, `--latency`。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
+- 完整包的可选 CLI 参数：`-p/--params`（JSON 配置）、`--lang`（`en` 或 `zh`）、`--title`（1–2000 字符）、`--accent`（3/6 位 HEX，默认 `#376c82`）、`--contact`（联系人名称，1–160 字符）、`--latency`（模拟发送延迟毫秒，整数 `150–3000`，默认 `900`）。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
 - 文案用纯文本节点/框架插值，颜色只接受合法 HEX，数字按参考约束限制。内联 JSON 必须转义 `<`，不能把用户文字送进 innerHTML、eval、事件属性或选择器。
 - 中英文文案使用明确字典，界面语言与用户输入内容分离；不得翻译或覆盖用户填写的名称、便笺或文件内容。
 - 演示里的本地数据不代表实际账号、付款、远程 AI 或业务后台；要接入真实服务时遵守用户授权和服务端准入，不向访客公开凭据、运营额度或其他人的任务。
@@ -44,7 +44,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 
 ```css
 :root {
-  --accent: #5b95ad;
+  --accent: #376c82;
   font-family: ui-sans-serif, system-ui, sans-serif;
   color: #283431;
   background: #eff0eb;
@@ -55,7 +55,11 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 <main class="skill-demo">
   <h1>每条消息，都有下一步。</h1>
   <p>写一句话，试一次失败，再重试。每一步都留在左侧的轨迹里；所有消息只存在于这个小实验。</p>
-  <select id="transport" aria-label="晴空万里 · 正常送达 一个小意外 · 下一条失败一次 暂时离线 · 等信号回来"></select>
+  <select id="transport" aria-label="信号场景">
+    <option value="success">晴空万里 · 正常送达</option>
+    <option value="fail">一个小意外 · 下一条失败一次</option>
+    <option value="offline">暂时离线 · 等信号回来</option>
+  </select>
   <button id="receive" type="button">↙ 收到一句问候</button>
   <button id="card" type="button">▧ 放入风景卡片</button>
   <button id="voice" type="button">♫ 放入三音符便条</button>
@@ -88,4 +92,4 @@ Both major regions have localized accessible names: Message state controls and L
 
 ## 可选完整包工作流 / Optional package workflow
 
-已获得完整 ZIP 时，可以参考 templates/index.template.html，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。
+已获得完整 ZIP 时，可以参考 [references/design.md](references/design.md) 与 `templates/index.template.html`，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。

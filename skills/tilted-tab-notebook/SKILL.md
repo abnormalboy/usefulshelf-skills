@@ -1,6 +1,6 @@
 ---
 name: tilted-tab-notebook
-description: 倾斜标签笔记本。四个原生标签使用 aria-selected/controls 与单一 roving tabindex。 Use for this interaction and adapt it to the existing framework.
+description: 倾斜标签笔记本（Tilted tab notebook & Markdown export workbench）。四个带物理倾角交互的原生标签使用 aria-selected/controls 与 roving tabindex，支持笔记书写、待办勾选与整本 Markdown 导出，适用于轻量笔记、任务工作台与多页标签切换。
 ---
 
 # 倾斜标签笔记本
@@ -18,7 +18,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ## 参数与内容边界
 
 - 将标题、副标题、强调色与场景数据作为可配置输入；未指定时采用下面的设计参考，而不强制迁移用户的技术栈。
-- 完整包的可选 CLI 参数：`--title`, `--accent`, `--notebook`, `--tilt`。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
+- 完整包的可选 CLI 参数：`--title`、`--accent`（3/6 位 HEX）、`--notebook`（1–160 字符）、`--tilt`（整数 0–15，标签倾角）、`--lang`（`en` / `zh`）、`-p` / `--params`（JSON 配置文件）。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
 - 文案用纯文本节点/框架插值，颜色只接受合法 HEX，数字按参考约束限制。内联 JSON 必须转义 `<`，不能把用户文字送进 innerHTML、eval、事件属性或选择器。
 - 中英文文案使用明确字典，界面语言与用户输入内容分离；不得翻译或覆盖用户填写的名称、便笺或文件内容。
 - 演示里的本地数据不代表实际账号、付款、远程 AI 或业务后台；要接入真实服务时遵守用户授权和服务端准入，不向访客公开凭据、运营额度或其他人的任务。
@@ -88,4 +88,4 @@ All state is intentionally in memory. Explain that a refresh clears it and provi
 
 ## 可选完整包工作流 / Optional package workflow
 
-已获得完整 ZIP 时，可以参考 templates/index.template.html，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。
+已获得完整 ZIP 时，可以参考 [references/design.md](references/design.md) 与 `templates/index.template.html`，并执行 `python3 scripts/generate.py -o index.html`（可加 `--lang zh` 或 `-p params.json`）。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。

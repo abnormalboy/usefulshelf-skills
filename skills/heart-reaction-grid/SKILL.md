@@ -1,6 +1,6 @@
 ---
 name: heart-reaction-grid
-description: 点赞反馈动效。四张场景卡片各保存一个布尔点赞值，单项计数只能是 0 或 1，总数取和。 Use for this interaction and adapt it to the existing framework.
+description: 点赞反馈动效（深色卡片点赞网格与独立粒子试播台）。四张场景卡片维护独立布尔状态与筛选视图，心形按压/填色/粒子动效严格隔离于真实赞数。Trigger when building interactive like/heart reaction buttons, burst particle feedback, filterable reaction cards, or accessible aria-pressed toggle grids.
 ---
 
 # 点赞反馈动效
@@ -18,7 +18,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ## 参数与内容边界
 
 - 将标题、副标题、强调色与场景数据作为可配置输入；未指定时采用下面的设计参考，而不强制迁移用户的技术栈。
-- 完整包的可选 CLI 参数：`--accent`, `--stagger`。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
+- 完整包的可选 CLI 参数：`-p/--params`（JSON 配置）、`--lang`（`en` 或 `zh`）、`--title`（1–100 字符）、`--subtitle`（1–300 字符）、`--label`（顶栏品牌标签，1–24 字符）、`--accent`（3/6 位 HEX）、`--stagger`（试播阶段延迟毫秒，整数 `150–2000`，默认 `420`）。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
 - 文案用纯文本节点/框架插值，颜色只接受合法 HEX，数字按参考约束限制。内联 JSON 必须转义 `<`，不能把用户文字送进 innerHTML、eval、事件属性或选择器。
 - 中英文文案使用明确字典，界面语言与用户输入内容分离；不得翻译或覆盖用户填写的名称、便笺或文件内容。
 - 演示里的本地数据不代表实际账号、付款、远程 AI 或业务后台；要接入真实服务时遵守用户授权和服务端准入，不向访客公开凭据、运营额度或其他人的任务。
@@ -96,4 +96,4 @@ This demo is offline and ephemeral. Replace local state with application-owned s
 
 ## 可选完整包工作流 / Optional package workflow
 
-已获得完整 ZIP 时，可以参考 templates/index.template.html，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。
+已获得完整 ZIP 时，可以参考 [references/design.md](references/design.md) 与 `templates/index.template.html`，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。

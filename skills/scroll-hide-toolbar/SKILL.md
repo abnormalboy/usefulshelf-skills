@@ -1,6 +1,6 @@
 ---
 name: scroll-hide-toolbar
-description: 滚动隐藏悬浮导航。外层设备画布包含独立可滚动图标网格，短胶囊与右侧加号分开。 Use for this interaction and adapt it to the existing framework.
+description: 滚动隐藏悬浮导航（Scroll-aware frosted glass floating toolbar & mobile app dock）。设备画布内置独立可滚动图标网格，随下滑收起胶囊、上滑展开工具栏，支持明暗主题、roving tabindex 键盘导航与示例图标追加，适用于移动端底部导航栏与玻璃态 Dock。
 ---
 
 # 滚动隐藏悬浮导航
@@ -18,7 +18,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ## 参数与内容边界
 
 - 将标题、副标题、强调色与场景数据作为可配置输入；未指定时采用下面的设计参考，而不强制迁移用户的技术栈。
-- 完整包的可选 CLI 参数：`--title`, `--label`, `--accent`, `--theme`, `--hideThreshold`, `--navHideMs`, `--bg`, `--stage`, `--text`, `--muted`, `--iconRadius`。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
+- 完整包的可选 CLI 参数：`--title`、`--label`、`--accent`（3/6 位 HEX）、`--theme`（`light` / `dark`）、`--hideThreshold`（整数 1–100 px）、`--navHideMs`（整数 0–2000 ms）、`--bg`、`--stage`、`--text`、`--muted`（3/6 位 HEX）、`--iconRadius`（`0%`–`50%`）、`--lang`（`en` / `zh`）、`-p` / `--params`（JSON 配置文件，支持 `apps` 数组：1–60 项 `{label, glyph}`）。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
 - 文案用纯文本节点/框架插值，颜色只接受合法 HEX，数字按参考约束限制。内联 JSON 必须转义 `<`，不能把用户文字送进 innerHTML、eval、事件属性或选择器。
 - 中英文文案使用明确字典，界面语言与用户输入内容分离；不得翻译或覆盖用户填写的名称、便笺或文件内容。
 - 演示里的本地数据不代表实际账号、付款、远程 AI 或业务后台；要接入真实服务时遵守用户授权和服务端准入，不向访客公开凭据、运营额度或其他人的任务。
@@ -47,7 +47,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
   --bg: #e8eaef;
   --stage: #ffffff;
   --text: #111111;
-  --muted: #6b7280;
+  --muted: #475569;
   --accent: #2f7dff;
   --glass: rgba(255,255,255,0.62);
   --glass-border: rgba(255,255,255,0.55);
@@ -103,4 +103,4 @@ For a full page, replace the demo scroller reference with the project's actual s
 
 ## 可选完整包工作流 / Optional package workflow
 
-已获得完整 ZIP 时，可以参考 templates/index.template.html，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。
+已获得完整 ZIP 时，可以参考 [references/design.md](references/design.md) 与 `templates/index.template.html`，并执行 `python3 scripts/generate.py -o index.html`（可加 `--lang zh` 或 `-p params.json`）。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。

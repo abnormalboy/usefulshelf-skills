@@ -1,6 +1,6 @@
 ---
 name: word-dissolve-poster
-description: 文字粒子海报。离屏 Canvas 按字形 alpha 采样粒子，不用矩形粒子冒充文字。 Use for this interaction and adapt it to the existing framework.
+description: 文字粒子海报（Kinetic glyph particle dissolve poster on HTML Canvas）。离屏 Canvas 按真实字形 alpha 采样粒子，支持中英文实时重排、侧风与重力散落/还原动画，适用于创意排版海报、品牌动效实验与交互字体展示。
 ---
 
 # 文字粒子海报
@@ -18,7 +18,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ## 参数与内容边界
 
 - 将标题、副标题、强调色与场景数据作为可配置输入；未指定时采用下面的设计参考，而不强制迁移用户的技术栈。
-- 完整包的可选 CLI 参数：`--title`, `--accent`, `--density`。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
+- 完整包的可选 CLI 参数：`--title`（1–300 字符）、`--accent`（3/6 位 HEX）、`--density`（整数 3–8）、`--phrase`（1–36 字符，海报初始文字）、`--lang`（`en` / `zh`）、`-p` / `--params`（JSON 配置文件）。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
 - 文案用纯文本节点/框架插值，颜色只接受合法 HEX，数字按参考约束限制。内联 JSON 必须转义 `<`，不能把用户文字送进 innerHTML、eval、事件属性或选择器。
 - 中英文文案使用明确字典，界面语言与用户输入内容分离；不得翻译或覆盖用户填写的名称、便笺或文件内容。
 - 演示里的本地数据不代表实际账号、付款、远程 AI 或业务后台；要接入真实服务时遵守用户授权和服务端准入，不向访客公开凭据、运营额度或其他人的任务。
@@ -72,6 +72,18 @@ The following specification is included in full so this document works without a
 
 The editable poster is drawn into an offscreen canvas, then sampled from actual alpha-covered glyph pixels. Never replace this with rectangular bounding-box particles: the original shape must still read while it begins falling. Fit text to the available area and support both CJK and Latin text. Side wind affects horizontal displacement while quadratic gravity drives the vertical path. Scatter and gather share the same particles, so an interrupted transition can reverse from its current amount. The animation lasts 1.5 seconds and stops. Reduced motion commits a fully readable or empty endpoint. Keep editable copy as plain input/textContent, never HTML. Limit editable poster text to 36 characters while allowing the independent page heading to remain fully readable up to 300 characters. Canvas Enter/Space toggles scatter/gather; dedicated buttons make the action discoverable.
 
+#### Visual tokens and layout
+
+Pair a matte charcoal shell (`#181a17`) with a deep obsidian poster frame (`#0c0d0b`) and a single high-contrast accent (`#e9ff68` default) driving the top hairline rule, input ink, active button fill, and canvas glyph pixels. Maintain two balanced columns (`0.9fr / 1.1fr`) above 700px and stack into a single centered column on mobile with zero horizontal overflow. Keep the poster aspect ratio close to `0.85` and sample canvas dimensions at up to `2x` devicePixelRatio via ResizeObserver so strokes stay razor-sharp on retina screens.
+
+#### State machine, accessibility, and lifecycle
+
+Track explicit transition state (`set`, `falling`, `fallen`, `gathering`) with a single `requestAnimationFrame` handle cancelled on resample, language change, `visibilitychange`, or reduced-motion toggle. Announce state transitions in one polite live region (`#status`) and update the particle readout (`#particleCount`) after every build. Default poster text localizes to Chinese (`让声音被看见`) in Chinese mode unless the user supplies a custom `phrase` via CLI/params or edits `#words`.
+
+#### Parameters and boundaries
+
+Accept `--title` (1–300 chars), `--accent` (3- or 6-digit hex), `--density` (integer 3–8 controlling sampling stride), `--phrase` (1–36 chars), `--lang` (`en` or `zh`), and `-p`/`--params` JSON files. Escape all HTML and inline JSON (`<`, `>`, `&`), never pass user text into `innerHTML`, and keep rendering 100% offline with zero network calls.
+
 ## 可选完整包工作流 / Optional package workflow
 
-已获得完整 ZIP 时，可以参考 templates/index.template.html，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。
+已获得完整 ZIP 时，可以参考 [references/design.md](references/design.md) 与 `templates/index.template.html`，并执行 `python3 scripts/generate.py -o index.html`（可加 `--lang zh` 或 `-p params.json`）。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。

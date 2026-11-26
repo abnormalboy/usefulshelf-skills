@@ -1,6 +1,6 @@
 ---
 name: node-connection-studio
-description: 节点接线工作台。点阵画布包含暖冷胶囊节点，边保存稳定端点与路径，支持直连、分支合流、回环预设。 Use for this interaction and adapt it to the existing framework.
+description: 节点接线工作台（Node connection studio & interactive SVG bezier wire editor）。点阵画布包含暖冷胶囊节点与实时数据流管道，支持直连、分支合流、回环预设及 SVG 海报导出，适用于可视化工作流、节点编排与连线交互演示。
 ---
 
 # 节点接线工作台
@@ -18,7 +18,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ## 参数与内容边界
 
 - 将标题、副标题、强调色与场景数据作为可配置输入；未指定时采用下面的设计参考，而不强制迁移用户的技术栈。
-- 完整包的可选 CLI 参数：`--title`, `--accent`, `--phrase`, `--curvature`。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
+- 完整包的可选 CLI 参数：`--title`、`--accent`（3/6 位 HEX）、`--phrase`（1–160 字符）、`--curvature`（整数 30–200）、`--lang`（`en` / `zh`）、`-p` / `--params`（JSON 配置文件）。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
 - 文案用纯文本节点/框架插值，颜色只接受合法 HEX，数字按参考约束限制。内联 JSON 必须转义 `<`，不能把用户文字送进 innerHTML、eval、事件属性或选择器。
 - 中英文文案使用明确字典，界面语言与用户输入内容分离；不得翻译或覆盖用户填写的名称、便笺或文件内容。
 - 演示里的本地数据不代表实际账号、付款、远程 AI 或业务后台；要接入真实服务时遵守用户授权和服务端准入，不向访客公开凭据、运营额度或其他人的任务。
@@ -97,4 +97,4 @@ SVG export uses the actual current output and XML-escapes its text. Long text wr
 
 ## 可选完整包工作流 / Optional package workflow
 
-已获得完整 ZIP 时，可以参考 templates/index.template.html，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。
+已获得完整 ZIP 时，可以参考 [references/design.md](references/design.md) 与 `templates/index.template.html`，并执行 `python3 scripts/generate.py -o index.html`（可加 `--lang zh` 或 `-p params.json`）。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。

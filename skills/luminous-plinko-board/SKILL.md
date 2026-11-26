@@ -1,6 +1,6 @@
 ---
 name: luminous-plinko-board
-description: 发光弹珠实验台。模拟坐标固定为 640×460，与显示尺寸解耦；使用 120Hz 有界累加器、先更新速度后更新位置的半隐式积分。 Use for this interaction and adapt it to the existing framework.
+description: 发光弹珠实验台（Canvas 2D 120Hz 物理碰撞与光影落点分布实验）。固定 640×460 模拟空间实现半隐式积分、动态阴影、弹性调节、单秒步进与实时直方图统计。Trigger when building interactive Plinko/Galton board physics demos, luminous Canvas 2D collision experiments, probability histograms, or fixed-timestep simulations.
 ---
 
 # 发光弹珠实验台
@@ -18,7 +18,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ## 参数与内容边界
 
 - 将标题、副标题、强调色与场景数据作为可配置输入；未指定时采用下面的设计参考，而不强制迁移用户的技术栈。
-- 完整包的可选 CLI 参数：`--gravity`。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
+- 完整包的可选 CLI 参数：`-p/--params`（JSON 配置）、`--lang`（`en` 或 `zh`）、`--title`（1–2000 字符）、`--subtitle`（1–2000 字符）、`--accent`（3/6 位 HEX）、`--gravity`（重力加速度，整数 `200–1400`，默认 `700`）。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
 - 文案用纯文本节点/框架插值，颜色只接受合法 HEX，数字按参考约束限制。内联 JSON 必须转义 `<`，不能把用户文字送进 innerHTML、eval、事件属性或选择器。
 - 中英文文案使用明确字典，界面语言与用户输入内容分离；不得翻译或覆盖用户填写的名称、便笺或文件内容。
 - 演示里的本地数据不代表实际账号、付款、远程 AI 或业务后台；要接入真实服务时遵守用户授权和服务端准入，不向访客公开凭据、运营额度或其他人的任务。
@@ -84,4 +84,4 @@ For validation, reset, release one ball and advance several seconds: exactly one
 
 ## 可选完整包工作流 / Optional package workflow
 
-已获得完整 ZIP 时，可以参考 templates/index.template.html，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。
+已获得完整 ZIP 时，可以参考 [references/design.md](references/design.md) 与 `templates/index.template.html`，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。

@@ -9,7 +9,7 @@ description: 创建可调纵深和轮廓光强度的视差镭射卡片，用于�
 
 ## 参考实现
 
-完整包中的 [assets/LaserCard.vue](assets/LaserCard.vue) 是与分享页面同步的 Vue 3 单文件组件。Vue 项目优先复制并按现有界面调整；其他框架迁移相同的 CSS 分层与生命周期逻辑，不为这个效果更换技术栈。
+完整包中的 [assets/LaserCard.vue](assets/LaserCard.vue) 是与分享页面同步的 Vue 3 单文件组件，设计参数与配色规格另见 [references/design.md](references/design.md)。Vue 项目优先复制并按现有界面调整；其他框架迁移相同的 CSS 分层与生命周期逻辑，不为这个效果更换技术栈。
 
 如果用户只提供了本 SKILL.md，按下面的实现约束构建，不依赖缺失附件。无需付费素材、WebGL 或动画库。
 
@@ -20,6 +20,11 @@ description: 创建可调纵深和轮廓光强度的视差镭射卡片，用于�
 | depth | 0–100 px | 48 px | 轮廓在 Z 轴上的总分层深度 |
 | glow | 0–100% | 70% | 彩色轮廓与辉光的强度，0 时完全隐藏轮廓光 |
 | autoRotate | 布尔值 | false | 无需指针的缓慢视角演示，可随时暂停 |
+| lang | `'zh' \| 'en'` | `'zh'` | 控制默认标题文案与无障碍描述语言 |
+| brand | 字符串 | `'USEFUL SHELF / INTERACTION LAB'` | 顶部细字品牌标识，替换为项目自有名称 |
+| titlePrefix | 字符串 | 按 `lang` 回退（`光，有了` / `Light, in`） | 卡片主标题第一行 |
+| titleStrong | 字符串 | 按 `lang` 回退（`纵深。` / `depth.`） | 卡片主标题强调行 |
+| caption | 字符串（支持 `\n` 换行） | `'PARALLAX\nCONTOUR STUDY'` | 底部说明文案 |
 
 同时提供两条有可见标签、数值和键盘支持的 range 滑杆。预设建议：柔和 24/35、经典 48/70、强烈 85/100。重置恢复 48/70 并关闭自动演示。
 

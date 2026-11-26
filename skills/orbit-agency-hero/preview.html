@@ -122,23 +122,33 @@
         pointer-events: none;
       }
       .eyebrow {
-        font: 10px/1.4 monospace;
+        font: 11px/1.4 monospace;
         letter-spacing: 2px;
         text-transform: uppercase;
-        color: #5c6358;
+        color: #4f574b;
       }
       .copy h1 {
         margin: 19px 0 18px;
         font-size: clamp(32px, 5vw, 62px);
         font-weight: 500;
-        line-height: 1.02;
-        letter-spacing: -3px;
+        line-height: 1.04;
+        letter-spacing: -2.5px;
+        text-wrap: balance;
+      }
+      :lang(zh) .copy {
+        width: min(560px, 60%);
+      }
+      :lang(zh) .copy h1 {
+        font-size: clamp(30px, 4.1vw, 50px);
+        line-height: 1.18;
+        letter-spacing: -0.02em;
+        word-break: keep-all;
       }
       .copy p {
         font-size: 14px;
         line-height: 1.6;
-        color: #67705f;
-        max-width: 290px;
+        color: #525a4c;
+        max-width: 310px;
         margin: 0 auto;
       }
       .primary {
@@ -277,20 +287,28 @@
           min-height: 550px;
         }
         .copy {
-          width: 82%;
-          top: 48%;
+          width: 84%;
+          top: 50%;
+        }
+        :lang(zh) .copy {
+          width: 86%;
         }
         .copy h1 {
-          font-size: 43px;
-          letter-spacing: -2px;
+          font-size: clamp(34px, 9.5vw, 42px);
+          letter-spacing: -1.5px;
+        }
+        :lang(zh) .copy h1 {
+          font-size: clamp(28px, 7.6vw, 34px);
+          letter-spacing: -0.02em;
         }
         .copy p {
-          max-width: 220px;
+          max-width: 240px;
           font-size: 13px;
         }
         .piece {
-          width: 64px;
-          height: 64px;
+          width: clamp(40px, 11.5vw, 46px);
+          height: clamp(40px, 11.5vw, 46px);
+          border-width: 3px;
         }
         .track {
           width: 85%;
@@ -388,664 +406,256 @@
       (() => {
         "use strict";
         const dictionary = {
-          "A little bite of joy.": "咬一口小快乐。",
-          "Choose a flavor. Take six little bites. Leave no crumbs behind.":
-            "选一种口味，分六口吃掉，再烤一枚新的。",
-          Vanilla: "香草",
-          Berry: "莓果",
-          Matcha: "抹茶",
-          "One more?": "再来一枚？",
-          "Vanilla · 6 bites to happiness": "香草 · 六口小快乐",
-          "Bake a fresh one ↻": "重新烘焙 ↻",
-          "Zero calories. Quite a lot of delight.": "零卡路里，一点小快乐。",
-          "Cookie flavor": "饼干口味",
-          "Take a bite": "咬一口",
-          "Bake another cookie": "再烤一枚饼干",
-          "All gone!": "吃完啦",
-          "Memories, ready to play.": "让回忆，重新播放。",
-          "Four chapters. One small collection. Pick a cartridge and see what it holds.":
-            "四段故事，一套小收藏。选张卡带，看看里面的回忆。",
-          "First spark": "最初的火花",
-          "Into the wild": "走向远方",
-          "Make together": "一起创造",
-          "New horizons": "新的地平线",
-          "Draw another memory ↗": "再抽一段回忆 ↗",
-          "1 of 4 memories discovered": "已发现 1 / 4 段回忆",
-          "Memory cartridges": "回忆卡带",
-          "Collection complete · play it again": "已集齐回忆 · 再播放一遍",
-          "A tiny weekend experiment became the first thing I was brave enough to share. Small beginnings have a way of growing.":
-            "周末的小实验，成了第一次勇敢分享的作品。小小的开始，也会慢慢生长。",
-          "A backpack, a notebook and a city I had never seen. The best discoveries arrived when the plan ran out.":
-            "一个背包，一本笔记，一座陌生城市。最好的发现，常常在计划之外。",
-          "Four people, one long table, a hundred ideas. We built something none of us could have made alone.":
-            "四个人，一张长桌，许多想法。我们做出了一个人无法完成的东西。",
-          "A fresh page is not an empty page. Every experiment, detour and friendship comes along for the next chapter.":
-            "新的一页并非空白。每次尝试、绕路和相遇，都跟着我们进入下一章。",
-          "Dark documentation navigation": "深色文档导航",
-          Documentation: "使用文档",
-          "Query Reference": "查询参考",
-          "Platform Overview": "平台概览",
-          Quickstart: "快速开始",
-          Architecture: "架构",
-          Features: "功能",
-          Fundamentals: "基本概念",
-          Datasets: "数据集",
-          "Edge deployments": "边缘部署",
-          Limits: "使用限制",
-          Performance: "性能",
-          "Optimize usage": "用法优化",
-          Requirements: "前置要求",
-          "Semantic conventions": "语义约定",
-          Glossary: "术语表",
-          Security: "安全",
-          Roadmap: "路线图",
-          "Send Data": "发送数据",
-          "Reference architectures": "参考架构",
-          Methods: "方法",
-          "Understand Data": "理解数据",
-          Console: "控制台",
-          Overview: "概览",
-          Query: "查询",
-          Dashboards: "仪表板",
-          Stream: "数据流",
-          Docs: "文档",
-          "Docs areas": "文档分区",
-          "Documentation sidebar": "文档侧栏",
-          "Hover sidebar rows · expand Fundamentals / Console · tabs switch accent underline":
-            "悬停侧栏、展开基本概念与控制台，切换顶部标签查看选中状态。",
-          "Query operators, functions, and examples. Replace this sample content with your reference documentation.":
-            "运算符、函数与示例。接入项目时请替换为自己的参考文档。",
-          "Explore the platform, follow the quickstart, and learn the core concepts.":
-            "从快速开始出发，了解平台的基本概念。",
-          "Replace this sample text with documentation for the selected page.":
-            "请将示例文字替换为所选页面的真实文档。",
-          "Get from zero to first query: create a dataset, send events, open the console.":
-            "从创建数据集、发送事件到打开控制台，完成第一次查询。",
-          "Core concepts that underpin ingest, storage, and query behavior.":
-            "了解数据接入、存储与查询背后的核心概念。",
-          "Run collectors closer to your traffic edge for lower latency and regional buffering.":
-            "在靠近数据来源的位置运行采集器，降低延迟并提供区域缓冲。",
-          "Rate limits, retention windows, and plan ceilings that shape how you design pipelines.":
-            "设计数据管道时需确认请求限制、保留时间与服务边界。",
-          "Guidance for query shape, indexing hints, and ingest batching.":
-            "查询组织、索引与批量接入的参考方法。",
-          "A little button. More possibilities.": "一个小按钮，展开更多可能。",
-          "Three quick actions, one quiet home. A wallet interaction with room to breathe.":
-            "三个快捷操作，留在一个轻巧的钱包演示里。",
-          "Interaction collection · 01": "交互练习 · 01",
-          "Open the menu. Make a move.": "展开菜单，试一次操作。",
-          "Good morning, Alex": "早上好，小艾",
-          "Your wallet": "你的钱包",
-          "Total balance": "示例余额",
-          "this week": "本周",
-          "Your assets": "示例资产",
-          Bitcoin: "比特币",
-          Ethereum: "以太坊",
-          "USD Coin": "美元稳定币",
-          "◉ Wallet": "◉   钱包",
-          "▥ Activity": "▥   动态",
-          "⚙ Settings": "⚙   设置",
-          "Interactive demo": "交互演示",
-          "Amount (USD)": "金额（美元）",
-          "Wallet interaction demo": "钱包交互演示",
-          "Quick actions": "快捷操作",
-          "Open quick actions": "展开快捷操作",
-          "Close quick actions": "收起快捷操作",
-          "Close dialog": "关闭对话框",
-          Receive: "收款演示",
-          Send: "发送演示",
-          Swap: "兑换演示",
-          "Share this sample address to receive funds.": "这是演示地址，请勿用于真实收款。",
-          "Choose an amount to preview a transfer.": "选择金额，预览一次本地转账演示。",
-          "Choose an amount to preview an exchange.": "选择金额，预览一次本地兑换演示。",
-          "Copy demo address": "复制演示地址",
-          Preview: "预览",
-          "Demo address copied": "演示地址已复制",
-          "Demo address: demo:wallet:alex:0042": "演示地址：demo:wallet:alex:0042",
-          "A tiny sticker studio.": "一间小小贴纸工坊。",
-          "Pick a collection. Make it yours. Take a little joy with you.":
-            "选一组图形，拼出自己的画面，再把它带走。",
-          "Little things ✳": "小小图形 ✳",
-          "Little shapes.": "小小形状。",
-          "Endless possibilities.": "许多种可能。",
-          "Collapse the sidebar": "收起侧栏",
-          "with Ctrl / ⌘ B.": "快捷键 Ctrl / ⌘ B。",
-          Ink: "墨色",
-          "Rotate ↻": "旋转 ↻",
-          Remove: "移除",
-          "Mix it up": "换个组合",
-          "Export SVG ↗": "导出 SVG ↗",
-          "Add a sticker, move it around, make it yours.": "添加贴纸、移动位置，拼出自己的画面。",
-          "Sticker collections": "贴纸集合",
-          "Collapse sidebar": "收起侧栏",
-          "Expand sidebar": "展开侧栏",
-          Collections: "集合",
-          "Sticker composition. Select a sticker, then use arrow keys to move it.":
-            "贴纸画布。选择贴纸后可用方向键移动。",
-          "Add a sticker": "添加贴纸",
-          "Sticker color": "贴纸颜色",
-          "Happy accidents": "意外的小快乐",
-          "Cosmic daydreams": "宇宙白日梦",
-          "Garden club": "花园俱乐部",
-          Add: "添加",
-          "Your sheet is full. Remove a sticker to make room.": "画布上的贴纸已满，请先移除一张。",
-          "Sticker removed.": "贴纸已移除。",
-          "A new arrangement. Keep mixing until it feels like you.":
-            "换了一个组合，继续试到喜欢为止。",
-          "Sticker placed. Arrow keys adjust its position.": "贴纸已放置，可用方向键微调。",
-          "Your sticker sheet has been exported as an editable SVG.": "贴纸已导出为可编辑的 SVG。",
-          "Three little beginnings. Add more, drag them around, make it yours.":
-            "从三张小贴纸开始，添加、拖动，组成自己的画面。",
-          "A little out of orbit.": "在轨道外，发现一点不同。",
-          "An interactive collection of shape, rhythm and possibility.":
-            "一组关于形状、节奏与可能性的交互练习。",
-          "Ribbon study": "丝带研究",
-          Pause: "暂停",
-          Play: "播放",
-          "Orbit spread": "轨道间距",
-          "Eight original geometric studies.": "八组原创几何练习。",
-          "Infinite ways of looking.": "换个角度，看看不同。",
-          "Choose an object": "选择图形",
-          "Previous object": "上一个图形",
-          "Next object": "下一个图形",
-          "Green frequency": "绿色频率",
-          "Solar assembly": "阳光组合",
-          "Midnight fold": "午夜折叠",
-          "Soft symmetry": "柔和对称",
-          "Tidal rhythm": "潮汐节奏",
-          "Forest module": "森林模块",
-          "Earth signal": "大地信号",
-          Select: "选择",
-          "A continuous line folds back on itself, turning tension into a quiet rhythm.":
-            "连续的线条折返，让张力化作安静的节奏。",
-          "Fine concentric marks create a graphic echo across a green field.":
-            "细密同心线在绿色画面中留下回声。",
-          "Offset circles reveal a sunny composition of overlapping forms.":
-            "错位圆形组成一幅明亮的重叠构图。",
-          "A folded silhouette balances structure with unexpected negative space.":
-            "折叠轮廓在结构与留白之间取得平衡。",
-          "Two mirrored curves find a soft balance in a warm palette.":
-            "两条镜像曲线在温暖配色中找到柔和的平衡。",
-          "Horizontal bands move like water across a circular window.":
-            "横向条带像水面一样穿过圆窗。",
-          "A field of repeated modules breaks gently away from its own rules.":
-            "重复模块轻轻打破自己的排列规则。",
-          "A small architectural landscape explores scale, texture and proportion.":
-            "一处小小建筑景观，探索尺度、肌理与比例。",
-          "Small rituals, worth keeping.": "把日常的小仪式，留在这里。",
-          "A quiet home for your favorite coffees. Open the liquid menu to add beans or remember a cup.":
-            "展开液态菜单，记一款豆子，或留住一杯好咖啡。",
-          "Made for everyday rituals": "为日常的小仪式而做",
-          "A little movement. A richer moment.": "一点动作，留住一个时刻。",
-          "Daily grounds": "日常咖啡簿",
-          "Clear journal": "清空记录",
-          "No coffees yet": "还没有咖啡记录",
-          "Every good collection starts with a first cup.": "每一份收藏，都从第一杯开始。",
-          "Your journal lives in this preview only.": "记录仅保留在本次预览中。",
-          "A new entry": "新增记录",
-          "Log a cup": "记一杯咖啡",
-          "Coffee name": "咖啡名称",
-          "A short note (optional)": "简短备注（选填）",
-          "Save to journal": "保存记录",
-          "Stored in memory for this preview. Refreshing clears entries.":
-            "数据只在当前页面内存中，刷新会清空。",
-          "Coffee journal demo": "咖啡记录演示",
-          "Journal entries": "咖啡记录",
-          "Add to journal": "添加记录",
-          "Add beans": "记一款豆子",
-          "Open journal actions": "展开记录菜单",
-          "Close journal actions": "收起记录菜单",
-          "Chocolate, hazelnut, a slow morning": "巧克力、榛果，或一个慢悠悠的早晨",
-          "Add your beans": "记下喜欢的豆子",
-          "Log a good cup": "留住一杯好咖啡",
-          Beans: "豆子",
-          Cup: "咖啡",
-          "Enter a coffee name.": "请填写咖啡名称。",
-          "Journal cleared. Ready for a fresh start.": "记录已清空，可以重新开始。",
-          "Let curiosity fall.": "让好奇心，落在光里。",
-          "One small nudge. A different journey. Explore light, chance and collisions.":
-            "轻轻一放，走出不同的路线，观察光影与碰撞。",
-          "Launch position": "发射位置",
-          Bounciness: "弹性",
-          "Release a ball ↓": "放下一颗球 ↓",
-          "Release five": "放下五颗",
-          "Advance 1s": "前进一秒",
-          "Start over": "重新开始",
-          "Each column counts real landings.": "每一列记录真实落点次数。",
-          "One path, many possibilities.": "一条路线，许多可能。",
-          "Last path: on": "上次轨迹：显示",
-          "Release a ball. Change the launch point. Follow the light.":
-            "放下一颗球，换个起点，跟着光走。",
-          "Luminous pegboard": "发光弹珠板",
-          "Experiment controls": "实验控件",
-          "Landing distribution": "落点分布",
-          Column: "列",
-          Resume: "继续",
-          "The board is full. Wait for a few landings or start over.":
-            "画布上的球已满，请等球落下，或重新开始。",
-          "Ball ready. Use Advance 1s or Resume to follow its journey.":
-            "球已准备好，可用前进一秒或继续观察路线。",
-          "Ball released. Watch its shadow move across the pegs.":
-            "球已放下，观察阴影如何经过钉点。",
-          "Paused. Inspect the light or advance one second at a time.":
-            "已暂停，可以观察光影，或逐秒前进。",
-          "The experiment is running.": "实验正在运行。",
-          "Advanced one second. Step again to inspect the next part of the journey.":
-            "已前进一秒，再走一步看看接下来的路线。",
-          "A clean board. Your next experiment starts here.": "画布已清空，下一次实验从这里开始。",
-          "Motion paused for your preference. Advance 1s to inspect a static step.":
-            "已按减少动态效果偏好暂停，可前进一秒查看静态结果。",
-          "Motion is paused for your preference. Use Advance 1s to explore without animation.":
-            "已按减少动态效果偏好暂停，可用单秒步进进行探索。",
-          Menu: "菜单",
-          Platform: "平台",
-          Observability: "可观测性",
-          "Try the playground ↗": "试试本地演示 ↗",
-          "Infrastructure for what comes next": "为下一步，搭好结构。",
-          "Run sample pipeline ↗": "运行示例流程 ↗",
-          "Explore the platform ↓": "了解功能 ↓",
-          "Local playground · no account required": "本地演示 · 无需账号",
-          "Python outline": "Python 说明草图",
-          "Copy ↗": "复制 ↗",
-          "Actual JavaScript parser used by this playground.":
-            "此演示实际使用的 JavaScript 解析器。",
-          "The JavaScript parser loads here.": "此处显示实际使用的 JavaScript 解析器。",
-          "Edit sample invoice text": "编辑示例发票文本",
-          "Plain text input · maximum 4,000 characters · USD workflow":
-            "纯文本输入 · 最多 4000 字符 · 美元示例流程",
-          "Valid sample": "有效示例",
-          "Invalid sample": "无效示例",
-          "Ready when you are.": "准备好就可以运行。",
-          "Run the sample to inspect the result.": "运行示例，查看处理结果。",
-          "Your activity in this session": "本次访问中的操作",
-          "Structured from the sample invoice": "从示例发票中提取的结构",
-          Sandbox: "本地演示",
-          "Text parsing in your browser · no upload": "在浏览器中解析文字 · 不上传",
-          "A clearer path from input to insight": "从输入到结果，看清每一步。",
-          "Complex documents.": "复杂文档。",
-          "Simple building blocks.": "清晰模块。",
-          "01 — Classify the input": "01 — 识别输入类型",
-          "Identify the document type before your workflow begins. Give every input the right route through your system.":
-            "在流程开始前识别文档类型，让每种输入进入合适的处理路径。",
-          "02 — Extract what matters": "02 — 提取关键字段",
-          "Map unstructured content into named fields. Keep vendor, currency, and totals readable and ready for the next step.":
-            "将非结构化文本整理成具名字段，清楚保留供应方、货币与金额。",
-          "03 — Validate the result": "03 — 校验结果",
-          "Check required fields and currency before accepting a record. Make a clear boundary between complete and incomplete data.":
-            "接收记录前校验必填字段和货币，区分完整与不完整的数据。",
-          "Document inspector": "文档检查器",
-          Invoice: "发票",
-          Vendor: "供应方",
-          Currency: "货币",
-          "Amount due": "应付金额",
-          "Type identified → INVOICE": "识别类型 → INVOICE",
-          "Route → invoice-flow": "处理路径 → invoice-flow",
-          "Copy code": "复制代码",
-          "Select and copy the code below.": "选择并复制下面的代码。",
-          Done: "完成",
-          "Code language": "代码语言",
-          "Local sample metrics": "本地示例指标",
-          "Code to copy": "待复制的代码",
-          "Missing INVOICE heading": "缺少 INVOICE 标题",
-          "Vendor is required": "供应方不能为空",
-          "Currency must be a three-letter code": "货币需使用三字母代码",
-          "This workflow accepts USD only": "此示例流程仅接受 USD",
-          "Amount due must be a non-negative amount with up to two decimal places, at most 999,999,999.99":
-            "应付金额须为最多两位小数的非负数，且不超过 999999999.99",
-          "Illustrative pseudocode only. This tab is not executed.":
-            "仅供说明的伪代码，本页签不会执行。",
-          "Code copied to clipboard.": "代码已复制到剪贴板。",
-          "Valid sample loaded. Run to parse and validate.": "有效示例已载入，运行以解析和校验。",
-          "Invalid sample loaded. Run to see validation errors.":
-            "无效示例已载入，运行后查看校验错误。",
-          "Unknown document": "未知文档",
-          Missing: "缺失",
-          "Invalid amount": "金额无效",
-          "Validation failed": "校验失败",
-          "Processing sample…": "正在处理示例…",
-          "Reading local text…": "正在读取本地文字…",
-          "Reading invoice text…": "正在读取发票文本…",
-          "Parsing labeled document fields…": "正在解析具名字段…",
-          "Validating amount and currency…": "正在校验金额与货币…",
-          "Complete. Text parsed and validated locally.": "已完成，文字已在本地解析并校验。",
-          "Parsed with validation errors. Edit the sample text and run again.":
-            "解析完成但校验未通过，请编辑示例后重试。",
-          "Processing stopped. Review the input and retry.": "处理已停止，请检查输入后重试。",
-          "Run sample again ↗": "再次运行示例 ↗",
           "A different perspective.": "换个角度，看见不同。",
-          "Independent minds. Extraordinary outcomes.": "独立的想法，认真完成的作品。",
-          "Pause motion": "暂停动效",
-          "Resume motion": "继续动效",
-          "Our work ↗": "查看作品 ↗",
-          "Explore the collection": "浏览作品集",
-          "Available for new perspectives": "期待新的视角",
-          "Strategy · Identity · Digital experiences": "策略 · 视觉识别 · 数字体验",
-          "Small details.": "小小细节。",
-          "Entirely different worlds.": "不一样的世界。",
-          "This is a sample project study. Replace it with your own work.":
-            "这是示例项目，请替换为自己的作品。",
-          "Orbiting project collection": "轨道作品集",
-          "Close project": "关闭项目",
-          "Folded space": "折叠空间",
-          "Quiet frequency": "安静频率",
-          "New terrain": "新的地形",
-          "Moving matter": "移动的形状",
-          "Soft structure": "柔和结构",
-          "After hours": "夜色之后",
-          "Brand identity": "品牌识别",
-          "Sound & culture": "声音与文化",
-          "Editorial design": "编辑设计",
-          "Digital experience": "数字体验",
-          "Art direction": "视觉指导",
-          "Visual identity": "视觉识别",
-          "Architectural folds turn a simple grid into an unexpected identity.":
-            "建筑般的折面，让简单网格有了不同的识别。",
-          "Concentric lines make rhythm visible, one imperfect circle at a time.":
-            "同心线让节奏变得可见，一圈圈留下细微差异。",
-          "An abstract landscape finds its balance between precision and warmth.":
-            "抽象景观在精确与温暖之间取得平衡。",
-          "A study of modular forms and the spaces they create together.":
-            "研究模块形状，以及它们共同留下的空间。",
-          "An optimistic geometry with a softer, more tactile point of view.":
-            "用更柔和、更有触感的方式理解几何。",
           "A nocturnal color study built from oversized letters and negative space.":
             "由大字与留白组成的夜色练习。",
-          View: "查看",
-          "Small things, worth keeping.": "值得留下的小事情。",
-          "Make a tiny receipt for a lovely day. Scrunch it, smooth it, keep it.":
-            "给美好的一天开张小收据，揉皱、抚平，再把它带走。",
-          "+ Add a little thing": "+ 添加一件小事",
-          "Keep as PNG ↓": "保存为 PNG ↓",
-          "Scrunch paper": "揉皱纸张",
-          "Smooth it out": "抚平纸张",
-          "Your paper is ready. Give it a little scrunch.": "纸张准备好了，轻轻揉皱一下。",
-          "Editable paper receipt": "可编辑的纸条收据",
-          "Morning coffee": "清晨咖啡",
-          "A bunch of flowers": "一束花",
-          "Something sweet": "一点甜",
-          "Use a name and a price from 0 to 9999.99 (up to two decimals).":
-            "请填写名称和 0–9999.99 的价格，最多两位小数。",
-          "Receipt updated. Ready to scrunch or keep.": "收据已更新，可以揉皱或保存。",
-          "a little day": "小小的一天",
-          Item: "项目",
-          "Remove item": "移除项目",
-          "Smoothed out. Your little memories are still here.": "已抚平，小小的回忆还在这里。",
-          "A tiny paper sculpture. Smooth it out whenever you like.": "一件小纸雕，随时可以抚平。",
-          "A little surprise": "一个小惊喜",
-          "New line added. Make it your own.": "已添加一行，写下自己的小事。",
-          "Your PNG is ready — a little day, kept forever.": "PNG 已准备好，小小的一天可以留下了。",
-          "A collection of perspectives.": "把不同的视角，放在一起。",
-          "Independent studies in form, color and movement.": "关于形态、颜色与动作的独立练习。",
-          "Folded landscape": "折叠景观",
-          "/ Editorial composition": "/ 编辑构图",
-          "Visual study collection. Use left and right arrow keys to change slides.":
-            "视觉练习集，可用左右方向键切换。",
-          "Previous study": "上一个练习",
-          "Next study": "下一个练习",
-          "Choose a study": "选择练习",
-          "Close study": "关闭练习",
-          "Signal & noise": "信号与杂音",
-          "Soft architecture": "柔和建筑",
-          "Color in motion": "颜色在移动",
-          "The quiet room": "安静房间",
-          "Between the lines": "字里行间",
-          "Editorial composition": "编辑构图",
-          "Graphic rhythm": "图形节奏",
-          "Spatial study": "空间练习",
-          "Chromatic experiment": "色彩实验",
-          "Material language": "材质语言",
-          "Abstract landscape": "抽象景观",
-          "Typography study": "字体研究",
-          "Angular planes intersect across a warm field, with a small solar accent anchoring the composition.":
-            "折面交叠在温暖画面上，一枚小小太阳稳定构图。",
-          "Repeated marks build density and then dissolve into a small moment of silence.":
-            "重复记号逐渐密集，又融成片刻安静。",
-          "A monumental arch turns simple negative space into an architectural subject.":
-            "一座拱门，让简单留白成为建筑般的主题。",
-          "A set of interlocking disks creates movement without relying on a literal image.":
-            "交错圆盘不用具象图片，也能让画面流动。",
-          "Layered blocks and warm neutral tones suggest a room through the relationship of shapes.":
-            "层叠色块与暖中性色，通过形状关系暗示一个房间。",
-          "A stepped horizon and an oversized sun make a landscape from just three colors.":
-            "阶梯地平线和大太阳，只用三种颜色组成景观。",
-          "A single letter becomes an architectural form through repetition and scale.":
-            "一个字母经过重复和缩放，变成建筑般的形状。",
-          "This is an original geometric study for demonstration.":
-            "这是一组用于演示的原创几何练习。",
-          Show: "显示",
-          "Make a little delivery.": "送出一个小包裹。",
-          "Turn any small file into a portable parcel. Everything happens on your device.":
-            "把小文件装进可携带的包裹，所有处理都在你的设备上完成。",
-          "Wrap this file": "打包文件",
-          "Ready to wrap": "准备打包",
-          "Choose a file": "选择文件",
-          Cancel: "取消",
-          "Download parcel": "下载包裹",
-          "A real local file, a glowing journey, and a parcel you can keep.":
-            "读取真实本地文件，看见处理进度，再带走完整包裹。",
-          "↗ Moon notes": "↗ 月亮便笺",
-          "✳ Field journal": "✳ 田野笔记",
-          "◈ Tiny manifesto": "◈ 小小宣言",
-          "JSON parcel · Base64 file contents + CRC32 checksum":
-            "JSON 包裹 · Base64 文件内容与 CRC32 校验和",
-          "Choose → Wrap → Keep → Repeat": "选择 → 打包 → 保存 → 再试一次",
-          "File processing button": "文件处理按钮",
-          "Parcel details": "包裹详情",
-          "Bytes packaged": "已打包字节",
-          "Ready. Your file will be encoded locally into a portable JSON parcel.":
-            "已准备好，文件将在本地编码为可携带的 JSON 包裹。",
-          Cancelled: "已取消",
-          "Wrapping cancelled. The original file is unchanged.": "打包已取消，原文件未改动。",
-          "Wrapping…": "正在打包…",
-          "Encoding bytes": "正在编码字节",
-          "Reading and encoding your file on this device…": "正在此设备上读取并编码文件…",
-          "Wrapped with care": "已完成打包",
-          "Parcel ready": "包裹已就绪",
-          "Try again": "重试",
-          "Could not read file": "无法读取文件",
-          "This file could not be read. Choose another file and try again.":
-            "无法读取此文件，请重新选择文件后再试。",
-          "Fieldwork®": "Fieldwork®",
-          "An expressive navigation study.": "一组会回应动作的导航练习。",
-          "Available for good ideas": "期待好想法",
-          "A small gesture. A clear direction.": "一个小动作，指向清晰的下一步。",
-          "Hover to explore · click to select": "悬停预览 · 点击选择",
-          "Explore sections": "浏览分区",
-          Home: "首页",
-          About: "关于",
-          Services: "服务",
-          Work: "作品",
-          Contact: "联系",
-          "Good things start with a little curiosity.": "好的事情，从一点好奇心开始。",
-          "Thoughtful digital experiences, built around the small moments that make a lasting impression.":
-            "围绕那些值得记住的小瞬间，认真构建数字体验。",
-          "A small studio with a wider perspective.": "小小工作室，宽一点的视角。",
-          "We are a close-knit team of designers and makers. Our best work happens where clear thinking meets playful exploration.":
-            "我们是一组设计与创作伙伴，把清楚的思考和有趣的尝试放在一起。",
-          "From the first idea to the final detail.": "从第一个想法，到最后一个细节。",
-          "Strategy, visual identity, and digital products. We help ambitious teams find their voice and bring it to life.":
-            "从策略、视觉识别到数字产品，帮助团队找到自己的表达。",
-          "Ideas made tangible.": "让想法，变得可以触摸。",
-          "A selection of identities, interfaces, and experiments. Each project starts with a question and ends with something worth using.":
-            "收集识别、界面与实验，每个项目都从问题出发，落到能使用的作品。",
-          "Let’s make something that matters.": "一起做一点有意义的东西。",
-          "Have a project in mind? Start a conversation with your team and turn the next good idea into a considered experience.":
-            "有了项目想法，就与团队开始讨论，让它成为认真完成的体验。",
-          "A world in a little switch.": "小小开关，装着一整个世界。",
-          "Slide from golden afternoons to quiet evenings. There is a little magic in both.":
-            "从金色午后切换到安静夜晚，两边都有一点小魔法。",
-          Daylight: "白昼",
-          Moonlight: "月夜",
-          "16:24 · golden hour": "16:24 · 金色时刻",
-          "Add a cloud +": "添一朵云 +",
-          "A small place to slow down.": "一个可以慢下来的小地方。",
-          "Daytime cottage in green hills with sunshine": "阳光照在绿丘间的小屋上",
-          "Time of day": "日夜时段",
-          "Moonlit cottage with a glowing window, stars and dark hills":
-            "月光照着小屋，窗灯、星星和暗色山丘相伴",
-          "21:08 · wishful thinking": "21:08 · 许愿时刻",
-          "Make a wish ↗": "许个愿 ↗",
-          "The lights are on. Make yourself at home.": "灯亮了，像回到家一样。",
-          "Scroll-aware toolbar": "会随滚动收起的导航。",
-          "A floating glass toolbar that follows your scroll direction.":
-            "跟随滚动方向展开与收起的玻璃悬浮导航。",
-          "Scroll the phone screen — the capsule contracts on down-scroll and expands on up-scroll.":
-            "滚动手机画面：下滑收起胶囊，上滑重新展开。",
-          "Hide-on-scroll navbar demo": "滚动隐藏导航演示",
-          "Scrollable app grid": "可滚动的应用网格",
-          "Floating toolbar": "悬浮导航",
-          "Demo views": "示例视图",
-          Profile: "个人入口",
-          Charts: "图表",
+          "A study of modular forms and the spaces they create together.":
+            "研究模块形状，以及它们共同留下的空间。",
+          "After hours": "夜色之后",
+          "An abstract landscape finds its balance between precision and warmth.":
+            "抽象景观在精确与温暖之间取得平衡。",
+          "An optimistic geometry with a softer, more tactile point of view.":
+            "用更柔和、更有触感的方式理解几何。",
+          "Architectural folds turn a simple grid into an unexpected identity.":
+            "建筑般的折面，让简单网格有了不同的识别。",
+          "Art direction": "视觉指导",
+          "Available for new perspectives": "期待新的视角",
+          "Brand identity": "品牌识别",
+          "Close project": "关闭项目",
+          "Concentric lines make rhythm visible, one imperfect circle at a time.":
+            "同心线让节奏变得可见，一圈圈留下细微差异。",
+          "DESIGN WITHOUT THE ORDINARY": "跳出常规的设计",
+          "Digital experience": "数字体验",
+          "Editorial design": "编辑设计",
+          "Entirely different worlds.": "不一样的世界。",
+          "Explore the collection": "浏览作品集",
+          FORM: "形态",
+          "Folded space": "折叠空间",
+          "Independent minds. Extraordinary outcomes.": "独立的想法，认真完成的作品。",
           List: "列表",
-          "Add a sample icon": "添加示例图标",
+          "Moving matter": "移动的形状",
           New: "新建",
-          Camera: "相机",
-          Maps: "地图",
-          Weather: "天气",
-          Share: "分享",
-          Translate: "翻译",
-          Wallet: "钱包",
-          Mail: "邮件",
-          Passwords: "密码",
-          Music: "音乐",
-          Settings: "设置",
-          Photos: "照片",
-          Notes: "便笺",
-          "take a bite.": "咬一口。",
-          "Less plumbing.": "少一点繁琐。",
-          "More possibility.": "多一些可能。",
-          "Turn complex documents into dependable workflows. One modular platform for everything you build next.":
-            "把复杂文档变成可靠的处理流程，用清晰模块搭起下一步。",
-          "YOUR COLLECTIONS": "你的收藏",
-          "3 assets": "3 项示例资产",
-          "ADD BEANS": "添加咖啡豆",
-          "ADD A MEMORY": "留下记忆",
-          "LOG A CUP": "记下一杯",
-          "MAKE A SMALL CHANGE": "试着改一点",
-          LANDED: "已落下",
-          COLLISIONS: "碰撞",
-          "WHERE CURIOSITY LANDS": "让好奇心在这里落下",
-          "ADD A LITTLE JOY": "添一点小快乐",
-          "YOUR LITTLE THINGS": "你的小事情",
-          "TODAY'S TOTAL": "今日合计",
-          "YOUR NEXT LITTLE PARCEL": "下一份小包裹",
-          "TRY A SAMPLE": "试试示例",
-          "Files stay on this device. Maximum 16 MB.": "文件留在此设备，最大 16 MB。",
-          "COMPLETED RUNS": "完成次数",
-          "DOCUMENT FIELDS": "文档字段",
-          "PROCESSING MODE": "处理方式",
-          "01 / INGEST": "01 / 读取",
-          "02 / EXTRACT": "02 / 提取",
-          "03 / VALIDATE": "03 / 校验",
-          "FRESHLY CLICKED · 06 BITES": "新鲜出炉 · 六口快乐",
-          "FOUR CHAPTERS · KEEP FOREVER": "四段故事 · 收藏此刻",
-          "DRAG · ARROW KEYS · DELETE": "拖动 · 方向键 · 删除",
-          "DRAG TO ROTATE · SELECT TO EXPLORE": "拖动旋转 · 选择查看",
-          "CLICK TO DROP · SPACE TO REPEAT": "点击放下 · 空格再来一次",
-          "LAST LANDING —": "上次落点 —",
-          "LIGHT FIELD / 640 × 460": "光场 / 640 × 460",
-          "DRAG TO BROWSE": "拖动浏览",
-          "SELECT THE CENTER CARD TO EXPLORE": "选择中间卡片查看",
-          "SWITCH THE LIGHT. CHANGE THE FEELING.": "切换光线，换一种心情。",
-          cookie: "枚饼干",
-          "enjoyed.": "，享用完毕。",
-          bite: "口",
-          "to happiness": "小快乐",
-          s: "",
-          "PLAYING 0": "正在播放 0",
-          "of 4 memories discovered": "/ 4 段回忆已发现",
-          "collection opened. Pick a shape to add.": "集合已展开，选个图形加入。",
-          sticker: "贴纸",
-          "added.": "已添加。",
-          "stickers on your sheet.": "张贴纸在画布上。",
-          "Selected sticker rotated to": "所选贴纸旋转至",
-          "degrees.": "度。",
-          "e.g. Ethiopia natural roast": "例如：埃塞俄比亚日晒豆",
-          "e.g. Sunday flat white": "例如：周日的馥芮白",
-          "removed.": "已移除。",
-          "added to your journal.": "已加入咖啡记录。",
-          landings: "次落点",
-          "PAUSED · STEP TO EXPLORE": "已暂停 · 单步探索",
-          "LIVE ·": "运行中 ·",
-          "IN FLIGHT": "颗球飞行中",
-          "LAST LANDING": "上次落点",
-          "Landed in column": "落在第",
-          "Sample document → INVOICE Run the parser to inspect your input.":
-            "示例文档 → INVOICE\n运行解析，检查输入。",
-          "Sample fields → vendor · currency · total": "示例字段 → 供应方 · 货币 · 总额",
-          "USD workflow Run to validate your input.": "美元处理流程\n运行校验，检查输入。",
-          "Validation passed ✓ Required fields present · currency is USD":
-            "校验通过 ✓\n必填字段齐全 · 货币为 USD",
-          "COLLECT MOMENTS, TOO.": "也把美好时刻收藏起来。",
-          "THE LITTLE THINGS": "生活的小事情",
-          "DAY WELL SPENT": "值得留下的一天",
-          "A SMALL SOUVENIR. JUST FOR YOU.": "一份小小纪念，送给自己。",
+          "New terrain": "新的地形",
+          "Orbiting project collection": "轨道作品集",
+          "Our work ↗": "查看作品 ↗",
+          Pause: "暂停",
+          "Pause motion": "暂停动效",
+          "Quiet frequency": "安静频率",
+          Resume: "继续",
+          "Resume motion": "继续动效",
+          "SELECTED STUDIES / 01—06": "精选作品 / 01—06",
+          Select: "选择",
+          "Small details.": "小小细节。",
+          "Soft structure": "柔和结构",
+          "Sound & culture": "声音与文化",
+          "Strategy · Identity · Digital experiences": "策略 · 视觉识别 · 数字体验",
+          "This is a sample project study. Replace it with your own work.":
+            "这是示例项目，请替换为自己的作品。",
+          View: "查看",
+          "Visual identity": "视觉识别",
           name: "名称",
-          price: "价格",
-          "bytes ·": "字节 ·",
-          "binary file": "二进制文件",
-          "This file is too large. Choose a file under": "文件过大，请选择小于",
-          "MB.": "MB 的文件。",
-          Packed: "已打包",
-          "bytes. CRC32": "字节。CRC32",
-          wish: "个愿望",
-          "added to your sky.": "已加入夜空。",
-          "little cloud": "朵小云",
-          "drifting by.": "正轻轻飘过。",
-          "Less plumbing. More possibility.": "少一点繁琐，多一些可能。",
+          star: "星星",
         };
-        const lang =
-          new URLSearchParams(location.search).get("lang") ||
-          document.documentElement.dataset.skillLang ||
-          "zh";
-        const chinese = lang !== "en";
-        document.documentElement.lang = chinese ? "zh-CN" : "en";
         const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        const normalizeLang = (value) => {
+          if (!value) return "";
+          const lower = String(value).trim().toLowerCase();
+          if (lower === "zh" || lower.startsWith("zh-")) return "zh";
+          if (lower === "en" || lower.startsWith("en-")) return "en";
+          return "";
+        };
+        const readQueryLang = () => {
+          try {
+            return normalizeLang(new URLSearchParams(location.search).get("lang"));
+          } catch {
+            return "";
+          }
+        };
+        const resolveLang = () =>
+          readQueryLang() ||
+          normalizeLang(document.documentElement.dataset.skillLang) ||
+          (normalizeLang(document.documentElement.lang) === "zh" ? "zh" : "en");
+
+        let currentLang = resolveLang();
+        let chinese = currentLang === "zh";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+
+        const actionZh = { receive: "收款", send: "发送", swap: "兑换" };
+        const flavorZh = {
+          vanilla: "香草",
+          berry: "莓果",
+          matcha: "抹茶",
+          cocoa: "可可",
+          citrus: "柑橘",
+          peach: "蜜桃",
+        };
+        const localizedAttrs = ["aria-label", "placeholder", "title", "data-hint"];
+        const skipSelector =
+          "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]";
+        const originalTextNodes = new WeakMap();
+        const originalAttrs = new WeakMap();
+        let originalDocumentTitle = null;
+
         window.__usefulshelfConfigure = (config) => {
           const accent = document.documentElement.dataset.skillAccent;
-          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+          return /^#(?:[\da-f]{3}|[\da-f]{6})$/i.test(accent || "")
+            ? { ...config, accent }
+            : config;
         };
+
         window.__usefulshelfText = (value) => {
           if (!chinese || typeof value !== "string") return value;
-          const exact = dictionary[normalize(value)];
+          const normalized = normalize(value);
+          if (!normalized) return value;
+          const exact = dictionary[normalized];
           if (exact !== undefined) return exact;
           return value
             .replace(/What is ([^?]+)\?/g, "什么是 $1？")
             .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
-            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
-            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/PLAYING\s+(\d+)\s*\/\s*(\d+)/g, "正在播放 $1 / $2")
+            .replace(
+              /^(Vanilla|Berry|Matcha|Cocoa|Citrus|Peach)\s*·\s*(\d+)\s+bites?\s+to happiness$/i,
+              (_, flavor, count) =>
+                `${flavorZh[flavor.toLowerCase()] || flavor} · 还有 ${count} 口小快乐`,
+            )
+            .replace(/(\d+)\s+bites?\s+to happiness/g, "还有 $1 口小快乐")
+            .replace(/All gone!\s*(\d+)\s+cookies?\s+enjoyed\./g, "吃完啦！已享用 $1 枚饼干。")
+            .replace(
+              /\bPreview\s+(Receive|Send|Swap)\b/gi,
+              (_, action) => `预览${actionZh[action.toLowerCase()] || action}`,
+            )
+            .replace(
+              /^(Receive|Send|Swap)\s+preview:\s*(\$[\d.,]+)\s*·\s*no transaction sent$/i,
+              (_, action, amount) =>
+                `${actionZh[action.toLowerCase()] || action}预览：${amount} · 未发送真实交易`,
+            )
+            .replace(/(\d+)\s*\/\s*12\s+STICKERS/g, "$1 / 12 张贴纸")
+            .replace(/(\d+)\s+stickers? on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(
+              /Landed in column (\d+)\.\s*Try a different launch position\./g,
+              "落在第 $1 列。换个发射位置试试。",
+            )
             .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Try a different launch position\./g, "换个发射位置试试。")
+            .replace(/Selected sticker rotated to\s*(-?\d+)\s*degrees\./g, "所选贴纸旋转至 $1 度。")
             .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
             .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
             .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/(\d+)\s+wish(?:es)?\s+added to your sky\./g, "$1 个愿望已加入夜空。")
             .replace(/added to your sky\./g, "已加入夜空。")
-            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/(\d+)\s+little clouds?\s+drifting by\./g, "$1 朵小云正轻轻飘过。")
+            .replace(/(\d+)\s+little clouds?/g, "$1 朵小云")
             .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(
+              /Files stay on this device\. Maximum (\d+) MB\./g,
+              "文件留在此设备，最大 $1 MB。",
+            )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
-        function boot() {
-          if (chinese) {
-            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-            let node;
-            while ((node = walker.nextNode())) {
-              if (
-                node.parentElement?.closest(
-                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
-                )
-              )
-                continue;
-              const next = window.__usefulshelfText(node.textContent);
-              if (next !== node.textContent) node.textContent = next;
+
+        function isCustomDocumentTitle(sourceTitle) {
+          const titleEl = document.querySelector("title");
+          if (titleEl?.hasAttribute("data-skill-custom-text")) return true;
+          const normalizedTitle = normalize(sourceTitle || "");
+          if (!normalizedTitle) return false;
+          for (const element of document.querySelectorAll("[data-skill-custom-text]")) {
+            if (normalize(element.textContent || "") === normalizedTitle) return true;
+          }
+          return false;
+        }
+
+        function applyLanguage(nextLang) {
+          const resolved = normalizeLang(nextLang) || "en";
+          currentLang = resolved;
+          chinese = resolved === "zh";
+          document.documentElement.lang = chinese ? "zh-CN" : "en";
+          if (!document.body) return;
+          if (originalDocumentTitle === null) originalDocumentTitle = document.title;
+
+          const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+          let node;
+          while ((node = walker.nextNode())) {
+            if (node.parentElement?.closest(skipSelector)) continue;
+            if (chinese) {
+              const source = originalTextNodes.has(node)
+                ? originalTextNodes.get(node)
+                : node.textContent;
+              const next = window.__usefulshelfText(source);
+              if (next !== source) {
+                if (!originalTextNodes.has(node)) originalTextNodes.set(node, source);
+                if (node.textContent !== next) node.textContent = next;
+              }
+            } else if (originalTextNodes.has(node)) {
+              const source = originalTextNodes.get(node);
+              if (node.textContent !== source) node.textContent = source;
             }
-            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
-              for (const name of ["aria-label", "placeholder", "title"]) {
-                if (element.hasAttribute(name))
-                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+          }
+
+          for (const element of document.querySelectorAll(
+            "[aria-label],[placeholder],[title],[data-hint]",
+          )) {
+            if (element.closest("[data-skill-custom-text]")) continue;
+            let saved = originalAttrs.get(element);
+            for (const name of localizedAttrs) {
+              if (!element.hasAttribute(name)) continue;
+              if (chinese) {
+                const source =
+                  saved && Object.prototype.hasOwnProperty.call(saved, name)
+                    ? saved[name]
+                    : element.getAttribute(name);
+                const next = window.__usefulshelfText(source);
+                if (next !== source) {
+                  if (!saved) {
+                    saved = {};
+                    originalAttrs.set(element, saved);
+                  }
+                  if (!Object.prototype.hasOwnProperty.call(saved, name)) {
+                    saved[name] = source;
+                  }
+                  if (element.getAttribute(name) !== next) element.setAttribute(name, next);
+                }
+              } else if (saved && Object.prototype.hasOwnProperty.call(saved, name)) {
+                if (element.getAttribute(name) !== saved[name]) {
+                  element.setAttribute(name, saved[name]);
+                }
               }
             }
-            document.title = window.__usefulshelfText(document.title);
           }
+
+          if (!isCustomDocumentTitle(originalDocumentTitle)) {
+            const targetTitle = chinese
+              ? window.__usefulshelfText(originalDocumentTitle)
+              : originalDocumentTitle;
+            if (document.title !== targetTitle) document.title = targetTitle;
+          }
+        }
+
+        window.__usefulshelfSetLang = (lang) => {
+          const resolved = normalizeLang(lang) || "en";
+          if (document.documentElement.dataset.skillLang !== resolved) {
+            document.documentElement.dataset.skillLang = resolved;
+          }
+          applyLanguage(resolved);
+        };
+
+        function boot() {
+          if (originalDocumentTitle === null) originalDocumentTitle = document.title;
+          if (chinese) applyLanguage("zh");
+
+          let langObserver;
+          if (typeof MutationObserver === "function") {
+            langObserver = new MutationObserver(() => {
+              const next =
+                normalizeLang(document.documentElement.dataset.skillLang) || resolveLang();
+              if (next !== currentLang) applyLanguage(next);
+            });
+            langObserver.observe(document.documentElement, {
+              attributes: true,
+              attributeFilter: ["data-skill-lang"],
+            });
+            window.addEventListener("pagehide", () => langObserver.disconnect(), { once: true });
+          }
+
           if (parent === window) return;
           // Freeze viewport-based demo heights before measuring, avoiding vh feedback
           // when the parent grows the iframe. Intentional inner demo scrollers remain.
@@ -1121,41 +731,8 @@
     <script>
       (() => {
         "use strict";
-        const names = [
-          window.__usefulshelfText("Folded space"),
-          window.__usefulshelfText("Quiet frequency"),
-          window.__usefulshelfText("New terrain"),
-          window.__usefulshelfText("Moving matter"),
-          window.__usefulshelfText("Soft structure"),
-          window.__usefulshelfText("After hours"),
-        ];
-        const categories = [
-          window.__usefulshelfText("Brand identity"),
-          window.__usefulshelfText("Sound & culture"),
-          window.__usefulshelfText("Editorial design"),
-          window.__usefulshelfText("Digital experience"),
-          window.__usefulshelfText("Art direction"),
-          window.__usefulshelfText("Visual identity"),
-        ];
-        const descriptions = [
-          window.__usefulshelfText(
-            "Architectural folds turn a simple grid into an unexpected identity.",
-          ),
-          window.__usefulshelfText(
-            "Concentric lines make rhythm visible, one imperfect circle at a time.",
-          ),
-          window.__usefulshelfText(
-            "An abstract landscape finds its balance between precision and warmth.",
-          ),
-          window.__usefulshelfText("A study of modular forms and the spaces they create together."),
-          window.__usefulshelfText(
-            "An optimistic geometry with a softer, more tactile point of view.",
-          ),
-          window.__usefulshelfText(
-            "A nocturnal color study built from oversized letters and negative space.",
-          ),
-        ];
-        const colors = [
+        const config = window.__usefulshelfConfigure({"accent": "#315c48", "speed": 0.45, "projects": null});
+        const palette = [
           ["#ed693f", "#f4d9b8"],
           ["#234e40", "#d9e0bd"],
           ["#baabd2", "#302942"],
@@ -1163,50 +740,132 @@
           ["#b66c4e", "#efe0ca"],
           ["#334c83", "#c4d6ef"],
         ];
+        const defaultProjects = [
+          {
+            name: window.__usefulshelfText("Folded space"),
+            category: window.__usefulshelfText("Brand identity"),
+            description: window.__usefulshelfText(
+              "Architectural folds turn a simple grid into an unexpected identity.",
+            ),
+            colors: palette[0],
+          },
+          {
+            name: window.__usefulshelfText("Quiet frequency"),
+            category: window.__usefulshelfText("Sound & culture"),
+            description: window.__usefulshelfText(
+              "Concentric lines make rhythm visible, one imperfect circle at a time.",
+            ),
+            colors: palette[1],
+          },
+          {
+            name: window.__usefulshelfText("New terrain"),
+            category: window.__usefulshelfText("Editorial design"),
+            description: window.__usefulshelfText(
+              "An abstract landscape finds its balance between precision and warmth.",
+            ),
+            colors: palette[2],
+          },
+          {
+            name: window.__usefulshelfText("Moving matter"),
+            category: window.__usefulshelfText("Digital experience"),
+            description: window.__usefulshelfText(
+              "A study of modular forms and the spaces they create together.",
+            ),
+            colors: palette[3],
+          },
+          {
+            name: window.__usefulshelfText("Soft structure"),
+            category: window.__usefulshelfText("Art direction"),
+            description: window.__usefulshelfText(
+              "An optimistic geometry with a softer, more tactile point of view.",
+            ),
+            colors: palette[4],
+          },
+          {
+            name: window.__usefulshelfText("After hours"),
+            category: window.__usefulshelfText("Visual identity"),
+            description: window.__usefulshelfText(
+              "A nocturnal color study built from oversized letters and negative space.",
+            ),
+            colors: palette[5],
+          },
+        ];
+        const customProjects = Array.isArray(config.projects) && config.projects.length >= 2;
+        const projects = customProjects
+          ? config.projects.map((p, idx) => ({
+              name: p.name,
+              category: p.category,
+              description: p.description,
+              colors: p.colors || palette[idx % palette.length],
+              mark: p.mark || "",
+            }))
+          : defaultProjects;
+        const names = projects.map((p) => p.name);
+        const categories = projects.map((p) => p.category);
+        const descriptions = projects.map((p) => p.description);
+        const escXml = (s) =>
+          String(s).replace(
+            /[&<>"']/g,
+            (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[c],
+          );
         function art(i) {
-          const [a, b] = colors[i];
+          const item = projects[i % projects.length];
+          const [a, b] = item.colors || palette[i % palette.length];
           let shapes = "";
-          if (i === 0)
+          if (item.mark) {
+            const fs = item.mark.length <= 2 ? 74 : item.mark.length === 3 ? 52 : 40;
             shapes =
-              '<path d="M20 90 65 15 65 100 105 20 105 110" fill="none" stroke="' +
+              '<text x="65" y="70" text-anchor="middle" dominant-baseline="central" fill="' +
               b +
-              '" stroke-width="18"/>';
-          if (i === 1)
-            for (let r = 12; r < 85; r += 9)
-              shapes +=
-                '<circle cx="70" cy="67" r="' +
-                r +
-                '" fill="none" stroke="' +
+              '" font-family="Arial, sans-serif" font-weight="700" font-size="' +
+              fs +
+              '">' +
+              escXml(item.mark) +
+              "</text>";
+          } else {
+            const shapeIdx = i % 6;
+            if (shapeIdx === 0)
+              shapes =
+                '<path d="M20 90 65 15 65 100 105 20 105 110" fill="none" stroke="' +
                 b +
-                '" stroke-width="2"/>';
-          if (i === 2)
-            shapes =
-              '<path d="M-10 140V75L42 22 75 57 95 38 150 100V140Z" fill="' +
-              b +
-              '"/><circle cx="99" cy="26" r="12" fill="#f4de79"/>';
-          if (i === 3)
-            for (let y = 0; y < 3; y++)
-              for (let x = 0; x < 3; x++)
+                '" stroke-width="18"/>';
+            if (shapeIdx === 1)
+              for (let r = 12; r < 85; r += 9)
                 shapes +=
-                  '<rect x="' +
-                  (x * 43 + 4) +
-                  '" y="' +
-                  (y * 43 + 4) +
-                  '" width="39" height="39" rx="' +
-                  ((x + y) % 2 ? 20 : 0) +
-                  '" fill="' +
+                  '<circle cx="70" cy="67" r="' +
+                  r +
+                  '" fill="none" stroke="' +
                   b +
-                  '"/>';
-          if (i === 4)
-            shapes =
-              '<path d="M65 8C-15 15 25 62 65 65C-15 75 25 127 65 122C145 125 105 74 65 65C145 60 105 8 65 8Z" fill="' +
-              b +
-              '"/>';
-          if (i === 5)
-            shapes =
-              '<text x="12" y="104" fill="' +
-              b +
-              '" font-family="Arial" font-weight="bold" font-size="108">a.</text>';
+                  '" stroke-width="2"/>';
+            if (shapeIdx === 2)
+              shapes =
+                '<path d="M-10 140V75L42 22 75 57 95 38 150 100V140Z" fill="' +
+                b +
+                '"/><circle cx="99" cy="26" r="12" fill="#f4de79"/>';
+            if (shapeIdx === 3)
+              for (let y = 0; y < 3; y++)
+                for (let x = 0; x < 3; x++)
+                  shapes +=
+                    '<rect x="' +
+                    (x * 43 + 4) +
+                    '" y="' +
+                    (y * 43 + 4) +
+                    '" width="39" height="39" rx="' +
+                    ((x + y) % 2 ? 20 : 0) +
+                    '" fill="' +
+                    b +
+                    '"/>';
+            if (shapeIdx === 4)
+              shapes =
+                '<path d="M65 8C-15 15 25 62 65 65C-15 75 25 127 65 122C145 125 105 74 65 65C145 60 105 8 65 8Z" fill="' +
+                b +
+                '"/>';
+            if (shapeIdx === 5)
+              shapes =
+                '<text x="12" y="104" fill="' +
+                b +
+                '" font-family="Arial" font-weight="bold" font-size="108">a.</text>';
+          }
           return (
             '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 130"><rect width="130" height="130" fill="' +
             a +
@@ -1256,13 +915,25 @@
               close();
           }
         });
-        for (let i = 0; i < 12; i++) {
+        if (customProjects) {
+          document.querySelector("#catalog-grid").setAttribute("data-skill-custom-text", "1");
+          document.querySelector("#detail-title").setAttribute("data-skill-custom-text", "1");
+          document.querySelector("#detail-category").setAttribute("data-skill-custom-text", "1");
+          document.querySelector("#detail-description").setAttribute("data-skill-custom-text", "1");
+          const catEyebrow = catalog.querySelector(".eyebrow");
+          if (catEyebrow)
+            catEyebrow.textContent =
+              "SELECTED STUDIES / 01—" + String(projects.length).padStart(2, "0");
+        }
+        const orbitCount = Math.max(12, projects.length);
+        for (let i = 0; i < orbitCount; i++) {
+          const idx = i % projects.length;
           const b = document.createElement("button");
           b.type = "button";
           b.className = "piece";
-          b.setAttribute("aria-label", window.__usefulshelfText("View ") + names[i % 6]);
-          b.innerHTML = art(i % 6);
-          b.onclick = () => open(i % 6);
+          b.setAttribute("aria-label", window.__usefulshelfText("View ") + names[idx]);
+          b.innerHTML = art(idx);
+          b.onclick = () => open(idx);
           orbital.append(b);
           pieces.push(b);
         }
@@ -1293,16 +964,20 @@
         };
         function draw() {
           const mobile = width < 600;
+          const half = Math.ceil(pieces.length / 2);
           pieces.forEach((b, i) => {
             const band = i % 2,
-              a = (i / 12) * Math.PI * 2 + (band ? -angle : angle);
+              a = (i / pieces.length) * Math.PI * 2 + (band ? -angle : angle);
             let x, y;
             if (mobile) {
-              const top = i < 6;
-              const n = i % 6;
-              x = Math.cos((n / 5) * Math.PI) * width * 0.37;
-              y = (top ? -1 : 1) * (180 + Math.sin((n / 5) * Math.PI) * 67);
-              x += Math.sin(angle + i) * 5;
+              const top = i < half;
+              const n = top ? i : i - half;
+              const rowCount = top ? half : pieces.length - half;
+              const theta = rowCount > 1 ? (n / (rowCount - 1)) * Math.PI : Math.PI / 2;
+              const rx = Math.min(width * 0.41, 168);
+              const ry = 86;
+              x = Math.cos(theta) * rx + Math.sin(angle + i) * 2;
+              y = (top ? -1 : 1) * (170 + Math.sin(theta) * ry);
             } else {
               x = Math.cos(a) * (Math.min(width * 0.42, 465) - (band ? 80 : 0));
               y = Math.sin(a) * (band ? 265 : 205);

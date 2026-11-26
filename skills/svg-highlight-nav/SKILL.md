@@ -1,6 +1,6 @@
 ---
 name: svg-highlight-nav
-description: 手绘圈选导航。暖白编辑式排版中，每个导航按钮拥有自己的三条 SVG 手绘路径，不依赖全局坐标。 Use for this interaction and adapt it to the existing framework.
+description: 手绘圈选导航（Hand-drawn SVG highlight ring tab navigation）。暖白编辑式排版中，每个原生导航标签内置三条手绘 SVG 椭圆路径并随悬停/焦点/键盘选择流畅描边，适用于工作室官网导航、编辑式标签页与创意作品集头部。
 ---
 
 # 手绘圈选导航
@@ -18,7 +18,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ## 参数与内容边界
 
 - 将标题、副标题、强调色与场景数据作为可配置输入；未指定时采用下面的设计参考，而不强制迁移用户的技术栈。
-- 完整包的可选 CLI 参数：`--title`, `--subtitle`, `--accent`, `--bg`。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
+- 完整包的可选 CLI 参数：`--title`（1–180 字符，左上角字标与网页标题）、`--subtitle`（1–180 字符，底部说明）、`--accent`（3/6 位 HEX，手绘圈选描边色）、`--bg`（3/6 位 HEX）、`--duration`（整数 0–2000 ms，描边动画时长）、`--lang`（`en` / `zh`）、`-p` / `--params`（JSON 配置文件，支持 `duration` 与 `items` 数组：2–8 项 `{label, heading, body}`）。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
 - 文案用纯文本节点/框架插值，颜色只接受合法 HEX，数字按参考约束限制。内联 JSON 必须转义 `<`，不能把用户文字送进 innerHTML、eval、事件属性或选择器。
 - 中英文文案使用明确字典，界面语言与用户输入内容分离；不得翻译或覆盖用户填写的名称、便笺或文件内容。
 - 演示里的本地数据不代表实际账号、付款、远程 AI 或业务后台；要接入真实服务时遵守用户授权和服务端准入，不向访客公开凭据、运营额度或其他人的任务。
@@ -49,14 +49,47 @@ If only this SKILL.md is supplied, implement the specification directly in the t
   --ink: #222423;
 }
 body {
-  font-family:
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 ```
 
 ```html
-<main class="skill-demo">
-  <h1>svg-highlight-nav</h1>
-  <p></p>
+<main class="page">
+  <header class="topline">
+    <div class="wordmark">Fieldwork®</div>
+    <div class="availability">Available for good ideas</div>
+  </header>
+  <section class="content">
+    <p class="eyebrow">A small gesture. A clear direction.</p>
+    <div class="nav" role="tablist" aria-label="Explore sections">
+      <button id="section-tab-0" type="button" role="tab" aria-controls="content-panel" aria-selected="true" class="marked" tabindex="0">
+        <span>Home</span>
+        <svg class="ring" viewBox="0 0 112 50" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M8 29C1 14 24 3 57 5S108 16 105 29 77 47 42 44 1 36 7 21C10 15 20 11 31 10" pathLength="1" />
+        </svg>
+      </button>
+      <button id="section-tab-1" type="button" role="tab" aria-controls="content-panel" aria-selected="false" tabindex="-1">
+        <span>About</span>
+        <svg class="ring" viewBox="0 0 112 50" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M8 27C3 12 32 3 62 5S108 15 104 30 68 47 36 44 0 34 10 20C15 13 28 9 37 8" pathLength="1" />
+        </svg>
+      </button>
+      <button id="section-tab-2" type="button" role="tab" aria-controls="content-panel" aria-selected="false" tabindex="-1">
+        <span>Work</span>
+        <svg class="ring" viewBox="0 0 112 50" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M7 30C0 16 26 5 57 4S108 14 105 29 75 47 40 44 3 37 6 24C9 16 24 10 36 9" pathLength="1" />
+        </svg>
+      </button>
+    </div>
+    <section class="panel" id="content-panel" role="tabpanel" aria-labelledby="section-tab-0" tabindex="0">
+      <h1>Good things start with a little curiosity.</h1>
+      <p>Thoughtful digital experiences, built around the small moments that make a lasting impression.</p>
+    </section>
+  </section>
+  <footer class="bottom">
+    <span>An expressive navigation study.</span>
+    <span id="count">01 / 05</span>
+  </footer>
 </main>
 ```
 
@@ -84,4 +117,4 @@ Ring paths are locally drawn vectors, rendered with a non-scaling stroke. The an
 
 ## 可选完整包工作流 / Optional package workflow
 
-已获得完整 ZIP 时，可以参考 templates/index.template.html，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。
+已获得完整 ZIP 时，可以参考 [references/design.md](references/design.md) 与 `templates/index.template.html`，并执行 `python3 scripts/generate.py -o index.html`（可加 `--lang zh` 或 `-p params.json`）。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。

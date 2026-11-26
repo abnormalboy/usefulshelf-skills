@@ -1,6 +1,6 @@
 ---
 name: ice-fracture-lab
-description: 冰面裂纹实验室。八边形晶体切成 24 个不重叠三角形；破碎量驱动径向位移、旋转和完整度，复原必须回到同一顶点。 Use for this interaction and adapt it to the existing framework.
+description: 冰面裂纹实验室（Canvas 2D 晶体碎裂与重冻复原交互）。八边形晶体切分为 24 个不重叠三角切面，支持冲击力度调节、完整度读数与精确顶点复原。Trigger when building shatter/fracture Canvas 2D hero effects, glass/ice crystal break-and-refreeze animations, or interactive material labs.
 ---
 
 # 冰面裂纹实验室
@@ -18,7 +18,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ## 参数与内容边界
 
 - 将标题、副标题、强调色与场景数据作为可配置输入；未指定时采用下面的设计参考，而不强制迁移用户的技术栈。
-- 完整包的可选 CLI 参数：`--title`, `--accent`, `--impact`。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
+- 完整包的可选 CLI 参数：`-p/--params`（JSON 配置）、`--lang`（`en` 或 `zh`）、`--title`（1–300 字符）、`--accent`（3/6 位 HEX）、`--impact`（初始冲击力度，整数 `10–100`，默认 `65`）。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
 - 文案用纯文本节点/框架插值，颜色只接受合法 HEX，数字按参考约束限制。内联 JSON 必须转义 `<`，不能把用户文字送进 innerHTML、eval、事件属性或选择器。
 - 中英文文案使用明确字典，界面语言与用户输入内容分离；不得翻译或覆盖用户填写的名称、便笺或文件内容。
 - 演示里的本地数据不代表实际账号、付款、远程 AI 或业务后台；要接入真实服务时遵守用户授权和服务端准入，不向访客公开凭据、运营额度或其他人的任务。
@@ -72,4 +72,4 @@ The crystal is an eight-sided silhouette partitioned into 24 non-overlapping tri
 
 ## 可选完整包工作流 / Optional package workflow
 
-已获得完整 ZIP 时，可以参考 templates/index.template.html，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。
+已获得完整 ZIP 时，可以参考 [references/design.md](references/design.md) 与 `templates/index.template.html`，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。

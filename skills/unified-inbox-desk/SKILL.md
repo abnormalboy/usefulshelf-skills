@@ -1,6 +1,6 @@
 ---
 name: unified-inbox-desk
-description: 轻巧收件工作台。默认以暖白窄卡、右侧深色问题气泡、回答和五通道比例条为主构图，收件箱是可切换的第二视图。 Use for this interaction and adapt it to the existing framework.
+description: 轻巧收件工作台（Unified inbox desk & channel analytics card）。以暖白窄卡、右侧深色问题气泡、五通道比例条为主构图，并可切换至筛选/搜索/草稿/归档撤销收件箱视图，适用于客服分析看板、多渠道消息中心与 SaaS 工作台。
 ---
 
 # 轻巧收件工作台
@@ -18,7 +18,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ## 参数与内容边界
 
 - 将标题、副标题、强调色与场景数据作为可配置输入；未指定时采用下面的设计参考，而不强制迁移用户的技术栈。
-- 完整包的可选 CLI 参数：`--title`, `--subtitle`, `--accent`, `--bg`。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
+- 完整包的可选 CLI 参数：`--title`、`--subtitle`、`--accent`（3/6 位 HEX）、`--bg`（3/6 位 HEX）、`--lang`（`en` / `zh`）、`-p` / `--params`（JSON 配置文件）。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
 - 文案用纯文本节点/框架插值，颜色只接受合法 HEX，数字按参考约束限制。内联 JSON 必须转义 `<`，不能把用户文字送进 innerHTML、eval、事件属性或选择器。
 - 中英文文案使用明确字典，界面语言与用户输入内容分离；不得翻译或覆盖用户填写的名称、便笺或文件内容。
 - 演示里的本地数据不代表实际账号、付款、远程 AI 或业务后台；要接入真实服务时遵守用户授权和服务端准入，不向访客公开凭据、运营额度或其他人的任务。
@@ -59,8 +59,8 @@ body {
   <p>问一个小问题，让每段对话都有清晰的去处。</p>
   <button id="analysis-view" type="button">洞察</button>
   <button id="desk-view" type="button">工作台</button>
-  <select id="question-select" aria-label="消息从哪里来？ 哪些已被处理？ 哪里需要关注？"></select>
-  <select id="period" aria-label="最近 7 天 最近 30 天"></select>
+  <select id="question-select" aria-label="换个问题"></select>
+  <select id="period" aria-label="时间"></select>
   <input id="search" aria-label="搜索消息" type="search">
   <button id="pin" type="button">pin</button>
   <button id="archive" type="button">归档这条 ↗</button>
@@ -83,8 +83,6 @@ Questions select received, resolved or outstanding counts. The 7-day and 30-day 
 
 The view switch keeps question, period, selected channel and inbox edits in memory. Both views share exactly one live status region. There is no automatic motion; reduced-motion disables bar transitions. On narrow screens controls wrap and the card remains within the viewport.
 
-#### Inbox desk model
-
 #### State model
 Messages use stable IDs and hold channel, pin, archive, edited draft and saved draft state. Filters and search derive the visible list without changing source order. A pinned sort is stable, and selecting a new filter chooses the first matching message when the previous selection is outside the filter. Empty lists hide the reader rather than showing an unrelated conversation. Channel bars are computed from actual unarchived sample messages.
 
@@ -96,4 +94,4 @@ Replace the `messages` data with your own sample content. Render message text wi
 
 ## 可选完整包工作流 / Optional package workflow
 
-已获得完整 ZIP 时，可以参考 templates/index.template.html，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。
+已获得完整 ZIP 时，可以参考 [references/design.md](references/design.md) 与 `templates/index.template.html`，并执行 `python3 scripts/generate.py -o index.html`（可加 `--lang zh` 或 `-p params.json`）。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。

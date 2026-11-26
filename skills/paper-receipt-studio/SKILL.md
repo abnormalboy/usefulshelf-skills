@@ -1,6 +1,6 @@
 ---
 name: paper-receipt-studio
-description: 纸条收据工坊。离屏 Canvas 绘制真实收据纹理，屏上用 12×18 三角网格和局部正弦折痕映射纸张，明确不是布料物理。 Use for this interaction and adapt it to the existing framework.
+description: 纸条收据工坊（Tactile paper receipt studio & scrunchable PNG exporter）。离屏 Canvas 绘制真实收据纹理，屏上用 12×18 三角网格与局部正弦折痕呈现揉纸与抚平质感，支持自定义店名/币种/印章/条目与高清 PNG 导出，适用于生活手账、消费小票与品牌纪念卡片。
 ---
 
 # 纸条收据工坊
@@ -18,7 +18,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ## 参数与内容边界
 
 - 将标题、副标题、强调色与场景数据作为可配置输入；未指定时采用下面的设计参考，而不强制迁移用户的技术栈。
-- 完整包的可选 CLI 参数：`--title`, `--subtitle`, `--accent`, `--bg`。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
+- 完整包的可选 CLI 参数：`--title`、`--subtitle`、`--accent`（3/6 位 HEX）、`--bg`（3/6 位 HEX）、`--store-name`（1–40 字符）、`--currency`（1–6 字符，如 `USD`/`CNY`/`EUR`）、`--stamp`（1–32 字符）、`--lang`（`en` / `zh`）、`-p` / `--params`（JSON 配置文件，支持 `storeName`、`currency`、`stamp` 及 `items` 数组：1–5 项 `{name, price}`）。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
 - 文案用纯文本节点/框架插值，颜色只接受合法 HEX，数字按参考约束限制。内联 JSON 必须转义 `<`，不能把用户文字送进 innerHTML、eval、事件属性或选择器。
 - 中英文文案使用明确字典，界面语言与用户输入内容分离；不得翻译或覆盖用户填写的名称、便笺或文件内容。
 - 演示里的本地数据不代表实际账号、付款、远程 AI 或业务后台；要接入真实服务时遵守用户授权和服务端准入，不向访客公开凭据、运营额度或其他人的任务。
@@ -49,7 +49,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
   --ink: #303b32;
 }
 body {
-  font:
+  font: 14px system-ui, sans-serif;
 }
 ```
 
@@ -82,4 +82,4 @@ PNG export uses the offscreen flat paper texture, so the saved receipt remains r
 
 ## 可选完整包工作流 / Optional package workflow
 
-已获得完整 ZIP 时，可以参考 templates/index.template.html，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。
+已获得完整 ZIP 时，可以参考 [references/design.md](references/design.md) 与 `templates/index.template.html`，并执行 `python3 scripts/generate.py -o index.html`（可加 `--lang zh` 或 `-p params.json`）。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。

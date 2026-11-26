@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Prism Refraction Lab</title>
+    <title>把一束光，拆成彩虹。</title>
     <style>
       :root {
         --accent: #b9a5ff;
@@ -32,17 +32,16 @@
       }
       .shell {
         max-width: 1440px;
-        padding: 27px 5%;
+        padding: 18px 5% 16px;
         margin: auto;
-        min-height: 730px;
       }
       header {
         display: flex;
         justify-content: space-between;
         gap: 18px;
         align-items: center;
-        font: 10px monospace;
-        color: #6d6b7b;
+        font: 11px monospace;
+        color: #9b98ad;
         letter-spacing: 0.12em;
       }
       .brand {
@@ -57,15 +56,15 @@
       .top {
         display: flex;
         justify-content: space-between;
-        gap: 30px;
+        gap: 28px;
         align-items: flex-end;
-        margin-top: 40px;
+        margin-top: 16px;
       }
       h1 {
-        font-size: clamp(34px, 4.5vw, 58px);
+        font-size: clamp(30px, 3.8vw, 48px);
         font-weight: 500;
-        letter-spacing: -0.055em;
-        line-height: 1.15;
+        letter-spacing: -0.045em;
+        line-height: 1.1;
         margin: 0;
         overflow-wrap: anywhere;
         max-width: 660px;
@@ -73,9 +72,9 @@
       }
       .intro {
         font-size: 12px;
-        line-height: 1.8;
-        color: #8e8a9e;
-        max-width: 330px;
+        line-height: 1.7;
+        color: #a8a3b8;
+        max-width: 340px;
         margin: 0;
       }
       .stage {
@@ -83,11 +82,11 @@
         width: 100%;
         max-width: 100%;
         min-width: 0;
-        margin-top: 18px;
+        margin-top: 10px;
         background: radial-gradient(ellipse at 48% 60%, #1c15292e, transparent 62%);
-        aspect-ratio: 2.35;
-        min-height: 260px;
-        max-height: 440px;
+        aspect-ratio: 2.65;
+        min-height: 220px;
+        max-height: 325px;
       }
       .stage svg {
         width: 100%;
@@ -98,34 +97,34 @@
       .edge {
         position: absolute;
         left: 0;
-        top: 22px;
-        color: #585463;
-        font: 9px monospace;
-        letter-spacing: 0.13em;
+        top: 12px;
+        color: #948fa6;
+        font: 10px monospace;
+        letter-spacing: 0.12em;
       }
       .bottomedge {
         top: auto;
-        bottom: 12px;
+        bottom: 8px;
         left: auto;
         right: 0;
       }
       .controls {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
-        gap: 32px;
+        gap: 24px;
         border-top: 1px solid #302a3c;
-        padding-top: 24px;
+        padding-top: 16px;
       }
       .row {
         display: flex;
         justify-content: space-between;
         gap: 12px;
-        color: #aaa2b7;
-        font-size: 11px;
-        margin-bottom: 14px;
+        color: #bab2c8;
+        font-size: 12px;
+        margin-bottom: 10px;
       }
       output {
-        font: 11px monospace;
+        font: 12px monospace;
         color: var(--accent);
       }
       input[type="range"] {
@@ -139,12 +138,12 @@
         flex-wrap: wrap;
       }
       button {
-        border: 1px solid #3b324b;
+        border: 1px solid #483e5c;
         background: transparent;
         border-radius: 4px;
-        color: #bcb1cd;
-        padding: 10px 12px;
-        font-size: 11px;
+        color: #cec5de;
+        padding: 9px 12px;
+        font-size: 12px;
       }
       button[aria-pressed="true"] {
         color: #181024;
@@ -159,7 +158,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 20px;
-        margin-top: 24px;
+        margin-top: 16px;
       }
       .actions div {
         display: flex;
@@ -168,7 +167,7 @@
       }
       .actions button {
         border-radius: 24px;
-        padding: 12px 18px;
+        padding: 10px 16px;
       }
       .actions .primary {
         background: #e9e5f0;
@@ -176,19 +175,19 @@
         border-color: #e9e5f0;
       }
       #spectrumCount {
-        font: 10px monospace;
-        color: #776a89;
+        font: 11px monospace;
+        color: #a497b8;
       }
       footer {
-        margin-top: 22px;
+        margin-top: 14px;
         display: flex;
         justify-content: space-between;
         gap: 20px;
-        font: 10px/1.7 monospace;
-        color: #61576e;
+        font: 11px/1.6 monospace;
+        color: #9c92ad;
       }
       #status {
-        color: #a99abe;
+        color: #bab0cc;
       }
       @media (max-width: 700px) {
         .shell {
@@ -356,57 +355,206 @@
       (() => {
         "use strict";
         const dictionary = {};
-        const lang =
-          new URLSearchParams(location.search).get("lang") ||
-          document.documentElement.dataset.skillLang ||
-          "zh";
-        const chinese = lang !== "en";
-        document.documentElement.lang = chinese ? "zh-CN" : "en";
         const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        const normalizeLang = (value) => {
+          if (!value) return "";
+          const lower = String(value).trim().toLowerCase();
+          if (lower === "zh" || lower.startsWith("zh-")) return "zh";
+          if (lower === "en" || lower.startsWith("en-")) return "en";
+          return "";
+        };
+        const readQueryLang = () => {
+          try {
+            return normalizeLang(new URLSearchParams(location.search).get("lang"));
+          } catch {
+            return "";
+          }
+        };
+        const resolveLang = () =>
+          readQueryLang() ||
+          normalizeLang(document.documentElement.dataset.skillLang) ||
+          (normalizeLang(document.documentElement.lang) === "zh" ? "zh" : "en");
+
+        let currentLang = resolveLang();
+        let chinese = currentLang === "zh";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+
+        const actionZh = { receive: "收款", send: "发送", swap: "兑换" };
+        const flavorZh = {
+          vanilla: "香草",
+          berry: "莓果",
+          matcha: "抹茶",
+          cocoa: "可可",
+          citrus: "柑橘",
+          peach: "蜜桃",
+        };
+        const localizedAttrs = ["aria-label", "placeholder", "title", "data-hint"];
+        const skipSelector =
+          "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]";
+        const originalTextNodes = new WeakMap();
+        const originalAttrs = new WeakMap();
+        let originalDocumentTitle = null;
+
         window.__usefulshelfConfigure = (config) => {
           const accent = document.documentElement.dataset.skillAccent;
-          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+          return /^#(?:[\da-f]{3}|[\da-f]{6})$/i.test(accent || "")
+            ? { ...config, accent }
+            : config;
         };
+
         window.__usefulshelfText = (value) => {
           if (!chinese || typeof value !== "string") return value;
-          const exact = dictionary[normalize(value)];
+          const normalized = normalize(value);
+          if (!normalized) return value;
+          const exact = dictionary[normalized];
           if (exact !== undefined) return exact;
           return value
             .replace(/What is ([^?]+)\?/g, "什么是 $1？")
             .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
-            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
-            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/PLAYING\s+(\d+)\s*\/\s*(\d+)/g, "正在播放 $1 / $2")
+            .replace(
+              /^(Vanilla|Berry|Matcha|Cocoa|Citrus|Peach)\s*·\s*(\d+)\s+bites?\s+to happiness$/i,
+              (_, flavor, count) =>
+                `${flavorZh[flavor.toLowerCase()] || flavor} · 还有 ${count} 口小快乐`,
+            )
+            .replace(/(\d+)\s+bites?\s+to happiness/g, "还有 $1 口小快乐")
+            .replace(/All gone!\s*(\d+)\s+cookies?\s+enjoyed\./g, "吃完啦！已享用 $1 枚饼干。")
+            .replace(
+              /\bPreview\s+(Receive|Send|Swap)\b/gi,
+              (_, action) => `预览${actionZh[action.toLowerCase()] || action}`,
+            )
+            .replace(
+              /^(Receive|Send|Swap)\s+preview:\s*(\$[\d.,]+)\s*·\s*no transaction sent$/i,
+              (_, action, amount) =>
+                `${actionZh[action.toLowerCase()] || action}预览：${amount} · 未发送真实交易`,
+            )
+            .replace(/(\d+)\s*\/\s*12\s+STICKERS/g, "$1 / 12 张贴纸")
+            .replace(/(\d+)\s+stickers? on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(
+              /Landed in column (\d+)\.\s*Try a different launch position\./g,
+              "落在第 $1 列。换个发射位置试试。",
+            )
             .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Try a different launch position\./g, "换个发射位置试试。")
+            .replace(/Selected sticker rotated to\s*(-?\d+)\s*degrees\./g, "所选贴纸旋转至 $1 度。")
             .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
             .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
             .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/(\d+)\s+wish(?:es)?\s+added to your sky\./g, "$1 个愿望已加入夜空。")
             .replace(/added to your sky\./g, "已加入夜空。")
-            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/(\d+)\s+little clouds?\s+drifting by\./g, "$1 朵小云正轻轻飘过。")
+            .replace(/(\d+)\s+little clouds?/g, "$1 朵小云")
             .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(
+              /Files stay on this device\. Maximum (\d+) MB\./g,
+              "文件留在此设备，最大 $1 MB。",
+            )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
-        function boot() {
-          if (chinese) {
-            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-            let node;
-            while ((node = walker.nextNode())) {
-              if (
-                node.parentElement?.closest(
-                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
-                )
-              )
-                continue;
-              const next = window.__usefulshelfText(node.textContent);
-              if (next !== node.textContent) node.textContent = next;
+
+        function isCustomDocumentTitle(sourceTitle) {
+          const titleEl = document.querySelector("title");
+          if (titleEl?.hasAttribute("data-skill-custom-text")) return true;
+          const normalizedTitle = normalize(sourceTitle || "");
+          if (!normalizedTitle) return false;
+          for (const element of document.querySelectorAll("[data-skill-custom-text]")) {
+            if (normalize(element.textContent || "") === normalizedTitle) return true;
+          }
+          return false;
+        }
+
+        function applyLanguage(nextLang) {
+          const resolved = normalizeLang(nextLang) || "en";
+          currentLang = resolved;
+          chinese = resolved === "zh";
+          document.documentElement.lang = chinese ? "zh-CN" : "en";
+          if (!document.body) return;
+          if (originalDocumentTitle === null) originalDocumentTitle = document.title;
+
+          const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+          let node;
+          while ((node = walker.nextNode())) {
+            if (node.parentElement?.closest(skipSelector)) continue;
+            if (chinese) {
+              const source = originalTextNodes.has(node)
+                ? originalTextNodes.get(node)
+                : node.textContent;
+              const next = window.__usefulshelfText(source);
+              if (next !== source) {
+                if (!originalTextNodes.has(node)) originalTextNodes.set(node, source);
+                if (node.textContent !== next) node.textContent = next;
+              }
+            } else if (originalTextNodes.has(node)) {
+              const source = originalTextNodes.get(node);
+              if (node.textContent !== source) node.textContent = source;
             }
-            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
-              for (const name of ["aria-label", "placeholder", "title"]) {
-                if (element.hasAttribute(name))
-                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+          }
+
+          for (const element of document.querySelectorAll(
+            "[aria-label],[placeholder],[title],[data-hint]",
+          )) {
+            if (element.closest("[data-skill-custom-text]")) continue;
+            let saved = originalAttrs.get(element);
+            for (const name of localizedAttrs) {
+              if (!element.hasAttribute(name)) continue;
+              if (chinese) {
+                const source =
+                  saved && Object.prototype.hasOwnProperty.call(saved, name)
+                    ? saved[name]
+                    : element.getAttribute(name);
+                const next = window.__usefulshelfText(source);
+                if (next !== source) {
+                  if (!saved) {
+                    saved = {};
+                    originalAttrs.set(element, saved);
+                  }
+                  if (!Object.prototype.hasOwnProperty.call(saved, name)) {
+                    saved[name] = source;
+                  }
+                  if (element.getAttribute(name) !== next) element.setAttribute(name, next);
+                }
+              } else if (saved && Object.prototype.hasOwnProperty.call(saved, name)) {
+                if (element.getAttribute(name) !== saved[name]) {
+                  element.setAttribute(name, saved[name]);
+                }
               }
             }
-            document.title = window.__usefulshelfText(document.title);
           }
+
+          if (!isCustomDocumentTitle(originalDocumentTitle)) {
+            const targetTitle = chinese
+              ? window.__usefulshelfText(originalDocumentTitle)
+              : originalDocumentTitle;
+            if (document.title !== targetTitle) document.title = targetTitle;
+          }
+        }
+
+        window.__usefulshelfSetLang = (lang) => {
+          const resolved = normalizeLang(lang) || "en";
+          if (document.documentElement.dataset.skillLang !== resolved) {
+            document.documentElement.dataset.skillLang = resolved;
+          }
+          applyLanguage(resolved);
+        };
+
+        function boot() {
+          if (originalDocumentTitle === null) originalDocumentTitle = document.title;
+          if (chinese) applyLanguage("zh");
+
+          let langObserver;
+          if (typeof MutationObserver === "function") {
+            langObserver = new MutationObserver(() => {
+              const next =
+                normalizeLang(document.documentElement.dataset.skillLang) || resolveLang();
+              if (next !== currentLang) applyLanguage(next);
+            });
+            langObserver.observe(document.documentElement, {
+              attributes: true,
+              attributeFilter: ["data-skill-lang"],
+            });
+            window.addEventListener("pagehide", () => langObserver.disconnect(), { once: true });
+          }
+
           if (parent === window) return;
           // Freeze viewport-based demo heights before measuring, avoiding vh feedback
           // when the parent grows the iframe. Intentional inner demo scrollers remain.
@@ -480,10 +628,12 @@
     </script>
     <!-- usefulshelf-runtime:end -->
     <script>
-      const config = window.__usefulshelfConfigure({"title": null, "accent": "#b9a5ff", "spread": 48, "angle": -10}),
-        en =
-          (new URLSearchParams(location.search).get("lang") ||
-            document.documentElement.dataset.skillLang) === "en";
+      const config = window.__usefulshelfConfigure({"title": null, "accent": "#b9a5ff", "spread": 48, "angle": -10, "customTitle": false}),
+        resolvedLang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          (document.documentElement.lang?.toLowerCase().startsWith("zh") ? "zh" : "en"),
+        en = resolvedLang !== "zh";
       document.documentElement.lang = en ? "en" : "zh-CN";
       const words = {
         header: "02 — THE ANATOMY OF LIGHT",
@@ -506,8 +656,12 @@
         document.querySelectorAll("[data-i]").forEach((e) => (e.textContent = words[e.dataset.i]));
         document.querySelector(".swatches").setAttribute("aria-label", "Light source");
       }
-      document.querySelector("h1").textContent =
-        config.title ?? (en ? "One beam.\nA world of color." : "把一束光，\n拆成彩虹。");
+      if (!config.customTitle) {
+        document.querySelector("h1").textContent = en
+          ? "One beam.\nA world of color."
+          : "把一束光，\n拆成彩虹。";
+        document.title = en ? "One beam. A world of color." : "把一束光，拆成彩虹。";
+      }
       const angle = document.querySelector("#angle"),
         spread = document.querySelector("#spread"),
         svg = document.querySelector("#optics"),

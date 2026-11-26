@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>每条消息，都有下一步。</title>
+    <title>Every message has a next step.</title>
     <style>
       :root {
-        --accent: #5b95ad;
+        --accent: #376c82;
         font-family: ui-sans-serif, system-ui, sans-serif;
         color: #283431;
         background: #eff0eb;
@@ -47,7 +47,7 @@
           10px ui-monospace,
           monospace;
         letter-spacing: 0.14em;
-        color: #839080;
+        color: #525e4f;
         display: flex;
         justify-content: space-between;
         gap: 15px;
@@ -63,7 +63,7 @@
       .intro {
         font-size: 12px;
         line-height: 1.8;
-        color: #7a8779;
+        color: #525e4f;
         margin: 0 0 28px;
       }
       .workspace {
@@ -81,7 +81,7 @@
           10px ui-monospace,
           monospace;
         letter-spacing: 0.12em;
-        color: #85917c;
+        color: #525e4f;
         margin: 0 0 20px;
       }
       .state-strip {
@@ -96,7 +96,7 @@
         display: flex;
         align-items: center;
         gap: 6px;
-        color: #8e9886;
+        color: #525e4f;
         position: relative;
       }
       .state::before {
@@ -104,11 +104,11 @@
         display: block;
         width: 7px;
         height: 7px;
-        border: 1px solid #a9b59d;
+        border: 1px solid #728067;
         border-radius: 50%;
       }
       .state.active {
-        color: #2b4136;
+        color: #21352b;
         font-weight: 650;
       }
       .state.active::before {
@@ -117,14 +117,14 @@
         box-shadow: 0 0 0 4px #a7bcc324;
       }
       .state-arrow {
-        color: #bbc4b5;
+        color: #63705f;
         font-size: 11px;
       }
       .mode-label {
         font-size: 12px;
         display: block;
         margin-bottom: 9px;
-        color: #5a6d58;
+        color: #40523d;
       }
       select {
         width: 100%;
@@ -132,11 +132,11 @@
         border: 1px solid #ccd3c2;
         border-radius: 8px;
         background: #f8f9f2;
-        color: #354931;
+        color: #2f422b;
         font-size: 12px;
       }
       .scenario-note {
-        color: #87927e;
+        color: #525e4f;
         font-size: 11px;
         line-height: 1.7;
         margin: 10px 0 21px;
@@ -175,11 +175,16 @@
         margin: 0;
       }
       .reset {
-        font-size: 10px;
+        font-size: 11px;
         background: none;
-        border: 0;
-        color: #697d5d;
-        padding: 4px;
+        border: 1px solid #c5cfbc;
+        border-radius: 6px;
+        color: #46583e;
+        min-height: 34px;
+        padding: 6px 10px;
+      }
+      .reset:hover {
+        background: #e4ebdb;
       }
       .events {
         list-style: none;
@@ -188,7 +193,7 @@
         font:
           10px/1.9 ui-monospace,
           monospace;
-        color: #718165;
+        color: #495a42;
         min-height: 83px;
         max-height: 104px;
         overflow: auto;
@@ -198,12 +203,12 @@
         gap: 12px;
       }
       .events .num {
-        color: #a1ad95;
+        color: #54644d;
       }
       .status {
         font-size: 11px;
         line-height: 1.8;
-        color: #52694b;
+        color: #40543a;
         min-height: 39px;
         margin: 14px 0 0;
       }
@@ -241,20 +246,20 @@
       .presence {
         font-size: 9px;
         display: block;
-        color: #95a18c;
+        color: #57664f;
         margin-top: 3px;
         font-weight: 400;
       }
       .local {
         margin-left: auto;
         align-self: flex-start;
-        border: 1px solid #d8e2d2;
+        border: 1px solid #c5d3bd;
         border-radius: 4px;
         padding: 3px 5px;
         font:
           8px ui-monospace,
           monospace;
-        color: #8c9b82;
+        color: #55644e;
       }
       .feed {
         height: 330px;
@@ -269,7 +274,7 @@
       .empty {
         text-align: center;
         margin: auto;
-        color: #90a080;
+        color: #57664f;
         font-size: 11px;
         line-height: 1.8;
       }
@@ -299,7 +304,7 @@
       }
       .message.failed {
         background: #f3e1db;
-        color: #9c6255;
+        color: #7c3f2c;
         border: 1px solid #e4c7bb;
       }
       .message.pending {
@@ -353,11 +358,12 @@
         top: 49px;
       }
       .save-card {
-        font-size: 10px;
+        font-size: 11px;
         border: 0;
         background: none;
-        color: #536745;
-        padding: 7px 0 0;
+        color: #3d4f33;
+        min-height: 32px;
+        padding: 6px 0 0;
       }
       .composer {
         border-top: 1px solid #e4eadd;
@@ -396,17 +402,18 @@
         justify-content: space-between;
         gap: 10px;
         font:
-          8px ui-monospace,
+          9px ui-monospace,
           monospace;
-        color: #9aaa8d;
+        color: #57664f;
         margin: 9px 2px;
       }
       .retry {
         width: 100%;
         border: 1px solid #d9b0a0;
         background: #f4e5dc;
-        color: #996553;
-        font-size: 10px;
+        color: #7c3f2c;
+        font-size: 11px;
+        min-height: 36px;
         border-radius: 7px;
         padding: 8px;
         margin-bottom: 10px;
@@ -428,7 +435,7 @@
         font:
           9px/1.7 ui-monospace,
           monospace;
-        color: #98a58c;
+        color: #525e4f;
         margin-top: 24px;
       }
       @keyframes arrive {
@@ -490,7 +497,7 @@
         <span>LITTLE SIGNALS / STATE STUDIO</span>
         <span data-i18n="mast">把看不见的状态，变成摸得着的反馈</span>
       </div>
-      <h1>每条消息，都有下一步。</h1>
+      <h1>Every message has a next step.</h1>
       <p class="intro" data-i18n="intro">
         写一句话，试一次失败，再重试。每一步都留在左侧的轨迹里；所有消息只存在于这个小实验。
       </p>
@@ -548,7 +555,7 @@
           <div class="phone-top">
             <span class="avatar" aria-hidden="true">✳</span>
             <div class="person">
-              <span id="contact">小满</span>
+              <span id="contact">Milo</span>
               <span class="presence" data-i18n="presence">一个虚构的聊天伙伴</span>
             </div>
             <span class="local">LOCAL</span>
@@ -584,57 +591,206 @@
       (() => {
         "use strict";
         const dictionary = {};
-        const lang =
-          new URLSearchParams(location.search).get("lang") ||
-          document.documentElement.dataset.skillLang ||
-          "zh";
-        const chinese = lang !== "en";
-        document.documentElement.lang = chinese ? "zh-CN" : "en";
         const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        const normalizeLang = (value) => {
+          if (!value) return "";
+          const lower = String(value).trim().toLowerCase();
+          if (lower === "zh" || lower.startsWith("zh-")) return "zh";
+          if (lower === "en" || lower.startsWith("en-")) return "en";
+          return "";
+        };
+        const readQueryLang = () => {
+          try {
+            return normalizeLang(new URLSearchParams(location.search).get("lang"));
+          } catch {
+            return "";
+          }
+        };
+        const resolveLang = () =>
+          readQueryLang() ||
+          normalizeLang(document.documentElement.dataset.skillLang) ||
+          (normalizeLang(document.documentElement.lang) === "zh" ? "zh" : "en");
+
+        let currentLang = resolveLang();
+        let chinese = currentLang === "zh";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+
+        const actionZh = { receive: "收款", send: "发送", swap: "兑换" };
+        const flavorZh = {
+          vanilla: "香草",
+          berry: "莓果",
+          matcha: "抹茶",
+          cocoa: "可可",
+          citrus: "柑橘",
+          peach: "蜜桃",
+        };
+        const localizedAttrs = ["aria-label", "placeholder", "title", "data-hint"];
+        const skipSelector =
+          "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]";
+        const originalTextNodes = new WeakMap();
+        const originalAttrs = new WeakMap();
+        let originalDocumentTitle = null;
+
         window.__usefulshelfConfigure = (config) => {
           const accent = document.documentElement.dataset.skillAccent;
-          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+          return /^#(?:[\da-f]{3}|[\da-f]{6})$/i.test(accent || "")
+            ? { ...config, accent }
+            : config;
         };
+
         window.__usefulshelfText = (value) => {
           if (!chinese || typeof value !== "string") return value;
-          const exact = dictionary[normalize(value)];
+          const normalized = normalize(value);
+          if (!normalized) return value;
+          const exact = dictionary[normalized];
           if (exact !== undefined) return exact;
           return value
             .replace(/What is ([^?]+)\?/g, "什么是 $1？")
             .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
-            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
-            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/PLAYING\s+(\d+)\s*\/\s*(\d+)/g, "正在播放 $1 / $2")
+            .replace(
+              /^(Vanilla|Berry|Matcha|Cocoa|Citrus|Peach)\s*·\s*(\d+)\s+bites?\s+to happiness$/i,
+              (_, flavor, count) =>
+                `${flavorZh[flavor.toLowerCase()] || flavor} · 还有 ${count} 口小快乐`,
+            )
+            .replace(/(\d+)\s+bites?\s+to happiness/g, "还有 $1 口小快乐")
+            .replace(/All gone!\s*(\d+)\s+cookies?\s+enjoyed\./g, "吃完啦！已享用 $1 枚饼干。")
+            .replace(
+              /\bPreview\s+(Receive|Send|Swap)\b/gi,
+              (_, action) => `预览${actionZh[action.toLowerCase()] || action}`,
+            )
+            .replace(
+              /^(Receive|Send|Swap)\s+preview:\s*(\$[\d.,]+)\s*·\s*no transaction sent$/i,
+              (_, action, amount) =>
+                `${actionZh[action.toLowerCase()] || action}预览：${amount} · 未发送真实交易`,
+            )
+            .replace(/(\d+)\s*\/\s*12\s+STICKERS/g, "$1 / 12 张贴纸")
+            .replace(/(\d+)\s+stickers? on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(
+              /Landed in column (\d+)\.\s*Try a different launch position\./g,
+              "落在第 $1 列。换个发射位置试试。",
+            )
             .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Try a different launch position\./g, "换个发射位置试试。")
+            .replace(/Selected sticker rotated to\s*(-?\d+)\s*degrees\./g, "所选贴纸旋转至 $1 度。")
             .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
             .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
             .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/(\d+)\s+wish(?:es)?\s+added to your sky\./g, "$1 个愿望已加入夜空。")
             .replace(/added to your sky\./g, "已加入夜空。")
-            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/(\d+)\s+little clouds?\s+drifting by\./g, "$1 朵小云正轻轻飘过。")
+            .replace(/(\d+)\s+little clouds?/g, "$1 朵小云")
             .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(
+              /Files stay on this device\. Maximum (\d+) MB\./g,
+              "文件留在此设备，最大 $1 MB。",
+            )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
-        function boot() {
-          if (chinese) {
-            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-            let node;
-            while ((node = walker.nextNode())) {
-              if (
-                node.parentElement?.closest(
-                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
-                )
-              )
-                continue;
-              const next = window.__usefulshelfText(node.textContent);
-              if (next !== node.textContent) node.textContent = next;
+
+        function isCustomDocumentTitle(sourceTitle) {
+          const titleEl = document.querySelector("title");
+          if (titleEl?.hasAttribute("data-skill-custom-text")) return true;
+          const normalizedTitle = normalize(sourceTitle || "");
+          if (!normalizedTitle) return false;
+          for (const element of document.querySelectorAll("[data-skill-custom-text]")) {
+            if (normalize(element.textContent || "") === normalizedTitle) return true;
+          }
+          return false;
+        }
+
+        function applyLanguage(nextLang) {
+          const resolved = normalizeLang(nextLang) || "en";
+          currentLang = resolved;
+          chinese = resolved === "zh";
+          document.documentElement.lang = chinese ? "zh-CN" : "en";
+          if (!document.body) return;
+          if (originalDocumentTitle === null) originalDocumentTitle = document.title;
+
+          const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+          let node;
+          while ((node = walker.nextNode())) {
+            if (node.parentElement?.closest(skipSelector)) continue;
+            if (chinese) {
+              const source = originalTextNodes.has(node)
+                ? originalTextNodes.get(node)
+                : node.textContent;
+              const next = window.__usefulshelfText(source);
+              if (next !== source) {
+                if (!originalTextNodes.has(node)) originalTextNodes.set(node, source);
+                if (node.textContent !== next) node.textContent = next;
+              }
+            } else if (originalTextNodes.has(node)) {
+              const source = originalTextNodes.get(node);
+              if (node.textContent !== source) node.textContent = source;
             }
-            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
-              for (const name of ["aria-label", "placeholder", "title"]) {
-                if (element.hasAttribute(name))
-                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+          }
+
+          for (const element of document.querySelectorAll(
+            "[aria-label],[placeholder],[title],[data-hint]",
+          )) {
+            if (element.closest("[data-skill-custom-text]")) continue;
+            let saved = originalAttrs.get(element);
+            for (const name of localizedAttrs) {
+              if (!element.hasAttribute(name)) continue;
+              if (chinese) {
+                const source =
+                  saved && Object.prototype.hasOwnProperty.call(saved, name)
+                    ? saved[name]
+                    : element.getAttribute(name);
+                const next = window.__usefulshelfText(source);
+                if (next !== source) {
+                  if (!saved) {
+                    saved = {};
+                    originalAttrs.set(element, saved);
+                  }
+                  if (!Object.prototype.hasOwnProperty.call(saved, name)) {
+                    saved[name] = source;
+                  }
+                  if (element.getAttribute(name) !== next) element.setAttribute(name, next);
+                }
+              } else if (saved && Object.prototype.hasOwnProperty.call(saved, name)) {
+                if (element.getAttribute(name) !== saved[name]) {
+                  element.setAttribute(name, saved[name]);
+                }
               }
             }
-            document.title = window.__usefulshelfText(document.title);
           }
+
+          if (!isCustomDocumentTitle(originalDocumentTitle)) {
+            const targetTitle = chinese
+              ? window.__usefulshelfText(originalDocumentTitle)
+              : originalDocumentTitle;
+            if (document.title !== targetTitle) document.title = targetTitle;
+          }
+        }
+
+        window.__usefulshelfSetLang = (lang) => {
+          const resolved = normalizeLang(lang) || "en";
+          if (document.documentElement.dataset.skillLang !== resolved) {
+            document.documentElement.dataset.skillLang = resolved;
+          }
+          applyLanguage(resolved);
+        };
+
+        function boot() {
+          if (originalDocumentTitle === null) originalDocumentTitle = document.title;
+          if (chinese) applyLanguage("zh");
+
+          let langObserver;
+          if (typeof MutationObserver === "function") {
+            langObserver = new MutationObserver(() => {
+              const next =
+                normalizeLang(document.documentElement.dataset.skillLang) || resolveLang();
+              if (next !== currentLang) applyLanguage(next);
+            });
+            langObserver.observe(document.documentElement, {
+              attributes: true,
+              attributeFilter: ["data-skill-lang"],
+            });
+            window.addEventListener("pagehide", () => langObserver.disconnect(), { once: true });
+          }
+
           if (parent === window) return;
           // Freeze viewport-based demo heights before measuring, avoiding vh feedback
           // when the parent grows the iframe. Intentional inner demo scrollers remain.
@@ -708,10 +864,12 @@
     </script>
     <!-- usefulshelf-runtime:end -->
     <script>
-      const config = window.__usefulshelfConfigure({"title": "\u6bcf\u6761\u6d88\u606f\uff0c\u90fd\u6709\u4e0b\u4e00\u6b65\u3002", "accent": "#5b95ad", "contact": "\u5c0f\u6ee1", "latency": 900, "customTitle": false, "customText": []}),
-        en =
-          (new URLSearchParams(location.search).get("lang") ||
-            document.documentElement.dataset.skillLang) === "en",
+      const config = window.__usefulshelfConfigure({"title": "Every message has a next step.", "accent": "#376c82", "contact": "Milo", "latency": 900, "customTitle": false, "customText": []}),
+        resolvedLang =
+          new URLSearchParams(location.search).get("lang") ||
+          document.documentElement.dataset.skillLang ||
+          (/^zh/i.test(document.documentElement.lang) ? "zh" : "en"),
+        en = resolvedLang !== "zh",
         $ = (id) => document.getElementById(id),
         t = (zh, eng) => (en ? eng : zh);
       document.documentElement.lang = en ? "en" : "zh-CN";
@@ -741,13 +899,16 @@
         retry: "Retry this message ↻",
         footer: "No server · No real recipient · Cleared on refresh",
       };
+      const resolvedTitle = config.customTitle
+        ? config.title
+        : t("每条消息，都有下一步。", "Every message has a next step.");
+      document.querySelector("h1").textContent = resolvedTitle;
+      document.title = resolvedTitle;
+      if (!config.customText.includes("contact")) $("contact").textContent = t("小满", "Milo");
       if (en) {
         document
           .querySelectorAll("[data-i18n]")
           .forEach((e) => (e.textContent = english[e.dataset.i18n]));
-        if (!config.customTitle)
-          document.querySelector("h1").textContent = "Every message has a next step.";
-        if (!config.customText.includes("contact")) $("contact").textContent = "Milo";
         $("draft").placeholder = "Write a little thought…";
         $("draft").setAttribute("aria-label", "Message text");
         $("send").setAttribute("aria-label", "Send message");

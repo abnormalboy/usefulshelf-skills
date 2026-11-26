@@ -1,6 +1,6 @@
 ---
 name: liquid-tab-menu
-description: 液态快捷菜单。三个 72px 装饰圆通过 Gaussian blur 加 alpha threshold 在分离时粘连；清晰图标和透明原生按钮放在独立层，命中位置随 --size/--spread 同步。 Use for this interaction and adapt it to the existing framework.
+description: 液态快捷菜单（SVG Gooey 滤镜粘连胶囊与日志弹窗）。三个 72px 装饰圆借高斯模糊与 alpha 阈值产生液态融合，清晰图标层与原生 dialog 保障键盘无障碍。Trigger when building gooey/liquid metaball tab menus, organic floating action hubs, SVG filter morphing navigation, or journal quick-add bars.
 ---
 
 # 液态快捷菜单
@@ -18,7 +18,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ## 参数与内容边界
 
 - 将标题、副标题、强调色与场景数据作为可配置输入；未指定时采用下面的设计参考，而不强制迁移用户的技术栈。
-- 完整包的可选 CLI 参数：`--title`, `--subtitle`, `--accent`, `--bg`。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
+- 完整包的可选 CLI 参数：`-p/--params`（JSON 配置）、`--lang`（`en` 或 `zh`）、`--title`（1–180 字符）、`--subtitle`（1–180 字符）、`--accent`（3/6 位 HEX）、`--bg`（3/6 位 HEX）。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
 - 文案用纯文本节点/框架插值，颜色只接受合法 HEX，数字按参考约束限制。内联 JSON 必须转义 `<`，不能把用户文字送进 innerHTML、eval、事件属性或选择器。
 - 中英文文案使用明确字典，界面语言与用户输入内容分离；不得翻译或覆盖用户填写的名称、便笺或文件内容。
 - 演示里的本地数据不代表实际账号、付款、远程 AI 或业务后台；要接入真实服务时遵守用户授权和服务端准入，不向访客公开凭据、运营额度或其他人的任务。
@@ -51,7 +51,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
   --ease: cubic-bezier(0.25, 1.15, 0.4, 1);
 }
 body {
-  font-family:
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 ```
 
@@ -86,4 +86,4 @@ Keep hit targets aligned with blob centers when changing `--spread` or `--size`.
 
 ## 可选完整包工作流 / Optional package workflow
 
-已获得完整 ZIP 时，可以参考 templates/index.template.html，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。
+已获得完整 ZIP 时，可以参考 [references/design.md](references/design.md) 与 `templates/index.template.html`，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。

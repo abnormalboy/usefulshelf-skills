@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Ice Fracture Lab</title>
+    <title>Break the ice.</title>
     <style>
       :root {
         --accent: #a5e6ff;
@@ -115,7 +115,7 @@
       .cross {
         position: absolute;
         font-size: 16px;
-        color: #536773;
+        color: #758d9b;
         pointer-events: none;
       }
       .cross.a {
@@ -132,7 +132,7 @@
         left: 0;
         right: 0;
         text-align: center;
-        color: #59717f;
+        color: #8ea6b3;
         font-size: 10px;
         letter-spacing: 0.1em;
         pointer-events: none;
@@ -212,13 +212,13 @@
         display: flex;
         justify-content: space-between;
         gap: 16px;
-        color: #536b78;
+        color: #8ea6b3;
         font-size: 10px;
         margin-top: 26px;
         line-height: 1.5;
       }
       #status {
-        color: #91adbb;
+        color: #a9c4d1;
       }
       .sr {
         position: absolute;
@@ -339,57 +339,206 @@
       (() => {
         "use strict";
         const dictionary = {};
-        const lang =
-          new URLSearchParams(location.search).get("lang") ||
-          document.documentElement.dataset.skillLang ||
-          "zh";
-        const chinese = lang !== "en";
-        document.documentElement.lang = chinese ? "zh-CN" : "en";
         const normalize = (value) => value.replace(/\s+/g, " ").trim();
+        const normalizeLang = (value) => {
+          if (!value) return "";
+          const lower = String(value).trim().toLowerCase();
+          if (lower === "zh" || lower.startsWith("zh-")) return "zh";
+          if (lower === "en" || lower.startsWith("en-")) return "en";
+          return "";
+        };
+        const readQueryLang = () => {
+          try {
+            return normalizeLang(new URLSearchParams(location.search).get("lang"));
+          } catch {
+            return "";
+          }
+        };
+        const resolveLang = () =>
+          readQueryLang() ||
+          normalizeLang(document.documentElement.dataset.skillLang) ||
+          (normalizeLang(document.documentElement.lang) === "zh" ? "zh" : "en");
+
+        let currentLang = resolveLang();
+        let chinese = currentLang === "zh";
+        document.documentElement.lang = chinese ? "zh-CN" : "en";
+
+        const actionZh = { receive: "收款", send: "发送", swap: "兑换" };
+        const flavorZh = {
+          vanilla: "香草",
+          berry: "莓果",
+          matcha: "抹茶",
+          cocoa: "可可",
+          citrus: "柑橘",
+          peach: "蜜桃",
+        };
+        const localizedAttrs = ["aria-label", "placeholder", "title", "data-hint"];
+        const skipSelector =
+          "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]";
+        const originalTextNodes = new WeakMap();
+        const originalAttrs = new WeakMap();
+        let originalDocumentTitle = null;
+
         window.__usefulshelfConfigure = (config) => {
           const accent = document.documentElement.dataset.skillAccent;
-          return /^#[\da-f]{6}$/i.test(accent || "") ? { ...config, accent } : config;
+          return /^#(?:[\da-f]{3}|[\da-f]{6})$/i.test(accent || "")
+            ? { ...config, accent }
+            : config;
         };
+
         window.__usefulshelfText = (value) => {
           if (!chinese || typeof value !== "string") return value;
-          const exact = dictionary[normalize(value)];
+          const normalized = normalize(value);
+          if (!normalized) return value;
+          const exact = dictionary[normalized];
           if (exact !== undefined) return exact;
           return value
             .replace(/What is ([^?]+)\?/g, "什么是 $1？")
             .replace(/(\d+) of 4 memories discovered/g, "已发现 $1 / 4 段回忆")
-            .replace(/(\d+) bites to happiness/g, "还有 $1 口小快乐")
-            .replace(/(\d+) stickers on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(/PLAYING\s+(\d+)\s*\/\s*(\d+)/g, "正在播放 $1 / $2")
+            .replace(
+              /^(Vanilla|Berry|Matcha|Cocoa|Citrus|Peach)\s*·\s*(\d+)\s+bites?\s+to happiness$/i,
+              (_, flavor, count) =>
+                `${flavorZh[flavor.toLowerCase()] || flavor} · 还有 ${count} 口小快乐`,
+            )
+            .replace(/(\d+)\s+bites?\s+to happiness/g, "还有 $1 口小快乐")
+            .replace(/All gone!\s*(\d+)\s+cookies?\s+enjoyed\./g, "吃完啦！已享用 $1 枚饼干。")
+            .replace(
+              /\bPreview\s+(Receive|Send|Swap)\b/gi,
+              (_, action) => `预览${actionZh[action.toLowerCase()] || action}`,
+            )
+            .replace(
+              /^(Receive|Send|Swap)\s+preview:\s*(\$[\d.,]+)\s*·\s*no transaction sent$/i,
+              (_, action, amount) =>
+                `${actionZh[action.toLowerCase()] || action}预览：${amount} · 未发送真实交易`,
+            )
+            .replace(/(\d+)\s*\/\s*12\s+STICKERS/g, "$1 / 12 张贴纸")
+            .replace(/(\d+)\s+stickers? on your sheet\./g, "画布上有 $1 张贴纸。")
+            .replace(
+              /Landed in column (\d+)\.\s*Try a different launch position\./g,
+              "落在第 $1 列。换个发射位置试试。",
+            )
             .replace(/Landed in column (\d+)\./g, "落在第 $1 列。")
+            .replace(/Try a different launch position\./g, "换个发射位置试试。")
+            .replace(/Selected sticker rotated to\s*(-?\d+)\s*degrees\./g, "所选贴纸旋转至 $1 度。")
             .replace(/Selected sticker rotated to/g, "所选贴纸旋转至")
             .replace(/collection opened\. Pick a shape to add\./g, "集合已展开，选一个图形加入。")
             .replace(/added to your journal\./g, "已加入咖啡记录。")
+            .replace(/(\d+)\s+wish(?:es)?\s+added to your sky\./g, "$1 个愿望已加入夜空。")
             .replace(/added to your sky\./g, "已加入夜空。")
-            .replace(/(\d+) little cloud/g, "$1 朵小云")
+            .replace(/(\d+)\s+little clouds?\s+drifting by\./g, "$1 朵小云正轻轻飘过。")
+            .replace(/(\d+)\s+little clouds?/g, "$1 朵小云")
             .replace(/drifting by\./g, "正轻轻飘过。")
+            .replace(
+              /Files stay on this device\. Maximum (\d+) MB\./g,
+              "文件留在此设备，最大 $1 MB。",
+            )
             .replace(/· no transaction sent/g, "· 未发送真实交易");
         };
-        function boot() {
-          if (chinese) {
-            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-            let node;
-            while ((node = walker.nextNode())) {
-              if (
-                node.parentElement?.closest(
-                  "script,style,pre,code,textarea,[contenteditable],[data-skill-custom-text]",
-                )
-              )
-                continue;
-              const next = window.__usefulshelfText(node.textContent);
-              if (next !== node.textContent) node.textContent = next;
+
+        function isCustomDocumentTitle(sourceTitle) {
+          const titleEl = document.querySelector("title");
+          if (titleEl?.hasAttribute("data-skill-custom-text")) return true;
+          const normalizedTitle = normalize(sourceTitle || "");
+          if (!normalizedTitle) return false;
+          for (const element of document.querySelectorAll("[data-skill-custom-text]")) {
+            if (normalize(element.textContent || "") === normalizedTitle) return true;
+          }
+          return false;
+        }
+
+        function applyLanguage(nextLang) {
+          const resolved = normalizeLang(nextLang) || "en";
+          currentLang = resolved;
+          chinese = resolved === "zh";
+          document.documentElement.lang = chinese ? "zh-CN" : "en";
+          if (!document.body) return;
+          if (originalDocumentTitle === null) originalDocumentTitle = document.title;
+
+          const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+          let node;
+          while ((node = walker.nextNode())) {
+            if (node.parentElement?.closest(skipSelector)) continue;
+            if (chinese) {
+              const source = originalTextNodes.has(node)
+                ? originalTextNodes.get(node)
+                : node.textContent;
+              const next = window.__usefulshelfText(source);
+              if (next !== source) {
+                if (!originalTextNodes.has(node)) originalTextNodes.set(node, source);
+                if (node.textContent !== next) node.textContent = next;
+              }
+            } else if (originalTextNodes.has(node)) {
+              const source = originalTextNodes.get(node);
+              if (node.textContent !== source) node.textContent = source;
             }
-            for (const element of document.querySelectorAll("[aria-label],[placeholder],[title]")) {
-              for (const name of ["aria-label", "placeholder", "title"]) {
-                if (element.hasAttribute(name))
-                  element.setAttribute(name, window.__usefulshelfText(element.getAttribute(name)));
+          }
+
+          for (const element of document.querySelectorAll(
+            "[aria-label],[placeholder],[title],[data-hint]",
+          )) {
+            if (element.closest("[data-skill-custom-text]")) continue;
+            let saved = originalAttrs.get(element);
+            for (const name of localizedAttrs) {
+              if (!element.hasAttribute(name)) continue;
+              if (chinese) {
+                const source =
+                  saved && Object.prototype.hasOwnProperty.call(saved, name)
+                    ? saved[name]
+                    : element.getAttribute(name);
+                const next = window.__usefulshelfText(source);
+                if (next !== source) {
+                  if (!saved) {
+                    saved = {};
+                    originalAttrs.set(element, saved);
+                  }
+                  if (!Object.prototype.hasOwnProperty.call(saved, name)) {
+                    saved[name] = source;
+                  }
+                  if (element.getAttribute(name) !== next) element.setAttribute(name, next);
+                }
+              } else if (saved && Object.prototype.hasOwnProperty.call(saved, name)) {
+                if (element.getAttribute(name) !== saved[name]) {
+                  element.setAttribute(name, saved[name]);
+                }
               }
             }
-            document.title = window.__usefulshelfText(document.title);
           }
+
+          if (!isCustomDocumentTitle(originalDocumentTitle)) {
+            const targetTitle = chinese
+              ? window.__usefulshelfText(originalDocumentTitle)
+              : originalDocumentTitle;
+            if (document.title !== targetTitle) document.title = targetTitle;
+          }
+        }
+
+        window.__usefulshelfSetLang = (lang) => {
+          const resolved = normalizeLang(lang) || "en";
+          if (document.documentElement.dataset.skillLang !== resolved) {
+            document.documentElement.dataset.skillLang = resolved;
+          }
+          applyLanguage(resolved);
+        };
+
+        function boot() {
+          if (originalDocumentTitle === null) originalDocumentTitle = document.title;
+          if (chinese) applyLanguage("zh");
+
+          let langObserver;
+          if (typeof MutationObserver === "function") {
+            langObserver = new MutationObserver(() => {
+              const next =
+                normalizeLang(document.documentElement.dataset.skillLang) || resolveLang();
+              if (next !== currentLang) applyLanguage(next);
+            });
+            langObserver.observe(document.documentElement, {
+              attributes: true,
+              attributeFilter: ["data-skill-lang"],
+            });
+            window.addEventListener("pagehide", () => langObserver.disconnect(), { once: true });
+          }
+
           if (parent === window) return;
           // Freeze viewport-based demo heights before measuring, avoiding vh feedback
           // when the parent grows the iframe. Intentional inner demo scrollers remain.
@@ -464,9 +613,11 @@
     <!-- usefulshelf-runtime:end -->
     <script>
       const config = window.__usefulshelfConfigure({"title": null, "impact": 65});
-      const en =
-        (new URLSearchParams(location.search).get("lang") ||
-          document.documentElement.dataset.skillLang) === "en";
+      const resolvedLang =
+        new URLSearchParams(location.search).get("lang") ||
+        document.documentElement.dataset.skillLang ||
+        (/^zh/i.test(document.documentElement.lang) ? "zh" : "en");
+      const en = resolvedLang !== "zh";
       document.documentElement.lang = en ? "en" : "zh-CN";
       const texts = {
         header: "MATERIAL PLAYGROUND",
@@ -480,10 +631,13 @@
         freeze: "Refreeze ↺",
         footer: "24 facets / A different shape with every impact",
       };
-      if (en)
+      if (en) {
         document.querySelectorAll("[data-i]").forEach((e) => (e.textContent = texts[e.dataset.i]));
+        document.querySelector(".controls")?.setAttribute("aria-label", "Experiment controls");
+      }
       document.querySelector("h1").textContent =
         config.title ?? (en ? "Break the ice." : "打破形态。\n重新凝结。");
+      document.title = config.title ?? (en ? "Break the ice." : "打破形态。重新凝结。");
       const canvas = document.querySelector("canvas"),
         ctx = canvas.getContext("2d"),
         range = document.querySelector("#force"),

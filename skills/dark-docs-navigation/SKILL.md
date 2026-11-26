@@ -1,6 +1,6 @@
 ---
 name: dark-docs-navigation
-description: 深色文档导航。深色背景、2px 强调色标签线、280px 侧栏和可收缩虚线树组成布局。 Use for this interaction and adapt it to the existing framework.
+description: 深色文档导航（开发文档侧栏树与顶栏标签壳层）。黑底高对比、2px 强调色标签线、可折叠虚线层级树与移动端抽屉开关，支持自定义 sections/pages JSON。Trigger when building developer documentation layouts, dark sidebar tree navigation, collapsible doc drawers, or API/SDK reference shells in HTML/Vue/React.
 ---
 
 # 深色文档导航
@@ -18,7 +18,7 @@ If only this SKILL.md is supplied, implement the specification directly in the t
 ## 参数与内容边界
 
 - 将标题、副标题、强调色与场景数据作为可配置输入；未指定时采用下面的设计参考，而不强制迁移用户的技术栈。
-- 完整包的可选 CLI 参数：`--title`, `--brandName`, `--brandDocs`, `--accent`, `--bg`, `--surface`, `--activeId`, `--intro`, `--sidebarWidth`, `--transitionMs`。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
+- 完整包的可选 CLI 参数：`-p/--params`（JSON 配置，额外支持自定义 `sections` 导航树数组、`pages` 页面标题/正文映射、`fontFamily` 及全部颜色 Token）、`--lang`（`en` 或 `zh`）、`--title`、`--brandName`（同时渲染于顶栏品牌位）、`--brandDocs`、`--accent`、`--bg`、`--surface`、`--activeId`、`--intro`、`--sidebarWidth`（`240px`–`400px`，必须包含 `px` 单位，如 `--sidebarWidth 300px`）、`--transitionMs`（整数 `0–2000`）。窄屏（`<= 720px`）自动将侧栏收纳至无障碍菜单按钮（`aria-expanded`/`aria-controls`）背后，保证文档标题与正文直接位于首屏。命令行只是便利入口；网页定制后的 HTML 可直接离线打开。
 - 文案用纯文本节点/框架插值，颜色只接受合法 HEX，数字按参考约束限制。内联 JSON 必须转义 `<`，不能把用户文字送进 innerHTML、eval、事件属性或选择器。
 - 中英文文案使用明确字典，界面语言与用户输入内容分离；不得翻译或覆盖用户填写的名称、便笺或文件内容。
 - 演示里的本地数据不代表实际账号、付款、远程 AI 或业务后台；要接入真实服务时遵守用户授权和服务端准入，不向访客公开凭据、运营额度或其他人的任务。
@@ -116,4 +116,4 @@ Replace sample article text before using this in a live product. For real page n
 
 ## 可选完整包工作流 / Optional package workflow
 
-已获得完整 ZIP 时，可以参考 templates/index.template.html，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。
+已获得完整 ZIP 时，可以参考 [references/design.md](references/design.md) 与 `templates/index.template.html`，并执行 `python3 scripts/generate.py -o index.html`。仅获得本文时请直接实现上述约束，不等待或虚构这些附件。复用本 Skill 不意味着获得部署网站、发送消息或操作他人数据的授权。
